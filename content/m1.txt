@@ -1,0 +1,396 @@
+# MONTH 1 — am · is · are
+@month 1 | Be: am · is · are | พื้นฐาน am · is · are | Little Guesthouse | เกสต์เฮาส์หลังเล็ก
+
+# ------------------------------------------------------------------ UNIT 1
+@unit 1 | I am … | ฉัน… (I am) | 🌱 | บอกความรู้สึกของตัวเองได้ และไม่ลืม am
+
+@tip | I + am = ห้ามลืม am!
+p: ภาษาไทยพูดว่า "ฉันหิว" ได้เลย แต่ภาษาอังกฤษต้องมีคำว่า am อยู่ตรงกลางเสมอ
+ok: I am hungry. | ฉันหิว
+no: I hungry. | ผิด เพราะลืม am
+p: am ไม่มีคำแปลในภาษาไทย แต่ต้องใส่ทุกครั้งที่บอกว่าตัวเอง "เป็นอย่างไร" เช่น หิว ง่วง เหนื่อย มีความสุข
+tr: I | am | hungry.
+tr: ฉัน | (am) | หิว
+trick: 💑 I กับ am เป็นคู่รักกัน ไปไหนต้องไปด้วยกันเสมอ → I am
+
+@lesson 1.1 | I am hungry | ฉันหิว
+new: I am hungry sleepy tired happy
+I am hungry. = ฉันหิว
+I am sleepy. = ฉันง่วงนอน
+I am tired. = ฉันเหนื่อย
+I am happy. = ฉันมีความสุข
+
+@lesson 1.2 | I am busy | ฉันยุ่ง
+new: very busy sick fine ready
+I am busy. = ฉันยุ่ง
+I am very busy. = ฉันยุ่งมาก | very อยู่ข้างหน้า: very busy = ยุ่งมาก (ภาษาไทย "มาก" อยู่ข้างหลัง)
+I am sick. = ฉันป่วย (ฉันไม่สบาย)
+I am fine. = ฉันสบายดี
+I am ready. = ฉันพร้อมแล้ว
+I am very tired. = ฉันเหนื่อยมาก
+I am very happy. = ฉันมีความสุขมาก
+
+@tip | I'm = I am (พูดสั้น ๆ)
+p: เวลาพูดเร็ว ๆ คนจะย่อ I am เป็น I'm (อ่านว่า ไอม์) ความหมายเหมือนเดิม 100%
+ok: I'm hungry. | ฉันหิว (= I am hungry.)
+ok: I'm cold. | ฉันหนาว
+no: Im cold. | ผิด เพราะขาดเครื่องหมาย '
+trick: เครื่องหมาย ' คือที่ที่ตัว a ของ am หายไป: I am → I'm
+
+@lesson 1.3 | I'm cold | ฉันหนาว
+new: I'm cold hot late bored and
+I'm cold. = ฉันหนาว
+I'm hot. = ฉันร้อน
+I'm late! = ฉันสายแล้ว!
+I'm bored. = ฉันเบื่อ
+I'm hungry and tired. = ฉันหิวและเหนื่อย
+I'm sleepy and cold. = ฉันง่วงและหนาว
+I'm very late! = ฉันสายมากแล้ว!
+I am fine and happy. = ฉันสบายดีและมีความสุข
+
+@tip | You + are
+p: เวลาพูดถึง "คุณ" (you) ต้องใช้ are ไม่ใช่ am
+tr: I | am | ฉัน
+tr: You | are | คุณ
+ok: You are kind. | คุณใจดี
+no: You is kind. | ผิด — you ต้องใช้ are
+p: พูดสั้น ๆ: You are → You're (อ่านว่า ยัวร์)
+trick: am มีไว้ให้ I คนเดียวเท่านั้น!
+
+@lesson 1.4 | You are kind | คุณใจดี
+new: you are you're kind beautiful right smart
+You are kind. = คุณใจดี
+You are beautiful. = คุณสวย
+You are right. = คุณพูดถูก
+You're smart. = คุณฉลาด | you're = you are
+You are very kind. = คุณใจดีมาก
+You're late! = คุณมาสาย!
+You are tired. = คุณเหนื่อย
+I am happy and you are happy. = ฉันมีความสุข และคุณก็มีความสุข
+
+@talk morning | Good morning! | อรุณสวัสดิ์ | friends | Ploy | 👩
+A: Good morning, Alvee! = อรุณสวัสดิ์ Alvee!
+B: Good morning! = อรุณสวัสดิ์จ้ะ!
+x: Good night!
+A: How are you? = เป็นยังไงบ้าง
+B: I am sleepy and hungry. = ฉันง่วงแล้วก็หิวด้วย
+x: I sleepy and hungry.
+x: I is sleepy and hungry.
+A: Me too! I'm very tired. = ฉันก็เหมือนกัน! ฉันเหนื่อยมาก
+B: You are very busy. = เธอยุ่งมากเลยนะ
+x: You am very busy.
+x: You very busy.
+A: Yes! And I'm late! = ใช่! แล้วฉันก็สายแล้วด้วย!
+B: I'm late too! Bye! = ฉันก็สายเหมือนกัน! บ๊ายบาย!
+x: I late too! Bye!
+x: I are late too! Bye!
+
+# ------------------------------------------------------------------ UNIT 2
+@unit 2 | He is · She is · It is | เขา · เธอ · มัน (is) | 🌴 | พูดถึงคนอื่นและสิ่งของได้ ด้วย is
+
+@tip | He / She / It + is
+p: เวลาพูดถึงคนอื่น 1 คน หรือสิ่งของ 1 อย่าง ให้ใช้ is
+tr: I | am | ฉัน
+tr: You | are | คุณ
+tr: He | is | เขา (ผู้ชาย)
+tr: She | is | เธอ (ผู้หญิง)
+tr: It | is | มัน (สิ่งของ อากาศ เวลา)
+ok: She is tired. | เธอเหนื่อย
+no: She tired. | ผิด — ลืม is
+no: She are tired. | ผิด — she ต้องใช้ is
+trick: is = สำหรับ "คนเดียว" หรือ "ของชิ้นเดียว"
+
+@lesson 2.1 | She is tired | เธอเหนื่อย
+new: he she is he's she's
+She is tired. = เธอเหนื่อย
+He is hungry. = เขาหิว
+She is happy. = เธอมีความสุข
+He is busy. = เขายุ่ง
+She's sick. = เธอป่วย | she's = she is
+He's late. = เขามาสาย | he's = he is
+She is very beautiful. = เธอสวยมาก
+He is kind. = เขาใจดี
+
+@lesson 2.2 | My co-worker is sick | เพื่อนร่วมงานของฉันป่วย
+new: my co-worker friend boss mother father
+My co-worker is sick. = เพื่อนร่วมงานของฉันป่วย | my อยู่ข้างหน้า: my co-worker = เพื่อนร่วมงานของฉัน
+My friend is busy. = เพื่อนของฉันยุ่ง
+My boss is happy. = หัวหน้าของฉันอารมณ์ดี
+My mother is tired. = แม่ของฉันเหนื่อย
+My father is fine. = พ่อของฉันสบายดี
+My co-worker is late. = เพื่อนร่วมงานของฉันมาสาย
+My friend is very kind. = เพื่อนของฉันใจดีมาก
+My boss is very busy. = หัวหน้าของฉันยุ่งมาก
+
+@lesson 2.3 | It is hot today | วันนี้อากาศร้อน
+new: it it's today now nice big small
+It is hot today. = วันนี้อากาศร้อน | พูดถึงอากาศ ใช้ It is เสมอ
+It's cold now. = ตอนนี้อากาศหนาว | it's = it is
+It is late. = ดึกแล้ว (สายแล้ว)
+It's nice. = ดีจัง
+It is big. = มันใหญ่
+It is very small. = มันเล็กมาก
+My boss is very busy today. = วันนี้หัวหน้าของฉันยุ่งมาก
+I'm very sleepy now. = ตอนนี้ฉันง่วงมาก
+
+@tip | a + อาชีพ
+p: เวลาบอกอาชีพ ภาษาอังกฤษต้องมี a ข้างหน้า (แปลว่า "หนึ่ง") และต้องมี am / is / are ด้วย
+ok: I am a receptionist. | ฉันเป็นพนักงานต้อนรับ
+no: I receptionist. | ผิด — ขาด am และ a
+p: am / is / are แปลว่า "เป็น" หรือ "อยู่" ได้ด้วย
+ok: He is at home. | เขาอยู่บ้าน
+trick: ฉัน + เป็น + (หนึ่ง) + อาชีพ = I + am + a + receptionist
+
+@lesson 2.4 | She is a receptionist | เธอเป็นพนักงานต้อนรับ
+new: a receptionist cook teacher nurse driver at work home
+I am a receptionist. = ฉันเป็นพนักงานต้อนรับ
+She is a cook. = เธอเป็นแม่ครัว
+He is a driver. = เขาเป็นคนขับรถ
+My mother is a teacher. = แม่ของฉันเป็นครู
+My friend is a nurse. = เพื่อนของฉันเป็นพยาบาล
+I am at work. = ฉันอยู่ที่ทำงาน | am / is / are แปลว่า "อยู่" ได้ด้วย
+He is at home. = เขาอยู่บ้าน
+My father is at work now. = ตอนนี้พ่อของฉันอยู่ที่ทำงาน
+
+@talk coworker | My co-worker is sick | เพื่อนร่วมงานป่วย | work | Boss | 👨‍💼
+A: Good morning, Alvee. = อรุณสวัสดิ์ Alvee
+B: Good morning! = อรุณสวัสดิ์ค่ะ!
+x: Good evening!
+A: Nok is late. = นกมาสาย
+B: She is sick. = เธอป่วยค่ะ
+x: She sick.
+x: She are sick.
+A: Oh no! = แย่จัง!
+B: She is at home today. = วันนี้เธออยู่บ้านค่ะ
+x: She at home today.
+x: She am at home today.
+A: OK. You are very busy today. = โอเค วันนี้คุณยุ่งมากเลยนะ
+B: It's fine. I am ready! = ไม่เป็นไรค่ะ ฉันพร้อมแล้ว!
+x: It fine. I ready!
+x: It's fine. I is ready!
+A: Thank you, Alvee. You are very kind. = ขอบคุณนะ Alvee คุณใจดีมาก
+
+# ------------------------------------------------------------------ UNIT 3
+@unit 3 | We are · They are | พวกเรา · พวกเขา (are) | 🌺 | ใช้ are กับหลายคน หลายสิ่ง และถามว่าอยู่ที่ไหน
+
+@tip | We / They / หลายคน + are
+p: ถ้ามีมากกว่า 1 (หลายคน หลายสิ่ง) ให้ใช้ are เสมอ
+tr: I | am
+tr: He / She / It | is
+tr: You / We / They | are
+ok: We are happy. | พวกเรามีความสุข
+ok: They are tired. | พวกเขาเหนื่อย
+no: They is tired. | ผิด — they ต้องใช้ are
+trick: are = "หลาย" (we, they, ห้องหลายห้อง) และ you
+
+@lesson 3.1 | We are happy | พวกเรามีความสุข
+new: we they we're they're
+We are happy. = พวกเรามีความสุข
+They are tired. = พวกเขาเหนื่อย
+We are busy today. = วันนี้พวกเรายุ่ง
+They're hungry. = พวกเขาหิว | they're = they are
+We're ready. = พวกเราพร้อมแล้ว | we're = we are
+They are at work. = พวกเขาอยู่ที่ทำงาน
+We are very sleepy now. = ตอนนี้พวกเราง่วงมาก
+They are at home today. = วันนี้พวกเขาอยู่บ้าน
+
+@tip | 1 อัน vs หลายอัน (เติม s)
+p: ภาษาไทยพูดว่า "ห้อง" ได้ทั้ง 1 ห้องและหลายห้อง แต่ภาษาอังกฤษ ถ้ามากกว่า 1 ให้เติม s
+tr: 1 | room | is
+tr: 2+ | rooms | are
+ok: The room is clean. | ห้อง (1 ห้อง) สะอาด
+ok: The rooms are clean. | ห้อง (หลายห้อง) สะอาด
+no: The rooms is clean. | ผิด — rooms (หลายห้อง) ต้องใช้ are
+trick: เห็นตัว s ท้ายคำ (rooms, guests) → ใช้ are
+
+@lesson 3.2 | The rooms are clean | ห้องสะอาด
+new: the room guest clean dirty
+The room is clean. = ห้องสะอาด
+The rooms are clean. = ห้อง (ทุกห้อง) สะอาด
+The guest is happy. = แขกพอใจ (มีความสุข)
+The guests are happy. = แขก (หลายคน) พอใจ
+The room is dirty. = ห้องสกปรก
+The rooms are big. = ห้อง (หลายห้อง) ใหญ่
+The guests are hungry. = แขก (หลายคน) หิว
+The guest is late. = แขกมาสาย
+
+@lesson 3.3 | Is or are? | is หรือ are?
+new: friends people co-workers
+My friends are kind. = เพื่อน ๆ ของฉันใจดี
+Ploy and Nok are at home. = พลอยกับนกอยู่บ้าน | 2 คน (Ploy + Nok) → are
+The people are nice. = ผู้คนนิสัยดี
+My co-workers are busy. = เพื่อนร่วมงาน (หลายคน) ของฉันยุ่ง
+My mother and father are fine. = พ่อและแม่ของฉันสบายดี | 2 คน → are
+Alvee is happy. = Alvee มีความสุข | 1 คน → is
+My friend is sick. = เพื่อน (1 คน) ของฉันป่วย
+The people are happy today. = วันนี้ผู้คนมีความสุข
+
+@tip | Where is …? (อยู่ที่ไหน)
+p: ถามว่าของอยู่ที่ไหน ใช้ Where is (1 อย่าง) หรือ Where are (หลายอย่าง)
+ok: Where is my phone? | โทรศัพท์ของฉันอยู่ที่ไหน
+ok: Where are the keys? | กุญแจ (หลายดอก) อยู่ที่ไหน
+tr: in | ใน (in my bag)
+tr: on | บน (on the table)
+tr: at | ที่ (at work, at home)
+trick: ตอบด้วย It is … (1 อย่าง) หรือ They are … (หลายอย่าง)
+
+@lesson 3.4 | Where is my phone? | โทรศัพท์ของฉันอยู่ไหน
+new: where phone key bag table lobby in on
+Where is my phone? = โทรศัพท์ของฉันอยู่ที่ไหน
+It is on the table. = มันอยู่บนโต๊ะ
+Where are the keys? = กุญแจอยู่ที่ไหน
+They are in my bag. = มันอยู่ในกระเป๋าของฉัน
+The key is here. = กุญแจอยู่ที่นี่
+My bag is there. = กระเป๋าของฉันอยู่ตรงนั้น
+The guests are in the lobby. = แขกอยู่ที่ล็อบบี้
+Where is the guest? = แขกอยู่ที่ไหน
+
+@talk phone | Where is my phone? | โทรศัพท์อยู่ไหน | home | Mom | 👩‍🦳
+B: Mom, where is my phone? = แม่คะ โทรศัพท์หนูอยู่ไหน
+x: Mom, where my phone?
+x: Mom, where are my phone?
+A: It is on the table. = อยู่บนโต๊ะไง
+B: Where are my keys? = แล้วกุญแจหนูอยู่ไหน
+x: Where is my keys?
+x: Where my keys?
+A: They are in your bag. = อยู่ในกระเป๋าของลูกไง
+B: Thank you, Mom! I'm late! = ขอบคุณค่ะแม่! หนูสายแล้ว!
+x: Thank you, Mom! I late!
+x: Thank you, Mom! I are late!
+A: Your friends are here. = เพื่อน ๆ ของลูกมาแล้ว
+B: OK! We are ready! Bye, Mom! = โอเค! พวกเราพร้อมแล้ว! บ๊ายบายค่ะแม่!
+x: OK! We is ready! Bye, Mom!
+x: OK! We ready! Bye, Mom!
+
+# ------------------------------------------------------------------ UNIT 4
+@unit 4 | Not · Questions · Hello | ไม่ · คำถาม · ทักทาย | 🛎️ | ปฏิเสธ ถาม-ตอบ yes/no และทักทายแขก
+
+@tip | ปฏิเสธ: am / is / are + not
+p: ภาษาไทยใส่ "ไม่" ไว้หน้าคำ (ไม่หิว) แต่ภาษาอังกฤษใส่ not ไว้หลัง am / is / are
+ok: I am not hungry. | ฉันไม่หิว
+no: I not hungry. | ผิด — ลืม am
+tr: I am not | I'm not
+tr: He / She / It is not | isn't
+tr: You / We / They are not | aren't
+trick: am / is / are มาก่อน แล้ว not ตามหลังเสมอ
+
+@lesson 4.1 | I am not hungry | ฉันไม่หิว
+new: not isn't aren't
+I am not hungry. = ฉันไม่หิว
+I'm not tired. = ฉันไม่เหนื่อย
+She is not at home. = เธอไม่อยู่บ้าน
+He isn't busy. = เขาไม่ยุ่ง | isn't = is not
+They aren't ready. = พวกเขายังไม่พร้อม | aren't = are not
+The room isn't clean. = ห้องไม่สะอาด
+It isn't cold today. = วันนี้อากาศไม่หนาว
+We are not late. = พวกเราไม่สาย
+
+@tip | คำถาม: ย้าย am / is / are มาข้างหน้า
+p: จะถามคำถาม ให้ย้าย am / is / are ไปไว้หน้าสุด แล้วจบด้วย ?
+tr: You are hungry. | → | Are you hungry?
+tr: She is at work. | → | Is she at work?
+p: ตอบสั้น ๆ: Yes, I am. (ใช่) / No, I'm not. (ไม่)
+ok: Are you okay? | คุณโอเคไหม
+no: You are okay? | ไม่ถูก — ต้องย้าย are มาข้างหน้า
+trick: ภาษาไทยเติม "ไหม" ท้ายประโยค แต่ภาษาอังกฤษ "สลับที่" แทน
+
+@lesson 4.2 | Are you hungry? | คุณหิวไหม
+new: yes no okay
+Are you hungry? = คุณหิวไหม
+Yes, I am. = ใช่ค่ะ (ฉันหิว) | ตอบสั้น ๆ ไม่ต้องพูด hungry ซ้ำ
+No, I'm not. = ไม่ค่ะ (ฉันไม่หิว)
+Is she at work? = เธออยู่ที่ทำงานไหม
+Yes, she is. = ใช่ เธออยู่
+Is it hot? = ร้อนไหม
+Are they ready? = พวกเขาพร้อมหรือยัง
+No, they aren't. = ยัง พวกเขายังไม่พร้อม
+Are you okay? = คุณโอเคไหม (เป็นอะไรหรือเปล่า)
+
+@tip | ทักทายตามเวลา
+tr: Good morning | ตอนเช้า (ก่อนเที่ยง)
+tr: Good afternoon | ตอนบ่าย (12:00 – 17:00)
+tr: Good evening | ตอนเย็น / ค่ำ (หลัง 17:00)
+tr: Good night | ใช้ตอนลา หรือก่อนนอนเท่านั้น
+ok: Good evening. Welcome to our hotel. | สวัสดีตอนเย็นค่ะ ยินดีต้อนรับสู่โรงแรมของเรา
+no: Good night! Welcome! | ผิด — Good night ไม่ใช้ทักทายตอนเจอกัน
+trick: แขกมาถึงตอนดึก ก็ยังทักว่า Good evening นะ
+
+@lesson 4.3 | Good morning! Welcome! | สวัสดี! ยินดีต้อนรับ
+new: hello good_morning good_afternoon good_evening how_are_you welcome hotel our thank_you
+Hello! = สวัสดี!
+Good morning! = สวัสดีตอนเช้า (อรุณสวัสดิ์)
+Good afternoon. = สวัสดีตอนบ่าย
+Good evening. = สวัสดีตอนเย็น
+Welcome to our hotel. = ยินดีต้อนรับสู่โรงแรมของเรา
+How are you? = สบายดีไหม (เป็นยังไงบ้าง)
+I'm fine, thank you. = ฉันสบายดี ขอบคุณ
+Thank you very much. = ขอบคุณมาก
+
+@lesson 4.4 | My name is Alvee | ฉันชื่อ Alvee
+new: name your nice_to_meet_you floor third breakfast restaurant pool open
+My name is Alvee. = ฉันชื่อ Alvee | name is = ชื่อ… (ห้ามลืม is)
+I am the receptionist. = ฉันเป็นพนักงานต้อนรับ
+Nice to meet you. = ยินดีที่ได้รู้จัก
+Your room is ready. = ห้องของคุณพร้อมแล้ว
+Your room is on the third floor. = ห้องของคุณอยู่ชั้นสาม
+Breakfast is in the restaurant. = อาหารเช้าอยู่ที่ห้องอาหาร
+The pool is open. = สระว่ายน้ำเปิดอยู่
+The restaurant is not open now. = ตอนนี้ห้องอาหารยังไม่เปิด
+
+@talk welcome | Welcome to our hotel | ยินดีต้อนรับสู่โรงแรม | hotel | Guest | 🧳
+B: Good afternoon! Welcome to our hotel. = สวัสดีตอนบ่ายค่ะ ยินดีต้อนรับสู่โรงแรมของเรา
+x: Good night! Welcome to our hotel.
+x: Good afternoon! Welcome to our bag.
+A: Hello! Thank you. = สวัสดีครับ ขอบคุณครับ
+B: My name is Alvee. How can I help you? = ดิฉันชื่อ Alvee ค่ะ มีอะไรให้ช่วยไหมคะ
+x: My name Alvee. How can I help you?
+x: I name is Alvee. How can I help you?
+A: I'm Mr. Brown. Is my room ready? = ผมชื่อมิสเตอร์บราวน์ครับ ห้องของผมพร้อมหรือยังครับ
+B: Yes, it is. Your room is on the third floor. = พร้อมแล้วค่ะ ห้องของคุณอยู่ชั้นสามค่ะ
+x: Yes, it are. Your room is on the third floor.
+x: Yes, it is. Your room on the third floor.
+A: Great! Is the pool open? = เยี่ยมเลย! สระว่ายน้ำเปิดไหมครับ
+B: Yes, it is. The pool is open now. = เปิดค่ะ ตอนนี้สระว่ายน้ำเปิดอยู่ค่ะ
+x: Yes, it is. The pool open now.
+x: No, I'm not. The pool is open now.
+A: Thank you very much! = ขอบคุณมากครับ!
+B: You're welcome. Nice to meet you! = ยินดีค่ะ ยินดีที่ได้รู้จักนะคะ!
+x: You welcome. Nice to meet you!
+x: You're welcome. Nice to meet your!
+
+@talk goodnight | Good night text | ข้อความก่อนนอน | love | {bf} | 💙
+A: Hi Alvee! Are you at home? = หวัดดี Alvee! ถึงบ้านหรือยัง
+B: Yes, I am. I'm very tired today. = ถึงแล้วค่ะ วันนี้เหนื่อยมากเลย
+x: Yes, I am. I very tired today.
+x: Yes, I is. I'm very tired today.
+A: Oh no! Are you okay? = แย่จัง! เป็นอะไรไหม
+B: I'm okay. The hotel is very busy. = ไม่เป็นไรค่ะ โรงแรมยุ่งมากเลย
+x: I okay. The hotel very busy.
+x: I'm okay. The hotel are very busy.
+A: You are a great receptionist! = เธอเป็นพนักงานต้อนรับที่เก่งมาก!
+B: Thank you! You are very kind. = ขอบคุณค่ะ! คุณใจดีมาก
+x: Thank you! You is very kind.
+x: Thank you! You very kind.
+A: Are you sleepy now? = ตอนนี้ง่วงหรือยัง
+B: Yes, I am. Good night! = ง่วงแล้วค่ะ ฝันดีนะ!
+x: Yes, I am. Good morning!
+x: Yes, I is. Good night!
+A: Good night, Alvee! = ฝันดีนะ Alvee!
+
+@talk callmom | Video call with Mom | วิดีโอคอลกับแม่ | family | Mom | 👩‍🦳
+A: Hello, Alvee! How are you? = สวัสดีลูก! เป็นยังไงบ้าง
+B: Hi, Mom! I'm fine. Are you okay? = สวัสดีค่ะแม่! หนูสบายดี แม่โอเคไหมคะ
+x: Hi, Mom! I fine. Are you okay?
+x: Hi, Mom! I'm fine. You are okay?
+A: Yes, I am. But it is very hot today. = โอเคจ้ะ แต่วันนี้อากาศร้อนมาก
+B: Is Dad at home? = พ่ออยู่บ้านไหมคะ
+x: Dad at home?
+x: Are Dad at home?
+A: No, he isn't. He is at work. = ไม่อยู่จ้ะ พ่ออยู่ที่ทำงาน
+B: Is he okay? = พ่อสบายดีไหมคะ
+x: Are he okay?
+x: He okay?
+A: Yes, he is. He is busy and happy. = สบายดีจ้ะ พ่อยุ่งแต่ก็มีความสุข
+B: Good! I'm happy too. = ดีจังค่ะ! หนูก็มีความสุขเหมือนกัน
+x: Good! I happy too.
+x: Good! I'm happy to.

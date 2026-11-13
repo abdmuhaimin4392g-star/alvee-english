@@ -1,0 +1,11 @@
+{
+  "name": "alvee-english",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alvee's 6-month English course: game lessons with Thai help on every word, plus a private dashboard.",
+  "scripts": {
+    "start": "node server/server.js",
+    "build": "node tools/build.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

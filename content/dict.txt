@@ -1,0 +1,1890 @@
+# DICTIONARY — word | pos | Thai | pronunciation (Thai script) | picture | note
+# pos: n, v, adj, adv, pron, prep, conj, det, poss, aux, q, int, phr, name, num, contr
+# "+ English = Thai" lines are extra examples for the word above.
+@dict
+
+# ---------- people & pronouns
+I | pron | ฉัน / ดิฉัน / ผม | ไอ | 🙋‍♀️ | ใช้แทนตัวเอง เขียนตัวใหญ่ I เสมอ แม้อยู่กลางประโยค · คู่กับ am เสมอ: I am
++ I am at home. = ฉันอยู่บ้าน
++ I am a receptionist. = ฉันเป็นพนักงานต้อนรับ
+you | pron | คุณ / เธอ (คนที่เราคุยด้วย) | ยู | 🫵 | ใช้ได้ทั้ง 1 คนและหลายคน · คู่กับ are เสมอ: you are
++ You are my friend. = คุณเป็นเพื่อนของฉัน
+he | pron | เขา (ผู้ชาย 1 คน) | ฮี | 👨 | คู่กับ is: he is
++ He is my friend. = เขาเป็นเพื่อนของฉัน
+she | pron | เธอ / เขา (ผู้หญิง 1 คน) | ชี | 👩 | คู่กับ is: she is
++ She is my mother. = เธอเป็นแม่ของฉัน
+it | pron | มัน (สิ่งของ สัตว์ อากาศ เวลา) | อิท | 📦 | ใช้พูดถึงอากาศและเวลาด้วย: It is hot = อากาศร้อน · คู่กับ is
++ It is my bag. = มันคือกระเป๋าของฉัน
+we | pron | พวกเรา / เรา | วี | 👨‍👩‍👧 | รวมตัวเราด้วย · คู่กับ are: we are
++ We are friends. = พวกเราเป็นเพื่อนกัน
+they | pron | พวกเขา / พวกมัน | เธย์ | 👥 | หลายคน หรือหลายสิ่ง · คู่กับ are: they are
++ They are my friends. = พวกเขาเป็นเพื่อนของฉัน
+me | pron | ฉัน (ใช้ตามหลังกริยา) | มี | 🙋‍♀️ | help me = ช่วยฉัน · Me too = ฉันด้วย
++ Help me, please. = ช่วยฉันหน่อย
++ It is for me. = มันเป็นของฉัน (สำหรับฉัน)
+my | poss | ของฉัน | มาย | | วางไว้ข้างหน้าคำ: my friend = เพื่อนของฉัน (ภาษาไทย "ของฉัน" อยู่ข้างหลัง)
+your | poss | ของคุณ | ยัวร์ | | วางไว้ข้างหน้า: your room = ห้องของคุณ · อย่าสับสนกับ you're (= you are)
++ Your bag is here. = กระเป๋าของคุณอยู่ที่นี่
+our | poss | ของเรา | อาวร์ | | our hotel = โรงแรมของเรา
++ Our room is big. = ห้องของเราใหญ่
++ Our boss is kind. = หัวหน้าของเราใจดี
+
+# ---------- be (am / is / are)
+am | aux | เป็น / อยู่ / คือ (ใช้กับ I เท่านั้น) | แอม | 🔗 | ไม่มีคำแปลตรง ๆ ในภาษาไทย แต่ต้องใส่หลัง I เสมอ: I am hungry = ฉันหิว · ห้ามพูด I hungry
++ I am at work. = ฉันอยู่ที่ทำงาน
+is | aux | เป็น / อยู่ / คือ (ใช้กับ he, she, it และ 1 คน / 1 สิ่ง) | อิซ | 🔗 | He is · She is · It is · The room is · Alvee is
++ The pool is open. = สระว่ายน้ำเปิดอยู่
+are | aux | เป็น / อยู่ / คือ (ใช้กับ you, we, they และหลายคน / หลายสิ่ง) | อาร์ | 🔗 | You are · We are · They are · The rooms are
++ The guests are in the lobby. = แขกอยู่ที่ล็อบบี้
+I'm | contr:I am | ฉัน (= I am) | ไอม์ | | ย่อมาจาก I am ความหมายเหมือนกัน ใช้พูดบ่อยมาก
++ I'm at home. = ฉันอยู่บ้าน
+you're | contr:you are | คุณ (= you are) | ยัวร์ | | ย่อมาจาก you are · You're welcome = ไม่เป็นไร / ยินดีค่ะ
+he's | contr:he is | เขา (= he is) | ฮีส | | ย่อมาจาก he is
++ He's my father. = เขาเป็นพ่อของฉัน
+she's | contr:she is | เธอ (= she is) | ชีส | | ย่อมาจาก she is
++ She's my friend. = เธอเป็นเพื่อนของฉัน
+it's | contr:it is | มัน (= it is) | อิทส์ | | ย่อมาจาก it is · It's fine = ไม่เป็นไร
++ It's hot today. = วันนี้อากาศร้อน
+we're | contr:we are | พวกเรา (= we are) | เวียร์ | | ย่อมาจาก we are
++ We're at work. = พวกเราอยู่ที่ทำงาน
+they're | contr:they are | พวกเขา (= they are) | แธร์ | | ย่อมาจาก they are · อ่านเหมือน there และ their
++ They're very kind. = พวกเขาใจดีมาก
+not | adv | ไม่ | น็อท | 🚫 | ใช้หลัง am / is / are: I am not hungry = ฉันไม่หิว
++ It is not my bag. = มันไม่ใช่กระเป๋าของฉัน
+isn't | contr:is not | ไม่ (= is not) | อิซ-เซินท์ | | ย่อมาจาก is not ใช้กับ he / she / it
++ It isn't my phone. = มันไม่ใช่โทรศัพท์ของฉัน
+aren't | contr:are not | ไม่ (= are not) | อาร์นท์ | | ย่อมาจาก are not ใช้กับ you / we / they
++ We aren't busy. = พวกเราไม่ยุ่ง
++ You aren't late. = คุณไม่สาย
+
+# ---------- feelings & describing words
+hungry | adj | หิว | ฮัง-กรี้ | 😋 | ใช้กับ am / is / are: I am hungry = ฉันหิว
++ The baby is hungry. = เด็กทารกหิว
+sleepy | adj | ง่วงนอน | สลี-ปี้ | 😴 | ง่วง อยากนอน (ต่างจาก tired = เหนื่อย)
++ It is late. I am sleepy. = ดึกแล้ว ฉันง่วงนอน
+tired | adj | เหนื่อย / เพลีย | ไทเอิร์ด | 😩 | เหนื่อยจากการทำงาน (ต่างจาก sleepy = ง่วงนอน)
++ My mother is tired today. = วันนี้แม่ของฉันเหนื่อย
+happy | adj | มีความสุข / ดีใจ | แฮป-ปี้ | 😊 | ตรงข้ามกับ sad (เศร้า)
++ We are happy today. = วันนี้พวกเรามีความสุข
+busy | adj | ยุ่ง / ไม่ว่าง / (สถานที่) คนเยอะ | บิ-ซี่ | 🏃‍♀️ | The hotel is busy = โรงแรมยุ่ง / คนเยอะ
++ The restaurant is busy now. = ตอนนี้ร้านอาหารคนเยอะ
+sick | adj | ป่วย / ไม่สบาย | ซิก | 🤒 |
++ My father is sick today. = วันนี้พ่อของฉันไม่สบาย
+fine | adj | สบายดี / ดี / ไม่เป็นไร | ฟายน์ | 👌 | I'm fine = ฉันสบายดี · It's fine = ไม่เป็นไร
++ It's fine. = ไม่เป็นไร
+ready | adj | พร้อม / เสร็จแล้ว | เร-ดี้ | ✅ | Your room is ready = ห้องของคุณพร้อมแล้ว
++ Breakfast is ready. = อาหารเช้าพร้อมแล้ว
+cold | adj | หนาว / เย็น | โคลด์ | 🥶 | I'm cold = ฉันหนาว · It's cold = อากาศหนาว
++ The room is very cold. = ห้องเย็นมาก
+hot | adj | ร้อน / (อาหาร) เผ็ด | ฮ็อท | 🥵 | It is hot = อากาศร้อน
++ The room is hot. = ห้องร้อน
+late | adj | สาย / ช้า / ดึก | เลท | ⏰ | I'm late = ฉันมาสาย · It's late = ดึกแล้ว
++ The driver is late. = คนขับรถมาสาย
+bored | adj | เบื่อ | บอร์ด | 🥱 |
++ My friends are bored. = เพื่อน ๆ ของฉันเบื่อ
++ I am bored at home. = ฉันเบื่ออยู่บ้าน
+kind | adj | ใจดี | ไคนด์ | 🤗 |
++ The guests are very kind. = แขกใจดีมาก
+beautiful | adj | สวย / สวยงาม | บิว-ทิ-ฟูล | 🌸 | ใช้กับคน สิ่งของ สถานที่
++ The hotel is beautiful. = โรงแรมสวยงาม
+right | adj | ถูกต้อง / ขวา | ไรท์ | ✔️ | You are right = คุณพูดถูก · on the right = ทางขวา
++ Yes, you are right. = ใช่ คุณพูดถูก
+smart | adj | ฉลาด / เก่ง | สมาร์ท | 🧠 |
++ My friend is very smart. = เพื่อนของฉันฉลาดมาก
++ She is a smart nurse. = เธอเป็นพยาบาลที่เก่ง
+good | adj | ดี / เก่ง | กู๊ด | 👍 | Good! = ดีจัง!
++ It is good. = มันดี
++ She is a good teacher. = เธอเป็นครูที่ดี
+great | adj | เยี่ยม / ดีมาก | เกรท | 🌟 | Great! = เยี่ยมเลย!
++ It's great! = เยี่ยมไปเลย!
++ He is a great driver. = เขาเป็นคนขับรถที่เก่งมาก
+nice | adj | ดี / น่ารัก / นิสัยดี | ไนซ์ | 😊 |
++ The room is very nice. = ห้องดีมาก
+big | adj | ใหญ่ | บิ๊ก | 🐘 |
++ The pool is big. = สระว่ายน้ำใหญ่
+small | adj | เล็ก | สมอล | 🐜 |
++ My bag is small. = กระเป๋าของฉันเล็ก
++ The room is small. = ห้องเล็ก
+clean | adj+v | สะอาด · (กริยา) ทำความสะอาด | คลีน | ✨ | The room is clean = ห้องสะอาด · I clean the room = ฉันทำความสะอาดห้อง
++ The pool is very clean. = สระว่ายน้ำสะอาดมาก
+dirty | adj | สกปรก | เดอร์-ตี้ | 🦠 | ตรงข้ามกับ clean
++ My bag is dirty. = กระเป๋าของฉันสกปรก
++ The table is dirty. = โต๊ะสกปรก
+okay | adj | โอเค / ไม่เป็นไร / ตกลง | โอ-เค | 👌 | Are you okay? = เป็นอะไรไหม / โอเคไหม
++ I'm okay. = ฉันโอเค
+OK | int | โอเค / ตกลง | โอ-เค | 👌 | เหมือน okay
++ OK, thank you. = โอเค ขอบคุณ
+open | adj+v | เปิด (อยู่) · (กริยา) เปิด | โอ-เพ่น | 🔓 | The pool is open = สระเปิดอยู่
++ The lobby is open now. = ตอนนี้ล็อบบี้เปิดอยู่
+welcome | adj | ยินดีต้อนรับ | เวล-คัม | 🤗 | Welcome to … = ยินดีต้อนรับสู่…
++ Welcome home! = ยินดีต้อนรับกลับบ้าน!
+
+# ---------- small words
+very | adv | มาก | เว-รี่ | 💯 | วางไว้ข้างหน้าคำ: very hungry = หิวมาก (ภาษาไทย "มาก" อยู่ข้างหลัง)
++ The hotel is very big. = โรงแรมใหญ่มาก
+and | conj | และ / กับ / แล้วก็ | แอนด์ | ➕ | hungry and tired = หิวและเหนื่อย
++ My mother and my father are at home. = พ่อและแม่ของฉันอยู่บ้าน
+but | conj | แต่ | บัท | ↔️ |
++ I am tired but happy. = ฉันเหนื่อยแต่มีความสุข
++ It is small but clean. = มันเล็กแต่สะอาด
+too | adv | ด้วย / เหมือนกัน | ทู | ➕ | วางไว้ท้ายประโยค: I'm hungry too = ฉันก็หิวเหมือนกัน
++ She is sleepy too. = เธอก็ง่วงเหมือนกัน
++ My boss is busy too. = หัวหน้าของฉันก็ยุ่งเหมือนกัน
+much | adv | มาก | มัช | | มักใช้ใน Thank you very much = ขอบคุณมาก
++ Thank you so much. = ขอบคุณมาก ๆ
+so | adv | มาก / จัง · (คำเชื่อม) ดังนั้น | โซ | | so happy = มีความสุขจัง
++ I am so happy! = ฉันมีความสุขมาก!
++ You are so kind. = คุณใจดีจัง
+a | det | หนึ่ง (นำหน้าคน/สิ่งของ 1 อย่าง) | อะ | 1️⃣ | ใส่หน้าคำนามที่นับได้ 1 อย่าง: a bag · ใช้ an ถ้าคำต่อไปขึ้นต้นด้วยเสียงสระ (an apple)
++ It is a big room. = มันเป็นห้องใหญ่ (1 ห้อง)
+the | det | (นำหน้าสิ่งที่รู้กันว่าอันไหน) | เดอะ | 👉 | the room = ห้องนั้น / ห้องที่พูดถึง · อ่านว่า "ดิ" ถ้าคำต่อไปขึ้นต้นด้วยสระ
++ The key is on the table. = กุญแจอยู่บนโต๊ะ
+at | prep | ที่ (สถานที่ / เวลา) | แอท | 📍 | at work = ที่ทำงาน · at home = ที่บ้าน
++ We are at the hotel. = พวกเราอยู่ที่โรงแรม
+in | prep | ใน / ข้างใน | อิน | 📥 | in my bag = ในกระเป๋าของฉัน
++ The keys are in the room. = กุญแจอยู่ในห้อง
+on | prep | บน / ที่ (ชั้น) | ออน | ⬆️ | on the table = บนโต๊ะ · on the third floor = ที่ชั้นสาม
++ My bag is on the floor. = กระเป๋าของฉันอยู่บนพื้น
+to | prep | ไป / ถึง / สู่ | ทู | ➡️ | Welcome to … = ยินดีต้อนรับสู่…
++ Welcome to Thailand. = ยินดีต้อนรับสู่ประเทศไทย
+here | adv | ที่นี่ / ตรงนี้ | เฮียร์ | 👇 |
++ I am here. = ฉันอยู่ที่นี่
++ Your key is here. = กุญแจของคุณอยู่ตรงนี้
+there | adv | ที่นั่น / ตรงนั้น | แดร์ | 👉 |
++ The pool is there. = สระว่ายน้ำอยู่ตรงนั้น
++ My friend is there. = เพื่อนของฉันอยู่ที่นั่น
+now | adv | ตอนนี้ / เดี๋ยวนี้ | นาว | ⏱️ |
++ I am at work now. = ตอนนี้ฉันอยู่ที่ทำงาน
+today | adv | วันนี้ | ทู-เดย์ | 📅 |
++ I am busy today. = วันนี้ฉันยุ่ง
+where | q | ที่ไหน | แวร์ | 📍 | Where is…? = …อยู่ที่ไหน (1 อย่าง) · Where are…? (หลายอย่าง)
++ Where is the pool? = สระว่ายน้ำอยู่ที่ไหน
++ Where are you? = คุณอยู่ที่ไหน
+how | q | อย่างไร / ยังไง | ฮาว | ❓ | How are you? = สบายดีไหม
++ How is your mother? = แม่ของคุณสบายดีไหม
+can | aux | สามารถ / ได้ | แคน | 💪 | can + กริยา: I can help = ฉันช่วยได้
++ I can help you. = ฉันช่วยคุณได้
+yes | int | ใช่ / ค่ะ / ครับ | เยส | 👍 |
++ Yes, it is. = ใช่ (มันเป็นอย่างนั้น)
+no | int | ไม่ / ไม่ใช่ | โน | 🙅‍♀️ | ตอบคำถาม · ใช้ not หลัง am / is / are
++ No, it isn't. = ไม่ใช่
+oh | int | โอ้ / อ๋อ | โอ | 😮 |
++ Oh, it's you! = อ้าว คุณนี่เอง!
++ Oh, thank you! = โอ้ ขอบคุณ!
+hello | int | สวัสดี | เฮล-โล | 👋 |
++ Hello, my name is Alvee. = สวัสดี ฉันชื่อ Alvee
+hi | int | หวัดดี (เป็นกันเอง) | ไฮ | 👋 | ใช้กับเพื่อน / คนสนิท
++ Hi, Ploy! = หวัดดี พลอย!
++ Hi! How are you? = หวัดดี! สบายดีไหม
+bye | int | บ๊ายบาย / ลาก่อน | บาย | 👋 |
++ Bye! See you! = บ๊ายบาย! แล้วเจอกัน!
++ Bye, Mom! = บ๊ายบายค่ะแม่!
+thank | v | ขอบคุณ | แธงค์ | 🙏 | มักพูดว่า thank you
++ Thank you, my friend. = ขอบคุณนะ เพื่อน
+
+please | int | กรุณา / ได้โปรด / ...หน่อย | พลีส | 🙏 | ใช้ให้สุภาพ วางไว้ต้นหรือท้ายประโยค
++ Water, please. = ขอน้ำหน่อยค่ะ
++ Please help me. = กรุณาช่วยฉันหน่อย
+for | prep | สำหรับ / เพื่อ / ให้ | ฟอร์ | 🎁 | It is for you = นี่สำหรับคุณ
++ This is for you. = นี่สำหรับคุณ
++ Thank you for your help. = ขอบคุณสำหรับความช่วยเหลือ
+from | prep | จาก / มาจาก | ฟรอม | 🛫 | I am from Thailand = ฉันมาจากประเทศไทย
++ Where are you from? = คุณมาจากที่ไหน
++ The guest is from England. = แขกมาจากประเทศอังกฤษ
+what | q | อะไร | วอท | ❔ | What is …? = …คืออะไร
++ What is it? = มันคืออะไร
++ What is your name? = คุณชื่ออะไร
+her | poss | ของเธอ · (ตามหลังกริยา) เธอ | เฮอร์ | | her bag = กระเป๋าของเธอ · help her = ช่วยเธอ
++ Her room is clean. = ห้องของเธอสะอาด
++ Her name is Ploy. = เธอชื่อพลอย
+his | poss | ของเขา (ผู้ชาย) | ฮิส | | his bag = กระเป๋าของเขา
++ His name is Nok. = เขาชื่อนก
++ His room is on the second floor. = ห้องของเขาอยู่ชั้นสอง
+day | n | วัน | เดย์ | 📆 | every day = ทุกวัน · today = วันนี้
++ It is a beautiful day. = วันนี้เป็นวันที่สวยงาม
++ Have a nice day! = ขอให้มีวันที่ดีนะคะ!
+baby | n | เด็กทารก / ที่รัก (คำเรียกคนรัก) | เบ-บี้ | 👶 |
++ The baby is sleepy. = เด็กทารกง่วงนอน
++ My baby is happy. = ลูกน้อยของฉันมีความสุข
+see | v:=,saw,= | เห็น / ดู / เจอ | ซี | 👀 | See you! = แล้วเจอกัน!
++ See you tomorrow! = แล้วเจอกันพรุ่งนี้!
++ I see the pool. = ฉันเห็นสระว่ายน้ำ
+
+water | n0 | น้ำ | วอ-เทอร์ | 💧 | นับไม่ได้ ไม่เติม s: a bottle of water = น้ำ 1 ขวด
++ The water is cold. = น้ำเย็น
++ The water is very hot. = น้ำร้อนมาก
+this | det | นี่ / นี้ / อันนี้ | ดิส | 👇 | ใช้กับของที่อยู่ใกล้ 1 อย่าง · This is … = นี่คือ…
++ This is my room. = นี่คือห้องของฉัน
++ This is Ploy. She is my friend. = นี่คือพลอย เธอเป็นเพื่อนของฉัน
+have | v:has,had,having | มี · (อาหาร) กิน / ทาน | แฮฟ | 🤲 | I have / You have / They have · He / She has
++ I have a key. = ฉันมีกุญแจ
++ I have breakfast at home. = ฉันกินอาหารเช้าที่บ้าน
+tomorrow | adv | พรุ่งนี้ | ทู-มอร์-โร | 🌄 |
++ I am busy tomorrow. = พรุ่งนี้ฉันยุ่ง
++ It is hot tomorrow. = พรุ่งนี้อากาศร้อน
+England | name | ประเทศอังกฤษ | อิง-แลนด์ | 🇬🇧 |
++ Mr. Brown is from England. = คุณบราวน์มาจากประเทศอังกฤษ
++ It is cold in England. = ที่อังกฤษอากาศหนาว
+
+# ---------- phrases
+good morning | phr | อรุณสวัสดิ์ / สวัสดีตอนเช้า | กู๊ด-มอร์-นิ่ง | 🌅 | ใช้ก่อนเที่ยง
++ Good morning, Mom! = อรุณสวัสดิ์ค่ะแม่!
+good afternoon | phr | สวัสดีตอนบ่าย | กู๊ด-อาฟ-เตอร์-นูน | ☀️ | ใช้ช่วง 12:00 – 17:00
++ Good afternoon, Mr. Brown. = สวัสดีตอนบ่ายค่ะ คุณบราวน์
+good evening | phr | สวัสดีตอนเย็น | กู๊ด-อีฟ-นิ่ง | 🌇 | ใช้หลัง 17:00 ตอนเจอกัน
++ Good evening! Welcome! = สวัสดีตอนเย็นค่ะ! ยินดีต้อนรับ!
+good night | phr | ราตรีสวัสดิ์ / ฝันดี | กู๊ด-ไนท์ | 🌙 | ใช้ตอนลากัน หรือก่อนนอนเท่านั้น
++ Good night, Mom. = ฝันดีนะคะแม่
+thank you | phr | ขอบคุณ | แธงค์-กิ้ว | 🙏 | Thank you very much = ขอบคุณมาก · ตอบว่า You're welcome
+how are you | phr | สบายดีไหม / เป็นยังไงบ้าง | ฮาว-อาร์-ยู | 🙂 | ตอบว่า I'm fine, thank you.
++ Hi, Nok! How are you? = หวัดดี นก! สบายดีไหม
+nice to meet you | phr | ยินดีที่ได้รู้จัก | ไนซ์-ทู-มีท-ยู | 🤝 | ตอบว่า Nice to meet you too.
++ Nice to meet you too. = ยินดีที่ได้รู้จักเช่นกัน
+you're welcome | phr | ไม่เป็นไร / ยินดีค่ะ (ตอบคำขอบคุณ) | ยัวร์-เวล-คัม | 😊 |
++ Thank you! — You're welcome. = ขอบคุณ! — ยินดีค่ะ
+me too | phr | ฉันด้วย / ฉันก็เหมือนกัน | มี-ทู | 🙋 |
++ I am hungry. Me too! = ฉันหิว ฉันก็เหมือนกัน!
+oh no | phr | แย่จัง / ตายแล้ว | โอ-โน | 😱 |
++ Oh no! I'm late! = ตายแล้ว! ฉันสายแล้ว!
+how can I help you | phr | มีอะไรให้ช่วยไหมคะ | ฮาว-แคน-ไอ-เฮลพ์-ยู | 💁‍♀️ | ประโยคสำคัญของพนักงานต้อนรับ
++ Good morning! How can I help you? = สวัสดีตอนเช้าค่ะ มีอะไรให้ช่วยไหมคะ
+
+# ---------- people & jobs
+friend | n | เพื่อน | เฟรนด์ | 👭 |
+co-worker | n | เพื่อนร่วมงาน | โค-เวิร์ค-เกอร์ | 🧑‍🤝‍🧑 | คนที่ทำงานที่เดียวกัน
+boss | n | หัวหน้า / เจ้านาย | บอส | 👨‍💼 |
+mother | n | แม่ / มารดา | มา-เธอร์ | 👩‍🦳 | เรียกแม่สั้น ๆ ว่า Mom
++ My mother is kind. = แม่ของฉันใจดี
+father | n | พ่อ / บิดา | ฟา-เธอร์ | 👨‍🦳 | เรียกพ่อสั้น ๆ ว่า Dad
++ My father is a driver. = พ่อของฉันเป็นคนขับรถ
+mom | n | แม่ (คำเรียกแม่) | มัม | 👩‍🦳 | เหมือน mother แต่เป็นกันเอง
+dad | n | พ่อ (คำเรียกพ่อ) | แดด | 👨‍🦳 | เหมือน father แต่เป็นกันเอง
++ Dad, where are you? = พ่อ อยู่ไหนคะ
++ My dad is at home. = พ่อของฉันอยู่บ้าน
+person | n:people | คน (1 คน) | เพอร์-ซัน | 🧍 | หลายคนใช้ people
++ He is a nice person. = เขาเป็นคนนิสัยดี
++ She is a kind person. = เธอเป็นคนใจดี
+people | n0 | ผู้คน / คน (หลายคน) | พี-เพิ่ล | 👨‍👩‍👧‍👦 | พหูพจน์ของ person · ใช้กับ are: people are
++ The people here are kind. = คนที่นี่ใจดี
+receptionist | n | พนักงานต้อนรับ | รี-เซ็พ-ชั่น-นิสท์ | 💁‍♀️ | อาชีพของคุณ!
++ The receptionist is very kind. = พนักงานต้อนรับใจดีมาก
+cook | v | ทำอาหาร · (คำนาม) พ่อครัว / แม่ครัว | คุก | 👩‍🍳 | She is a cook = เธอเป็นแม่ครัว · I cook = ฉันทำอาหาร
++ My father is a cook. = พ่อของฉันเป็นพ่อครัว
+teacher | n | ครู | ที-เชอร์ | 👩‍🏫 |
++ The teacher is kind. = คุณครูใจดี
+nurse | n | พยาบาล | เนิร์ส | 👩‍⚕️ |
++ The nurse is busy. = พยาบาลยุ่ง
+driver | n | คนขับรถ | ไดร-เวอร์ | 🚕 |
++ The driver is here. = คนขับรถมาแล้ว (อยู่ที่นี่)
+guest | n | แขก / ลูกค้าที่มาพัก | เกสท์ | 🧳 | ที่โรงแรม เรียกลูกค้าว่า guest
++ The guest is in the lobby. = แขกอยู่ที่ล็อบบี้
+name | n | ชื่อ | เนม | 📛 | My name is … = ฉันชื่อ…
++ What is your name? = คุณชื่ออะไร
++ Her name is Ploy. = เธอชื่อพลอย
+
+# ---------- places & things
+work | v | ทำงาน · (คำนาม) ที่ทำงาน / งาน | เวิร์ค | 💼 | at work = อยู่ที่ทำงาน · I work = ฉันทำงาน
+home | n | บ้าน | โฮม | 🏠 | at home = อยู่บ้าน
+hotel | n | โรงแรม | โฮ-เทล | 🏨 |
++ The hotel is big and beautiful. = โรงแรมใหญ่และสวยงาม
+room | n | ห้อง | รูม | 🛏️ |
+lobby | n | ล็อบบี้ (โถงต้อนรับ) | ล็อบ-บี้ | 🛋️ |
++ The lobby is busy. = ล็อบบี้คนเยอะ
++ I am in the lobby. = ฉันอยู่ที่ล็อบบี้
+restaurant | n | ร้านอาหาร / ห้องอาหาร | เรส-เตอ-รองท์ | 🍽️ |
++ The restaurant is on the first floor. = ห้องอาหารอยู่ชั้นหนึ่ง
+pool | n | สระว่ายน้ำ | พูล | 🏊 |
++ The pool is very clean. = สระว่ายน้ำสะอาดมาก
+floor | n | ชั้น (ของตึก) / พื้น | ฟลอร์ | 🏢 | on the third floor = ที่ชั้น 3
++ The pool is on the second floor. = สระว่ายน้ำอยู่ชั้นสอง
+breakfast | n | อาหารเช้า | เบรก-ฟัสท์ | 🍳 |
++ Breakfast is ready. = อาหารเช้าพร้อมแล้ว
++ Breakfast is in the restaurant. = อาหารเช้าอยู่ที่ห้องอาหาร
+phone | n | โทรศัพท์ | โฟน | 📱 |
++ My phone is in my bag. = โทรศัพท์ของฉันอยู่ในกระเป๋า
+key | n | กุญแจ / คีย์การ์ด | คีย์ | 🔑 | room key = กุญแจห้อง
+bag | n | กระเป๋า | แบ็ก | 👜 |
+table | n | โต๊ะ | เท-เบิ้ล | 🍽️ |
++ The table is clean. = โต๊ะสะอาด
+morning | n | ตอนเช้า | มอร์-นิ่ง | 🌅 | in the morning = ตอนเช้า
++ It is morning. = ตอนเช้าแล้ว
++ I am sleepy in the morning. = ตอนเช้าฉันง่วงนอน
+afternoon | n | ตอนบ่าย | อาฟ-เตอร์-นูน | ☀️ |
++ It is hot in the afternoon. = ตอนบ่ายอากาศร้อน
++ I am at work in the afternoon. = ตอนบ่ายฉันอยู่ที่ทำงาน
+evening | n | ตอนเย็น / ตอนค่ำ | อีฟ-นิ่ง | 🌇 |
++ I am at home in the evening. = ตอนเย็นฉันอยู่บ้าน
++ It is cold in the evening. = ตอนเย็นอากาศหนาว
+night | n | กลางคืน | ไนท์ | 🌙 | at night = ตอนกลางคืน
++ It is late at night. = ดึกแล้ว
++ I am tired at night. = ฉันเหนื่อยตอนกลางคืน
+third | num | ที่สาม (ลำดับที่ 3) | เธิร์ด | 3️⃣ | the third floor = ชั้นที่ 3
++ It is on the third floor. = มันอยู่ชั้นสาม
+first | num | ที่หนึ่ง / แรก (ลำดับที่ 1) | เฟิร์สท์ | 1️⃣ | the first floor = ชั้นที่ 1
++ The lobby is on the first floor. = ล็อบบี้อยู่ชั้นหนึ่ง
++ It is my first day. = วันนี้เป็นวันแรกของฉัน
+second | num | ที่สอง (ลำดับที่ 2) | เซค-คั่น | 2️⃣ | the second floor = ชั้นที่ 2
++ My room is on the second floor. = ห้องของฉันอยู่ชั้นสอง
++ It is the second room. = มันคือห้องที่สอง
+help | v | ช่วย / ช่วยเหลือ | เฮลพ์ | 🆘 |
++ Help! = ช่วยด้วย!
+meet | v:=,met,= | พบ / เจอ / ได้รู้จัก | มีท | 🤝 |
++ Nice to meet you, Mr. Brown. = ยินดีที่ได้รู้จักค่ะ คุณบราวน์
+
+# ---------- names
+Alvee | name | ชื่อของคุณเอง! | อัล-วี | 💛 |
++ Alvee is a receptionist. = Alvee เป็นพนักงานต้อนรับ
++ Alvee is very smart. = Alvee ฉลาดมาก
+Ploy | name | พลอย (ชื่อผู้หญิง) | พลอย | 👩 |
++ Ploy is my friend. = พลอยเป็นเพื่อนของฉัน
+Nok | name | นก (ชื่อคน) | นก | 🧑 |
++ Nok is my co-worker. = นกเป็นเพื่อนร่วมงานของฉัน
+Mr | name | นาย / คุณ (นำหน้าชื่อผู้ชาย) | มิส-เตอร์ | 🎩 | เขียนว่า Mr. ใช้นำหน้านามสกุล เช่น Mr. Brown
++ Mr. Brown is a guest. = คุณบราวน์เป็นแขก
+Brown | name | บราวน์ (นามสกุล) | บราวน์ | 👨 |
++ Mr. Brown is in the lobby. = คุณบราวน์อยู่ที่ล็อบบี้
+Thailand | name | ประเทศไทย | ไท-แลนด์ | 🇹🇭 |
++ I am from Thailand. = ฉันมาจากประเทศไทย
++ Thailand is beautiful. = ประเทศไทยสวยงาม
+
+# ================= MONTH 2
+# ---------- verbs
+like | v | ชอบ · (คำเชื่อม) เหมือน | ไลค์ | ❤️ | I like = ฉันชอบ (ไม่มี am) · He likes = เขาชอบ (เติม s)
++ I like my job. = ฉันชอบงานของฉัน
++ She likes cats. = เธอชอบแมว
+want | v | อยากได้ / ต้องการ | วอนท์ | 🙏 | want + ของ = อยากได้… · want to + กริยา = อยาก…
++ I want a big bag. = ฉันอยากได้กระเป๋าใบใหญ่
++ Do you want tea? = คุณอยากดื่มชาไหม
+need | v | ต้องการ / จำเป็นต้องมี | นีด | 🆘 | need to + กริยา = ต้อง…
++ The guest needs a towel. = แขกต้องการผ้าเช็ดตัว
++ I need to go now. = ฉันต้องไปแล้ว
+eat | v:=,ate,= | กิน / ทาน | อีท | 🍽️ | eat rice = กินข้าว
++ Let's eat! = กินกันเถอะ!
++ I eat rice every day. = ฉันกินข้าวทุกวัน
+drink | v:=,drank,= | ดื่ม · (คำนาม) เครื่องดื่ม | ดริงค์ | 🥤 | drink water = ดื่มน้ำ
++ I drink water every morning. = ฉันดื่มน้ำทุกเช้า
++ Do you want a drink? = คุณอยากได้เครื่องดื่มไหม
+sleep | v:=,slept,= | นอน / หลับ | สลีพ | 🛌 | go to sleep = เข้านอน
++ I sleep at 11. = ฉันนอนตอนห้าทุ่ม
++ The baby sleeps a lot. = เด็กทารกนอนเยอะ
+live | v | อาศัยอยู่ / อยู่ | ลิฟว์ | 🏡 | live in + เมือง/ประเทศ: I live in Thailand
++ Where do you live? = คุณอาศัยอยู่ที่ไหน
+speak | v:=,spoke,= | พูด (ภาษา) | สปีค | 🗣️ | speak English = พูดภาษาอังกฤษ (ได้)
++ I speak a little English. = ฉันพูดภาษาอังกฤษได้นิดหน่อย
++ Please speak slowly. = กรุณาพูดช้า ๆ
+go | v:goes,went,going | ไป | โก | 🚶‍♀️ | go to work = ไปทำงาน · go home = กลับบ้าน (ไม่มี to)
++ Let's go! = ไปกันเถอะ!
++ I go to the market on Sunday. = ฉันไปตลาดวันอาทิตย์
+watch | v | ดู (ทีวี / หนัง) · (คำนาม) นาฬิกาข้อมือ | วอทช์ | 📺 | watch TV = ดูทีวี
++ I watch TV at night. = ฉันดูทีวีตอนกลางคืน
++ We watch a movie on Sunday. = พวกเราดูหนังวันอาทิตย์
+come | v:=,came,= | มา | คัม | 👋 | come here = มาที่นี่ · come to Thailand = มาประเทศไทย
++ Please come in. = เชิญเข้ามาค่ะ
++ Come here, please. = มาที่นี่หน่อย
+tell | v:=,told,= | บอก / เล่า | เทล | 💬 | tell me = บอกฉัน
++ Please tell me. = กรุณาบอกฉันหน่อย
++ Tell me about your day. = เล่าเรื่องวันนี้ของคุณให้ฟังหน่อย
+drive | v:=,drove,= | ขับ (รถ) | ไดรฟ์ | 🚗 |
++ I drive to work. = ฉันขับรถไปทำงาน
++ My brother drives a taxi. = พี่ชายของฉันขับแท็กซี่
+know | v:=,knew,= | รู้ / รู้จัก | โน | 💡 | ตัว k ไม่ออกเสียง · I don't know = ฉันไม่รู้
++ I know her. = ฉันรู้จักเธอ
++ Do you know the way? = คุณรู้ทางไหม
+understand | v:=,understood,= | เข้าใจ | อัน-เดอร์-สแตนด์ | 🧠 | I don't understand = ฉันไม่เข้าใจ
++ I understand. Thank you. = ฉันเข้าใจแล้ว ขอบคุณ
++ Do you understand? = คุณเข้าใจไหม
+start | v | เริ่ม | สตาร์ท | 🏁 |
++ We start at 9. = พวกเราเริ่มตอนเก้าโมง
++ The lesson starts now. = บทเรียนเริ่มแล้ว
+hurt | v:=,hurt,= | เจ็บ / ทำให้เจ็บ | เฮิร์ท | 🤕 | My head hurts = ฉันปวดหัว
++ My leg hurts. = ฉันเจ็บขา
++ It hurts a lot. = มันเจ็บมาก
+finish | v | เสร็จ / เลิก (งาน) | ฟิน-นิช | 🏁 | finish work = เลิกงาน · finish → finishes (เติม es)
++ I finish work at 6. = ฉันเลิกงานตอนหกโมง
++ Did you finish? = เสร็จหรือยัง
+take | v:=,took,= | เอา / หยิบ / ใช้เวลา / ขึ้น (รถ) | เทค | 🤲 | take a shower = อาบน้ำ · take a taxi = นั่งแท็กซี่
++ Take this, please. = เอาอันนี้ไปค่ะ
++ I take a taxi to work. = ฉันนั่งแท็กซี่ไปทำงาน
+wake | v:=,woke,= | ตื่น / ปลุก | เวค | ⏰ | มักใช้ wake up = ตื่นนอน
++ Please wake me at 6. = ช่วยปลุกฉันตอนหกโมงด้วย
+close | v | ปิด | โคลส | 🔒 | ตรงข้ามกับ open
++ Please close the door. = กรุณาปิดประตู
++ The shop closes at 10. = ร้านปิดตอนสี่ทุ่ม
+do | aux+v:does,did,doing | ทำ · (ช่วยตั้งคำถาม/ปฏิเสธ) | ดู | 🛠️ | Do you…? = …ไหม · I don't = ฉันไม่… · ใช้กับ I / you / we / they
++ What do you do? = คุณทำงานอะไร
++ I do my homework. = ฉันทำการบ้าน
+does | aux | ทำ · (ช่วยถาม/ปฏิเสธ ใช้กับ he / she / it) | ดัซ | 🛠️ | Does she…? = เธอ…ไหม · หลัง does ใช้กริยาธรรมดา (ไม่เติม s)
++ Does he like tea? = เขาชอบชาไหม
++ What does she do? = เธอทำงานอะไร
+don't | contr:do not | ไม่ (= do not) | โดนท์ | 🚫 | ใช้กับ I / you / we / they + กริยา: I don't like
++ Don't worry. = ไม่ต้องห่วง
++ We don't know. = พวกเราไม่รู้
+doesn't | contr:does not | ไม่ (= does not) | ดัซ-เซินท์ | 🚫 | ใช้กับ he / she / it + กริยาธรรมดา: she doesn't like
++ He doesn't like tea. = เขาไม่ชอบชา
+let's | contr:let us | …กันเถอะ / มา…กัน | เล็ทส์ | 🙌 | Let's go! = ไปกันเถอะ!
++ Let's go home. = กลับบ้านกันเถอะ
++ Let's eat. = กินกันเถอะ
+may | aux | ขอ… ได้ไหม (สุภาพ) · อาจจะ | เม | 🙏 | May I…? = ขอ…ได้ไหมคะ (สุภาพมาก)
++ May I help you? = มีอะไรให้ช่วยไหมคะ
++ May I have your name? = ขอทราบชื่อได้ไหมคะ
+
+# ---------- food & things
+coffee | n | กาแฟ | คอฟ-ฟี่ | ☕ | สั่งหลายแก้วพูดว่า two coffees ได้
+tea | n0 | ชา | ที | 🍵 |
++ Tea or coffee? = ชาหรือกาแฟ
+food | n0 | อาหาร | ฟู้ด | 🍲 | Thai food = อาหารไทย
++ The food is very good. = อาหารอร่อยมาก
+rice | n0 | ข้าว | ไรซ์ | 🍚 | นับไม่ได้ ไม่เติม s
+chicken | n0 | ไก่ / เนื้อไก่ | ชิค-เค่น | 🍗 |
++ I like chicken and rice. = ฉันชอบข้าวกับไก่
++ The chicken is spicy. = ไก่เผ็ด
+fish | n:fish | ปลา | ฟิช | 🐟 | หลายตัวก็ใช้ fish เหมือนเดิม
++ I like fish. = ฉันชอบปลา
++ The fish is very fresh. = ปลาสดมาก
+meat | n0 | เนื้อสัตว์ | มีท | 🥩 |
++ I don't eat meat. = ฉันไม่กินเนื้อสัตว์
+mango | n:mangoes | มะม่วง | แมง-โก้ | 🥭 | หลายลูก = mangoes
++ I like mango and sticky rice. = ฉันชอบข้าวเหนียวมะม่วง
++ This mango is sweet. = มะม่วงลูกนี้หวาน
+dinner | n | อาหารเย็น | ดิน-เนอร์ | 🍛 | have dinner = กินอาหารเย็น
++ Dinner is ready! = อาหารเย็นพร้อมแล้ว!
+money | n0 | เงิน | มัน-นี่ | 💵 | นับไม่ได้ ไม่เติม s
++ I don't have money. = ฉันไม่มีเงิน
+time | n | เวลา / ครั้ง | ไทม์ | ⏳ | What time is it? = กี่โมงแล้ว
++ I don't have time. = ฉันไม่มีเวลา
+taxi | n | แท็กซี่ | แท็ก-ซี่ | 🚕 |
++ The taxi is here. = แท็กซี่มาแล้ว
+bus | n | รถบัส / รถเมล์ | บัส | 🚌 | by bus = โดยรถบัส
++ The bus is late. = รถบัสมาช้า
+car | n | รถยนต์ | คาร์ | 🚗 |
++ My car is red. = รถของฉันสีแดง
+TV | n | ทีวี / โทรทัศน์ | ที-วี | 📺 |
++ The TV doesn't work. = ทีวีเสีย
+passport | n | หนังสือเดินทาง / พาสปอร์ต | พาส-ปอร์ท | 🛂 |
++ Here is my passport. = นี่คือพาสปอร์ตของฉัน
+reservation | n | การจอง | เร-เซอร์-เว-ชั่น | 📋 | have a reservation = จองไว้แล้ว
++ I have a reservation. = ฉันจองไว้แล้ว
++ Your reservation is ready. = การจองของคุณเรียบร้อยแล้ว
+shower | n | ฝักบัว / การอาบน้ำ | ชาว-เวอร์ | 🚿 | take a shower = อาบน้ำ
++ The shower is hot. = น้ำฝักบัวร้อน
+bed | n | เตียง | เบด | 🛏️ | go to bed = เข้านอน
++ The bed is big. = เตียงใหญ่
++ I need a new bed. = ฉันต้องการเตียงใหม่
+desk | n | โต๊ะทำงาน / เคาน์เตอร์ | เดสก์ | 🗄️ | front desk = เคาน์เตอร์ต้อนรับ
++ The key is on the desk. = กุญแจอยู่บนโต๊ะ
+city | n | เมือง | ซิท-ตี้ | 🏙️ | big city = เมืองใหญ่
++ Bangkok is a big city. = กรุงเทพฯ เป็นเมืองใหญ่
+hospital | n | โรงพยาบาล | ฮอส-พิ-ทัล | 🏥 |
++ My sister works at a hospital. = พี่สาวของฉันทำงานที่โรงพยาบาล
++ The hospital is near here. = โรงพยาบาลอยู่ใกล้ที่นี่
+school | n | โรงเรียน | สคูล | 🏫 | go to school = ไปโรงเรียน
++ My brother goes to school. = น้องชายของฉันไปโรงเรียน
++ The school is big. = โรงเรียนใหญ่
+beach | n | ชายหาด / ทะเล | บีช | 🏖️ | go to the beach = ไปทะเล
++ The beach is beautiful. = ชายหาดสวยงาม
++ The hotel is near the beach. = โรงแรมอยู่ใกล้ชายหาด
+idea | n | ความคิด / ไอเดีย | ไอ-เดีย | 💡 | Good idea! = ความคิดดี!
++ That is a good idea. = นั่นเป็นความคิดที่ดี
++ I have an idea! = ฉันมีไอเดีย!
+check-in | n | การเช็คอิน (เข้าพัก) | เช็ค-อิน | 🛎️ | check-in time = เวลาเช็คอิน
++ Check-in is at 2 o'clock. = เช็คอินตอนบ่ายสองโมง
++ The check-in desk is here. = เคาน์เตอร์เช็คอินอยู่ที่นี่
+check-out | n | การเช็คเอาท์ (ออกจากห้องพัก) | เช็ค-เอาท์ | 🧳 | check-out time = เวลาเช็คเอาท์
++ Check-out is at 12 o'clock. = เช็คเอาท์ตอนเที่ยง
++ Late check-out is OK. = เช็คเอาท์ช้าได้ค่ะ
+family | n | ครอบครัว | แฟม-มิ-ลี่ | 👨‍👩‍👧‍👦 |
++ I love my family. = ฉันรักครอบครัวของฉัน
++ My family lives in Thailand. = ครอบครัวของฉันอาศัยอยู่ในประเทศไทย
+sister | n | พี่สาว / น้องสาว | ซิส-เตอร์ | 👧 | ภาษาอังกฤษไม่แยกพี่กับน้อง
++ My sister is a nurse. = พี่สาวของฉันเป็นพยาบาล
+brother | n | พี่ชาย / น้องชาย | บรา-เธอร์ | 👦 | ภาษาอังกฤษไม่แยกพี่กับน้อง
++ My brother is tall. = พี่ชายของฉันตัวสูง
+wife | n:wives | ภรรยา | ไวฟ์ | 👰 |
++ His wife is Thai. = ภรรยาของเขาเป็นคนไทย
++ My wife likes the beach. = ภรรยาผมชอบทะเล
+cat | n | แมว | แคท | 🐱 |
++ The cat is sleepy. = แมวง่วงนอน
+dog | n | สุนัข / หมา | ด็อก | 🐶 |
++ My dog is very big. = หมาของฉันตัวใหญ่มาก
++ The dog likes fish. = หมาชอบปลา
+kilo | n | กิโลกรัม | กิ-โล | ⚖️ |
++ One kilo of rice, please. = ขอข้าวหนึ่งกิโลค่ะ
++ It is 2 kilos. = มันหนักสองกิโล
+baht | n0 | บาท (เงินไทย) | บาท | 💴 | ไม่เติม s: 100 baht
++ It is 50 baht. = ราคาห้าสิบบาท
++ The taxi is 200 baht. = ค่าแท็กซี่สองร้อยบาท
+
+# ---------- describing & small words
+Thai | adj | ไทย (คนไทย / ภาษาไทย / แบบไทย) | ไท | 🇹🇭 | Thai food = อาหารไทย · I am Thai = ฉันเป็นคนไทย · ขึ้นต้นตัวใหญ่เสมอ
++ I am Thai. = ฉันเป็นคนไทย
++ Thai people are kind. = คนไทยใจดี
+English | adj | ภาษาอังกฤษ / อังกฤษ | อิง-ลิช | 🇬🇧 | speak English = พูดภาษาอังกฤษ · ขึ้นต้นตัวใหญ่เสมอ
++ I want to speak English. = ฉันอยากพูดภาษาอังกฤษได้
++ English is fun. = ภาษาอังกฤษสนุก
+Chinese | adj | ภาษาจีน / จีน | ไช-นีส | 🇨🇳 |
++ She speaks Chinese. = เธอพูดภาษาจีนได้
++ We have Chinese guests. = พวกเรามีแขกชาวจีน
+spicy | adj | เผ็ด | สไป-ซี่ | 🌶️ | not spicy = ไม่เผ็ด
++ Is it spicy? = เผ็ดไหม
++ Not spicy, please. = ไม่เผ็ดนะคะ
+sweet | adj | หวาน / น่ารัก | สวีท | 🍬 |
++ This coffee is very sweet. = กาแฟแก้วนี้หวานมาก
++ You are so sweet. = คุณน่ารักจัง
+early | adj | เช้า / แต่เช้า / ก่อนเวลา | เอิร์ล-ลี่ | 🐓 | ตรงข้ามกับ late
++ I am early today. = วันนี้ฉันมาเช้า
++ I wake up early. = ฉันตื่นเช้า
+or | conj | หรือ | ออร์ | 🔀 | hot or cold = ร้อนหรือเย็น
++ Coffee or tea? = กาแฟหรือชา
++ Is it big or small? = มันใหญ่หรือเล็ก
+with | prep | กับ / ด้วย / พร้อม | วิธ | 🤝 | rice with chicken = ข้าวกับไก่
++ I live with my family. = ฉันอาศัยอยู่กับครอบครัว
++ Coffee with milk, please. = ขอกาแฟใส่นมค่ะ
+about | prep | เกี่ยวกับ / ประมาณ | อะ-เบาท์ | 💭 | tell me about… = เล่าเรื่อง…ให้ฟัง
++ Tell me about Thailand. = เล่าเรื่องประเทศไทยให้ฟังหน่อย
++ It is about 5 minutes. = ประมาณห้านาที
+by | prep | โดย (วิธีเดินทาง) / ข้าง ๆ | บาย | 🚌 | by bus = โดยรถบัส · by taxi = โดยแท็กซี่
++ I go to work by taxi. = ฉันไปทำงานโดยแท็กซี่
++ We go by car. = พวกเราไปโดยรถยนต์
+after | prep | หลังจาก | อาฟ-เตอร์ | ⏭️ | after work = หลังเลิกงาน
++ See you after work. = เจอกันหลังเลิกงาน
++ I sleep after dinner. = ฉันนอนหลังอาหารเย็น
+really | adv | จริง ๆ / จริงเหรอ | เรีย-ลี่ | 😲 | Really? = จริงเหรอ?
++ It is really hot today. = วันนี้ร้อนจริง ๆ
+soon | adv | เร็ว ๆ นี้ / ในไม่ช้า | ซูน | ⏳ | See you soon! = แล้วเจอกันเร็ว ๆ นี้!
++ See you soon! = แล้วเจอกันเร็ว ๆ นี้!
++ The taxi is coming soon. = แท็กซี่กำลังจะมาเร็ว ๆ นี้
+well | adv | ดี (ทำได้ดี) | เวล | 👍 | speak English well = พูดภาษาอังกฤษได้ดี
++ You speak English very well. = คุณพูดภาษาอังกฤษได้ดีมาก
++ I don't sleep well. = ฉันนอนหลับไม่ค่อยดี
+together | adv | ด้วยกัน | ทู-เก็ท-เธอร์ | 👫 |
++ We work together. = พวกเราทำงานด้วยกัน
++ Let's go together. = ไปด้วยกันเถอะ
+up | adv | ขึ้น | อัพ | ⬆️ | wake up = ตื่น · get up = ลุกขึ้น
++ Please stand up. = กรุณายืนขึ้น
++ The room is up there. = ห้องอยู่ข้างบนนั่น
+past | prep | เลย / ผ่าน (เวลา) | พาสท์ | ⏱️ | half past 8 = แปดโมงครึ่ง (เลยแปดโมงมาครึ่งชั่วโมง)
++ It is half past 3. = บ่ายสามโมงครึ่ง
+half | n | ครึ่ง | ฮาล์ฟ | 🌓 | ตัว l ไม่ออกเสียง
++ Half a kilo, please. = ขอครึ่งกิโลค่ะ
++ It is half past 6. = หกโมงครึ่ง
+o'clock | adv | …โมง (เวลาตรง) | อะ-คล็อก | 🕖 | 7 o'clock = เจ็ดโมงตรง
++ It is 9 o'clock. = เก้าโมงแล้ว
+front | n | ข้างหน้า / ด้านหน้า | ฟรอนท์ | ⬆️ | in front of = ข้างหน้า · front desk = เคาน์เตอร์ต้อนรับ
++ The taxi is in front of the hotel. = แท็กซี่อยู่หน้าโรงแรม
+both | det | ทั้งสอง | โบธ | ✌️ |
++ I like both. = ฉันชอบทั้งสองอย่าง
++ Both rooms are ready. = ห้องทั้งสองห้องพร้อมแล้ว
+always | adv | เสมอ / ตลอด (100%) | ออล-เวย์ส | 💯 | วางหน้ากริยา: I always drink…
++ He is always kind. = เขาใจดีเสมอ
+usually | adv | ปกติ / มักจะ (80%) | ยู-ชวล-ลี่ | 🔁 |
++ I usually eat at home. = ปกติฉันกินข้าวที่บ้าน
+sometimes | adv | บางครั้ง (50%) | ซัม-ไทมส์ | 🌗 |
++ Sometimes I am late. = บางครั้งฉันมาสาย
+never | adv | ไม่เคย / ไม่…เลย (0%) | เน-เวอร์ | 🙅‍♀️ | ไม่ต้องใส่ not อีก
++ I never drink coffee. = ฉันไม่ดื่มกาแฟเลย
+wow | int | ว้าว | วาว | 🤩 |
++ Wow, it's beautiful! = ว้าว สวยจัง!
++ Wow! Thank you! = ว้าว! ขอบคุณ!
+
+# ---------- numbers & names
+one | num | หนึ่ง (1) | วัน | 1️⃣ |
++ I have one sister. = ฉันมีพี่สาวหนึ่งคน
++ One coffee, please. = ขอกาแฟหนึ่งแก้วค่ะ
+two | num | สอง (2) | ทู | 2️⃣ | อ่านเหมือน to และ too
++ Two coffees, please. = ขอกาแฟสองแก้วค่ะ
++ I have two cats. = ฉันมีแมวสองตัว
+fifty | num | ห้าสิบ (50) | ฟิฟ-ตี้ | 5️⃣ |
++ It is fifty baht. = ราคาห้าสิบบาท
++ The room has fifty beds. = ห้องมีเตียงห้าสิบเตียง
+hundred | num | ร้อย (100) | ฮัน-เดร็ด | 💯 | one hundred = หนึ่งร้อย
++ It is two hundred baht. = ราคาสองร้อยบาท
++ One hundred baht, please. = หนึ่งร้อยบาทค่ะ
+Bangkok | name | กรุงเทพฯ | แบง-ค็อก | 🏙️ |
++ I live in Bangkok. = ฉันอาศัยอยู่ที่กรุงเทพฯ
++ Bangkok is very hot. = กรุงเทพฯ ร้อนมาก
+Maldives | name | มัลดีฟส์ (ประเทศหมู่เกาะ) | มอล-ดีฟส์ | 🏝️ | ใช้ the: the Maldives
++ The Maldives is beautiful. = มัลดีฟส์สวยงาม
++ He works in the Maldives. = เขาทำงานที่มัลดีฟส์
+Sunday | name | วันอาทิตย์ | ซัน-เดย์ | ☀️ | on Sunday = ในวันอาทิตย์
++ I don't work on Sunday. = ฉันไม่ทำงานวันอาทิตย์
++ See you on Sunday! = เจอกันวันอาทิตย์!
+Tom | name | ทอม (ชื่อผู้ชาย) | ทอม | 👨 |
++ Tom is a guest. = ทอมเป็นแขก
++ Tom likes spicy food. = ทอมชอบอาหารเผ็ด
+Smith | name | สมิธ (นามสกุล) | สมิธ | 👨 |
++ Mr. Smith is in room 305. = คุณสมิธอยู่ห้อง 305
++ Mr. Smith is very kind. = คุณสมิธใจดีมาก
+
+# ---------- phrases
+what time | phr | กี่โมง | วอท-ไทม์ | 🕒 | What time is it? = กี่โมงแล้ว
++ What time is check-out? = เช็คเอาท์กี่โมง
+half past | phr | …โมงครึ่ง | ฮาล์ฟ-พาสท์ | 🕦 | half past 8 = แปดโมงครึ่ง
++ It is half past 10. = สิบโมงครึ่ง
+wake up | phr | ตื่นนอน | เวค-อัพ | ⏰ |
++ I wake up at 7. = ฉันตื่นนอนตอนเจ็ดโมง
+take a shower | phr | อาบน้ำ (ฝักบัว) | เทค-อะ-ชาว-เวอร์ | 🚿 |
++ I take a shower at night. = ฉันอาบน้ำตอนกลางคืน
+go to bed | phr | เข้านอน | โก-ทู-เบด | 🛌 |
++ I go to bed early. = ฉันเข้านอนเร็ว
+front desk | phr | เคาน์เตอร์ต้อนรับ / แผนกต้อนรับ | ฟรอนท์-เดสก์ | 🛎️ | ที่ทำงานของพนักงานต้อนรับ
++ Please call the front desk. = กรุณาโทรหาแผนกต้อนรับ
++ I work at the front desk. = ฉันทำงานที่เคาน์เตอร์ต้อนรับ
+here you are | phr | นี่ค่ะ / นี่ครับ (ตอนยื่นของให้) | เฮียร์-ยู-อาร์ | 🤲 |
++ Your key? Here you are. = กุญแจเหรอคะ นี่ค่ะ
+how much | phr | เท่าไหร่ (ราคา) | ฮาว-มัช | 💰 | How much is it? = ราคาเท่าไหร่
++ How much is the room? = ห้องราคาเท่าไหร่
++ How much is a taxi? = ค่าแท็กซี่เท่าไหร่
+excuse me | phr | ขอโทษนะคะ (เรียกความสนใจ / ขอทาง) | เอ็กซ์-คิวส์-มี | 🙋 | ใช้ก่อนถามคำถามคนแปลกหน้า
++ Excuse me, where is the lobby? = ขอโทษนะคะ ล็อบบี้อยู่ที่ไหน
+excuse | v | ขอโทษ / ยกโทษ | เอ็กซ์-คิวส์ | 🙏 | มักใช้ excuse me
++ Excuse me, do you speak English? = ขอโทษนะคะ คุณพูดภาษาอังกฤษได้ไหม
++ Excuse me, please. = ขอทางหน่อยค่ะ
+have a nice day | phr | ขอให้มีวันที่ดี | แฮฟ-อะ-ไนซ์-เดย์ | 🌞 | พูดตอนลาแขกหรือลูกค้า
++ Thank you. Have a nice day! = ขอบคุณค่ะ ขอให้มีวันที่ดีนะคะ!
+see you | phr | แล้วเจอกัน | ซี-ยู | 👋 | See you tomorrow! = เจอกันพรุ่งนี้!
++ See you later! = แล้วเจอกันนะ!
+
+# ---------- extra everyday words (used in examples, more later)
+job | n | งาน / อาชีพ | จ็อบ | 💼 |
++ I have a good job. = ฉันมีงานที่ดี
++ What is your job? = คุณทำงานอะไร
+towel | n | ผ้าเช็ดตัว | ทาว-เอิล | 🧺 |
++ Can I have a towel, please? = ขอผ้าเช็ดตัวหน่อยได้ไหมคะ
++ The towels are in the bathroom. = ผ้าเช็ดตัวอยู่ในห้องน้ำ
+every | det | ทุก ๆ | เอฟ-เวอ-รี่ | 🔁 | every day = ทุกวัน · every morning = ทุกเช้า
++ I work every day. = ฉันทำงานทุกวัน
++ I drink coffee every morning. = ฉันดื่มกาแฟทุกเช้า
+a lot | phr | เยอะ / มาก | อะ-ล็อท | 📈 | a lot of = เยอะมาก
++ Thank you a lot! = ขอบคุณมาก ๆ!
++ I eat a lot. = ฉันกินเยอะ
+lot | n | จำนวนมาก | ล็อท | 📈 | มักใช้ a lot / a lot of
++ I have a lot of work today. = วันนี้ฉันมีงานเยอะมาก
++ We have a lot of guests today. = วันนี้พวกเรามีแขกเยอะมาก
+little | adj | เล็ก / นิดหน่อย | ลิท-เทิล | 🤏 | a little = นิดหน่อย
++ I speak a little English. = ฉันพูดภาษาอังกฤษได้นิดหน่อย
++ It is a little spicy. = มันเผ็ดนิดหน่อย
+slowly | adv | ช้า ๆ | สโลว์-ลี่ | 🐢 | Please speak slowly = กรุณาพูดช้า ๆ
++ Please drive slowly. = กรุณาขับช้า ๆ
++ Can you speak slowly, please? = ช่วยพูดช้า ๆ หน่อยได้ไหมคะ
+market | n | ตลาด | มาร์-เก็ท | 🧺 |
++ The market is near the hotel. = ตลาดอยู่ใกล้โรงแรม
++ I buy fish at the market. = ฉันซื้อปลาที่ตลาด
+movie | n | ภาพยนตร์ / หนัง | มู-วี่ | 🎬 | watch a movie = ดูหนัง
++ I like this movie. = ฉันชอบหนังเรื่องนี้
++ Let's watch a movie! = ไปดูหนังกันเถอะ!
+way | n | ทาง / วิธี | เวย์ | 🛣️ | the way to… = ทางไป…
++ Is this the way to the beach? = นี่คือทางไปชายหาดใช่ไหม
++ This way, please. = เชิญทางนี้ค่ะ
+lesson | n | บทเรียน | เลส-ซั่น | 📖 |
++ This lesson is easy. = บทเรียนนี้ง่าย
++ I do one lesson every day. = ฉันเรียนวันละหนึ่งบท
+leg | n | ขา | เล็ก | 🦵 |
++ My leg hurts. = ฉันเจ็บขา
++ He has long legs. = เขาขายาว
+did | aux | ทำ (อดีต) · ช่วยถาม/ปฏิเสธเรื่องที่ผ่านมา | ดิด | ⏪ | Did you…? = คุณ…หรือเปล่า (อดีต) · หลัง did ใช้กริยาธรรมดา
++ Did you eat? = กินข้าวหรือยัง
++ Did you sleep well? = นอนหลับสบายไหม
+door | n | ประตู | ดอร์ | 🚪 |
++ Please open the door. = กรุณาเปิดประตู
++ The door is open. = ประตูเปิดอยู่
+shop | n | ร้านค้า | ช็อป | 🏪 | (กริยา) ช้อปปิ้ง
++ The shop is open now. = ตอนนี้ร้านเปิดอยู่
++ There is a shop in the lobby. = มีร้านค้าอยู่ในล็อบบี้
+homework | n0 | การบ้าน | โฮม-เวิร์ค | 📝 |
++ My brother has a lot of homework. = น้องชายของฉันมีการบ้านเยอะ
++ I help him with his homework. = ฉันช่วยเขาทำการบ้าน
+worry | v | กังวล / เป็นห่วง | เวอร์-รี่ | 😟 | Don't worry = ไม่ต้องห่วง
++ Don't worry. I can help. = ไม่ต้องห่วงค่ะ ฉันช่วยได้
++ I worry about my mother. = ฉันเป็นห่วงแม่
+fresh | adj | สด / สดชื่น | เฟรช | 🌿 |
++ The fruit is fresh. = ผลไม้สด
++ I want fresh air. = ฉันอยากได้อากาศสดชื่น
+sticky | adj | เหนียว | สติค-กี้ | 🍙 | sticky rice = ข้าวเหนียว
++ I like sticky rice. = ฉันชอบข้าวเหนียว
++ My hands are sticky. = มือของฉันเหนียว
+red | adj | สีแดง | เรด | 🔴 |
++ I like the red bag. = ฉันชอบกระเป๋าสีแดง
++ The flowers are red. = ดอกไม้สีแดง
+new | adj | ใหม่ | นิว | 🆕 |
++ I have a new phone. = ฉันมีโทรศัพท์ใหม่
++ She is new here. = เธอเพิ่งมาใหม่ที่นี่
+near | prep | ใกล้ | เนียร์ | 📍 | near here = ใกล้ ๆ นี้
++ Is there a bank near here? = แถวนี้มีธนาคารไหม
++ I live near the beach. = ฉันอาศัยอยู่ใกล้ชายหาด
+that | det | นั่น / นั้น / อันนั้น · (คำเชื่อม) ว่า | แดท | 👉 | ใช้กับของที่อยู่ไกล · This (นี่) ↔ That (นั่น)
++ That is my bag. = นั่นคือกระเป๋าของฉัน
++ I like that. = ฉันชอบอันนั้น
+an | det | หนึ่ง (ใช้หน้าคำที่ขึ้นต้นด้วยเสียงสระ) | แอน | 1️⃣ | an apple, an egg, an hour · คำอื่นใช้ a
++ I want an egg. = ฉันอยากได้ไข่หนึ่งฟอง
++ It is an old hotel. = มันเป็นโรงแรมเก่า
+love | v | รัก · (คำนาม) ความรัก | เลิฟ | ❤️ | I love you = ฉันรักคุณ
++ I love Thai food. = ฉันรักอาหารไทย
++ I love you. = ฉันรักคุณ
+tall | adj | สูง (คน ตึก) | ทอล | 🦒 |
++ He is very tall. = เขาสูงมาก
++ The hotel is tall. = โรงแรมสูง
+of | prep | ของ / แห่ง | ออฟ | 🔗 | a cup of coffee = กาแฟหนึ่งแก้ว · a lot of = เยอะ
++ A cup of tea, please. = ขอชาหนึ่งถ้วยค่ะ
++ It is the name of my hotel. = มันคือชื่อโรงแรมของฉัน
+fun | adj | สนุก | ฟัน | 🎉 |
++ The party is fun. = งานปาร์ตี้สนุก
++ English is fun! = ภาษาอังกฤษสนุก!
+milk | n0 | นม | มิลค์ | 🥛 |
++ I drink milk every morning. = ฉันดื่มนมทุกเช้า
++ No milk, please. = ไม่ใส่นมนะคะ
+minute | n | นาที | มิน-นิท | ⏱️ | 5 minutes = 5 นาที
++ Please wait a minute. = กรุณารอสักครู่
++ The taxi is 10 minutes away. = แท็กซี่อยู่ห่างไปสิบนาที
+stand | v:=,stood,= | ยืน | สแตนด์ | 🧍 | stand up = ยืนขึ้น
++ I stand all day at work. = ฉันยืนทั้งวันที่ทำงาน
++ Please stand here. = กรุณายืนตรงนี้
+call | v | โทร / เรียก | คอล | 📞 | call me = โทรหาฉัน
++ Please call me. = กรุณาโทรหาฉัน
++ I call my mother every day. = ฉันโทรหาแม่ทุกวัน
+later | adv | ทีหลัง / ภายหลัง | เล-เทอร์ | ⏩ | See you later = แล้วเจอกัน
++ I can call you later. = ฉันโทรหาคุณทีหลังได้
++ Talk to you later! = แล้วค่อยคุยกันนะ!
+bathroom | n | ห้องน้ำ | บาธ-รูม | 🛁 |
++ The bathroom is clean. = ห้องน้ำสะอาด
++ Where is the bathroom? = ห้องน้ำอยู่ที่ไหน
+buy | v:=,bought,= | ซื้อ | บาย | 🛍️ |
++ I want to buy a bag. = ฉันอยากซื้อกระเป๋า
++ Where can I buy water? = ฉันซื้อน้ำได้ที่ไหน
+easy | adj | ง่าย | อี-ซี่ | 😌 | ตรงข้ามกับ difficult (ยาก)
++ It is easy. = มันง่าย
++ English is easy for you! = ภาษาอังกฤษง่ายสำหรับคุณ!
+long | adj | ยาว / นาน | ลอง | 📏 | a long day = วันที่ยาวนาน
++ It is a long day. = วันนี้เป็นวันที่ยาวนาน
++ She has long hair. = เธอผมยาว
+him | pron | เขา (ผู้ชาย ใช้ตามหลังกริยา) | ฮิม | 👨 | help him = ช่วยเขา · I like him = ฉันชอบเขา
++ I know him. = ฉันรู้จักเขา
++ Please call him. = กรุณาโทรหาเขา
+fruit | n0 | ผลไม้ | ฟรูท | 🍉 |
++ I like Thai fruit. = ฉันชอบผลไม้ไทย
++ Mango is my favorite fruit. = มะม่วงคือผลไม้ที่ฉันชอบที่สุด
+air | n0 | อากาศ / ลม | แอร์ | 🌬️ | air-con = แอร์ (เครื่องปรับอากาศ)
++ I need fresh air. = ฉันต้องการอากาศบริสุทธิ์
++ The air is cool in the morning. = อากาศเย็นสบายตอนเช้า
+hand | n | มือ | แฮนด์ | ✋ |
++ Please wash your hands. = กรุณาล้างมือ
++ My hands are cold. = มือของฉันเย็น
+flower | n | ดอกไม้ | ฟลาว-เวอร์ | 🌸 |
++ The flowers are beautiful. = ดอกไม้สวยงาม
++ I like flowers. = ฉันชอบดอกไม้
+bank | n | ธนาคาร | แบงค์ | 🏦 |
++ The bank is open today. = วันนี้ธนาคารเปิด
++ I go to the bank. = ฉันไปธนาคาร
+egg | n | ไข่ | เอ็ก | 🥚 |
++ I eat two eggs for breakfast. = ฉันกินไข่สองฟองตอนอาหารเช้า
++ Do you want an egg? = คุณอยากได้ไข่ไหม
+old | adj | เก่า / แก่ (อายุมาก) | โอลด์ | 👵 | ตรงข้ามกับ new หรือ young · I am 25 years old = ฉันอายุ 25 ปี
++ My phone is old. = โทรศัพท์ของฉันเก่าแล้ว
++ My grandmother is old. = คุณยายของฉันอายุมากแล้ว
+cup | n | ถ้วย / แก้ว | คัพ | ☕ | a cup of coffee = กาแฟหนึ่งแก้ว
++ A cup of coffee, please. = ขอกาแฟหนึ่งแก้วค่ะ
++ I drink two cups of tea. = ฉันดื่มชาสองถ้วย
+party | n | งานเลี้ยง / ปาร์ตี้ | ปาร์-ตี้ | 🥳 |
++ We have a party on Sunday. = พวกเรามีงานเลี้ยงวันอาทิตย์
++ The party is at my home. = งานเลี้ยงจัดที่บ้านของฉัน
+wait | v | รอ | เวท | ⏳ | Please wait = กรุณารอ · wait for… = รอ…
++ Please wait here. = กรุณารอตรงนี้
++ I wait for the bus. = ฉันรอรถบัส
+away | adv | ห่างออกไป / ไม่อยู่ | อะ-เวย์ | ↔️ | far away = ไกลออกไป
++ The beach is 5 minutes away. = ชายหาดอยู่ห่างไปห้านาที
++ My boss is away today. = วันนี้หัวหน้าของฉันไม่อยู่
+all | det | ทั้งหมด / ทุก | ออล | 💯 | all day = ทั้งวัน
++ I work all day. = ฉันทำงานทั้งวัน
++ All the rooms are clean. = ห้องทุกห้องสะอาด
+talk | v | คุย / พูดคุย | ทอล์ค | 💬 | talk to… = คุยกับ…
++ I talk to my mother every day. = ฉันคุยกับแม่ทุกวัน
++ Let's talk later. = ค่อยคุยกันทีหลังนะ
+hair | n0 | ผม (บนศีรษะ) | แฮร์ | 💇‍♀️ |
++ Her hair is very long. = ผมของเธอยาวมาก
++ I wash my hair every day. = ฉันสระผมทุกวัน
+favorite | adj | ที่ชอบที่สุด | เฟ-เวอ-ริท | ⭐ | my favorite food = อาหารที่ฉันชอบที่สุด
++ Tea is my favorite drink. = ชาคือเครื่องดื่มที่ฉันชอบที่สุด
++ What is your favorite food? = อาหารที่คุณชอบที่สุดคืออะไร
+cool | adj | เย็นสบาย · เจ๋ง | คูล | 😎 | Cool! = เจ๋ง!
++ It is cool today. = วันนี้อากาศเย็นสบาย
++ Your phone is cool! = โทรศัพท์ของคุณเจ๋งมาก!
+wash | v | ล้าง / ซัก | วอช | 🧼 | wash my hands = ล้างมือ
++ I wash the cups. = ฉันล้างแก้ว
++ Please wash your hands. = กรุณาล้างมือ
+grandmother | n | ยาย / ย่า | แกรนด์-มา-เธอร์ | 👵 | ภาษาอังกฤษใช้คำเดียวทั้งยายและย่า
++ My grandmother lives with us. = คุณยายอาศัยอยู่กับพวกเรา
++ I love my grandmother. = ฉันรักคุณยาย
+us | pron | พวกเรา (ใช้ตามหลังกริยา) | อัส | 👨‍👩‍👧 | help us = ช่วยพวกเรา · Let's = Let us
++ Please help us. = กรุณาช่วยพวกเราหน่อย
++ Come with us! = มากับพวกเราสิ!
+them | pron | พวกเขา / พวกมัน (ใช้ตามหลังกริยา) | เธม | 👥 | I like them = ฉันชอบพวกเขา
++ I call them every week. = ฉันโทรหาพวกเขาทุกสัปดาห์
++ I know them. = ฉันรู้จักพวกเขา
+week | n | สัปดาห์ / อาทิตย์ | วีค | 📅 | every week = ทุกสัปดาห์ · next week = สัปดาห์หน้า
++ I work six days a week. = ฉันทำงานสัปดาห์ละหกวัน
++ See you next week! = เจอกันสัปดาห์หน้า!
+next | adj | ถัดไป / หน้า | เน็กซ์ท | ⏭️ | next week = สัปดาห์หน้า · next to = ข้าง ๆ
++ The next bus is at 9. = รถบัสคันต่อไปมาตอนเก้าโมง
++ The bank is next to the hotel. = ธนาคารอยู่ข้างโรงแรม
+six | num | หก (6) | ซิกซ์ | 6️⃣ |
++ I wake up at six. = ฉันตื่นตอนหกโมง
++ We have six rooms. = พวกเรามีหกห้อง
+
+# ================= MONTH 3
+# ---------- verbs (-ing practice)
+read | v:=,read,= | อ่าน | รีด | 📖 | อดีตเขียนเหมือนเดิม (read) แต่อ่านว่า "เรด"
++ I read a book every night. = ฉันอ่านหนังสือทุกคืน
++ Can you read English? = คุณอ่านภาษาอังกฤษได้ไหม
+study | v | เรียน / ศึกษา | สตั-ดี้ | ✏️ | study English = เรียนภาษาอังกฤษ
++ I study English every day. = ฉันเรียนภาษาอังกฤษทุกวัน
++ She studies at night. = เธอเรียนตอนกลางคืน
+cry | v | ร้องไห้ | คราย | 😢 |
++ Don't cry. = อย่าร้องไห้นะ
++ The baby cries at night. = เด็กทารกร้องไห้ตอนกลางคืน
+rain | n+v | ฝน · (กริยา) ฝนตก | เรน | 🌧️ | It is raining = ฝนกำลังตก (ใช้ It)
++ It rains a lot in Thailand. = ที่ประเทศไทยฝนตกบ่อย
++ I don't like rain. = ฉันไม่ชอบฝน
+play | v | เล่น | เพลย์ | ⚽ | play football = เล่นฟุตบอล
++ The children play outside. = เด็ก ๆ เล่นอยู่ข้างนอก
++ Let's play a game! = มาเล่นเกมกันเถอะ!
+walk | v | เดิน / เดินเล่น | วอล์ค | 🚶‍♀️ | ตัว l ไม่ออกเสียง · walk to work = เดินไปทำงาน
++ I walk to work. = ฉันเดินไปทำงาน
++ Let's walk on the beach. = ไปเดินเล่นที่ชายหาดกันเถอะ
+look | v | ดู / มอง | ลุค | 👀 | Look! = ดูสิ! · look at… = มองดู…
++ Look at the sea! = ดูทะเลสิ!
++ You look beautiful. = คุณดูสวยมาก
+listen | v | ฟัง | ลิส-เซิน | 👂 | ตัว t ไม่ออกเสียง · listen to… = ฟัง…
++ Listen to me. = ฟังฉันนะ
++ I listen to music every day. = ฉันฟังเพลงทุกวัน
+make | v:=,made,= | ทำ / สร้าง | เมค | 🍳 | make coffee = ชงกาแฟ · make a reservation = จอง
++ I make coffee every morning. = ฉันชงกาแฟทุกเช้า
++ Can I make a reservation? = ขอจองได้ไหมคะ
+swim | v:=,swam,= | ว่ายน้ำ | สวิม | 🏊‍♀️ |
++ I swim in the sea. = ฉันว่ายน้ำในทะเล
++ The guests are swimming in the pool. = แขกกำลังว่ายน้ำอยู่ในสระ
+sing | v:=,sang,= | ร้องเพลง | ซิง | 🎤 |
++ She sings very well. = เธอร้องเพลงเพราะมาก
++ Let's sing together! = มาร้องเพลงด้วยกัน!
+dance | v | เต้น | แดนซ์ | 💃 |
++ We dance at the party. = พวกเราเต้นที่งานปาร์ตี้
++ I can't dance. = ฉันเต้นไม่เป็น
+repeat | v | พูดซ้ำ / ทำซ้ำ | รี-พีท | 🔁 | Can you repeat, please? = ช่วยพูดอีกครั้งได้ไหมคะ
++ Please repeat after me. = กรุณาพูดตามฉัน
++ Sorry, can you repeat that? = ขอโทษค่ะ ช่วยพูดอีกครั้งได้ไหม
+pay | v:=,paid,= | จ่าย (เงิน) | เพย์ | 💳 | pay by card = จ่ายด้วยบัตร
++ I pay for the room. = ฉันจ่ายค่าห้อง
++ You can pay at the front desk. = คุณจ่ายเงินที่เคาน์เตอร์ได้
+sit | v:=,sat,= | นั่ง | ซิท | 🪑 | sit down = นั่งลง
++ Please sit down. = เชิญนั่งค่ะ
++ We sit by the pool. = พวกเรานั่งริมสระ
+use | v | ใช้ | ยูส | 🧰 |
++ Can I use your phone? = ขอใช้โทรศัพท์ของคุณได้ไหม
++ I use the gym every day. = ฉันใช้ฟิตเนสทุกวัน
+smoke | v | สูบบุหรี่ · (คำนาม) ควัน | สโมค | 🚭 | No smoking = ห้ามสูบบุหรี่
++ He doesn't smoke. = เขาไม่สูบบุหรี่
++ Please don't smoke here. = กรุณาอย่าสูบบุหรี่ที่นี่
+leave | v:=,left,= | ออกไป / จากไป / ฝากไว้ | ลีฟ | 🚪 | leave your bag = ฝากกระเป๋าไว้
++ I leave work at 5. = ฉันออกจากที่ทำงานตอนห้าโมง
++ The bus leaves at 8. = รถบัสออกตอนแปดโมง
+turn | v | เลี้ยว / หัน / เปิด-ปิด (ไฟ) | เทิร์น | ↪️ | turn left = เลี้ยวซ้าย
++ Turn left at the shop. = เลี้ยวซ้ายที่ร้านค้า
++ Please turn off the light. = กรุณาปิดไฟ
+get | v:=,got,= | ได้รับ / ไปถึง / กลายเป็น | เก็ท | 🎁 | get to… = ไปถึง… · get up = ลุกจากเตียง
++ I get up at 6. = ฉันลุกจากเตียงตอนหกโมง
++ What do you get for breakfast? = คุณได้อะไรเป็นอาหารเช้า
+teach | v:=,taught,= | สอน | ทีช | 👩‍🏫 |
++ My mother teaches English. = แม่ของฉันสอนภาษาอังกฤษ
++ Can you teach me? = คุณสอนฉันได้ไหม
+bring | v:=,brought,= | นำมา / เอามา | บริง | 🧺 |
++ Can you bring me a towel? = ช่วยเอาผ้าเช็ดตัวมาให้หน่อยได้ไหม
++ Please bring your passport. = กรุณานำพาสปอร์ตมาด้วย
+stop | n+v | ป้าย / ที่หยุด · (กริยา) หยุด | สต็อป | 🛑 | bus stop = ป้ายรถเมล์
++ Please stop here. = กรุณาจอดตรงนี้
++ The bus stop is near my home. = ป้ายรถเมล์อยู่ใกล้บ้านฉัน
+enjoy | v | สนุกกับ / เพลิดเพลิน | เอ็น-จอย | 😊 | Enjoy your meal = ทานให้อร่อยนะคะ
++ I enjoy my job. = ฉันสนุกกับงานของฉัน
++ Enjoy your meal! = ทานให้อร่อยนะคะ!
+stay | v+n | พัก / อยู่ · (คำนาม) การเข้าพัก | สเตย์ | 🏨 | stay at a hotel = พักที่โรงแรม
++ We stay at a beautiful hotel. = พวกเราพักที่โรงแรมที่สวยงาม
++ How long are you staying? = คุณจะพักนานแค่ไหน
+check | v | ตรวจ / เช็ค | เช็ค | ✔️ | check in = เช็คอิน · check out = เช็คเอาท์
++ Let me check. = ขอเช็คให้ก่อนนะคะ
++ Please check your room. = กรุณาตรวจดูห้องของคุณ
+break | n+v:=,broke,= | ช่วงพัก · (กริยา) ทำแตก / เสีย | เบรค | ☕ | on a break = กำลังพัก
++ I take a break at 12. = ฉันพักตอนเที่ยง
++ Let's take a break. = พักกันหน่อยเถอะ
+
+# ---------- hotel & home things
+book | n+v | หนังสือ · (กริยา) จอง | บุ๊ค | 📚 | book a room = จองห้อง
++ This book is good. = หนังสือเล่มนี้ดี
++ I want to book a room. = ฉันอยากจองห้อง
+football | n0 | ฟุตบอล | ฟุต-บอล | ⚽ |
++ He likes football. = เขาชอบฟุตบอล
++ We watch football on TV. = พวกเราดูฟุตบอลทางทีวี
+gym | n | ฟิตเนส / ยิม | จิม | 🏋️ |
++ I go to the gym after work. = ฉันไปฟิตเนสหลังเลิกงาน
+roof | n | หลังคา / ดาดฟ้า | รูฟ | 🏠 | on the roof = บนดาดฟ้า
++ There is a bar on the roof. = มีบาร์อยู่บนดาดฟ้า
++ The roof is red. = หลังคาสีแดง
+pillow | n | หมอน | พิล-โล่ว์ | 🛏️ |
++ Can I have one more pillow? = ขอหมอนเพิ่มอีกใบได้ไหม
+chair | n | เก้าอี้ | แชร์ | 🪑 |
++ Please sit on this chair. = เชิญนั่งเก้าอี้ตัวนี้
++ The chair is very old. = เก้าอี้เก่ามาก
+Wi-Fi | n0 | ไวไฟ (อินเทอร์เน็ตไร้สาย) | ไว-ไฟ | 📶 |
++ The Wi-Fi is free. = ไวไฟใช้ฟรี
++ The Wi-Fi doesn't work. = ไวไฟใช้ไม่ได้
+air-con | n | แอร์ / เครื่องปรับอากาศ | แอร์-คอน | ❄️ | พูดเต็มว่า air conditioner
++ The air-con is too cold. = แอร์เย็นเกินไป
++ Please turn on the air-con. = กรุณาเปิดแอร์
+fridge | n | ตู้เย็น | ฟริดจ์ | 🧊 |
++ The water is in the fridge. = น้ำอยู่ในตู้เย็น
+safe | n | ตู้เซฟ · (คุณศัพท์) ปลอดภัย | เซฟ | 🔐 | It is safe = ปลอดภัย
++ Put your passport in the safe. = เก็บพาสปอร์ตไว้ในตู้เซฟ
++ The hotel is very safe. = โรงแรมปลอดภัยมาก
+bottle | n | ขวด | บ็อท-เทิล | 🍼 | a bottle of water = น้ำหนึ่งขวด
++ Can I have a bottle of water? = ขอน้ำหนึ่งขวดได้ไหม
+kettle | n | กาต้มน้ำ | เค็ท-เทิล | 🫖 |
++ The kettle is hot. = กาต้มน้ำร้อน
++ The kettle doesn't work. = กาต้มน้ำเสีย
+window | n | หน้าต่าง | วิน-โดว์ | 🪟 |
++ The window is open. = หน้าต่างเปิดอยู่
+light | n | ไฟ / แสง | ไลท์ | 💡 | turn on the light = เปิดไฟ
++ Please turn on the light. = กรุณาเปิดไฟ
+password | n | รหัสผ่าน | พาส-เวิร์ด | 🔑 |
++ What is the Wi-Fi password? = รหัสไวไฟคืออะไร
++ The password is on the card. = รหัสผ่านอยู่บนการ์ด
+card | n | บัตร / การ์ด | คาร์ด | 💳 | key card = คีย์การ์ด · credit card = บัตรเครดิต
++ Here is your key card. = นี่คือคีย์การ์ดของคุณ
++ I pay by card. = ฉันจ่ายด้วยบัตร
+kitchen | n | ห้องครัว | คิท-เช่น | 🍳 |
++ My mother is in the kitchen. = แม่ของฉันอยู่ในห้องครัว
+bill | n | บิล / ใบเสร็จ | บิล | 🧾 | Can I have the bill? = ขอบิลด้วย
++ Here is your bill. = นี่คือบิลของคุณค่ะ
+cash | n0 | เงินสด | แคช | 💵 | pay by cash = จ่ายเงินสด
++ I don't have cash. = ฉันไม่มีเงินสด
++ Do you take cash? = รับเงินสดไหม
+elevator | n | ลิฟต์ | เอล-ลิ-เว-เตอร์ | 🛗 | แบบอังกฤษเรียก lift
++ The elevator is on your left. = ลิฟต์อยู่ทางซ้ายมือของคุณ
+stairs | n0 | บันได | สแตร์ส | 🪜 | ใช้รูปพหูพจน์เสมอ
++ Please take the stairs. = กรุณาใช้บันได
+toilet | n | ห้องน้ำ / ส้วม | ทอย-เล็ท | 🚻 |
++ Where is the toilet? = ห้องน้ำอยู่ที่ไหน
+spa | n | สปา | สปา | 💆‍♀️ |
++ The spa is very relaxing. = สปาผ่อนคลายมาก
++ I want to book a spa. = ฉันอยากจองสปา
+pharmacy | n | ร้านขายยา | ฟาร์-มา-ซี | 💊 |
++ Is there a pharmacy near here? = แถวนี้มีร้านขายยาไหม
+café | n | ร้านกาแฟ / คาเฟ่ | แค-เฟ่ | ☕ |
++ Let's meet at the café. = ไปเจอกันที่ร้านกาแฟนะ
++ The café is open until 10. = ร้านกาแฟเปิดถึงสี่ทุ่ม
+street | n | ถนน | สตรีท | 🛣️ |
++ The hotel is on this street. = โรงแรมอยู่บนถนนเส้นนี้
++ The street is busy. = ถนนรถเยอะ
+number | n | หมายเลข / เบอร์ / ตัวเลข | นัม-เบอร์ | 🔢 | phone number = เบอร์โทรศัพท์
++ What is your phone number? = เบอร์โทรศัพท์ของคุณคืออะไร
++ Your room number is 305. = หมายเลขห้องของคุณคือ 305
+ATM | n | ตู้เอทีเอ็ม (ตู้กดเงิน) | เอ-ที-เอ็ม | 🏧 |
++ There is an ATM in the lobby. = มีตู้เอทีเอ็มอยู่ในล็อบบี้
+manager | n | ผู้จัดการ | แม-เน-เจอร์ | 👩‍💼 |
++ The manager is in her office. = ผู้จัดการอยู่ในห้องทำงาน
++ Can I talk to the manager? = ขอคุยกับผู้จัดการได้ไหม
+medicine | n0 | ยา | เม-ดิ-ซิน | 💊 |
++ Take your medicine. = ทานยาด้วยนะ
+headache | n | อาการปวดหัว | เฮด-เอค | 🤕 | have a headache = ปวดหัว (ใช้ have ไม่ใช่ am)
++ My mother has a headache. = แม่ของฉันปวดหัว
+fever | n | ไข้ | ฟี-เวอร์ | 🤒 | have a fever = มีไข้
++ The baby has a fever. = เด็กทารกมีไข้
++ I don't have a fever. = ฉันไม่มีไข้
+curry | n | แกง | เคอร์-รี่ | 🍛 | green curry = แกงเขียวหวาน
++ I like chicken curry. = ฉันชอบแกงไก่
+sandwich | n | แซนด์วิช | แซนด์-วิช | 🥪 |
++ I eat a sandwich for lunch. = ฉันกินแซนด์วิชเป็นอาหารกลางวัน
+
+# ---------- small words
+outside | adv | ข้างนอก | เอาท์-ไซด์ | 🌳 | ตรงข้ามกับ inside (ข้างใน)
++ It is hot outside. = ข้างนอกอากาศร้อน
++ Please wait outside. = กรุณารอข้างนอก
+many | det | หลาย / มาก (นับได้) | เม-นี่ | 🔢 | many rooms = หลายห้อง
++ There are many people here. = ที่นี่มีคนเยอะ
++ How many rooms? = กี่ห้องคะ
+any | det | …บ้าง / …เลย (ใช้ในคำถามและปฏิเสธ) | เอ-นี่ | ❓ | Do you have any…? = มี…บ้างไหม
++ Do you have any questions? = มีคำถามไหมคะ
++ I don't have any money. = ฉันไม่มีเงินเลย
+some | det | บ้าง / จำนวนหนึ่ง | ซัม | 🤏 | some water = น้ำนิดหน่อย
++ Can I have some tea? = ขอชาหน่อยได้ไหม
++ I need some help. = ฉันต้องการความช่วยเหลือนิดหน่อย
+free | adj | ฟรี / ว่าง | ฟรี | 🆓 | for free = ฟรี · Are you free? = คุณว่างไหม
++ The Wi-Fi is free. = ไวไฟฟรี
++ Are you free tonight? = คืนนี้ว่างไหม
+until | prep | จนถึง | อัน-ทิล | ⏳ | until 10 = จนถึงสิบโมง
++ The shop is open until 9. = ร้านเปิดจนถึงสามทุ่ม
++ Please wait until 3. = กรุณารอจนถึงบ่ายสาม
+sorry | adj | ขอโทษ / เสียใจ | ซอร์-รี่ | 🙇‍♀️ | I'm sorry = ขอโทษค่ะ
++ I'm sorry. I am late. = ขอโทษค่ะ ฉันมาสาย
++ Sorry, I don't understand. = ขอโทษค่ะ ฉันไม่เข้าใจ
+left | n | ซ้าย / ทางซ้าย | เลฟท์ | ⬅️ | turn left = เลี้ยวซ้าย · on the left = ทางซ้าย
++ The bank is on the left. = ธนาคารอยู่ทางซ้าย
+down | adv | ลง / ไปตาม (ถนน) | ดาวน์ | ⬇️ | sit down = นั่งลง · go down the street = ไปตามถนน
++ Please sit down. = เชิญนั่งลงค่ะ
++ Go down the stairs. = ลงบันไดไป
+opposite | prep | ตรงข้าม | ออพ-โพ-ซิท | ↔️ |
++ The bank is opposite the hotel. = ธนาคารอยู่ตรงข้ามโรงแรม
+between | prep | ระหว่าง | บิท-วีน | ↔️ | between A and B = ระหว่าง A กับ B
++ The café is between the bank and the shop. = ร้านกาแฟอยู่ระหว่างธนาคารกับร้านค้า
+behind | prep | ข้างหลัง | บิ-ไฮนด์ | 🔙 |
++ The pool is behind the hotel. = สระว่ายน้ำอยู่หลังโรงแรม
++ My bag is behind the chair. = กระเป๋าของฉันอยู่หลังเก้าอี้
+upstairs | adv | ชั้นบน / ข้างบน | อัพ-สแตร์ส | ⬆️ |
++ My room is upstairs. = ห้องของฉันอยู่ชั้นบน
+downstairs | adv | ชั้นล่าง / ข้างล่าง | ดาวน์-สแตร์ส | ⬇️ |
++ Breakfast is downstairs. = อาหารเช้าอยู่ชั้นล่าง
+far | adj | ไกล | ฟาร์ | 🗺️ | Is it far? = ไกลไหม
++ My home is far from the hotel. = บ้านของฉันไกลจากโรงแรม
++ It is not far. = ไม่ไกล
+nearest | adj | ที่ใกล้ที่สุด | เนียร์-เรสท์ | 📍 | the nearest… = …ที่ใกล้ที่สุด
++ Where is the nearest pharmacy? = ร้านขายยาที่ใกล้ที่สุดอยู่ที่ไหน
++ The nearest bank is on this street. = ธนาคารที่ใกล้ที่สุดอยู่บนถนนเส้นนี้
+fifth | num | ที่ห้า (ลำดับที่ 5) | ฟิฟธ์ | 5️⃣ | the fifth floor = ชั้นห้า
++ The gym is on the fifth floor. = ฟิตเนสอยู่ชั้นห้า
+three | num | สาม (3) | ธรี | 3️⃣ |
++ I have three sisters. = ฉันมีพี่สาวน้องสาวสามคน
++ We need three rooms. = พวกเราต้องการสามห้อง
+tonight | adv | คืนนี้ | ทู-ไนท์ | 🌙 |
++ Are you busy tonight? = คืนนี้ยุ่งไหม
++ It is cold tonight. = คืนนี้อากาศหนาว
+out | adv | ออก / ข้างนอก | เอาท์ | 🚪 | go out = ออกไปข้างนอก · eat out = กินข้าวนอกบ้าน
++ Let's go out tonight. = คืนนี้ออกไปข้างนอกกันเถอะ
++ She is out now. = ตอนนี้เธอไม่อยู่ (ออกไปข้างนอก)
+green | adj | สีเขียว | กรีน | 💚 | green curry = แกงเขียวหวาน
++ I like the green bag. = ฉันชอบกระเป๋าสีเขียว
++ The trees are green. = ต้นไม้สีเขียว
+yummy | adj | อร่อย / น่ากิน | ยัม-มี่ | 😋 | ภาษาพูดแบบเป็นกันเอง (สุภาพใช้ delicious)
++ This cake is yummy! = เค้กนี้อร่อยจัง!
++ Yummy! I love it. = อร่อยจัง! ชอบมาก
+hard | adj | หนัก / ยาก / แข็ง | ฮาร์ด | 💪 | work hard = ทำงานหนัก
++ English is not hard. = ภาษาอังกฤษไม่ยาก
++ The bed is too hard. = เตียงแข็งเกินไป
+can't | contr:can not | ไม่ได้ / ทำไม่ได้ (= cannot) | แคนท์ | 🚫 | can't + กริยาธรรมดา
++ I can't find my key. = ฉันหากุญแจไม่เจอ
++ Sorry, I can't come. = ขอโทษ ฉันมาไม่ได้
+there's | contr:there is | มี… (= there is) | แดร์ส | 👉 | ใช้กับของ 1 อย่าง
++ There's a cat in the lobby! = มีแมวอยู่ในล็อบบี้!
+
+# ---------- phrases
+wait for | phr | รอ… | เวท-ฟอร์ | ⏳ | wait for the bus = รอรถบัส
++ I am waiting for my friend. = ฉันกำลังรอเพื่อน
+on the phone | phr | ทางโทรศัพท์ / กำลังคุยโทรศัพท์ | ออน-เดอะ-โฟน | 📞 |
++ She is on the phone. = เธอกำลังคุยโทรศัพท์
+right now | phr | ตอนนี้เลย / เดี๋ยวนี้ | ไรท์-นาว | ⚡ |
++ I am busy right now. = ตอนนี้ฉันยุ่งมาก
++ Please come right now. = กรุณามาเดี๋ยวนี้เลย
+there is | phr | มี… (1 อย่าง) | แดร์-อิส | 👉 | ขึ้นต้นประโยคแทนคำว่า "มี" ภาษาไทย
++ There is a cat on the bed. = มีแมวอยู่บนเตียง
+there are | phr | มี… (หลายอย่าง) | แดร์-อาร์ | 👉 |
++ There are many cats here. = ที่นี่มีแมวเยอะ
+go straight | phr | ไปตรง ๆ / เดินตรงไป | โก-สเตรท | ⬆️ |
++ Go straight for 100 meters. = ตรงไปหนึ่งร้อยเมตร
+next to | phr | ข้าง ๆ / ติดกับ | เน็กซ์-ทู | ↔️ |
++ Sit next to me. = มานั่งข้างฉันสิ
++ The ATM is next to the door. = ตู้เอทีเอ็มอยู่ข้างประตู
+get to | phr | ไปถึง / ไป… (ยังไง) | เก็ท-ทู | 🗺️ | How do I get to…? = ไป…ยังไง
++ How do I get to the airport? = ไปสนามบินยังไง
+check in | phr | เช็คอิน (เข้าพัก) | เช็ค-อิน | 🛎️ | กริยา: I want to check in = ฉันต้องการเช็คอิน
++ I want to check in, please. = ฉันต้องการเช็คอินค่ะ
+check out | phr | เช็คเอาท์ (ออกจากห้องพัก) | เช็ค-เอาท์ | 🧳 |
++ I want to check out, please. = ฉันต้องการเช็คเอาท์ค่ะ
++ What time do I check out? = ฉันต้องเช็คเอาท์กี่โมง
+bus stop | phr | ป้ายรถเมล์ | บัส-สต็อป | 🚏 |
++ The bus stop is next to the bank. = ป้ายรถเมล์อยู่ข้างธนาคาร
+car park | phr | ที่จอดรถ | คาร์-พาร์ค | 🅿️ |
++ The car park is free. = ที่จอดรถฟรี
+key card | phr | คีย์การ์ด (บัตรเปิดประตูห้อง) | คีย์-คาร์ด | 💳 |
++ Your key card doesn't work? = คีย์การ์ดของคุณใช้ไม่ได้หรือคะ
+green curry | phr | แกงเขียวหวาน | กรีน-เคอร์-รี่ | 🍛 |
++ Green curry is my favorite food. = แกงเขียวหวานคืออาหารที่ฉันชอบที่สุด
+eat out | phr | กินข้าวนอกบ้าน | อีท-เอาท์ | 🍽️ |
++ We eat out on Sunday. = พวกเรากินข้าวนอกบ้านวันอาทิตย์
+on a break | phr | กำลังพัก (เบรก) | ออน-อะ-เบรค | ☕ |
++ The manager is on a break. = ผู้จัดการกำลังพักเบรก
+enjoy your stay | phr | ขอให้พักผ่อนอย่างมีความสุข | เอ็น-จอย-ยัวร์-สเตย์ | 🌴 | พูดกับแขกหลังเช็คอินเสร็จ
++ Here is your key. Enjoy your stay! = นี่กุญแจของคุณค่ะ ขอให้พักผ่อนอย่างมีความสุขนะคะ!
+for free | phr | ฟรี (ไม่เสียเงิน) | ฟอร์-ฟรี | 🆓 |
++ You can use the pool for free. = คุณใช้สระว่ายน้ำได้ฟรี
+park | n+v | สวนสาธารณะ · (กริยา) จอดรถ | พาร์ค | 🌳 | car park = ที่จอดรถ
++ You can park here. = คุณจอดรถตรงนี้ได้
++ Let's walk in the park. = ไปเดินเล่นในสวนกันเถอะ
+straight | adv | ตรง ๆ / ตรงไป | สเตรท | ⬆️ | go straight = ไปตรง ๆ
++ Walk straight to the lobby. = เดินตรงไปที่ล็อบบี้
++ The road goes straight to the beach. = ถนนตรงไปถึงชายหาด
+child | n:children | เด็ก (1 คน) | ไชลด์ | 🧒 | หลายคน = children (ไม่เติม s)
++ She has one child. = เธอมีลูกหนึ่งคน
++ The children are happy. = เด็ก ๆ มีความสุข
+game | n | เกม / การแข่งขัน | เกม | 🎮 |
++ This game is fun. = เกมนี้สนุก
++ We play a game at night. = พวกเราเล่นเกมตอนกลางคืน
+sea | n | ทะเล | ซี | 🌊 |
++ The sea is blue. = ทะเลสีฟ้า
++ I can see the sea from my room. = ฉันมองเห็นทะเลจากห้อง
+music | n0 | เพลง / ดนตรี | มิว-สิค | 🎵 |
++ I like Thai music. = ฉันชอบเพลงไทย
++ The music is too loud. = เพลงดังเกินไป
+off | adv | ปิด / ออก | ออฟ | 📴 | turn off = ปิด (ไฟ แอร์) · day off = วันหยุด
++ Please turn off the TV. = กรุณาปิดทีวี
++ Tomorrow is my day off. = พรุ่งนี้เป็นวันหยุดของฉัน
+meal | n | มื้ออาหาร | มีล | 🍽️ |
++ Breakfast is my favorite meal. = อาหารเช้าคือมื้อที่ฉันชอบที่สุด
++ We have three meals a day. = พวกเรากินวันละสามมื้อ
+let | v:=,let,= | ให้ / ยอมให้ | เล็ท | 👐 | Let me… = ขอให้ฉัน…หน่อย · Let's = Let us
++ Let me help you. = ให้ฉันช่วยนะคะ
++ Let me check. = ขอเช็คให้ก่อนนะคะ
+bar | n | บาร์ | บาร์ | 🍸 |
++ The bar is open until 12. = บาร์เปิดถึงเที่ยงคืน
++ The bar is next to the pool. = บาร์อยู่ข้างสระว่ายน้ำ
+more | det | มากกว่า / เพิ่มอีก | มอร์ | ➕ | one more = อีกหนึ่ง
++ Can I have more water? = ขอน้ำเพิ่มได้ไหม
++ I want to learn more English. = ฉันอยากเรียนภาษาอังกฤษเพิ่ม
+put | v:=,put,= | วาง / ใส่ / เก็บ | พุท | 📥 |
++ Put the bag here, please. = วางกระเป๋าไว้ตรงนี้ค่ะ
++ I put the key on the table. = ฉันวางกุญแจไว้บนโต๊ะ
+relaxing | adj | ผ่อนคลาย | รี-แลก-ซิ่ง | 😌 |
++ The beach is very relaxing. = ชายหาดผ่อนคลายมาก
++ A hot shower is relaxing. = อาบน้ำอุ่นแล้วผ่อนคลาย
+office | n | สำนักงาน / ห้องทำงาน | ออฟ-ฟิส | 🏢 |
++ My office is on the first floor. = ห้องทำงานของฉันอยู่ชั้นหนึ่ง
++ He works in an office. = เขาทำงานในออฟฟิศ
+lunch | n | อาหารกลางวัน | ลันช์ | 🍱 | have lunch = กินข้าวกลางวัน
++ Let's have lunch together. = กินข้าวกลางวันด้วยกันนะ
++ I have lunch at 12. = ฉันกินข้าวกลางวันตอนเที่ยง
+question | n | คำถาม | เควส-ชั่น | ❓ |
++ Can I ask a question? = ขอถามหน่อยได้ไหม
++ That is a good question. = เป็นคำถามที่ดี
+tree | n | ต้นไม้ | ทรี | 🌳 |
++ There is a big tree near the pool. = มีต้นไม้ใหญ่อยู่ใกล้สระว่ายน้ำ
++ The trees are very tall. = ต้นไม้สูงมาก
+cake | n | เค้ก / ขนมเค้ก | เค้ก | 🎂 |
++ I want a piece of cake. = ฉันอยากได้เค้กหนึ่งชิ้น
++ The cake is sweet. = เค้กหวาน
+find | v:=,found,= | หา / เจอ / พบ | ไฟนด์ | 🔍 |
++ I can't find my phone. = ฉันหาโทรศัพท์ไม่เจอ
++ Did you find your key? = เจอกุญแจหรือยัง
+meter | n | เมตร | มี-เตอร์ | 📏 |
++ The beach is 100 meters from the hotel. = ชายหาดห่างจากโรงแรมหนึ่งร้อยเมตร
++ Walk 50 meters and turn left. = เดินไปห้าสิบเมตรแล้วเลี้ยวซ้าย
+airport | n | สนามบิน | แอร์-พอร์ท | ✈️ |
++ The airport is far from here. = สนามบินอยู่ไกลจากที่นี่
++ I need a taxi to the airport. = ฉันต้องการแท็กซี่ไปสนามบิน
+road | n | ถนน | โรด | 🛣️ |
++ This road is very busy. = ถนนเส้นนี้รถเยอะมาก
++ Be careful on the road. = ระวังบนถนนด้วยนะ
+blue | adj | สีฟ้า / สีน้ำเงิน | บลู | 🔵 |
++ The sky is blue today. = วันนี้ท้องฟ้าสีฟ้า
++ I like the blue room. = ฉันชอบห้องสีฟ้า
+loud | adj | (เสียง) ดัง | ลาวด์ | 🔊 | ตรงข้ามกับ quiet (เงียบ)
++ The TV is too loud. = ทีวีเสียงดังเกินไป
++ The party is very loud. = งานปาร์ตี้เสียงดังมาก
+learn | v | เรียนรู้ | เลิร์น | 🎓 |
++ I learn English every day. = ฉันเรียนภาษาอังกฤษทุกวัน
++ You learn fast! = คุณเรียนรู้เร็วมาก!
+ask | v | ถาม / ขอ | อาสก์ | 🙋 | ask a question = ถามคำถาม
++ Can I ask you something? = ขอถามอะไรหน่อยได้ไหม
++ The guest asks for a towel. = แขกขอผ้าเช็ดตัว
+piece | n | ชิ้น | พีซ | 🍰 | a piece of cake = เค้กหนึ่งชิ้น
++ Can I have a piece of cake? = ขอเค้กหนึ่งชิ้นได้ไหม
++ I want one more piece. = ฉันอยากได้อีกหนึ่งชิ้น
+sky | n | ท้องฟ้า | สกาย | 🌤️ |
++ The sky is beautiful tonight. = คืนนี้ท้องฟ้าสวยมาก
++ Look at the sky! = ดูท้องฟ้าสิ!
+careful | adj | ระมัดระวัง | แคร์-ฟูล | ⚠️ | Be careful! = ระวังนะ!
++ Be careful! The floor is wet. = ระวังนะ! พื้นเปียก
++ Please be careful. = กรุณาระวังด้วย
+be | aux | เป็น / อยู่ (รูปพื้นฐานของ am / is / are) | บี | 🔗 | ใช้หลัง will / can / please: Be careful! · I will be late.
++ Be happy! = มีความสุขนะ!
++ Please be quiet. = กรุณาเงียบหน่อย
+fast | adj | เร็ว | ฟาสท์ | ⚡ |
++ The taxi is very fast. = แท็กซี่ขับเร็วมาก
++ You speak too fast. = คุณพูดเร็วเกินไป
+something | pron | บางอย่าง / อะไรบางอย่าง | ซัม-ธิง | 🎁 |
++ I want something to eat. = ฉันอยากกินอะไรสักอย่าง
++ Do you need something? = คุณต้องการอะไรไหม
+wet | adj | เปียก | เว็ท | 💦 |
++ My hair is wet. = ผมของฉันเปียก
++ The towel is wet. = ผ้าเช็ดตัวเปียก
+quiet | adj | เงียบ | ไคว-เอ็ท | 🤫 | ตรงข้ามกับ loud
++ I want a quiet room. = ฉันอยากได้ห้องที่เงียบ
++ The library is quiet. = ห้องสมุดเงียบ
+library | n | ห้องสมุด | ไล-บรา-รี่ | 📚 |
++ The library is open on Sunday. = ห้องสมุดเปิดวันอาทิตย์
++ I read books in the library. = ฉันอ่านหนังสือในห้องสมุด
+
+# ================= MONTH 4
+was | aux | เป็น / อยู่ (อดีตของ am / is) | วอส | ⏪ | ใช้กับ I / he / she / it: I was tired = ฉันเหนื่อย (ตอนนั้น)
++ It was a long day. = วันนี้เป็นวันที่ยาวนาน
++ She was my teacher. = เธอเคยเป็นครูของฉัน
+were | aux | เป็น / อยู่ (อดีตของ are) | เวอร์ | ⏪ | ใช้กับ you / we / they และหลายคน: we were happy
++ You were right. = คุณพูดถูก
++ The rooms were ready. = ห้องพร้อมแล้ว (ตอนนั้น)
+wasn't | contr:was not | ไม่ (= was not) | วอส-เซินท์ | 🚫 | ใช้กับ I / he / she / it
++ The bus wasn't late. = รถบัสไม่ได้มาช้า
+weren't | contr:were not | ไม่ (= were not) | เวิร์นท์ | 🚫 | ใช้กับ you / we / they
++ The guests weren't happy. = แขกไม่พอใจ
+yesterday | adv | เมื่อวาน | เยส-เตอร์-เดย์ | ⏮️ | ใช้กับอดีต: was / were / -ed
++ I was very busy yesterday. = เมื่อวานฉันยุ่งมาก
+last | adj | ที่แล้ว / ล่าสุด / สุดท้าย | ลาสท์ | ⏮️ | last night = เมื่อคืน · last week = สัปดาห์ที่แล้ว
++ This is the last room. = นี่คือห้องสุดท้าย
++ I saw him last Sunday. = ฉันเจอเขาเมื่อวันอาทิตย์ที่แล้ว
+last night | phr | เมื่อคืน | ลาสท์-ไนท์ | 🌙 |
++ I didn't sleep last night. = เมื่อคืนฉันไม่ได้นอน
+last week | phr | สัปดาห์ที่แล้ว | ลาสท์-วีค | 📅 |
++ We were in Phuket last week. = สัปดาห์ที่แล้วพวกเราอยู่ที่ภูเก็ต
+last year | phr | ปีที่แล้ว | ลาสท์-เยียร์ | 📆 |
++ I started this job last year. = ฉันเริ่มงานนี้เมื่อปีที่แล้ว
+this morning | phr | เมื่อเช้านี้ / เช้านี้ | ดิส-มอร์-นิ่ง | 🌅 |
++ I drank two coffees this morning. = เช้านี้ฉันดื่มกาแฟไปสองแก้ว
+ago | adv | ที่แล้ว / ก่อน (ย้อนไป) | อะ-โก | ⏪ | two days ago = สองวันก่อน · วางไว้หลังเวลา
++ I came here three years ago. = ฉันมาที่นี่เมื่อสามปีก่อน
++ The guest left 10 minutes ago. = แขกออกไปเมื่อสิบนาทีที่แล้ว
+parent | n | พ่อหรือแม่ (parents = พ่อแม่) | แพ-เรนท์ | 👪 |
++ My parents live in Udon. = พ่อแม่ของฉันอาศัยอยู่ที่อุดร
++ I call my parents every Sunday. = ฉันโทรหาพ่อแม่ทุกวันอาทิตย์
+fault | n | ความผิด | ฟอลท์ | 🙅 | It's my fault = เป็นความผิดของฉัน
++ It's not your fault. = ไม่ใช่ความผิดของคุณ
++ Sorry, it was my fault. = ขอโทษค่ะ เป็นความผิดของฉันเอง
+how was | phr | …เป็นยังไงบ้าง (เรื่องที่ผ่านมา) | ฮาว-วอส | 💬 | How was your day? = วันนี้เป็นยังไงบ้าง
++ How was the food? = อาหารเป็นยังไงบ้าง
+day off | phr | วันหยุด (จากงาน) | เดย์-ออฟ | 🏖️ |
++ Sunday is my day off. = วันอาทิตย์เป็นวันหยุดของฉัน
+trip | n | การเดินทาง / ทริป | ทริป | 🧳 |
++ Have a nice trip! = เดินทางปลอดภัยนะ!
++ My trip was very fun. = ทริปของฉันสนุกมาก
+weekend | n | สุดสัปดาห์ (เสาร์-อาทิตย์) | วีค-เอนด์ | 🎉 |
++ What do you do on the weekend? = คุณทำอะไรในวันหยุดสุดสัปดาห์
++ Have a nice weekend! = ขอให้มีความสุขในวันหยุดนะ!
+weather | n0 | อากาศ / สภาพอากาศ | เวท-เธอร์ | 🌦️ |
++ The weather is nice today. = วันนี้อากาศดี
++ How is the weather in the Maldives? = อากาศที่มัลดีฟส์เป็นยังไง
+sunny | adj | แดดจ้า / แดดดี | ซัน-นี่ | ☀️ |
++ It is sunny today. = วันนี้แดดดี
++ I like sunny days. = ฉันชอบวันที่แดดดี
+rainy | adj | ฝนตก / มีฝน | เรน-นี่ | 🌧️ | rainy season = ฤดูฝน
++ It is rainy today. = วันนี้ฝนตก
++ I don't like rainy days. = ฉันไม่ชอบวันฝนตก
+because | conj | เพราะ / เพราะว่า | บิ-คอส | ➡️ | because of… = เพราะ… (ตามด้วยคำนาม)
++ I am tired because I worked a lot. = ฉันเหนื่อยเพราะทำงานเยอะ
++ I can't come because I am sick. = ฉันมาไม่ได้เพราะป่วย
+because of | phr | เพราะ… (ตามด้วยคำนาม) | บิ-คอส-ออฟ | ➡️ | because of the rain = เพราะฝนตก
++ The bus was late because of the rain. = รถบัสมาช้าเพราะฝนตก
+year | n | ปี | เยียร์ | 📆 | every year = ทุกปี
++ I am 25 years old. = ฉันอายุ 25 ปี
++ Happy New Year! = สวัสดีปีใหม่!
+arrive | v | มาถึง | อะ-ไรฟ์ | 🛬 | arrive at the hotel = มาถึงโรงแรม
++ What time does the bus arrive? = รถบัสมาถึงกี่โมง
++ The guests arrive at 2. = แขกมาถึงตอนบ่ายสองโมง
+rest | v+n | พัก / พักผ่อน · (คำนาม) การพัก | เรสท์ | 😌 |
++ You need to rest. = คุณต้องพักผ่อน
++ Take a rest. = พักหน่อยนะ
+doctor | n | หมอ / แพทย์ | ด็อก-เตอร์ | 👩‍⚕️ |
++ My sister is a doctor. = พี่สาวของฉันเป็นหมอ
++ You need to see a doctor. = คุณต้องไปหาหมอ
+proud | adj | ภูมิใจ | พราวด์ | 🥹 | proud of… = ภูมิใจใน…
++ My parents are proud of me. = พ่อแม่ภูมิใจในตัวฉัน
++ I am proud of you. = ฉันภูมิใจในตัวคุณ
+hour | n | ชั่วโมง | อาว-เวอร์ | 🕐 | ตัว h ไม่ออกเสียง จึงใช้ an hour
++ I work eight hours a day. = ฉันทำงานวันละแปดชั่วโมง
++ The trip is one hour. = การเดินทางใช้เวลาหนึ่งชั่วโมง
+message | n | ข้อความ | เมส-เสจ | 💬 |
++ I sent you a message. = ฉันส่งข้อความไปหาคุณแล้ว
++ Did you read my message? = อ่านข้อความของฉันหรือยัง
+photo | n | รูปถ่าย | โฟ-โต้ | 📸 | take a photo = ถ่ายรูป
++ Can you take a photo of us? = ช่วยถ่ายรูปให้พวกเราหน่อยได้ไหม
++ This photo is beautiful. = รูปนี้สวยมาก
+lose | v:=,lost,= | ทำหาย / แพ้ | ลูส | 😵 | lost = ทำหาย (อดีต) หรือ หลงทาง (I am lost)
++ Don't lose your key card. = อย่าทำคีย์การ์ดหายนะคะ
++ I am lost. = ฉันหลงทาง
+forget | v:=,forgot,= | ลืม | เฟอร์-เก็ท | 🤦‍♀️ | Don't forget! = อย่าลืมนะ!
++ Don't forget your passport. = อย่าลืมพาสปอร์ตนะ
++ I always forget his name. = ฉันลืมชื่อเขาตลอด
+glass | n | แก้ว (ภาชนะ / วัสดุ) | กลาส | 🥛 | a glass of water = น้ำหนึ่งแก้ว
++ Can I have a glass of water? = ขอน้ำหนึ่งแก้วได้ไหม
++ The glass is broken. = แก้วแตก
+problem | n | ปัญหา | พร็อบ-เบลม | ⚠️ | No problem = ไม่มีปัญหา / ได้เลย
++ No problem! = ไม่มีปัญหา / ได้เลยค่ะ!
++ Is there a problem with your room? = ห้องของคุณมีปัญหาอะไรไหมคะ
+temple | n | วัด | เทม-เปิ้ล | 🛕 |
++ There are many temples in Thailand. = ประเทศไทยมีวัดเยอะมาก
++ We went to the temple on Sunday. = พวกเราไปวัดวันอาทิตย์
+send | v:=,sent,= | ส่ง | เซนด์ | 📤 |
++ Please send me a photo. = ช่วยส่งรูปให้ฉันหน่อย
++ I sent the message. = ฉันส่งข้อความไปแล้ว
+think | v:=,thought,= | คิด | ธิงค์ | 🤔 | I think… = ฉันคิดว่า…
++ I think it is a good idea. = ฉันคิดว่ามันเป็นความคิดที่ดี
++ What do you think? = คุณคิดว่ายังไง
+say | v:says,said,= | พูด / บอก | เซย์ | 🗨️ | say + คำพูด · tell + คน (tell me)
++ Can you say it again? = ช่วยพูดอีกครั้งได้ไหม
++ How do you say this in English? = อันนี้ภาษาอังกฤษพูดว่ายังไง
+happen | v | เกิดขึ้น | แฮพ-เพ่น | ❗ | What happened? = เกิดอะไรขึ้น
++ What happened to your arm? = แขนคุณเป็นอะไร
++ It happens every day. = มันเกิดขึ้นทุกวัน
+broken | adj | เสีย / แตก / หัก | โบร-เคิ่น | 💔 |
++ The TV is broken. = ทีวีเสีย
++ My phone is broken. = โทรศัพท์ของฉันเสีย
+noisy | adj | เสียงดัง / หนวกหู | นอย-ซี่ | 📢 | ตรงข้ามกับ quiet
++ The street is very noisy. = ถนนเสียงดังมาก
++ Is the room noisy? = ห้องเสียงดังไหม
+fix | v | ซ่อม / แก้ไข | ฟิกซ์ | 🔧 |
++ Can you fix my phone? = คุณซ่อมโทรศัพท์ของฉันได้ไหม
++ The man fixed the air-con. = ช่างซ่อมแอร์แล้ว
+ant | n | มด | แอนท์ | 🐜 |
++ There is an ant on the table. = มีมดอยู่บนโต๊ะ
++ Ants like sweet food. = มดชอบอาหารหวาน
+minibar | n | มินิบาร์ (ตู้เครื่องดื่มในห้องพัก) | มิ-นิ-บาร์ | 🍫 |
++ The minibar is under the TV. = มินิบาร์อยู่ใต้ทีวี
++ Drinks in the minibar are not free. = เครื่องดื่มในมินิบาร์ไม่ฟรีนะคะ
+total | n | ยอดรวม / ทั้งหมด | โท-ทัล | 🧾 | in total = รวมทั้งหมด
++ What is the total? = ยอดรวมเท่าไหร่
++ The total is 500 baht. = ยอดรวมคือห้าร้อยบาท
+again | adv | อีกครั้ง / อีก | อะ-เกน | 🔁 |
++ Please say it again. = กรุณาพูดอีกครั้ง
++ See you again! = แล้วเจอกันอีกนะ!
+beer | n | เบียร์ | เบียร์ | 🍺 |
++ Two beers, please. = ขอเบียร์สองขวดค่ะ
++ He doesn't drink beer. = เขาไม่ดื่มเบียร์
+of course | phr | แน่นอน / ได้เลย | ออฟ-คอร์ส | 👍 |
++ Of course I can help you. = แน่นอนค่ะ ฉันช่วยคุณได้
++ Yes, of course! = ได้เลยค่ะ!
+course | n | หลักสูตร / คอร์ส | คอร์ส | 📚 | of course = แน่นอน
++ This English course is six months. = คอร์สภาษาอังกฤษนี้ใช้เวลาหกเดือน
++ I like this course. = ฉันชอบคอร์สนี้
+fall | v:=,fell,= | ตก / ล้ม | ฟอล | 🤕 | fall down = หกล้ม
++ Be careful! Don't fall. = ระวังนะ! อย่าล้ม
++ The glass fell on the floor. = แก้วตกพื้น
+fall down | phr | หกล้ม / ล้มลง | ฟอล-ดาวน์ | 🤕 |
++ The child fell down in the lobby. = เด็กหกล้มในล็อบบี้
+arm | n | แขน | อาร์ม | 💪 |
++ My arm hurts. = ฉันเจ็บแขน
++ He has strong arms. = เขาแขนแข็งแรง
+there was | phr | มี… (อดีต 1 อย่าง) | แดร์-วอส | 👉 |
++ There was a problem with my room. = ห้องของฉันมีปัญหา
+there were | phr | มี… (อดีต หลายอย่าง) | แดร์-เวอร์ | 👉 |
++ There were many guests yesterday. = เมื่อวานมีแขกเยอะมาก
+ask for | phr | ขอ… (ของ / ความช่วยเหลือ) | อาสก์-ฟอร์ | 🙋 |
++ The guest asked for more towels. = แขกขอผ้าเช็ดตัวเพิ่ม
+proud of | phr | ภูมิใจใน… | พราวด์-ออฟ | 🥹 |
++ I am proud of my work. = ฉันภูมิใจในงานของฉัน
+chiang mai | phr | เชียงใหม่ | เชียง-ไม | 🏔️ |
++ Chiang Mai is cool in December. = เชียงใหม่อากาศเย็นในเดือนธันวาคม
+Chiang | name | เชียง (จาก เชียงใหม่) | เชียง | 🏔️ |
++ Chiang Mai is in the north. = เชียงใหม่อยู่ภาคเหนือ
+Mai | name | ใหม่ (จาก เชียงใหม่) | ไม | 🏔️ |
++ I love Chiang Mai. = ฉันรักเชียงใหม่
+khao soi | phr | ข้าวซอย (อาหารเหนือ) | ข้าว-ซอย | 🍜 |
++ Khao soi is my favorite food. = ข้าวซอยคืออาหารที่ฉันชอบที่สุด
+khao | name | ข้าว (ในชื่ออาหารไทย) | ข้าว | 🍚 |
++ Khao soi is from Chiang Mai. = ข้าวซอยมาจากเชียงใหม่
+soi | name | ซอย (ในชื่อ ข้าวซอย / หรือ ซอย = ตรอก) | ซอย | 🍜 |
++ The hotel is in Soi 5. = โรงแรมอยู่ในซอย 5
+Phuket | name | ภูเก็ต | พู-เก็ต | 🏝️ |
++ Phuket is very beautiful. = ภูเก็ตสวยมาก
++ I want to go to Phuket. = ฉันอยากไปภูเก็ต
+Udon | name | อุดร (อุดรธานี) | อุ-ดร | 🏞️ |
++ My mother is from Udon. = แม่ของฉันมาจากอุดร
++ Udon is in the northeast. = อุดรอยู่ภาคอีสาน
+didn't | contr:did not | ไม่ได้… (อดีต = did not) | ดิด-เดินท์ | 🚫 | ใช้กับทุกคน + กริยาธรรมดา: I didn't go
++ I didn't know. = ฉันไม่รู้ (มาก่อน)
++ She didn't come. = เธอไม่ได้มา
+eight | num | แปด (8) | เอท | 8️⃣ |
++ I start work at eight. = ฉันเริ่มงานตอนแปดโมง
++ There are eight rooms on this floor. = ชั้นนี้มีแปดห้อง
+man | n:men | ผู้ชาย | แมน | 👨 | หลายคน = men
++ The man in room 305 is very kind. = ผู้ชายห้อง 305 ใจดีมาก
++ Two men are waiting outside. = มีผู้ชายสองคนรออยู่ข้างนอก
+woman | n:women | ผู้หญิง | วู-แมน | 👩 | หลายคน = women
++ The woman is my boss. = ผู้หญิงคนนั้นเป็นหัวหน้าของฉัน
++ A woman called for you. = มีผู้หญิงโทรมาหาคุณ
+under | prep | ใต้ / ข้างใต้ | อัน-เดอร์ | ⬇️ |
++ The cat is under the bed. = แมวอยู่ใต้เตียง
++ Your shoes are under the chair. = รองเท้าของคุณอยู่ใต้เก้าอี้
+month | n | เดือน | มันธ์ | 🗓️ | next month = เดือนหน้า
++ I study English every month. = ฉันเรียนภาษาอังกฤษทุกเดือน
++ See you next month! = เจอกันเดือนหน้า!
+strong | adj | แข็งแรง / เข้ม (กาแฟ) | สตรอง | 💪 |
++ The coffee is too strong. = กาแฟเข้มเกินไป
++ You are strong! = คุณแข็งแกร่งมาก!
+December | name | เดือนธันวาคม | ดี-เซม-เบอร์ | ❄️ |
++ It is cool in December. = เดือนธันวาคมอากาศเย็น
++ My birthday is in December. = วันเกิดของฉันอยู่ในเดือนธันวาคม
+north | n | ทิศเหนือ / ภาคเหนือ | นอร์ธ | 🧭 |
++ I am from the north of Thailand. = ฉันมาจากภาคเหนือของประเทศไทย
++ It is cold in the north. = ภาคเหนืออากาศหนาว
+northeast | n | ทิศตะวันออกเฉียงเหนือ / ภาคอีสาน | นอร์ธ-อีสท์ | 🧭 |
++ My family lives in the northeast. = ครอบครัวของฉันอาศัยอยู่ภาคอีสาน
++ The northeast is very hot. = ภาคอีสานร้อนมาก
+shoe | n | รองเท้า | ชู | 👟 | shoes = รองเท้า (คู่)
++ I need new shoes. = ฉันต้องการรองเท้าใหม่
++ Please take off your shoes. = กรุณาถอดรองเท้า
+birthday | n | วันเกิด | เบิร์ธ-เดย์ | 🎂 | Happy birthday! = สุขสันต์วันเกิด!
++ Happy birthday! = สุขสันต์วันเกิด!
++ When is your birthday? = วันเกิดของคุณคือวันไหน
+happy new year | phr | สวัสดีปีใหม่ | แฮป-ปี้-นิว-เยียร์ | 🎆 |
++ Happy New Year, Mom! = สวัสดีปีใหม่ค่ะแม่!
++ Happy New Year to all our guests! = สวัสดีปีใหม่แด่แขกทุกท่าน!
+
+# ================= MONTH 5
+will | aux | จะ (อนาคต / สัญญา / เสนอช่วย) | วิล | 🔮 | will + กริยาธรรมดา ใช้กับทุกคน: I will go · she will go
++ I will be there soon. = ฉันจะไปถึงเร็ว ๆ นี้
++ Will you come tomorrow? = พรุ่งนี้คุณจะมาไหม
+I'll | contr:I will | ฉันจะ… (= I will) | ไอล์ | 🔮 | ใช้บ่อยมากเวลาเสนอช่วย: I'll help you
++ I'll call you later. = เดี๋ยวฉันโทรหานะ
++ I'll be right back. = เดี๋ยวกลับมานะคะ
+won't | contr:will not | จะไม่… (= will not) | โวนท์ | 🚫 | won't + กริยาธรรมดา
++ It won't rain today. = วันนี้ฝนจะไม่ตก
++ I won't be late. = ฉันจะไม่มาสาย
+back | adv | กลับ / คืน / ข้างหลัง | แบค | 🔙 | come back = กลับมา · call back = โทรกลับ
++ I'll be back at 5. = ฉันจะกลับมาตอนห้าโมง
++ Please give it back. = กรุณาคืนมันด้วย
+come back | phr | กลับมา | คัม-แบค | 🔙 |
++ Please come back again! = กลับมาอีกนะคะ!
+be right back | phr | เดี๋ยวกลับมา (รอแป๊บเดียว) | บี-ไรท์-แบค | ⏱️ |
++ Please wait. I'll be right back. = กรุณารอสักครู่ เดี๋ยวฉันกลับมาค่ะ
+promise | v+n | สัญญา · (คำนาม) คำสัญญา | พรอม-มิส | 🤞 |
++ I promise. = ฉันสัญญา
++ You promised! = คุณสัญญาแล้วนะ!
+anyone | pron | ใครก็ได้ / ใคร (ในคำถาม-ปฏิเสธ) | เอ-นี่-วัน | 👥 |
++ Is anyone here? = มีใครอยู่ไหม
++ I don't know anyone here. = ฉันไม่รู้จักใครที่นี่เลย
+someone | pron | ใครบางคน | ซัม-วัน | 🧑 |
++ Someone is at the door. = มีคนมาที่ประตู
++ Someone called for you. = มีคนโทรมาหาคุณ
+maybe | adv | บางที / อาจจะ | เม-บี้ | 🤷‍♀️ |
++ Maybe tomorrow. = อาจจะพรุ่งนี้
++ Maybe she is busy. = บางทีเธออาจจะยุ่ง
+also | adv | ด้วย / ก็…เช่นกัน | ออล-โซ | ➕ | วางหน้ากริยา: I also like tea
++ I also speak Chinese. = ฉันพูดภาษาจีนได้ด้วย
++ She is also a receptionist. = เธอก็เป็นพนักงานต้อนรับเหมือนกัน
+myself | pron | ตัวฉันเอง | มาย-เซลฟ์ | 🙋‍♀️ | I did it myself = ฉันทำเอง
++ I made it myself. = ฉันทำเอง
++ I will do it myself. = ฉันจะทำเอง
+going to | phr | จะ… (มีแผนไว้แล้ว) | โก-อิ้ง-ทู | 🗓️ | am / is / are + going to + กริยาธรรมดา
++ I'm going to cook tonight. = คืนนี้ฉันจะทำอาหาร
+visit | v | ไปเยี่ยม / ไปเที่ยว | วิส-ซิท | 🏡 |
++ I visit my grandmother every month. = ฉันไปเยี่ยมคุณยายทุกเดือน
++ Many people visit Thailand. = มีคนมาเที่ยวประเทศไทยเยอะ
+travel | v | เดินทาง / ท่องเที่ยว | แทรฟ-เวิล | ✈️ |
++ I love to travel. = ฉันชอบเดินทางท่องเที่ยว
++ We travel by bus. = พวกเราเดินทางโดยรถบัส
+next month | phr | เดือนหน้า | เน็กซ์ท-มันธ์ | 🗓️ |
++ I will start a new job next month. = เดือนหน้าฉันจะเริ่มงานใหม่
+next week | phr | สัปดาห์หน้า | เน็กซ์ท-วีค | 📅 |
++ See you next week! = เจอกันสัปดาห์หน้า!
+next year | phr | ปีหน้า | เน็กซ์ท-เยียร์ | 📆 |
++ I will be 30 next year. = ปีหน้าฉันจะอายุ 30
+this weekend | phr | สุดสัปดาห์นี้ | ดิส-วีค-เอนด์ | 🎉 |
++ Are you free this weekend? = สุดสัปดาห์นี้ว่างไหม
+how long | phr | นานแค่ไหน / ยาวแค่ไหน | ฮาว-ลอง | ⏳ | How long will you stay? = จะพักนานแค่ไหน
++ How long is the trip? = การเดินทางใช้เวลานานแค่ไหน
+one day | phr | สักวันหนึ่ง / วันหนึ่ง | วัน-เดย์ | 🌈 |
++ One day, I will speak English very well. = สักวันหนึ่งฉันจะพูดภาษาอังกฤษได้เก่งมาก
+save | v | เก็บ (เงิน) / ประหยัด / ช่วยชีวิต | เซฟ | 🐷 | save money = เก็บเงิน
++ I save money every month. = ฉันเก็บเงินทุกเดือน
++ Save the photo, please. = กรุณาเซฟรูปไว้
+married | adj | แต่งงานแล้ว | แม-ริด | 💍 | get married = แต่งงาน
++ Are you married? = คุณแต่งงานแล้วหรือยัง
++ My sister is married. = พี่สาวของฉันแต่งงานแล้ว
+get married | phr | แต่งงาน | เก็ท-แม-ริด | 💒 |
++ They will get married next year. = พวกเขาจะแต่งงานปีหน้า
+dream | n+v | ความฝัน · (กริยา) ฝัน | ดรีม | 🌙 | Sweet dreams = ฝันดีนะ
++ Sweet dreams! = ฝันดีนะ!
++ I have a big dream. = ฉันมีความฝันที่ยิ่งใหญ่
+world | n | โลก | เวิร์ลด์ | 🌍 |
++ Thailand is the best country in the world. = ประเทศไทยเป็นประเทศที่ดีที่สุดในโลก
++ I want to see the world. = ฉันอยากเห็นโลกกว้าง
+ring | v:=,rang,= | (โทรศัพท์ / กริ่ง) ดัง | ริง | 🔔 |
++ My phone is ringing. = โทรศัพท์ของฉันดัง
++ Please ring the bell. = กรุณากดกริ่ง
+answer | v+n | รับ (โทรศัพท์) / ตอบ · (คำนาม) คำตอบ | แอน-เซอร์ | 📞 |
++ Please answer the phone. = กรุณารับโทรศัพท์
++ What is the answer? = คำตอบคืออะไร
+news | n0 | ข่าว | นิวส์ | 📰 | good news = ข่าวดี
++ I have good news. = ฉันมีข่าวดี
++ I watch the news every morning. = ฉันดูข่าวทุกเช้า
+show | v | แสดง / ให้ดู / พาไปดู | โชว์ | 👀 | show me = ให้ฉันดู
++ Can you show me the room? = ช่วยพาฉันไปดูห้องได้ไหม
++ I will show you the way. = ฉันจะพาคุณไปค่ะ
+Monday | name | วันจันทร์ | มัน-เดย์ | 📅 |
++ I start work on Monday. = ฉันเริ่มงานวันจันทร์
++ See you on Monday! = เจอกันวันจันทร์!
+Friday | name | วันศุกร์ | ไฟร-เดย์ | 🎉 |
++ We have a party on Friday. = วันศุกร์พวกเรามีปาร์ตี้
++ Friday is my favorite day. = วันศุกร์คือวันที่ฉันชอบที่สุด
+if | conj | ถ้า | อิฟ | 🔀 | If + ปัจจุบัน, … will … (หลัง If ไม่ใช้ will)
++ If you are tired, please rest. = ถ้าคุณเหนื่อย พักผ่อนนะ
++ Call me if you need help. = โทรหาฉันถ้าต้องการความช่วยเหลือ
+anything | pron | อะไรก็ได้ / อะไร (ในคำถาม-ปฏิเสธ) | เอ-นี่-ธิง | ❓ |
++ Do you need anything? = ต้องการอะไรไหมคะ
++ I don't want anything. = ฉันไม่ต้องการอะไร
+change | v+n | เปลี่ยน · (คำนาม) เงินทอน | เชนจ์ | 🔄 | Here is your change = นี่เงินทอนค่ะ
++ Can I change my room? = ขอเปลี่ยนห้องได้ไหม
++ Here is your change. = นี่เงินทอนค่ะ
+just | adv | แค่ / เพิ่ง / …ได้เลย | จัสท์ | ☝️ | just call me = โทรหาฉันได้เลย
++ Just a moment, please. = รอสักครู่นะคะ
++ I just arrived. = ฉันเพิ่งมาถึง
+hope | v | หวัง / หวังว่า | โฮพ | 🙏 | I hope so = หวังว่าอย่างนั้น
++ I hope you like it. = หวังว่าคุณจะชอบนะ
++ I hope to see you soon. = หวังว่าจะได้เจอคุณเร็ว ๆ นี้
+hope so | phr | หวังว่าอย่างนั้น | โฮพ-โซ | 🤞 |
++ Will it be sunny? I hope so. = แดดจะดีไหม หวังว่าอย่างนั้นนะ
+sure | adj | แน่ใจ / แน่นอน | ชัวร์ | 👍 | Sure! = ได้เลย! · I'm not sure = ไม่แน่ใจ
++ Sure! No problem. = ได้เลย ไม่มีปัญหา
++ Are you sure? = คุณแน่ใจเหรอ
+probably | adv | น่าจะ / คงจะ | พรอบ-บา-บลี่ | 🤔 |
++ She will probably come late. = เธอน่าจะมาสาย
++ It is probably in your bag. = มันน่าจะอยู่ในกระเป๋าของคุณ
+wear | v:=,wore,= | สวม / ใส่ (เสื้อผ้า) | แวร์ | 👗 |
++ I wear a uniform at work. = ฉันใส่ชุดยูนิฟอร์มที่ทำงาน
++ What will you wear tonight? = คืนนี้คุณจะใส่ชุดอะไร
+dress | n | ชุดเดรส / ชุดกระโปรง | เดรส | 👗 |
++ Your dress is beautiful. = ชุดของคุณสวยมาก
++ I want to buy a new dress. = ฉันอยากซื้อชุดใหม่
+uniform | n | เครื่องแบบ / ยูนิฟอร์ม | ยู-นิ-ฟอร์ม | 👔 |
++ My uniform is blue. = ยูนิฟอร์มของฉันสีฟ้า
++ We wear a uniform every day. = พวกเราใส่ยูนิฟอร์มทุกวัน
+included | adj | รวมอยู่ด้วย | อิน-คลู-ดิด | ✅ | Breakfast is included = รวมอาหารเช้าแล้ว
++ Is Wi-Fi included? = รวมไวไฟด้วยไหม
++ Breakfast is not included. = ไม่รวมอาหารเช้า
+terrace | n | ระเบียง / เทอร์เรซ | เทอร์-เรส | 🌿 |
++ We have breakfast on the terrace. = พวกเรากินอาหารเช้าที่ระเบียง
++ The terrace has a beautiful view. = ระเบียงมีวิวที่สวยงาม
+view | n | วิว / ทิวทัศน์ | วิว | 🏞️ | sea view = วิวทะเล
++ I would like a room with a sea view. = ฉันอยากได้ห้องวิวทะเล
++ What a beautiful view! = วิวสวยมาก!
+perfect | adj | สมบูรณ์แบบ / เยี่ยมเลย | เพอร์-เฟ็คท์ | 💯 |
++ Your English is perfect! = ภาษาอังกฤษของคุณเยี่ยมมาก!
++ The room is perfect. = ห้องดีเยี่ยม
+would | aux | จะ… (สุภาพ) · ช่วยใช้ใน Would you like…? | วูด | 🎩 | I would like = ฉันต้องการ (สุภาพ)
++ That would be great. = แบบนั้นจะดีมากเลย
++ I would love to come. = ฉันอยากมามาก
+would you like | phr | ต้องการ…ไหมคะ / รับ…ไหมคะ (สุภาพมาก) | วูด-ยู-ไลค์ | 🎩 | ใช้เสนอของหรือบริการให้แขก
++ Would you like some water? = รับน้ำไหมคะ
+I'd | contr:I would | ฉัน… (= I would) | ไอด์ | 🎩 | I'd like = I would like = ฉันต้องการ (สุภาพ)
++ I'd like a room for two nights. = ฉันต้องการห้องพักสองคืน
+seat | n | ที่นั่ง | ซีท | 💺 |
++ Please take a seat. = เชิญนั่งค่ะ
++ Is this seat free? = ที่นั่งนี้ว่างไหม
+menu | n | เมนู / รายการอาหาร | เม-นู | 📋 |
++ Here is the menu. = นี่คือเมนูค่ะ
++ Can I see the menu, please? = ขอดูเมนูหน่อยได้ไหม
+could | aux | ช่วย…ได้ไหม (สุภาพ) · อดีตของ can | คูด | 🎩 | Could you…? = ช่วย…ได้ไหมคะ (สุภาพกว่า Can you…?)
++ Could you help me, please? = ช่วยฉันหน่อยได้ไหมคะ
++ I could not sleep. = ฉันนอนไม่หลับ
+moment | n | สักครู่ / ช่วงเวลา | โม-เมนท์ | ⏱️ | One moment, please = กรุณารอสักครู่
++ Wait a moment, please. = กรุณารอสักครู่
++ This is a happy moment. = นี่เป็นช่วงเวลาที่มีความสุข
+spell | v | สะกด (ตัวอักษร) | สเปล | 🔤 | How do you spell it? = สะกดยังไง
++ How do you spell your name? = ชื่อของคุณสะกดยังไง
++ Can you spell it, please? = ช่วยสะกดให้หน่อยได้ไหม
+sign | v+n | เซ็นชื่อ · (คำนาม) ป้าย | ไซน์ | ✍️ | ตัว g ไม่ออกเสียง
++ Please sign here. = กรุณาเซ็นชื่อตรงนี้
++ Look at the sign. = ดูป้ายสิ
+noise | n | เสียงดัง / เสียงรบกวน | นอยส์ | 🔊 |
++ What is that noise? = นั่นเสียงอะไร
++ There is a lot of noise outside. = ข้างนอกเสียงดังมาก
+give | v:=,gave,= | ให้ | กิฟว์ | 🎁 | give me = ให้ฉัน
++ Can you give me a pen? = ขอปากกาหน่อยได้ไหม
++ He gave me flowers. = เขาให้ดอกไม้ฉัน
+patience | n0 | ความอดทน / การรอคอย | เพ-เชินซ์ | 🧘‍♀️ | Thank you for your patience = ขอบคุณที่รอ
++ Thank you for your patience. = ขอบคุณที่รอนะคะ
++ Learning needs patience. = การเรียนต้องใช้ความอดทน
+as soon as possible | phr | เร็วที่สุดเท่าที่จะทำได้ | แอส-ซูน-แอส-พอส-ซิ-เบิ้ล | ⚡ |
++ I will call you as soon as possible. = ฉันจะโทรหาคุณให้เร็วที่สุด
+possible | adj | เป็นไปได้ | พอส-ซิ-เบิ้ล | ✅ | Is it possible? = เป็นไปได้ไหม
++ Is it possible to check in early? = เช็คอินก่อนเวลาได้ไหม
++ Everything is possible. = ทุกอย่างเป็นไปได้
+as | conj | เท่ากับ / ขณะที่ / ในฐานะ | แอส | ↔️ | as soon as possible = เร็วที่สุด
++ I work as a receptionist. = ฉันทำงานเป็นพนักงานต้อนรับ
++ Come as soon as you can. = มาให้เร็วที่สุดเท่าที่ทำได้
+else | adv | อื่น / อีก | เอลส์ | ➕ | anything else = อย่างอื่นอีก
++ Anything else? = รับอะไรเพิ่มอีกไหมคะ
++ Who else is coming? = ใครจะมาอีก
+who | q | ใคร | ฮู | 🙋 | Who is calling? = ใครโทรมาคะ
++ Who is that man? = ผู้ชายคนนั้นคือใคร
++ Who wants coffee? = ใครอยากได้กาแฟบ้าง
+put you through | phr | โอนสายให้ | พุท-ยู-ทรู | 📞 | ใช้ตอนรับโทรศัพท์แล้วโอนไปห้อง/คนอื่น
++ I will put you through to room 305. = ฉันจะโอนสายไปที่ห้อง 305 ให้ค่ะ
+through | prep | ผ่าน / ทะลุ | ทรู | ➡️ | put you through = โอนสาย
++ Walk through the lobby. = เดินผ่านล็อบบี้ไป
++ We drove through the city. = พวกเราขับรถผ่านตัวเมือง
+call back | phr | โทรกลับ | คอล-แบค | 📞 |
++ I will call you back. = ฉันจะโทรกลับไปนะคะ
+goodbye | int | ลาก่อน / สวัสดี (ตอนลา) | กู๊ด-บาย | 👋 |
++ Goodbye! See you tomorrow. = ลาก่อน! เจอกันพรุ่งนี้
++ Say goodbye to the guests. = บอกลาแขก
+four | num | สี่ (4) | โฟร์ | 4️⃣ |
++ We are four people. = พวกเรามีสี่คน
++ It is four o'clock. = สี่โมงแล้ว
+sixth | num | ที่หก (ลำดับที่ 6) | ซิกซ์ธ | 6️⃣ |
++ The spa is on the sixth floor. = สปาอยู่ชั้นหก
+Sunshine | name | ซันไชน์ (ชื่อโรงแรมในบทเรียน) / แสงแดด | ซัน-ไชน์ | 🌞 |
++ Welcome to Sunshine Hotel! = ยินดีต้อนรับสู่โรงแรมซันไชน์!
++ Sunshine Hotel has a big pool. = โรงแรมซันไชน์มีสระว่ายน้ำใหญ่
+David | name | เดวิด (ชื่อผู้ชาย) | เด-วิด | 👨 |
++ David is from England. = เดวิดมาจากอังกฤษ
++ David wants a quiet room. = เดวิดต้องการห้องที่เงียบ
+Lee | name | ลี (นามสกุล) | ลี | 👨 |
++ Mr. Lee is in room 204. = คุณลีอยู่ห้อง 204
++ Mr. Lee booked a table. = คุณลีจองโต๊ะไว้
+when | q | เมื่อไหร่ / ตอนที่ | เวน | 🕰️ | When…? = …เมื่อไหร่
++ When will you come? = คุณจะมาเมื่อไหร่
++ When does the shop open? = ร้านเปิดเมื่อไหร่
+pen | n | ปากกา | เพ็น | 🖊️ |
++ Can I use your pen? = ขอยืมปากกาหน่อยได้ไหม
++ The pen is on the desk. = ปากกาอยู่บนโต๊ะ
+bell | n | กริ่ง / ระฆัง | เบล | 🔔 |
++ Ring the bell for help. = กดกริ่งเพื่อเรียกพนักงาน
++ The bell is on the desk. = กริ่งอยู่บนโต๊ะ
+everything | pron | ทุกอย่าง | เอฟ-วรี่-ธิง | 🌈 |
++ Everything is OK. = ทุกอย่างเรียบร้อยดี
++ Thank you for everything. = ขอบคุณสำหรับทุกอย่าง
+country | n | ประเทศ | คัน-ทรี่ | 🌏 |
++ Which country are you from? = คุณมาจากประเทศอะไร
++ Thailand is a beautiful country. = ประเทศไทยเป็นประเทศที่สวยงาม
+best | adj | ดีที่สุด | เบสท์ | 🏆 |
++ You are the best! = คุณเยี่ยมที่สุด!
++ This is the best hotel in the city. = นี่คือโรงแรมที่ดีที่สุดในเมือง
+sweet dreams | phr | ฝันดีนะ | สวีท-ดรีมส์ | 🌙 |
++ Good night and sweet dreams. = ราตรีสวัสดิ์ ฝันดีนะ
++ Sweet dreams, my love. = ฝันดีนะที่รัก
+
+# ================= MONTH 6
+why | q | ทำไม | วาย | 🤔 | ตอบด้วย Because… (เพราะว่า…)
++ Why are you late? = ทำไมคุณมาสาย
++ Why not? = ทำไมจะไม่ได้ล่ะ / ได้สิ
+which | q | อันไหน / …ไหน | วิช | 👆 | ใช้เมื่อมีตัวเลือก: Which room? = ห้องไหน
++ Which one do you want? = คุณอยากได้อันไหน
++ Which floor is the gym on? = ฟิตเนสอยู่ชั้นไหน
+what kind of | phr | …แบบไหน / ประเภทไหน | วอท-ไคนด์-ออฟ | 🗂️ | kind ตรงนี้แปลว่า "ชนิด" ไม่ใช่ "ใจดี"
++ What kind of room do you want? = คุณต้องการห้องแบบไหน
+how many | phr | กี่… (นับได้) | ฮาว-เม-นี่ | 🔢 | How many nights? = กี่คืน
++ How many people? = กี่ท่านคะ
+how old | phr | อายุเท่าไหร่ / เก่าแค่ไหน | ฮาว-โอลด์ | 🎂 |
++ How old is your sister? = พี่สาวของคุณอายุเท่าไหร่
+how far | phr | ไกลแค่ไหน | ฮาว-ฟาร์ | 🗺️ |
++ How far is the beach? = ชายหาดไกลแค่ไหน
+best friend | phr | เพื่อนสนิท / เพื่อนรัก | เบสท์-เฟรนด์ | 👯‍♀️ |
++ Ploy is my best friend. = พลอยเป็นเพื่อนสนิทของฉัน
+what's | contr:what is | …อะไร (= what is) | วอทส์ | ❔ | What's your name? = คุณชื่ออะไร
++ What's this? = นี่คืออะไร
++ What's the problem? = มีปัญหาอะไรคะ
+Australia | name | ประเทศออสเตรเลีย | ออส-เตร-เลีย | 🇦🇺 |
++ He is from Australia. = เขามาจากออสเตรเลีย
++ Australia is very big. = ออสเตรเลียใหญ่มาก
+Anna | name | แอนนา (ชื่อผู้หญิง) | แอน-นา | 👱‍♀️ |
++ Anna is my new friend. = แอนนาเป็นเพื่อนใหม่ของฉัน
++ Anna speaks English and Thai. = แอนนาพูดภาษาอังกฤษและภาษาไทยได้
+town | n | เมือง (เล็ก) | ทาวน์ | 🏘️ | old town = เมืองเก่า
++ I live in a small town. = ฉันอาศัยอยู่ในเมืองเล็ก ๆ
++ The old town is beautiful. = เมืองเก่าสวยงาม
+building | n | ตึก / อาคาร | บิล-ดิ้ง | 🏢 |
++ The hotel is a tall building. = โรงแรมเป็นตึกสูง
++ That building is very old. = ตึกนั้นเก่ามาก
+free time | phr | เวลาว่าง | ฟรี-ไทม์ | 🎨 |
++ What do you do in your free time? = เวลาว่างคุณทำอะไร
+important | adj | สำคัญ | อิม-พอร์-แทนท์ | ⭐ |
++ This is very important. = นี่สำคัญมาก
++ Sleep is important. = การนอนสำคัญ
+then | adv | แล้ว / จากนั้น / ตอนนั้น | เด็น | ➡️ |
++ Go straight, then turn left. = ตรงไป แล้วเลี้ยวซ้าย
++ I ate dinner, then I slept. = ฉันกินข้าวเย็น แล้วก็นอน
+after that | phr | หลังจากนั้น | อาฟ-เตอร์-แดท | ⏭️ |
++ After that, we went home. = หลังจากนั้นพวกเราก็กลับบ้าน
+everywhere | adv | ทุกที่ | เอฟ-วรี่-แวร์ | 🌍 |
++ I looked everywhere for my key. = ฉันหากุญแจทุกที่
++ There are flowers everywhere. = มีดอกไม้อยู่ทุกที่
+finally | adv | ในที่สุด | ไฟ-นัล-ลี่ | 🏁 |
++ Finally, the bus came. = ในที่สุดรถบัสก็มา
++ Finally, it is Friday! = ในที่สุดก็วันศุกร์!
+feel | v:=,felt,= | รู้สึก | ฟีล | 💗 | I feel happy = ฉันรู้สึกมีความสุข
++ How do you feel? = คุณรู้สึกยังไงบ้าง
++ I feel sick. = ฉันรู้สึกไม่สบาย
+agree | v | เห็นด้วย | อะ-กรี | 🤝 | I agree = ฉันเห็นด้วย
++ I agree. = ฉันเห็นด้วย
++ Do you agree? = คุณเห็นด้วยไหม
+opinion | n | ความคิดเห็น | โอ-พิน-เนียน | 💭 | in my opinion = ในความคิดของฉัน
++ What is your opinion? = ความคิดเห็นของคุณคืออะไร
++ In my opinion, it is too expensive. = ในความคิดของฉัน มันแพงเกินไป
+worried | adj | กังวล / เป็นห่วง | เวอร์-รีด | 😟 | worried about… = เป็นห่วงเรื่อง…
++ Don't be worried. = ไม่ต้องกังวลนะ
++ She is worried about her exam. = เธอกังวลเรื่องสอบ
+think so | phr | คิดอย่างนั้น | ธิงค์-โซ | 🤔 | I think so = คิดว่าใช่ · I don't think so = คิดว่าไม่ใช่
++ Is it far? I don't think so. = ไกลไหม คิดว่าไม่ไกลนะ
+better | adj | ดีกว่า / ดีขึ้น | เบท-เทอร์ | 📈 | feel better = รู้สึกดีขึ้น
++ This room is better. = ห้องนี้ดีกว่า
++ I hope you feel better soon. = หวังว่าคุณจะรู้สึกดีขึ้นเร็ว ๆ นะ
+yourself | pron | ตัวคุณเอง | ยัวร์-เซลฟ์ | 🫵 | take care of yourself = ดูแลตัวเองนะ
++ Please help yourself. = เชิญตามสบายเลยค่ะ
++ Tell me about yourself. = เล่าเรื่องตัวคุณให้ฟังหน่อย
+double | adj | คู่ / สองเท่า | ดับ-เบิ้ล | 2️⃣ | double room = ห้องเตียงใหญ่สำหรับสองคน
++ I'd like a double room, please. = ฉันต้องการห้องดับเบิลค่ะ
+double room | phr | ห้องดับเบิล (เตียงใหญ่ 1 เตียง สำหรับ 2 คน) | ดับ-เบิ้ล-รูม | 🛏️ |
++ The double room has a sea view. = ห้องดับเบิลมีวิวทะเล
+late check-out | phr | เช็คเอาท์ช้ากว่าเวลาปกติ | เลท-เช็ค-เอาท์ | 🕑 |
++ Late check-out is free for VIP guests. = เช็คเอาท์ช้าฟรีสำหรับแขกวีไอพี
+wake-up | adj | ปลุก | เวค-อัพ | ⏰ | wake-up call = บริการโทรปลุก
++ I need a wake-up call. = ฉันต้องการบริการโทรปลุก
+wake-up call | phr | บริการโทรปลุก | เวค-อัพ-คอล | ☎️ |
++ Your wake-up call is at 6 o'clock. = บริการโทรปลุกของคุณตอนหกโมงค่ะ
+extra | adj | เพิ่ม / เสริม / พิเศษ | เอ็กซ์-ตร้า | ➕ | extra bed = เตียงเสริม
++ Can I have an extra towel? = ขอผ้าเช็ดตัวเพิ่มได้ไหม
++ There is no extra charge. = ไม่มีค่าใช้จ่ายเพิ่มค่ะ
+luggage | n0 | กระเป๋าเดินทาง / สัมภาระ | ลัก-เกจ | 🧳 | นับไม่ได้ ไม่เติม s
++ Your luggage is in your room. = กระเป๋าเดินทางของคุณอยู่ในห้องแล้วค่ะ
++ How much luggage do you have? = คุณมีกระเป๋าเดินทางกี่ใบ
+keep | v:=,kept,= | เก็บ / รักษาไว้ / ทำต่อไป | คีพ | 📦 | keep + ing = ทำต่อไปเรื่อย ๆ
++ Keep the change. = ไม่ต้องทอนค่ะ
++ Keep going! = สู้ต่อไปนะ!
+recommend | v | แนะนำ | เร-คอม-เมนด์ | 👍 |
++ Can you recommend a good restaurant? = ช่วยแนะนำร้านอาหารดี ๆ หน่อยได้ไหม
++ I recommend the green curry. = ฉันแนะนำแกงเขียวหวานค่ะ
+should | aux | ควร | ชูด | ☝️ | should + กริยาธรรมดา
++ You should rest. = คุณควรพักผ่อน
++ You should see a doctor. = คุณควรไปหาหมอ
+try | v | ลอง / พยายาม | ทราย | 🍴 |
++ Try this! It's very good. = ลองอันนี้สิ! อร่อยมาก
++ I will try my best. = ฉันจะพยายามให้ดีที่สุด
+tour | n | ทัวร์ / การเที่ยวชม | ทัวร์ | 🚐 |
++ We have a tour to the islands. = เรามีทัวร์ไปเกาะค่ะ
++ The tour starts at 8. = ทัวร์เริ่มแปดโมง
+sunscreen | n0 | ครีมกันแดด | ซัน-สกรีน | 🧴 |
++ Put on some sunscreen. = ทาครีมกันแดดหน่อยนะ
++ The sun is strong. Use sunscreen! = แดดแรง ทาครีมกันแดดด้วยนะ!
+pad thai | phr | ผัดไทย | ผัด-ไท | 🍜 |
++ Pad thai is very popular. = ผัดไทยได้รับความนิยมมาก
+pad | name | ผัด (ในชื่ออาหาร ผัดไทย) | ผัด | 🍳 |
++ I love pad thai with shrimp. = ฉันชอบผัดไทยกุ้ง
+flight | n | เที่ยวบิน | ไฟลท์ | ✈️ |
++ My flight is at 10. = เที่ยวบินของฉันสิบโมง
++ How was your flight? = เที่ยวบินเป็นยังไงบ้าง
+cost | v:=,cost,= | ราคา… / มีค่าใช้จ่าย | คอสท์ | 💰 | It costs 100 baht = ราคาหนึ่งร้อยบาท
++ How much does it cost? = ราคาเท่าไหร่
++ The tour costs 1500 baht. = ทัวร์ราคา 1500 บาท
+boyfriend | n | แฟน (ผู้ชาย) | บอย-เฟรนด์ | 💑 |
++ My boyfriend lives in the Maldives. = แฟนของฉันอาศัยอยู่ที่มัลดีฟส์
++ My boyfriend is very kind. = แฟนของฉันใจดีมาก
+practice | v+n | ฝึก / ฝึกซ้อม · (คำนาม) การฝึก | แพรค-ทิส | 🏋️‍♀️ | Practice makes perfect = ฝึกบ่อย ๆ แล้วจะเก่ง
++ I practice English every day. = ฉันฝึกภาษาอังกฤษทุกวัน
++ Practice makes perfect! = ฝึกบ่อย ๆ แล้วจะเก่งเอง!
+plan | n+v | แผน · (กริยา) วางแผน | แพลน | 🗓️ |
++ What is your plan for tomorrow? = พรุ่งนี้คุณมีแผนอะไร
++ We plan to visit Phuket. = พวกเราวางแผนจะไปภูเก็ต
+shirt | n | เสื้อเชิ้ต / เสื้อ | เชิ้ร์ท | 👕 |
++ I need a new shirt. = ฉันต้องการเสื้อตัวใหม่
++ His shirt is blue. = เสื้อของเขาสีฟ้า
+miss | v | คิดถึง / พลาด | มิส | 🥺 | I miss you = ฉันคิดถึงคุณ · miss the bus = ตกรถบัส
++ I miss my family. = ฉันคิดถึงครอบครัว
++ Hurry! Don't miss the bus. = เร็วเข้า! อย่าตกรถบัสนะ
+sad | adj | เศร้า / เสียใจ | แซด | 😢 | ตรงข้ามกับ happy
++ Why are you sad? = ทำไมคุณเศร้า
++ I am sad today. = วันนี้ฉันเศร้า
+care | n+v | การดูแล · (กริยา) ใส่ใจ | แคร์ | 🤲 | take care = ดูแลตัวเองนะ
++ I care about you. = ฉันใส่ใจคุณนะ
+take care | phr | ดูแลตัวเองนะ / ระวังตัวด้วย | เทค-แคร์ | 🤗 | take care of… = ดูแล…
++ Bye! Take care! = บ๊ายบาย! ดูแลตัวเองนะ!
+congratulations | int | ยินดีด้วย | คอน-แกรท-ชู-เล-ชั่นส์ | 🎉 |
++ Congratulations on your new job! = ยินดีด้วยกับงานใหม่นะ!
++ Congratulations! You did it! = ยินดีด้วย! คุณทำได้แล้ว!
+can't wait | phr | อยาก…มาก ๆ / แทบรอไม่ไหว | แคนท์-เวท | 🤩 | I can't wait to see you = อยากเจอคุณจะแย่แล้ว
++ I can't wait for the weekend! = แทบรอวันหยุดไม่ไหวแล้ว!
+anymore | adv | อีกต่อไป / อีกแล้ว (ใช้กับประโยคปฏิเสธ) | เอ-นี่-มอร์ | 🙅‍♀️ |
++ I don't smoke anymore. = ฉันไม่สูบบุหรี่แล้ว
++ He doesn't live here anymore. = เขาไม่ได้อาศัยอยู่ที่นี่แล้ว
+word | n | คำ / คำศัพท์ | เวิร์ด | 🔤 |
++ What does this word mean? = คำนี้แปลว่าอะไร
++ I learn five new words every day. = ฉันเรียนคำศัพท์ใหม่วันละห้าคำ
+special | adj | พิเศษ | สเปช-เชียล | ✨ |
++ Today is a special day. = วันนี้เป็นวันพิเศษ
++ We have a special price for you. = เรามีราคาพิเศษสำหรับคุณค่ะ
+without | prep | โดยไม่มี / ปราศจาก | วิธ-เอาท์ | 🚫 | coffee without sugar = กาแฟไม่ใส่น้ำตาล
++ Coffee without sugar, please. = ขอกาแฟไม่ใส่น้ำตาลค่ะ
++ I can't live without you. = ฉันขาดคุณไม่ได้
+couldn't | contr:could not | ทำไม่ได้ (อดีต) / คงไม่… | คูด-เดินท์ | 🚫 |
++ I couldn't sleep last night. = เมื่อคืนฉันนอนไม่หลับ
++ We couldn't find a taxi. = พวกเราหาแท็กซี่ไม่ได้
+confidence | n0 | ความมั่นใจ | คอน-ฟิ-เดนซ์ | 💪 | with confidence = อย่างมั่นใจ
++ Speak with confidence! = พูดอย่างมั่นใจนะ!
++ She has a lot of confidence. = เธอมีความมั่นใจมาก
+celebrate | v | ฉลอง | เซล-เล-เบรท | 🥳 |
++ Let's celebrate your birthday! = มาฉลองวันเกิดของคุณกันเถอะ!
++ We celebrate New Year together. = พวกเราฉลองปีใหม่ด้วยกัน
+beginning | n | จุดเริ่มต้น / ตอนต้น | บิ-กิน-นิ่ง | 🌱 |
++ This is a new beginning. = นี่คือจุดเริ่มต้นใหม่
++ At the beginning, English was hard. = ตอนแรกภาษาอังกฤษยาก
+guess | v | เดา | เกส | 🤔 | Guess what? = รู้อะไรไหม (กำลังจะบอกข่าว)
++ Can you guess my age? = คุณเดาอายุฉันได้ไหม
++ Guess who called me! = เดาสิว่าใครโทรหาฉัน!
+guess what | phr | รู้อะไรไหม / ทายสิ (กำลังจะเล่าข่าว) | เกส-วอท | 🎁 |
++ Guess what? I got a new job! = รู้อะไรไหม ฉันได้งานใหม่แล้ว!
+date | n | นัด (เดท) / วันที่ | เดท | 📅 | It's a date! = ตกลงนัดกันแล้วนะ!
++ What is the date today? = วันนี้วันที่เท่าไหร่
++ We have a date tonight. = คืนนี้พวกเรามีนัดกัน
+wonderful | adj | วิเศษ / ยอดเยี่ยม | วัน-เดอร์-ฟูล | 🌟 |
++ What a wonderful day! = ช่างเป็นวันที่วิเศษมาก!
++ The food was wonderful. = อาหารยอดเยี่ยมมาก
+sea view | phr | วิวทะเล | ซี-วิว | 🌊 |
++ All our rooms have a sea view. = ห้องทุกห้องของเรามีวิวทะเล
+first time | phr | ครั้งแรก | เฟิร์สท์-ไทม์ | 1️⃣ |
++ It is my first time in Bangkok. = นี่เป็นครั้งแรกที่ฉันมากรุงเทพฯ
+expensive | adj | แพง | เอ็กซ์-เพน-ซีฟ | 💸 | ตรงข้ามกับ cheap (ถูก)
++ This bag is too expensive. = กระเป๋าใบนี้แพงเกินไป
++ Is the room expensive? = ห้องแพงไหม
+cheap | adj | ถูก (ราคา) | ชีพ | 🏷️ |
++ The food at the market is cheap. = อาหารที่ตลาดราคาถูก
++ Do you have a cheap room? = มีห้องราคาถูกไหม
+exam | n | การสอบ | เอ็กแซม | 📝 |
++ I have an exam tomorrow. = พรุ่งนี้ฉันมีสอบ
++ Good luck on your exam! = ขอให้โชคดีในการสอบนะ!
+luck | n0 | โชค | ลัค | 🍀 | Good luck! = โชคดีนะ!
++ Good luck! = โชคดีนะ!
++ I wish you luck. = ขอให้คุณโชคดี
+sugar | n0 | น้ำตาล | ชู-การ์ | 🍬 |
++ No sugar, please. = ไม่ใส่น้ำตาลค่ะ
++ Do you take sugar? = ใส่น้ำตาลไหมคะ
+island | n | เกาะ | ไอ-แลนด์ | 🏝️ | ตัว s ไม่ออกเสียง
++ The Maldives has many islands. = มัลดีฟส์มีเกาะเยอะมาก
++ Let's visit the island. = ไปเที่ยวเกาะกันเถอะ
+popular | adj | เป็นที่นิยม / ดัง | พอพ-พิว-ล่าร์ | 🔥 |
++ This hotel is very popular. = โรงแรมนี้เป็นที่นิยมมาก
++ Mango sticky rice is popular. = ข้าวเหนียวมะม่วงเป็นที่นิยม
+shrimp | n:shrimp | กุ้ง | ชริมพ์ | 🦐 |
++ I don't eat shrimp. = ฉันไม่กินกุ้ง
++ Fried rice with shrimp, please. = ขอข้าวผัดกุ้งค่ะ
+price | n | ราคา | ไพรซ์ | 🏷️ |
++ What is the price of the room? = ห้องราคาเท่าไหร่
++ The price is good. = ราคาดี
+charge | n | ค่าบริการ / ค่าธรรมเนียม | ชาร์จ | 💳 | no extra charge = ไม่มีค่าใช้จ่ายเพิ่ม
++ There is a charge for the minibar. = มีค่าบริการสำหรับมินิบาร์
++ Is there a charge for Wi-Fi? = ไวไฟมีค่าบริการไหม
+VIP | n | วีไอพี (แขกคนสำคัญ) | วี-ไอ-พี | 👑 |
++ Mr. Smith is a VIP guest. = คุณสมิธเป็นแขกวีไอพี
++ The VIP room is on the top floor. = ห้องวีไอพีอยู่ชั้นบนสุด
+age | n | อายุ | เอจ | 🎂 |
++ What is your age? = คุณอายุเท่าไหร่
++ Age is just a number. = อายุเป็นแค่ตัวเลข
+sun | n | ดวงอาทิตย์ / แดด | ซัน | ☀️ |
++ The sun is very hot today. = วันนี้แดดร้อนมาก
++ I like to sit in the sun. = ฉันชอบนั่งตากแดด
+hurry | v | รีบ | เฮอร์-รี่ | 🏃‍♀️ | Hurry up! = เร็วเข้า!
++ Hurry up! We are late. = เร็วเข้า! เราสายแล้ว
++ Don't hurry. = ไม่ต้องรีบนะ
+mean | v:=,meant,= | หมายถึง / แปลว่า | มีน | 💡 | What does it mean? = มันแปลว่าอะไร
++ What does this mean? = อันนี้แปลว่าอะไร
++ I mean it. = ฉันพูดจริงนะ
+five | num | ห้า (5) | ไฟว์ | 5️⃣ |
++ I have five sisters. = ฉันมีพี่น้องผู้หญิงห้าคน
++ It is five o'clock. = ห้าโมงแล้ว
+wish | v+n | ขอให้ / ปรารถนา · (คำนาม) คำอวยพร | วิช | 🌠 | Best wishes = ด้วยความปรารถนาดี
++ I wish you a happy birthday. = ขอให้มีความสุขในวันเกิดนะ
++ Make a wish! = อธิษฐานสิ!
+fried | adj | ทอด / ผัด | ฟรายด์ | 🍳 | fried rice = ข้าวผัด
++ I want fried rice. = ฉันอยากกินข้าวผัด
++ I like fried chicken. = ฉันชอบไก่ทอด
+top | n | ด้านบน / ยอด / บนสุด | ท็อป | 🔝 | the top floor = ชั้นบนสุด
++ The bar is on the top floor. = บาร์อยู่ชั้นบนสุด
++ Put it on top of the table. = วางไว้บนโต๊ะ

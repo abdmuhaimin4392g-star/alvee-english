@@ -1,0 +1,372 @@
+# MONTH 4 — yesterday (past)
+@month 4 | Yesterday | เมื่อวาน (อดีต) | Beach Resort | รีสอร์ทริมทะเล
+
+# ------------------------------------------------------------------ UNIT 13
+@unit 13 | was · were | อดีตของ am / is / are | ⛱️ | พูดถึงเมื่อวานด้วย was / were
+
+@tip | อดีตของ am / is / are
+p: เรื่องที่ผ่านมาแล้ว (yesterday, last night) เปลี่ยน am / is → was และ are → were
+tr: I / He / She / It | was | tired
+tr: You / We / They | were | happy
+ok: I was tired yesterday. | เมื่อวานฉันเหนื่อย
+no: I tired yesterday. | ผิด — ลืม was
+no: I am tired yesterday. | ผิด — เมื่อวานต้องใช้ was
+trick: am / is → was · are → were (ภาษาไทยไม่เปลี่ยน แต่ภาษาอังกฤษเปลี่ยน!)
+
+@lesson 13.1 | I was tired | ฉันเหนื่อย (เมื่อวาน)
+new: was yesterday last_night last_week
+I was tired yesterday. = เมื่อวานฉันเหนื่อย
+I was sick last week. = สัปดาห์ที่แล้วฉันป่วย
+She was at work yesterday. = เมื่อวานเธออยู่ที่ทำงาน
+He was very busy. = เขายุ่งมาก (ตอนนั้น)
+It was hot yesterday. = เมื่อวานอากาศร้อน
+The food was very good. = อาหารอร่อยมาก
+My boss was happy last night. = เมื่อคืนหัวหน้าของฉันอารมณ์ดี
+I was at home last night. = เมื่อคืนฉันอยู่บ้าน
+
+@lesson 13.2 | We were happy | พวกเรามีความสุข (ตอนนั้น)
+new: were ago this_morning parents
+We were happy. = พวกเรามีความสุข (ตอนนั้น)
+They were at the beach yesterday. = เมื่อวานพวกเขาอยู่ที่ชายหาด
+You were late this morning. = เมื่อเช้านี้คุณมาสาย
+The guests were very kind. = แขกใจดีมาก
+The rooms were clean. = ห้องสะอาดเรียบร้อย
+We were at a party two days ago. = สองวันก่อนพวกเราอยู่ที่งานปาร์ตี้
+My parents were in Bangkok last week. = สัปดาห์ที่แล้วพ่อแม่ของฉันอยู่ที่กรุงเทพฯ
+
+@lesson 13.3 | It wasn't my fault | ไม่ใช่ความผิดของฉัน
+new: wasn't weren't fault
+I wasn't tired. = ฉันไม่ได้เหนื่อย
+It wasn't my fault. = ไม่ใช่ความผิดของฉัน
+The room wasn't clean. = ห้องไม่สะอาด
+They weren't at home. = พวกเขาไม่ได้อยู่บ้าน
+We weren't late. = พวกเราไม่ได้มาสาย
+The food wasn't spicy. = อาหารไม่เผ็ด
+The air-con wasn't working last night. = เมื่อคืนแอร์ไม่ทำงาน
+
+@lesson 13.4 | How was your day? | วันนี้เป็นยังไงบ้าง
+new: how_was day_off trip quiet
+How was your day? = วันนี้เป็นยังไงบ้าง
+It was great! = เยี่ยมมาก!
+Was the food good? = อาหารอร่อยไหม
+Yes, it was. = อร่อยค่ะ (ใช่)
+Were you at work yesterday? = เมื่อวานคุณอยู่ที่ทำงานไหม
+No, I wasn't. It was my day off. = ไม่ได้อยู่ค่ะ เมื่อวานเป็นวันหยุดของฉัน
+How was your trip? = การเดินทางเป็นยังไงบ้าง
+Was the room quiet? = ห้องเงียบไหม
+
+@talk weekend | How was your weekend? | สุดสัปดาห์เป็นยังไง | friends | Ploy | 👩
+A: Hi Alvee! How was your weekend? = หวัดดี Alvee! สุดสัปดาห์เป็นยังไงบ้าง
+B: It was great! I was at the beach. = เยี่ยมมาก! ฉันไปทะเลมา
+x: It is great! I was at the beach.
+x: It was great! I at the beach.
+A: Was the weather good? = อากาศดีไหม
+B: Yes, it was. It was sunny and hot. = ดีมาก แดดจ้าและร้อน
+x: Yes, it were. It was sunny and hot.
+x: Yes, it was. It sunny and hot.
+A: Were your friends there too? = เพื่อน ๆ ไปด้วยไหม
+B: Yes, they were. We were very happy. = ไปด้วย พวกเรามีความสุขมาก
+x: Yes, they was. We were very happy.
+x: Yes, they were. We was very happy.
+A: And how was work today? = แล้ววันนี้งานเป็นยังไง
+B: It was busy. I was very tired! = ยุ่งมาก ฉันเหนื่อยมาก!
+x: It busy. I was very tired!
+x: It was busy. I were very tired!
+
+@talk weather | Nice weather today | อากาศดีนะคะ | weather | Guest | 🧳
+A: Good morning! It's a beautiful day. = อรุณสวัสดิ์ครับ วันนี้อากาศดีจัง
+B: Yes, it is. Yesterday was very rainy. = ใช่ค่ะ เมื่อวานฝนตกเยอะมาก
+x: Yes, it is. Yesterday is very rainy.
+x: Yes, it is. Yesterday very rainy.
+A: Was the pool open yesterday? = เมื่อวานสระว่ายน้ำเปิดไหมครับ
+B: No, it wasn't. It was closed because of the rain. = ไม่เปิดค่ะ ปิดเพราะฝนตก
+x: No, it wasn't. It is closed because of the rain.
+x: No, it weren't. It was closed because of the rain.
+A: And today? = แล้ววันนี้ล่ะครับ
+B: Today it is open from 7 o'clock. Enjoy! = วันนี้เปิดตั้งแต่เจ็ดโมงค่ะ ขอให้สนุกนะคะ!
+x: Today it was open from 7 o'clock. Enjoy!
+x: Today it open from 7 o'clock. Enjoy!
+
+# ------------------------------------------------------------------ UNIT 14
+@unit 14 | I worked · I called | อดีตเติม -ed | 🐠 | เล่าเรื่องที่ทำไปแล้วด้วย -ed
+
+@tip | ทำไปแล้ว: เติม -ed
+p: เรื่องที่ทำไปแล้ว ส่วนใหญ่เติม ed ท้ายกริยา และใช้เหมือนกันกับทุกคน (ไม่ต้องเติม s)
+tr: work | → | worked
+tr: call | → | called
+tr: like | → | liked (ลงท้าย e เติมแค่ d)
+tr: study | → | studied (y → ied)
+ok: I worked yesterday. | เมื่อวานฉันทำงาน
+no: I work yesterday. | ผิด — เมื่อวานต้องเติม ed
+no: She workeds yesterday. | ผิด — อดีตไม่เติม s
+trick: เห็น yesterday / last night / ago → นึกถึง ed
+
+@lesson 14.1 | I worked yesterday | เมื่อวานฉันทำงาน
+new: worked called cleaned watched cooked played
+I worked yesterday. = เมื่อวานฉันทำงาน
+I called my mother last night. = เมื่อคืนฉันโทรหาแม่
+She cleaned the room. = เธอทำความสะอาดห้องแล้ว
+We watched a movie. = พวกเราดูหนังกัน
+He cooked dinner for me. = เขาทำอาหารเย็นให้ฉัน
+They played football yesterday. = เมื่อวานพวกเขาเล่นฟุตบอล
+I cleaned my room this morning. = เมื่อเช้าฉันทำความสะอาดห้อง
+My friend called me. = เพื่อนโทรหาฉัน
+
+@lesson 14.2 | We stayed at a nice hotel | พวกเราพักที่โรงแรมดี ๆ
+new: liked stayed studied arrive arrived last_year
+I liked the movie. = ฉันชอบหนังเรื่องนั้น
+We stayed at a nice hotel. = พวกเราพักที่โรงแรมดี ๆ
+She studied English last year. = ปีที่แล้วเธอเรียนภาษาอังกฤษ
+The bus stopped here. = รถบัสจอดตรงนี้
+The guests arrived at 3. = แขกมาถึงตอนบ่ายสามโมง
+He lived in Bangkok. = เขาเคยอาศัยอยู่ที่กรุงเทพฯ
+It rained a lot yesterday. = เมื่อวานฝนตกหนัก
+I loved the food. = ฉันชอบอาหารมาก
+
+@lesson 14.3 | The guest checked in | แขกเช็คอินแล้ว
+new: booked asked wanted helped ask_for
+The guest checked in at 2. = แขกเช็คอินตอนบ่ายสองโมง
+They checked out this morning. = พวกเขาเช็คเอาท์ไปเมื่อเช้า
+He booked a room for two nights. = เขาจองห้องไว้สองคืน
+She asked for a towel. = เธอขอผ้าเช็ดตัว
+The guest wanted a quiet room. = แขกต้องการห้องที่เงียบ
+We needed more time. = พวกเราต้องการเวลาเพิ่ม
+I helped a guest with her bags. = ฉันช่วยแขกถือกระเป๋า
+The manager thanked me. = ผู้จัดการขอบคุณฉัน
+
+@tip | ไม่ได้…(อดีต): didn't + กริยาธรรมดา
+p: ปฏิเสธเรื่องที่ผ่านมา ใช้ didn't แล้วตามด้วยกริยาธรรมดา (ไม่เติม ed)
+ok: I didn't work yesterday. | เมื่อวานฉันไม่ได้ทำงาน
+no: I didn't worked yesterday. | ผิด — หลัง didn't ไม่เติม ed
+no: I wasn't work yesterday. | ผิด — work เป็นกริยา ใช้ didn't
+trick: did ทำหน้าที่บอก "อดีต" แล้ว กริยาข้างหลังจึงไม่ต้องเติม ed อีก
+
+@lesson 14.4 | I didn't sleep well | ฉันนอนหลับไม่ค่อยดี
+new: didn't
+I didn't work yesterday. = เมื่อวานฉันไม่ได้ทำงาน
+She didn't call me. = เธอไม่ได้โทรหาฉัน
+We didn't watch TV. = พวกเราไม่ได้ดูทีวี
+The guest didn't like the room. = แขกไม่ชอบห้อง
+It didn't rain last night. = เมื่อคืนฝนไม่ได้ตก
+I didn't sleep well. = ฉันนอนหลับไม่ค่อยดี
+He didn't want to stay. = เขาไม่อยากพักต่อ
+
+@talk sickday | I stayed at home | ฉันอยู่บ้านทั้งวัน | work | Boss | 👨‍💼
+A: Alvee, you weren't at work yesterday. = Alvee เมื่อวานคุณไม่ได้มาทำงาน
+B: I'm sorry. I was sick. = ขอโทษค่ะ ฉันป่วย
+x: I'm sorry. I am sick yesterday.
+x: I'm sorry. I sick.
+A: Are you OK now? = ตอนนี้โอเคหรือยัง
+B: Yes. I stayed at home and I rested. = ค่ะ ฉันอยู่บ้านและพักผ่อน
+x: Yes. I stay at home and I rested.
+x: Yes. I stayed at home and I am rested.
+A: Did you see a doctor? = ไปหาหมอมาหรือเปล่า
+B: No, I didn't. I called the pharmacy. = ไม่ได้ไปค่ะ ฉันโทรหาร้านขายยา
+x: No, I didn't. I call the pharmacy.
+x: No, I don't. I called the pharmacy.
+A: OK. Nok worked for you. = โอเค นกทำงานแทนคุณ
+B: He helped me a lot. I want to thank him. = เขาช่วยฉันเยอะมาก ฉันอยากขอบคุณเขา
+x: He help me a lot. I want to thank him.
+x: He helps me a lot yesterday. I want to thank him.
+
+@talk dayoff | My day off | วันหยุดของฉัน | love | {bf} | 💙
+A: How was your day off? = วันหยุดเป็นยังไงบ้าง
+B: It was nice. I cleaned my room in the morning. = ดีค่ะ ตอนเช้าฉันทำความสะอาดห้อง
+x: It was nice. I clean my room in the morning.
+x: It was nice. I am cleaned my room in the morning.
+A: And in the afternoon? = แล้วตอนบ่ายล่ะ
+B: I watched a movie and I cooked dinner. = ฉันดูหนังและทำอาหารเย็น
+x: I watch a movie and I cooked dinner.
+x: I watched a movie and I cook dinner.
+A: Did you study English? = ได้เรียนภาษาอังกฤษไหม
+B: Yes! I studied for 30 minutes. = ได้เรียนค่ะ! ฉันเรียนไปสามสิบนาที
+x: Yes! I studyed for 30 minutes.
+x: Yes! I study for 30 minutes.
+A: Wow, I'm proud of you! = ว้าว ภูมิใจในตัวเธอนะ!
+
+# ------------------------------------------------------------------ UNIT 15
+@unit 15 | I went · I ate | อดีตแบบพิเศษ | 🥥 | ใช้ went, ate, had, saw ได้ถูกต้อง
+
+@tip | อดีตแบบพิเศษ (ไม่เติม ed)
+p: คำที่ใช้บ่อยหลายคำเปลี่ยนรูปไปเลย ต้องจำทีละคำ
+tr: go | → | went
+tr: eat | → | ate
+tr: have | → | had
+tr: see | → | saw
+tr: come | → | came
+tr: buy | → | bought
+ok: I went to the beach yesterday. | เมื่อวานฉันไปทะเล
+no: I goed to the beach. | ผิด — go เปลี่ยนเป็น went
+trick: จำวันละ 3 คำ และแตะคำในแอปเพื่อดูรูปอดีตได้ทุกเมื่อ
+
+@lesson 15.1 | I went to the beach | ฉันไปทะเลมา
+new: went came had
+I went to the beach yesterday. = เมื่อวานฉันไปทะเล
+She went home early. = เธอกลับบ้านเร็ว
+We went to a party last night. = เมื่อคืนพวกเราไปงานปาร์ตี้
+My friend came to my home. = เพื่อนมาที่บ้านของฉัน
+The guests came late. = แขกมาสาย
+I had a headache yesterday. = เมื่อวานฉันปวดหัว
+We had dinner together. = พวกเรากินข้าวเย็นด้วยกัน
+He had a great time. = เขาสนุกมาก
+
+@lesson 15.2 | I ate green curry | ฉันกินแกงเขียวหวาน
+new: ate drank slept hour
+I ate green curry for lunch. = ฉันกินแกงเขียวหวานเป็นอาหารกลางวัน
+She drank a lot of water. = เธอดื่มน้ำเยอะมาก
+I slept for 10 hours. = ฉันนอนไปสิบชั่วโมง
+The baby slept well. = เด็กทารกนอนหลับสบาย
+We ate at a Thai restaurant. = พวกเรากินที่ร้านอาหารไทย
+He drank too much coffee. = เขาดื่มกาแฟมากเกินไป
+I didn't eat breakfast. = ฉันไม่ได้กินอาหารเช้า
+
+@lesson 15.3 | I saw a beautiful beach | ฉันเห็นชายหาดที่สวยงาม
+new: saw made took got bought message photo
+I saw a beautiful beach. = ฉันเห็นชายหาดที่สวยงาม
+She made a cake. = เธอทำเค้ก
+We took a taxi. = พวกเรานั่งแท็กซี่
+I got a message from him. = ฉันได้รับข้อความจากเขา
+He bought flowers for me. = เขาซื้อดอกไม้ให้ฉัน
+I took a lot of photos. = ฉันถ่ายรูปเยอะมาก
+My mother made green curry. = แม่ของฉันทำแกงเขียวหวาน
+
+@lesson 15.4 | I lost my key | ฉันทำกุญแจหาย
+new: lost forgot broke found told glass problem
+I lost my key. = ฉันทำกุญแจหาย
+The guest forgot his passport. = แขกลืมพาสปอร์ตของเขา
+She left her phone in the taxi. = เธอลืมโทรศัพท์ไว้ในแท็กซี่
+He broke a glass. = เขาทำแก้วแตก
+I found your bag! = ฉันเจอกระเป๋าของคุณแล้ว!
+She told me about the problem. = เธอเล่าเรื่องปัญหาให้ฉันฟัง
+I forgot my password. = ฉันลืมรหัสผ่าน
+
+@talk trip | My trip | ทริปของฉัน | travel | {bf} | 💙
+A: How was your trip to Chiang Mai? = ทริปเชียงใหม่เป็นยังไงบ้าง
+B: It was great! I went with my sister. = เยี่ยมมาก! ฉันไปกับพี่สาว
+x: It was great! I goed with my sister.
+x: It was great! I go with my sister.
+A: What did you do there? = ไปทำอะไรมาบ้าง
+B: We saw a beautiful temple. = พวกเราไปดูวัดที่สวยมาก
+x: We see a beautiful temple.
+x: We seed a beautiful temple.
+A: Did you eat khao soi? = ได้กินข้าวซอยไหม
+B: Yes! I ate it every day. = ได้กินค่ะ! ฉันกินทุกวันเลย
+x: Yes! I eated it every day.
+x: Yes! I eat it every day.
+A: Did you take photos? = ถ่ายรูปมาไหม
+B: Yes, I took a lot of photos. I can send them to you. = ถ่ายค่ะ ถ่ายมาเยอะเลย เดี๋ยวส่งให้นะ
+x: Yes, I taked a lot of photos. I can send them to you.
+x: Yes, I take a lot of photos. I can send them to you.
+
+@talk lostkey | I lost my key card | คีย์การ์ดหาย | hotel | Guest | 🧳
+A: Excuse me. I lost my key card. = ขอโทษครับ ผมทำคีย์การ์ดหาย
+B: Don't worry. What is your room number? = ไม่ต้องห่วงค่ะ หมายเลขห้องของคุณคืออะไรคะ
+x: Don't worry. What are your room number?
+x: Not worry. What is your room number?
+A: It's 512. I think I left it in the restaurant. = 512 ครับ ผมคิดว่าลืมไว้ที่ห้องอาหาร
+B: May I see your passport, please? = ขอดูพาสปอร์ตหน่อยได้ไหมคะ
+x: May I sees your passport, please?
+x: May I see you passport, please?
+A: Here you are. = นี่ครับ
+B: Thank you. Here is your new key card. = ขอบคุณค่ะ นี่คือคีย์การ์ดใบใหม่ของคุณค่ะ
+x: Thank you. Here are your new key card.
+x: Thank you. Here is you new key card.
+A: Thank you so much! = ขอบคุณมาก ๆ ครับ!
+B: You're welcome. I can call the restaurant for you. = ยินดีค่ะ ฉันโทรถามห้องอาหารให้ได้นะคะ
+x: You're welcome. I can calls the restaurant for you.
+x: You're welcome. I can to call the restaurant for you.
+
+# ------------------------------------------------------------------ UNIT 16
+@unit 16 | Did you…? | ถามเรื่องที่ผ่านมา | 🚤 | ถาม-ตอบเรื่องที่ผ่านมา และช่วยแก้ปัญหาให้แขก
+
+@tip | ถามเรื่องที่ผ่านมา: Did you…?
+p: ถามเรื่องอดีต ใช้ Did + คน + กริยาธรรมดา (ไม่เติม ed)
+ok: Did you sleep well? | นอนหลับสบายไหม
+no: Did you slept well? | ผิด — หลัง Did ใช้กริยาธรรมดา
+p: ตอบสั้น ๆ: Yes, I did. / No, I didn't.
+tr: What did you do? | คุณทำอะไรมา
+tr: Where did you go? | คุณไปไหนมา
+tr: What happened? | เกิดอะไรขึ้น
+trick: Did ใช้ได้กับทุกคน: Did you / Did she / Did they
+
+@lesson 16.1 | Did you sleep well? | นอนหลับสบายไหม
+new: did
+Did you sleep well? = นอนหลับสบายไหม
+Yes, I did. = สบายดีค่ะ (ใช่)
+No, I didn't. = ไม่ค่อยค่ะ (ไม่)
+Did you eat breakfast? = กินอาหารเช้าหรือยัง
+Did she call you? = เธอโทรหาคุณไหม
+Did they check out? = พวกเขาเช็คเอาท์แล้วหรือยัง
+Did you enjoy your stay? = คุณพักผ่อนสนุกไหมคะ
+Did you find your phone? = เจอโทรศัพท์หรือยัง
+
+@lesson 16.2 | What did you do? | คุณทำอะไรมา
+new: say said
+What did you do yesterday? = เมื่อวานคุณทำอะไร
+I went to the market. = ฉันไปตลาด
+Where did you go? = คุณไปไหนมา
+I went to Bangkok. = ฉันไปกรุงเทพฯ
+What did you eat? = คุณกินอะไร
+What did she say? = เธอพูดว่าอะไร
+She said thank you. = เธอพูดขอบคุณ
+What did you buy? = คุณซื้ออะไรมา
+
+@lesson 16.3 | What happened? | เกิดอะไรขึ้น
+new: happen broken noisy there_was fix ant
+What happened? = เกิดอะไรขึ้น
+The shower was broken. = ฝักบัวเสีย
+The room was very noisy. = ห้องเสียงดังมาก
+The air-con didn't work. = แอร์ไม่ทำงาน
+There was no hot water. = ไม่มีน้ำร้อน
+I'm very sorry about that. = ต้องขอโทษด้วยจริง ๆ ค่ะ
+We can fix it now. = เราซ่อมให้ได้ตอนนี้เลยค่ะ
+There were ants in the room. = มีมดในห้อง
+
+@lesson 16.4 | Check-out time | เวลาเช็คเอาท์
+new: minibar total again
+How was your stay? = การเข้าพักเป็นยังไงบ้างคะ
+Did you use the minibar? = คุณใช้มินิบาร์ไหมคะ
+You had two drinks from the minibar. = คุณใช้เครื่องดื่มจากมินิบาร์ไปสองอย่าง
+The total is 3500 baht. = ยอดรวมคือ 3500 บาท
+Did you pay by card? = คุณจ่ายด้วยบัตรไหมคะ
+Thank you for staying with us. = ขอบคุณที่มาพักกับเรานะคะ
+Please come again! = กลับมาพักอีกนะคะ!
+
+@talk checkout | Check-out | เช็คเอาท์ | hotel | Guest | 🧳
+B: Good morning! Did you enjoy your stay? = อรุณสวัสดิ์ค่ะ คุณพักผ่อนสนุกไหมคะ
+x: Good morning! Did you enjoyed your stay?
+x: Good morning! Do you enjoyed your stay?
+A: Yes, but the air-con was very noisy. = สนุกครับ แต่แอร์เสียงดังมาก
+B: I'm very sorry about that. What room were you in? = ต้องขอโทษจริง ๆ ค่ะ คุณพักห้องไหนคะ
+x: I'm very sorry about that. What room was you in?
+x: I'm very sorry about that. What room you were in?
+A: Room 308. = ห้อง 308 ครับ
+B: Did you use the minibar? = คุณใช้มินิบาร์ไหมคะ
+x: Did you used the minibar?
+x: Do you used the minibar?
+A: Yes, I had two beers. = ใช้ครับ ผมดื่มเบียร์ไปสองขวด
+B: OK. The total is 4200 baht. = ค่ะ ยอดรวมคือ 4200 บาทค่ะ
+x: OK. The total are 4200 baht.
+x: OK. The total 4200 baht.
+A: Can I pay by card? = จ่ายด้วยบัตรได้ไหมครับ
+B: Yes, of course. Thank you for staying with us! = ได้แน่นอนค่ะ ขอบคุณที่มาพักกับเรานะคะ!
+x: Yes, of course. Thank you for stay with us!
+x: Yes, of course. Thank you for stayed with us!
+
+@talk doctor | At the doctor | ไปหาหมอ | health | Doctor | 👩‍⚕️
+A: Hello. What happened? = สวัสดีครับ เป็นอะไรมาครับ
+B: I fell down at work yesterday. = เมื่อวานฉันหกล้มที่ทำงานค่ะ
+x: I fall down at work yesterday.
+x: I falled down at work yesterday.
+A: Where does it hurt? = เจ็บตรงไหนครับ
+B: My arm hurts. = ฉันเจ็บแขนค่ะ
+x: My arm hurt.
+x: My arm is hurts.
+A: Did you take any medicine? = ทานยาอะไรไปหรือยังครับ
+B: Yes, I took some medicine last night. = ทานแล้วค่ะ เมื่อคืนฉันทานยาไปนิดหน่อย
+x: Yes, I take some medicine last night.
+x: Yes, I taked some medicine last night.
+A: OK. It isn't broken. Please rest for two days. = โอเค กระดูกไม่หัก กรุณาพักสองวันนะครับ
+B: Thank you, doctor. = ขอบคุณค่ะคุณหมอ
+x: Thank you, doctors.
+x: Thanks you, doctor.

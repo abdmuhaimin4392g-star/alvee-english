@@ -1,0 +1,343 @@
+# MONTH 5 — tomorrow & if
+@month 5 | Tomorrow & if | อนาคต และ ถ้า… | Five-Star Resort | รีสอร์ทห้าดาว
+
+# ------------------------------------------------------------------ UNIT 17
+@unit 17 | will · won't | จะ… (อนาคต) | 🐬 | สัญญา เสนอความช่วยเหลือ และพูดถึงอนาคตด้วย will
+
+@tip | will = จะ…
+p: will + กริยาธรรมดา ใช้เหมือนกันกับทุกคน (ไม่เติม s ไม่เติม ing)
+tr: I / You / He / She / We / They | will call
+tr: (จะไม่) | won't call (= will not)
+ok: I will call you tomorrow. | พรุ่งนี้ฉันจะโทรหาคุณ
+no: I will calling you tomorrow. | ผิด — หลัง will ไม่เติม ing
+no: She will calls you. | ผิด — หลัง will ไม่เติม s
+trick: will = "จะ" ในภาษาไทย วางไว้หน้ากริยาได้เลย ง่ายมาก!
+
+@lesson 17.1 | I will call you | ฉันจะโทรหาคุณ
+new: will I'll come_back be
+I will call you tomorrow. = พรุ่งนี้ฉันจะโทรหาคุณ
+I will be there at 8. = ฉันจะไปถึงที่นั่นตอนแปดโมง
+She will come back soon. = เดี๋ยวเธอจะกลับมา
+It will rain tomorrow. = พรุ่งนี้ฝนจะตก
+We will see you on Sunday. = พวกเราจะเจอคุณวันอาทิตย์
+I'll help you. = ฉันจะช่วยคุณเอง | I'll = I will
+They will arrive at 3. = พวกเขาจะมาถึงตอนบ่ายสามโมง
+You will be OK. = คุณจะไม่เป็นไรนะ
+
+@lesson 17.2 | I won't forget | ฉันจะไม่ลืม
+new: won't promise anyone long
+I won't forget. = ฉันจะไม่ลืม
+He won't be late. = เขาจะไม่มาสาย
+It won't take long. = ใช้เวลาไม่นานค่ะ
+I promise I will study every day. = ฉันสัญญาว่าจะเรียนทุกวัน
+Don't worry. I won't tell anyone. = ไม่ต้องห่วง ฉันจะไม่บอกใคร
+The shop won't be open tomorrow. = พรุ่งนี้ร้านจะไม่เปิด
+We won't have time. = พวกเราจะไม่มีเวลา
+
+@lesson 17.3 | Will you be here? | คุณจะอยู่ที่นี่ไหม
+new: maybe
+Will you be here tomorrow? = พรุ่งนี้คุณจะอยู่ที่นี่ไหม
+Yes, I will. = อยู่ค่ะ (จะอยู่)
+Will it be hot tomorrow? = พรุ่งนี้อากาศจะร้อนไหม
+Will you call me tonight? = คืนนี้คุณจะโทรหาฉันไหม
+What time will you finish? = คุณจะเสร็จกี่โมง
+I think it will be sunny. = ฉันคิดว่าแดดจะออก
+Maybe I will go. = บางทีฉันอาจจะไป
+
+@lesson 17.4 | I'll do it for you | ฉันจะทำให้ค่ะ
+new: someone be_right_back
+I'll call a taxi for you. = ฉันจะเรียกแท็กซี่ให้คุณค่ะ
+I'll send someone to your room. = ฉันจะส่งพนักงานไปที่ห้องของคุณค่ะ
+Someone will come in 10 minutes. = อีกสิบนาทีจะมีพนักงานไปค่ะ
+I'll check for you. = ฉันจะเช็คให้นะคะ
+I'll be right back. = เดี๋ยวฉันกลับมาค่ะ
+We will fix it today. = เราจะซ่อมให้วันนี้ค่ะ
+I'll bring you more towels. = ฉันจะเอาผ้าเช็ดตัวมาเพิ่มให้ค่ะ
+
+@talk roomcall | Front desk, how can I help? | แผนกต้อนรับค่ะ | phone | Guest | 📞
+B: Good evening, front desk. How can I help you? = สวัสดีตอนเย็นค่ะ แผนกต้อนรับค่ะ มีอะไรให้ช่วยไหมคะ
+x: Good evening, front desk. How can I helps you?
+x: Good evening, front desk. How I can help you?
+A: Hi. The TV in my room doesn't work. = สวัสดีครับ ทีวีในห้องผมเสีย
+B: I'm sorry. I will send someone to your room. = ขอโทษค่ะ ฉันจะส่งพนักงานขึ้นไปที่ห้องค่ะ
+x: I'm sorry. I will sending someone to your room.
+x: I'm sorry. I sending someone to your room.
+A: How long will it take? = จะใช้เวลานานแค่ไหนครับ
+B: It won't take long. He will be there in 10 minutes. = ไม่นานค่ะ อีกสิบนาทีพนักงานจะไปถึงค่ะ
+x: It won't takes long. He will be there in 10 minutes.
+x: It won't take long. He will is there in 10 minutes.
+A: Thank you. Can I also have two more pillows? = ขอบคุณครับ ขอหมอนเพิ่มอีกสองใบได้ไหมครับ
+B: Of course. I'll bring them myself. = ได้แน่นอนค่ะ ฉันจะนำขึ้นไปให้เองค่ะ
+x: Of course. I'll brings them myself.
+x: Of course. I'll bringing them myself.
+
+@talk callyou | I'll call you tonight | คืนนี้จะโทรหานะ | love | {bf} | 💙
+A: Are you busy today? = วันนี้ยุ่งไหม
+B: Yes, I am. I will finish work at 8. = ยุ่งค่ะ ฉันจะเลิกงานตอนสองทุ่ม
+x: Yes, I am. I will finishes work at 8.
+x: Yes, I do. I will finish work at 8.
+A: OK. I'll call you after work. = โอเค ผมจะโทรหาหลังเลิกงานนะ
+B: Great! I will wait for your call. = ดีเลย! ฉันจะรอโทรศัพท์จากคุณนะ
+x: Great! I will waiting for your call.
+x: Great! I wait will for your call.
+A: Don't forget to eat dinner! = อย่าลืมกินข้าวเย็นนะ!
+B: I won't forget. I promise! = ไม่ลืมค่ะ สัญญา!
+x: I won't forgot. I promise!
+x: I not will forget. I promise!
+
+# ------------------------------------------------------------------ UNIT 18
+@unit 18 | going to | วางแผน (going to) | ✈️ | พูดถึงแผนการ: I'm going to…
+
+@tip | be going to = ตั้งใจว่าจะ… (มีแผนแล้ว)
+p: พูดถึงแผนที่ตัดสินใจไว้แล้ว ใช้ am / is / are + going to + กริยาธรรมดา
+tr: I | am going to | visit
+tr: He / She | is going to | cook
+tr: You / We / They | are going to | travel
+ok: I am going to visit my mother tomorrow. | พรุ่งนี้ฉันจะไปเยี่ยมแม่
+no: I going to visit my mother. | ผิด — ลืม am (อีกแล้ว!)
+trick: ตัดสินใจตอนนี้เลย → will (I'll help you!) · มีแผนไว้ก่อนแล้ว → going to
+
+@lesson 18.1 | I'm going to visit my mother | ฉันจะไปเยี่ยมแม่
+new: going_to visit travel next_month
+I am going to visit my mother. = ฉันจะไปเยี่ยมแม่
+I'm going to sleep early tonight. = คืนนี้ฉันจะนอนเร็ว
+We are going to travel next month. = เดือนหน้าพวกเราจะไปเที่ยว
+They are going to eat out tonight. = คืนนี้พวกเขาจะไปกินข้าวนอกบ้าน
+I'm going to study English after work. = ฉันจะเรียนภาษาอังกฤษหลังเลิกงาน
+She is going to buy a new phone. = เธอจะซื้อโทรศัพท์เครื่องใหม่
+It is going to rain. = ฝนกำลังจะตก
+
+@lesson 18.2 | What are you going to do? | คุณจะทำอะไร
+new: this_weekend how_long
+Are you going to work tomorrow? = พรุ่งนี้คุณจะไปทำงานไหม
+No, I'm not. I'm going to rest. = ไม่ค่ะ ฉันจะพักผ่อน
+Is he going to call? = เขาจะโทรมาไหม
+What are you going to do this weekend? = สุดสัปดาห์นี้คุณจะทำอะไร
+Where are you going to stay? = คุณจะไปพักที่ไหน
+We aren't going to stay long. = พวกเราจะไม่อยู่นาน
+How long are you going to stay? = คุณจะพักนานแค่ไหน
+
+@lesson 18.3 | My dreams | ความฝันของฉัน
+new: next_year save married dream world one_day
+I am going to speak English well. = ฉันจะพูดภาษาอังกฤษให้เก่ง
+Next year, I'm going to visit the Maldives. = ปีหน้าฉันจะไปเที่ยวมัลดีฟส์
+We are going to save money. = พวกเราจะเก็บเงิน
+She is going to get married. = เธอกำลังจะแต่งงาน
+He is going to learn to cook. = เขาจะหัดทำอาหาร
+I'm going to be a manager one day. = สักวันหนึ่งฉันจะได้เป็นผู้จัดการ
+My dream is to travel the world. = ความฝันของฉันคือการได้เที่ยวรอบโลก
+
+@lesson 18.4 | will or going to? | will หรือ going to?
+new: ring answer Friday next_week
+Look at the sky! It's going to rain. = ดูท้องฟ้าสิ! ฝนกำลังจะตก
+The phone is ringing. I'll answer it. = โทรศัพท์ดัง เดี๋ยวฉันรับเอง | ตัดสินใจตอนนั้นเลย → will
+I'm going to visit my parents on Sunday. = วันอาทิตย์ฉันจะไปเยี่ยมพ่อแม่ | มีแผนแล้ว → going to
+It's cold. I'll close the window. = หนาวจัง เดี๋ยวฉันปิดหน้าต่างเอง
+We're going to have a party on Friday. = วันศุกร์พวกเราจะจัดปาร์ตี้
+You look tired. I'll make you some tea. = คุณดูเหนื่อยนะ เดี๋ยวฉันชงชาให้
+She is going to start a new job next week. = สัปดาห์หน้าเธอจะเริ่มงานใหม่
+
+@talk plans | Weekend plans | แผนวันหยุด | friends | Ploy | 👩
+A: What are you going to do this weekend? = สุดสัปดาห์นี้จะทำอะไร
+B: I'm going to visit my parents in Udon. = ฉันจะไปเยี่ยมพ่อแม่ที่อุดร
+x: I going to visit my parents in Udon.
+x: I'm going to visiting my parents in Udon.
+A: Nice! How are you going to get there? = ดีจัง! จะไปยังไง
+B: I'm going to take the bus. = ฉันจะนั่งรถบัสไป
+x: I'm going take the bus.
+x: I'm go to take the bus.
+A: How long are you going to stay? = จะอยู่นานแค่ไหน
+B: Two days. I'm going to come back on Monday. = สองวัน ฉันจะกลับมาวันจันทร์
+x: Two days. I'm going to came back on Monday.
+x: Two days. I going to come back on Monday.
+A: Have a nice trip! = เดินทางปลอดภัยนะ!
+B: Thanks! I'll bring you some food from Udon. = ขอบคุณ! เดี๋ยวฉันเอาของกินจากอุดรมาฝากนะ
+x: Thanks! I'll brings you some food from Udon.
+x: Thanks! I bringing you some food from Udon.
+
+@talk visit | I'm going to visit you | ผมจะไปหาเธอ | love | {bf} | 💙
+A: I have good news! = ผมมีข่าวดี!
+B: Really? What is it? = จริงเหรอ อะไรเหรอ
+x: Really? What it is?
+x: Really? What are it?
+A: I'm going to visit Thailand next month! = เดือนหน้าผมจะไปเมืองไทย!
+B: Wow! I'm so happy! Where are you going to stay? = ว้าว! ดีใจมากเลย! คุณจะพักที่ไหน
+x: Wow! I so happy! Where are you going to stay?
+x: Wow! I'm so happy! Where you are going to stay?
+A: Maybe at your hotel! = อาจจะพักที่โรงแรมของเธอนะ!
+B: Great! I'm going to show you my city. = เยี่ยมเลย! ฉันจะพาคุณเที่ยวเมืองของฉัน
+x: Great! I'm going to shows you my city.
+x: Great! I'm going show you my city.
+
+# ------------------------------------------------------------------ UNIT 19
+@unit 19 | If …, I will … | ถ้า… จะ… | ☂️ | ใช้ if พูดถึงเงื่อนไขในชีวิตจริง
+
+@tip | If… = ถ้า…
+p: พูดว่า "ถ้า…" ใช้ If + ประโยคปัจจุบันธรรมดา แล้วตามด้วย will + กริยา
+tr: If it rains, | I will stay home.
+tr: ถ้าฝนตก | ฉันจะอยู่บ้าน
+ok: If you need anything, please call me. | ถ้าคุณต้องการอะไร โทรหาฉันได้เลย
+no: If it will rain, I will stay home. | ผิด — หลัง If ไม่ใช้ will
+trick: If + ตอนนี้ (rains) · ผลลัพธ์ + will (will stay) — will อยู่ฝั่งเดียวเท่านั้น
+
+@lesson 19.1 | If it rains… | ถ้าฝนตก…
+new: if
+If it rains, I will stay home. = ถ้าฝนตก ฉันจะอยู่บ้าน
+If I have time, I will call you. = ถ้ามีเวลา ฉันจะโทรหาคุณ
+If you are hungry, we can eat now. = ถ้าคุณหิว พวกเรากินตอนนี้ได้เลย
+If she is tired, she will sleep early. = ถ้าเธอเหนื่อย เธอจะนอนเร็ว
+If it is sunny, we will go to the beach. = ถ้าแดดดี พวกเราจะไปทะเล
+If I see him, I will tell him. = ถ้าฉันเจอเขา ฉันจะบอกเขา
+I will be happy if you come. = ฉันจะดีใจถ้าคุณมา
+
+@lesson 19.2 | If you need anything… | ถ้าต้องการอะไร…
+new: anything change just
+If you need anything, please call the front desk. = ถ้าต้องการอะไร กรุณาโทรหาแผนกต้อนรับ
+If you are cold, you can turn off the air-con. = ถ้าหนาว คุณปิดแอร์ได้เลย
+If the room is noisy, we will change it. = ถ้าห้องเสียงดัง เราจะเปลี่ยนห้องให้
+If you want, I can book a taxi. = ถ้าคุณต้องการ ฉันจองแท็กซี่ให้ได้
+If you lose your key, please tell us. = ถ้าทำกุญแจหาย กรุณาแจ้งเรา
+If you check out late, you will pay more. = ถ้าเช็คเอาท์ช้า คุณจะต้องจ่ายเพิ่ม
+If you have any questions, just ask me. = ถ้ามีคำถามอะไร ถามฉันได้เลย
+
+@lesson 19.3 | If I study every day… | ถ้าฉันเรียนทุกวัน…
+If I study every day, I will speak English well. = ถ้าฉันเรียนทุกวัน ฉันจะพูดภาษาอังกฤษได้เก่ง
+If you don't sleep, you will be tired. = ถ้าคุณไม่นอน คุณจะเหนื่อย
+If it is too spicy, I will drink water. = ถ้าเผ็ดเกินไป ฉันจะดื่มน้ำ
+If the bus is late, I will take a taxi. = ถ้ารถบัสมาช้า ฉันจะนั่งแท็กซี่
+If my mother calls, please tell me. = ถ้าแม่โทรมา กรุณาบอกฉันด้วย
+If I get a day off, I will visit you. = ถ้าฉันได้วันหยุด ฉันจะไปหาคุณ
+What will you do if it rains? = ถ้าฝนตก คุณจะทำอะไร
+
+@lesson 19.4 | I hope… | ฉันหวังว่า…
+new: hope sure probably
+I think it will rain. = ฉันคิดว่าฝนจะตก
+Maybe I will go to the party. = บางทีฉันอาจจะไปงานปาร์ตี้
+I hope you will come. = ฉันหวังว่าคุณจะมา
+I'm not sure. = ฉันไม่แน่ใจ
+It will probably be hot. = อากาศน่าจะร้อน
+I hope the weather will be nice. = ฉันหวังว่าอากาศจะดี
+If I can, I will help you. = ถ้าทำได้ ฉันจะช่วยคุณ
+
+@talk ifrain | If it rains… | ถ้าฝนตก… | weather | Ploy | 👩
+A: Let's go to the night market tomorrow! = พรุ่งนี้ไปตลาดกลางคืนกันเถอะ!
+B: OK! But if it rains, we will stay home. = ได้! แต่ถ้าฝนตก เราจะอยู่บ้านนะ
+x: OK! But if it will rain, we will stay home.
+x: OK! But if it rains, we stay will home.
+A: I think it will be sunny. = ฉันคิดว่าแดดจะดี
+B: I hope so! If it is sunny, I will wear my new dress. = หวังว่าอย่างนั้นนะ! ถ้าแดดดี ฉันจะใส่ชุดใหม่
+x: I hope so! If it is sunny, I wear will my new dress.
+x: I hope so! If it sunny, I will wear my new dress.
+A: What time will you finish work? = จะเลิกงานกี่โมง
+B: At 5. If I finish early, I will call you. = ห้าโมง ถ้าเลิกเร็ว ฉันจะโทรหานะ
+x: At 5. If I will finish early, I will call you.
+x: At 5. If I finish early, I calling you.
+
+@talk ifneed | If you need anything… | ถ้าต้องการอะไร… | hotel | Guest | 🧳
+B: Here is your key. Your room is on the third floor. = นี่กุญแจของคุณค่ะ ห้องอยู่ชั้นสามค่ะ
+x: Here is your key. Your room are on the third floor.
+x: Here is your key. Your room on the third floor.
+A: Thank you. Is breakfast included? = ขอบคุณครับ รวมอาหารเช้าไหมครับ
+B: Yes, it is. If you want, you can eat on the terrace. = รวมค่ะ ถ้าต้องการ คุณทานที่ระเบียงได้นะคะ
+x: Yes, it is. If you will want, you can eat on the terrace.
+x: Yes, it does. If you want, you can eat on the terrace.
+A: Great. And if I need a taxi? = เยี่ยม แล้วถ้าผมต้องการแท็กซี่ล่ะครับ
+B: If you need a taxi, just call the front desk. = ถ้าต้องการแท็กซี่ โทรหาแผนกต้อนรับได้เลยค่ะ
+x: If you need a taxi, just calls the front desk.
+x: If you will need a taxi, just call the front desk.
+A: Perfect. Thank you! = เยี่ยมเลย ขอบคุณครับ!
+B: You're welcome. If you need anything, I'm here. = ยินดีค่ะ ถ้าต้องการอะไร ฉันอยู่ตรงนี้นะคะ
+x: You're welcome. If you need anything, I here.
+x: You're welcome. If you needs anything, I'm here.
+
+# ------------------------------------------------------------------ UNIT 20
+@unit 20 | Polite English | ภาษาสุภาพ | 🦩 | Could you / Would you like / May I และการขอโทษ
+
+@tip | พูดให้สุภาพ
+tr: Can I…? | → | May I…? (สุภาพกว่า)
+tr: I want… | → | I would like… (สุภาพกว่า)
+tr: Do you want…? | → | Would you like…?
+tr: Can you…? | → | Could you…? (สุภาพกว่า)
+ok: Would you like some coffee? | รับกาแฟไหมคะ
+ok: Could you wait a moment, please? | กรุณารอสักครู่ได้ไหมคะ
+trick: กับแขก ใช้ Would / Could / May + please เสมอ จะฟังสุภาพเหมือนลงท้ายด้วย "ค่ะ"
+
+@lesson 20.1 | Would you like some coffee? | รับกาแฟไหมคะ
+new: would would_you_like I'd seat menu
+Would you like some coffee? = รับกาแฟไหมคะ
+Would you like a window seat? = ต้องการที่นั่งริมหน้าต่างไหมคะ
+Yes, please. = ค่ะ / ครับ (รับ)
+No, thank you. = ไม่เป็นไร ขอบคุณ
+I would like a coffee, please. = ขอกาแฟหนึ่งแก้วค่ะ
+I'd like to book a table for two. = ฉันอยากจองโต๊ะสำหรับสองคน | I'd like = I would like
+What would you like to drink? = คุณต้องการดื่มอะไรคะ
+Would you like to see the menu? = ต้องการดูเมนูไหมคะ
+
+@lesson 20.2 | Could you wait a moment? | กรุณารอสักครู่
+new: could moment spell sign
+Could you wait a moment, please? = กรุณารอสักครู่ได้ไหมคะ
+Could you spell your name, please? = ช่วยสะกดชื่อของคุณหน่อยได้ไหมคะ
+Could you sign here, please? = กรุณาเซ็นชื่อตรงนี้ด้วยค่ะ
+Could you speak more slowly? = ช่วยพูดช้าลงอีกหน่อยได้ไหมคะ
+Could you help me with my bags? = ช่วยถือกระเป๋าให้หน่อยได้ไหมคะ
+Could I have your phone number? = ขอเบอร์โทรศัพท์ของคุณได้ไหมคะ
+Of course. One moment, please. = ได้ค่ะ รอสักครู่นะคะ
+
+@lesson 20.3 | I'm sorry for the wait | ขอโทษที่ให้รอ
+new: noise give patience as_soon_as_possible else
+I'm sorry for the wait. = ขอโทษที่ให้รอนะคะ
+I'm so sorry about the noise. = ขอโทษเรื่องเสียงดังจริง ๆ ค่ะ
+We will give you a new room. = เราจะเปลี่ยนห้องใหม่ให้คุณค่ะ
+Let me check that for you. = ขอเช็คให้นะคะ
+Thank you for your patience. = ขอบคุณที่รอค่ะ
+We will fix it as soon as possible. = เราจะซ่อมให้เร็วที่สุดค่ะ
+Is there anything else I can do? = มีอะไรให้ช่วยอีกไหมคะ
+
+@lesson 20.4 | On the phone | คุยโทรศัพท์
+new: speaking who put_you_through call_back goodbye
+Good morning, Sunshine Hotel. Alvee speaking. = สวัสดีตอนเช้าค่ะ โรงแรมซันไชน์ Alvee พูดค่ะ
+Who is calling, please? = ขอทราบว่าใครโทรมาคะ
+One moment, please. I'll put you through. = รอสักครู่นะคะ ฉันจะโอนสายให้ค่ะ
+I'm sorry, he is not in his room. = ขอโทษค่ะ เขาไม่อยู่ในห้อง
+Would you like to leave a message? = ต้องการฝากข้อความไหมคะ
+Could you call back later? = ช่วยโทรกลับมาทีหลังได้ไหมคะ
+Thank you for calling. Goodbye! = ขอบคุณที่โทรมาค่ะ สวัสดีค่ะ
+
+@talk booking | Booking a table | จองโต๊ะ | phone | Caller | 📞
+B: Good evening, Sunshine Hotel. Alvee speaking. = สวัสดีตอนเย็นค่ะ โรงแรมซันไชน์ Alvee พูดค่ะ
+x: Good evening, Sunshine Hotel. Alvee speak.
+x: Good night, Sunshine Hotel. Alvee speaking.
+A: Hello. I would like to book a table for tonight. = สวัสดีครับ ผมอยากจองโต๊ะสำหรับคืนนี้ครับ
+B: Of course. How many people? = ได้ค่ะ กี่ท่านคะ
+x: Of course. How much people?
+x: Of course. How many peoples?
+A: Four people, at 7 o'clock. = สี่คนครับ เวลาหนึ่งทุ่ม
+B: Could I have your name, please? = ขอทราบชื่อของคุณได้ไหมคะ
+x: Could I has your name, please?
+x: Could I have you name, please?
+A: It's David Lee. = เดวิด ลีครับ
+B: Thank you, Mr. Lee. Your table is ready at 7. = ขอบคุณค่ะ คุณลี โต๊ะของคุณพร้อมตอนหนึ่งทุ่มค่ะ
+x: Thank you, Mr. Lee. Your table are ready at 7.
+x: Thank you, Mr. Lee. Your table ready at 7.
+A: Thank you very much. = ขอบคุณมากครับ
+B: Thank you for calling. Have a nice evening! = ขอบคุณที่โทรมาค่ะ ขอให้มีค่ำคืนที่ดีนะคะ!
+x: Thank you for call. Have a nice evening!
+x: Thank you for calling. Have a nice morning!
+
+@talk complaint | A noisy room | ห้องเสียงดัง | hotel | Guest | 😠
+A: Excuse me. My room is very noisy. I can't sleep! = ขอโทษนะครับ ห้องผมเสียงดังมาก ผมนอนไม่หลับ!
+B: I'm so sorry about that. What is your room number? = ต้องขอโทษจริง ๆ ค่ะ หมายเลขห้องของคุณคืออะไรคะ
+x: I'm so sorry about that. What your room number is?
+x: I so sorry about that. What is your room number?
+A: Room 204. The music from the bar is too loud. = ห้อง 204 ครับ เพลงจากบาร์ดังเกินไป
+B: I understand. Would you like a quiet room on the sixth floor? = เข้าใจค่ะ ต้องการห้องที่เงียบกว่าที่ชั้นหกไหมคะ
+x: I understand. Do you would like a quiet room on the sixth floor?
+x: I understand. Would you likes a quiet room on the sixth floor?
+A: Yes, please. That would be great. = ครับ แบบนั้นจะดีมากเลย
+B: Could you wait a moment, please? I'll get your new key. = กรุณารอสักครู่นะคะ ฉันจะไปเอากุญแจใหม่มาให้ค่ะ
+x: Could you waiting a moment, please? I'll get your new key.
+x: Could you wait a moment, please? I'll gets your new key.
+A: Thank you. You are very kind. = ขอบคุณครับ คุณใจดีมาก
+B: Thank you for your patience. = ขอบคุณที่รอนะคะ
+x: Thank you for you patience.
+x: Thanks you for your patience.

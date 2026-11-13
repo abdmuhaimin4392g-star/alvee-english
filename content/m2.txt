@@ -1,0 +1,397 @@
+# MONTH 2 — everyday life (present simple)
+@month 2 | Everyday life | ชีวิตประจำวัน (Present Simple) | Cozy Hotel | โรงแรมอบอุ่น
+
+# ------------------------------------------------------------------ UNIT 5
+@unit 5 | I like · I want · I need | ฉันชอบ · อยากได้ · ต้องการ | 🍹 | พูดถึงสิ่งที่ชอบ อยากได้ และต้องการ (ไม่ใส่ am หน้ากริยา)
+
+@tip | I like (ไม่ต้องมี am!)
+p: ถ้าคำหลัง I เป็น "คำกริยา" (การกระทำ เช่น ชอบ อยากได้ ต้องการ กิน ดื่ม) ไม่ต้องใส่ am
+ok: I like coffee. | ฉันชอบกาแฟ
+no: I am like coffee. | ผิด — like เป็นกริยา ไม่ต้องมี am
+tr: I am + ความรู้สึก | I am hungry.
+tr: I + การกระทำ | I like rice.
+trick: am ใช้บอกว่า "เป็นอย่างไร" (หิว ง่วง) · ถ้าบอกว่า "ทำอะไร" (ชอบ กิน ดื่ม) ไม่ต้องมี am
+
+@lesson 5.1 | I like coffee | ฉันชอบกาแฟ
+new: like coffee tea food Thai rice
+I like coffee. = ฉันชอบกาแฟ
+I like tea. = ฉันชอบชา
+I like Thai food. = ฉันชอบอาหารไทย
+We like rice. = พวกเราชอบข้าว
+They like coffee and tea. = พวกเขาชอบกาแฟและชา
+You like Thai food. = คุณชอบอาหารไทย
+I like it! = ฉันชอบมันจัง!
+
+@lesson 5.2 | I want to eat | ฉันอยากกินข้าว
+new: want water eat drink sleep
+I want water. = ฉันอยากได้น้ำ
+I want coffee, please. = ขอกาแฟหน่อยค่ะ
+I want to eat. = ฉันอยากกินข้าว | want to + กริยา = อยาก…
+I want to sleep. = ฉันอยากนอน
+I want to drink tea. = ฉันอยากดื่มชา
+We want to eat rice. = พวกเราอยากกินข้าว
+I am hungry. I want to eat. = ฉันหิว ฉันอยากกินข้าว | หิว (ความรู้สึก) → am · อยากกิน (การกระทำ) → ไม่มี am
+I am tired. I want to sleep. = ฉันเหนื่อย ฉันอยากนอน
+
+@lesson 5.3 | I need help | ฉันต้องการความช่วยเหลือ
+new: need help money time taxi
+I need help. = ฉันต้องการความช่วยเหลือ
+I need water. = ฉันต้องการน้ำ
+I need money. = ฉันต้องการเงิน
+I need time. = ฉันต้องการเวลา
+We need a taxi. = พวกเราต้องการแท็กซี่
+They need a room. = พวกเขาต้องการห้องพัก
+I need to work today. = วันนี้ฉันต้องทำงาน | need to + กริยา = ต้อง…
+You need to sleep. = คุณต้องนอนพักผ่อน
+
+@tip | have = มี (ห้ามใส่ am)
+p: "มี" ภาษาอังกฤษคือ have ใช้เหมือนกริยาทั่วไป ไม่ต้องมี am
+ok: I have a sister. | ฉันมีพี่สาว (หรือน้องสาว)
+no: I am have a sister. | ผิด — ไม่ต้องมี am
+p: have breakfast / have lunch / have dinner = กินอาหารเช้า / กลางวัน / เย็น
+trick: have = มี หรือ กิน (อาหาร) ก็ได้
+
+@lesson 5.4 | I have a sister | ฉันมีพี่สาว
+new: have sister brother cat dog car two
+I have a sister. = ฉันมีพี่สาว (หรือน้องสาว)
+I have a brother. = ฉันมีพี่ชาย (หรือน้องชาย)
+I have a cat. = ฉันมีแมว
+We have a big room. = พวกเรามีห้องใหญ่
+They have two dogs. = พวกเขามีหมาสองตัว
+I have a car. = ฉันมีรถ
+I have breakfast at home. = ฉันกินอาหารเช้าที่บ้าน | have breakfast = กินอาหารเช้า
+You have a beautiful name. = คุณมีชื่อที่สวย
+
+@talk cafe | At the café | ที่ร้านกาแฟ | food | Waiter | 🧑‍🍳
+A: Hello! What do you want? = สวัสดีครับ รับอะไรดีครับ
+B: I want a coffee, please. = ขอกาแฟหนึ่งแก้วค่ะ
+x: I am want a coffee, please.
+x: I wants a coffee, please.
+A: Hot or cold? = ร้อนหรือเย็นครับ
+B: Cold, please. It is very hot today. = เย็นค่ะ วันนี้อากาศร้อนมาก
+x: Cold, please. It very hot today.
+x: Cold, please. It are very hot today.
+A: Do you want food too? = รับอาหารด้วยไหมครับ
+B: Yes. I am hungry. I want rice and chicken. = ค่ะ หิวแล้ว ขอข้าวกับไก่ค่ะ
+x: Yes. I hungry. I want rice and chicken.
+x: Yes. I am hungry. I am want rice and chicken.
+A: OK. One coffee and one rice with chicken. = ได้ครับ กาแฟหนึ่งแก้ว ข้าวกับไก่หนึ่งจานครับ
+B: Thank you! = ขอบคุณค่ะ!
+x: Thank your!
+
+@talk likes | What do you like? | ชอบกินอะไร | love | {bf} | 💙
+A: Alvee, what food do you like? = Alvee ชอบกินอาหารอะไร
+B: I like Thai food. I like spicy food! = ฉันชอบอาหารไทย ชอบอาหารเผ็ด!
+x: I am like Thai food. I like spicy food!
+x: I likes Thai food. I like spicy food!
+A: Me too! I like rice and fish. = ผมก็ชอบ! ผมชอบข้าวกับปลา
+B: I want to cook for you. = ฉันอยากทำอาหารให้คุณกิน
+x: I am want to cook for you.
+x: I want cook for you.
+A: Really? I want to eat it! = จริงเหรอ อยากกินจัง!
+B: You need to come to Thailand! = คุณต้องมาเมืองไทยนะ!
+x: You need come to Thailand!
+x: You are need to come to Thailand!
+A: Yes! I want to see you soon. = ใช่! ผมอยากเจอเธอเร็ว ๆ นี้
+
+# ------------------------------------------------------------------ UNIT 6
+@unit 6 | He works · She likes | เขาทำงาน (เติม s) | 🐚 | ใช้ he / she + กริยาเติม s ได้ถูกต้อง
+
+@tip | He / She + กริยาเติม s
+p: ถ้าคนที่ทำเป็น he, she, it หรือคน 1 คน (my mother, Ploy) กริยาต้องเติม s
+tr: I / You / We / They | work | like
+tr: He / She / It | works | likes
+ok: She works at a hotel. | เธอทำงานที่โรงแรม
+no: She work at a hotel. | ผิด — she ต้องเติม s
+trick: 🐍 he / she / it มีงูตัว s ตามไปด้วยเสมอ: she works, he likes
+
+@lesson 6.1 | She works at a hotel | เธอทำงานที่โรงแรม
+new: live city Bangkok night
+She works at a hotel. = เธอทำงานที่โรงแรม
+He works at a restaurant. = เขาทำงานที่ร้านอาหาร
+My mother lives in Bangkok. = แม่ของฉันอาศัยอยู่ที่กรุงเทพฯ
+My friend lives in a big city. = เพื่อนของฉันอาศัยอยู่ในเมืองใหญ่
+I work at a hotel. = ฉันทำงานที่โรงแรม | I → work (ไม่เติม s)
+We live in Thailand. = พวกเราอาศัยอยู่ในประเทศไทย
+Nok works at night. = นกทำงานตอนกลางคืน
+He lives here. = เขาอาศัยอยู่ที่นี่
+
+@lesson 6.2 | He likes coffee | เขาชอบกาแฟ
+new: speak English
+He likes coffee. = เขาชอบกาแฟ
+She wants water. = เธออยากได้น้ำ
+My boss needs help. = หัวหน้าของฉันต้องการความช่วยเหลือ
+The guest wants a big room. = แขกอยากได้ห้องใหญ่
+She speaks English. = เธอพูดภาษาอังกฤษได้
+He speaks Thai. = เขาพูดภาษาไทยได้
+Ploy needs a taxi. = พลอยต้องการแท็กซี่
+He wants to sleep. = เขาอยากนอน
+
+@tip | กริยาพิเศษ: has · goes · does · watches
+p: บางคำเวลาใช้กับ he / she / it จะเปลี่ยนรูปพิเศษ
+tr: have | → | has
+tr: go | → | goes
+tr: do | → | does
+tr: watch | → | watches
+ok: She has a cat. | เธอมีแมว
+no: She haves a cat. | ผิด — have เปลี่ยนเป็น has
+trick: คำที่ลงท้ายด้วย o, ch, sh, s, x เติม es: goes, watches, washes
+
+@lesson 6.3 | She has a cat | เธอมีแมว
+new: go watch TV
+She has a cat. = เธอมีแมว
+He has two sisters. = เขามีพี่สาวหรือน้องสาวสองคน
+My father goes to work at 7. = พ่อของฉันไปทำงานตอนเจ็ดโมง
+She goes home at night. = เธอกลับบ้านตอนกลางคืน | go home ไม่ต้องมี to
+He watches TV. = เขาดูทีวี
+The hotel has a big pool. = โรงแรมมีสระว่ายน้ำใหญ่
+My co-worker has a car. = เพื่อนร่วมงานของฉันมีรถ
+I go to work at 8. = ฉันไปทำงานตอนแปดโมง
+
+@lesson 6.4 | I work, she works | ฉันทำงาน เธอทำงาน
+new: Maldives hospital school
+I like tea, but she likes coffee. = ฉันชอบชา แต่เธอชอบกาแฟ
+I live in Thailand. He lives in the Maldives. = ฉันอาศัยอยู่ที่ประเทศไทย เขาอาศัยอยู่ที่มัลดีฟส์
+We work at a hotel. My friend works at a hospital. = พวกเราทำงานที่โรงแรม เพื่อนของฉันทำงานที่โรงพยาบาล
+They have a dog. She has a cat. = พวกเขามีหมา เธอมีแมว
+You speak Thai. He speaks English. = คุณพูดภาษาไทย เขาพูดภาษาอังกฤษ
+My mother cooks Thai food. = แม่ของฉันทำอาหารไทย
+I go to work, and she goes to school. = ฉันไปทำงาน และเธอไปโรงเรียน
+He watches TV, but I sleep. = เขาดูทีวี แต่ฉันนอน
+
+@talk family | My family | ครอบครัวของฉัน | family | Ploy | 👩
+A: Alvee, tell me about your family. = Alvee เล่าเรื่องครอบครัวให้ฟังหน่อย
+B: I have a sister and a brother. = ฉันมีพี่สาวหนึ่งคนกับพี่ชายหนึ่งคน
+x: I has a sister and a brother.
+x: I am have a sister and a brother.
+A: What does your sister do? = พี่สาวเธอทำงานอะไร
+B: She works at a hospital. She is a nurse. = เธอทำงานที่โรงพยาบาล เธอเป็นพยาบาล
+x: She work at a hospital. She is a nurse.
+x: She works at a hospital. She a nurse.
+A: And your brother? = แล้วพี่ชายล่ะ
+B: He lives in Bangkok. He drives a taxi. = เขาอยู่กรุงเทพฯ เขาขับแท็กซี่
+x: He live in Bangkok. He drives a taxi.
+x: He lives in Bangkok. He drive a taxi.
+A: Your family is great! = ครอบครัวเธอน่ารักมาก!
+B: Thank you! My mother cooks very good food. = ขอบคุณ! แม่ฉันทำอาหารอร่อยมาก
+x: Thank you! My mother cook very good food.
+x: Thank you! My mother is cook very good food.
+
+@talk newcoworker | Meet my co-worker | แนะนำเพื่อนร่วมงาน | work | Guest | 🧳
+B: This is Nok. He works at the front desk too. = นี่คือนกค่ะ เขาทำงานที่เคาน์เตอร์ต้อนรับเหมือนกัน
+x: This is Nok. He work at the front desk too.
+x: This is Nok. He is work at the front desk too.
+A: Nice to meet you, Nok! = ยินดีที่ได้รู้จักครับ นก!
+B: He speaks English and Chinese. = เขาพูดภาษาอังกฤษและภาษาจีนได้ค่ะ
+x: He speak English and Chinese.
+x: He speaks English and Chinese is.
+A: Great! My wife speaks Chinese. = เยี่ยมเลย ภรรยาผมพูดภาษาจีนได้
+B: Nok knows Bangkok very well. He can help you. = นกรู้จักกรุงเทพฯ ดีมาก เขาช่วยคุณได้ค่ะ
+x: Nok know Bangkok very well. He can help you.
+x: Nok knows Bangkok very well. He can helps you.
+A: Thank you both! = ขอบคุณทั้งสองคนนะครับ!
+
+# ------------------------------------------------------------------ UNIT 7
+@unit 7 | Do you…? · I don't | ถามด้วย do / does และปฏิเสธ | 🪴 | ถาม-ตอบ Do you…? และพูด don't / doesn't
+
+@tip | ไม่… : don't / doesn't
+p: ปฏิเสธการกระทำ ใช้ don't หรือ doesn't แล้วตามด้วยกริยาธรรมดา (ไม่เติม s)
+tr: I / You / We / They | don't like
+tr: He / She / It | doesn't like
+ok: I don't like coffee. | ฉันไม่ชอบกาแฟ
+no: I am not like coffee. | ผิด — like เป็นกริยา ต้องใช้ don't
+no: She doesn't likes coffee. | ผิด — หลัง doesn't ไม่เติม s
+trick: am not / is not ใช้กับความรู้สึก (not hungry) · don't ใช้กับการกระทำ (don't like)
+
+@lesson 7.1 | I don't know | ฉันไม่รู้
+new: don't know understand
+I don't like coffee. = ฉันไม่ชอบกาแฟ
+I don't know. = ฉันไม่รู้
+I don't understand. = ฉันไม่เข้าใจ
+We don't have a car. = พวกเราไม่มีรถ
+They don't speak Thai. = พวกเขาพูดภาษาไทยไม่ได้
+I don't want to work today. = วันนี้ฉันไม่อยากทำงาน
+You don't need money. = คุณไม่ต้องใช้เงิน
+I don't drink coffee at night. = ฉันไม่ดื่มกาแฟตอนกลางคืน
+
+@lesson 7.2 | She doesn't eat meat | เธอไม่กินเนื้อสัตว์
+new: doesn't meat spicy
+She doesn't like spicy food. = เธอไม่ชอบอาหารเผ็ด
+He doesn't eat meat. = เขาไม่กินเนื้อสัตว์
+My boss doesn't speak Thai. = หัวหน้าของฉันพูดภาษาไทยไม่ได้
+The guest doesn't want a taxi. = แขกไม่ต้องการแท็กซี่
+It doesn't work. = มันใช้งานไม่ได้ (เสีย) | work กับเครื่องใช้ = ใช้งานได้
+My sister doesn't have a car. = พี่สาวของฉันไม่มีรถ
+Nok doesn't know. = นกไม่รู้
+She doesn't drink coffee. = เธอไม่ดื่มกาแฟ
+
+@tip | ถาม: Do you…? / Does she…?
+p: ถามเรื่องการกระทำ ให้ขึ้นต้นด้วย Do หรือ Does
+tr: Do | I / you / we / they | …?
+tr: Does | he / she / it | …?
+ok: Do you like Thai food? | คุณชอบอาหารไทยไหม
+ok: Does she work here? | เธอทำงานที่นี่ไหม
+p: ตอบสั้น ๆ: Yes, I do. / No, I don't. · Yes, she does. / No, she doesn't.
+no: Are you like Thai food? | ผิด — like เป็นกริยา ใช้ Do
+trick: Are you…? ถามความรู้สึก (Are you hungry?) · Do you…? ถามการกระทำ (Do you like…?)
+
+@lesson 7.3 | Do you speak English? | คุณพูดภาษาอังกฤษได้ไหม
+new: do reservation
+Do you like Thai food? = คุณชอบอาหารไทยไหม
+Yes, I do. = ชอบค่ะ (ใช่) | ตอบคำถาม Do you…? แบบสั้น ๆ
+No, I don't. = ไม่ค่ะ
+Do you speak English? = คุณพูดภาษาอังกฤษได้ไหม
+Do you need help? = คุณต้องการความช่วยเหลือไหม
+Do you have a reservation? = คุณจองห้องไว้หรือเปล่า
+Do they want breakfast? = พวกเขาต้องการอาหารเช้าไหม
+Do you know Ploy? = คุณรู้จักพลอยไหม
+
+@lesson 7.4 | Does she work here? | เธอทำงานที่นี่ไหม
+new: does start hurt
+Does she work here? = เธอทำงานที่นี่ไหม
+Yes, she does. = ใช่ เธอทำงานที่นี่
+No, he doesn't. = ไม่ เขาไม่ได้ทำ
+Does the room have a TV? = ห้องมีทีวีไหม
+Does he speak Thai? = เขาพูดภาษาไทยได้ไหม
+Does your mother cook? = แม่ของคุณทำอาหารไหม
+Does breakfast start at 7? = อาหารเช้าเริ่มเจ็ดโมงไหม
+Does it hurt? = เจ็บไหม
+
+@talk checkin | Check-in | เช็คอิน | hotel | Guest | 🧳
+B: Good evening! Do you have a reservation? = สวัสดีตอนเย็นค่ะ คุณจองห้องไว้หรือเปล่าคะ
+x: Good evening! Are you have a reservation?
+x: Good evening! Does you have a reservation?
+A: Yes, I do. My name is Tom Smith. = ใช่ครับ ผมชื่อทอม สมิธ
+B: May I see your passport, please? = ขอดูพาสปอร์ตหน่อยได้ไหมคะ
+x: May I see you passport, please?
+x: May I sees your passport, please?
+A: Here you are. = นี่ครับ
+B: Thank you. Do you want breakfast? = ขอบคุณค่ะ คุณต้องการอาหารเช้าไหมคะ
+x: Thank you. Are you want breakfast?
+x: Thank you. Does you want breakfast?
+A: Yes, please. What time is breakfast? = ครับ อาหารเช้ากี่โมงครับ
+B: Breakfast is from 7 to 10 in the restaurant. = อาหารเช้ามีตั้งแต่เจ็ดโมงถึงสิบโมงที่ห้องอาหารค่ะ
+x: Breakfast from 7 to 10 in the restaurant.
+x: Breakfast are from 7 to 10 in the restaurant.
+A: Great. Thank you! = เยี่ยม ขอบคุณครับ!
+B: Here is your key. Your room is 305. = นี่กุญแจของคุณค่ะ ห้องของคุณคือห้อง 305
+x: Here are your key. Your room is 305.
+x: Here is your key. Your room are 305.
+
+@talk market | At the market | ที่ตลาด | shop | Seller | 🧑‍🌾
+B: Hello! Do you have mangoes? = สวัสดีค่ะ มีมะม่วงไหมคะ
+x: Hello! Are you have mangoes?
+x: Hello! Does you have mangoes?
+A: Yes, I do. They are very sweet. = มีครับ หวานมากเลย
+B: How much is it? = เท่าไหร่คะ
+x: How much are it?
+x: How much it?
+A: Fifty baht for one kilo. = กิโลละห้าสิบบาทครับ
+B: I want two kilos, please. = ขอสองกิโลค่ะ
+x: I am want two kilos, please.
+x: I wants two kilos, please.
+A: One hundred baht, please. = หนึ่งร้อยบาทครับ
+B: Here you are. Thank you! = นี่ค่ะ ขอบคุณค่ะ!
+x: Here you is. Thank you!
+x: Here are you. Thank you!
+
+# ------------------------------------------------------------------ UNIT 8
+@unit 8 | My day · Time | กิจวัตรและเวลา | 🏮 | บอกเวลา และเล่ากิจวัตรประจำวัน
+
+@tip | บอกเวลา: at · in · on
+tr: at | เวลา | at 7 o'clock
+tr: in | ช่วงของวัน | in the morning
+tr: on | วัน | on Sunday
+ok: I start work at 8 in the morning. | ฉันเริ่มงานตอนแปดโมงเช้า
+p: เรื่องที่ทำทุกวัน (กิจวัตร) ใช้กริยาธรรมดา: I go / she goes
+trick: at = จุดเวลา · in = ช่วงเวลา · on = วัน
+
+@lesson 8.1 | What time is it? | กี่โมงแล้ว
+new: what_time o'clock half_past morning afternoon from check-in check-out
+What time is it? = กี่โมงแล้ว
+It is 7 o'clock. = เจ็ดโมงแล้ว
+It is half past 8. = แปดโมงครึ่ง
+I start work at 8 o'clock. = ฉันเริ่มงานตอนแปดโมง
+Breakfast is at 7 in the morning. = อาหารเช้าตอนเจ็ดโมงเช้า
+Check-out time is 12 o'clock. = เวลาเช็คเอาท์คือเที่ยงตรง
+Check-in time is 2 in the afternoon. = เวลาเช็คอินคือบ่ายสองโมง
+The pool is open from 6 to 9. = สระว่ายน้ำเปิดตั้งแต่หกโมงถึงเก้าโมง
+
+@lesson 8.2 | My day | วันของฉัน
+new: wake_up take_a_shower finish go_to_bed evening
+I wake up at 6. = ฉันตื่นนอนตอนหกโมง
+I take a shower. = ฉันอาบน้ำ
+I have breakfast at 7. = ฉันกินอาหารเช้าตอนเจ็ดโมง
+I go to work at 8. = ฉันไปทำงานตอนแปดโมง
+I finish work at 5. = ฉันเลิกงานตอนห้าโมง
+I go home in the evening. = ฉันกลับบ้านตอนเย็น
+I go to bed at 11. = ฉันเข้านอนตอนห้าทุ่ม
+I am very tired at night. = ตอนกลางคืนฉันเหนื่อยมาก
+
+@lesson 8.3 | Her day | วันของเธอ
+new: by bus
+She wakes up at 5. = เธอตื่นนอนตอนตีห้า
+She takes a shower. = เธออาบน้ำ
+He goes to work by bus. = เขาไปทำงานโดยรถบัส
+My mother cooks breakfast. = แม่ของฉันทำอาหารเช้า
+She finishes work at 6. = เธอเลิกงานตอนหกโมงเย็น | finish → finishes (เติม es)
+He goes to bed late. = เขาเข้านอนดึก
+My co-worker watches TV at night. = เพื่อนร่วมงานของฉันดูทีวีตอนกลางคืน
+Ploy wakes up late on Sunday. = พลอยตื่นสายในวันอาทิตย์
+
+@tip | บ่อยแค่ไหน: always · usually · sometimes · never
+tr: always | เสมอ (100%)
+tr: usually | ปกติ (80%)
+tr: sometimes | บางครั้ง (50%)
+tr: never | ไม่เคยเลย (0%)
+ok: I always drink coffee. | ฉันดื่มกาแฟเสมอ
+ok: She is always late. | เธอมาสายเสมอ
+p: วางไว้หน้ากริยา (always drink) แต่วางไว้หลัง am / is / are (is always late)
+trick: never = ไม่เลย ไม่ต้องใส่ not อีก: I never eat meat ✅
+
+@lesson 8.4 | Always, sometimes, never | เสมอ บางครั้ง ไม่เคย
+new: always usually sometimes never dinner beach
+I always drink coffee in the morning. = ฉันดื่มกาแฟตอนเช้าเสมอ
+She is always late. = เธอมาสายเสมอ
+I usually go to work by bus. = ปกติฉันไปทำงานโดยรถบัส
+Sometimes I cook dinner. = บางครั้งฉันทำอาหารเย็น
+He never eats breakfast. = เขาไม่เคยกินอาหารเช้าเลย
+We sometimes go to the beach. = บางครั้งพวกเราไปทะเล
+I am usually tired at night. = ปกติตอนกลางคืนฉันเหนื่อย
+I never drink coffee at night. = ฉันไม่เคยดื่มกาแฟตอนกลางคืน
+
+@talk myday | What time do you start? | เริ่มงานกี่โมง | friends | Ploy | 👩
+A: What time do you wake up? = เธอตื่นกี่โมง
+B: I usually wake up at 6. = ปกติฉันตื่นหกโมง
+x: I usually wakes up at 6.
+x: I am usually wake up at 6.
+A: Wow, early! What time do you start work? = ว้าว เช้าจัง! เริ่มงานกี่โมง
+B: I start at 8 and I finish at 5. = ฉันเริ่มแปดโมง เลิกห้าโมง
+x: I starts at 8 and I finish at 5.
+x: I am start at 8 and I finish at 5.
+A: Do you cook dinner? = ทำอาหารเย็นเองไหม
+B: Sometimes. I am always tired after work. = บางครั้ง ฉันเหนื่อยเสมอหลังเลิกงาน
+x: Sometimes. I always tired after work.
+x: Sometimes. I is always tired after work.
+A: Me too. Let's eat dinner together on Sunday! = ฉันด้วย วันอาทิตย์ไปกินข้าวเย็นด้วยกันนะ!
+B: Good idea! See you on Sunday. = ความคิดดี! เจอกันวันอาทิตย์นะ
+x: Good ideas! See you on Sunday.
+x: Good idea! See you in Sunday.
+
+@talk hoteltimes | What time…? | กี่โมงคะ | hotel | Guest | 🧳
+A: Excuse me. What time is breakfast? = ขอโทษครับ อาหารเช้ากี่โมงครับ
+B: Breakfast is from 6:30 to 10 o'clock. = อาหารเช้าตั้งแต่หกโมงครึ่งถึงสิบโมงค่ะ
+x: Breakfast are from 6:30 to 10 o'clock.
+x: Breakfast from 6:30 to 10 o'clock.
+A: And what time is check-out? = แล้วเช็คเอาท์กี่โมงครับ
+B: Check-out is at 12 o'clock. = เช็คเอาท์ตอนเที่ยงค่ะ
+x: Check-out at 12 o'clock.
+x: Check-out is on 12 o'clock.
+A: Does the pool close at night? = สระว่ายน้ำปิดตอนกลางคืนไหมครับ
+B: Yes, it does. It closes at 9 in the evening. = ปิดค่ะ ปิดตอนสามทุ่มค่ะ
+x: Yes, it do. It closes at 9 in the evening.
+x: Yes, it does. It close at 9 in the evening.
+A: Thank you very much. = ขอบคุณมากครับ
+B: You're welcome. Have a nice day! = ยินดีค่ะ ขอให้มีวันที่ดีนะคะ!
+x: You welcome. Have a nice day!
+x: You're welcome. Have a nice days!

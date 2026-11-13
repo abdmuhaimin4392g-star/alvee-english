@@ -1,0 +1,366 @@
+# MONTH 3 — right now & around me
+@month 3 | Right now | ตอนนี้และรอบตัว | Garden Hotel | โรงแรมในสวน
+
+# ------------------------------------------------------------------ UNIT 9
+@unit 9 | I am working | กำลังทำ (-ing) | 🌿 | พูดว่ากำลังทำอะไรอยู่ (am / is / are + ing)
+
+@tip | กำลังทำ = am / is / are + ing
+p: เวลาบอกว่า "กำลังทำ" อยู่ตอนนี้ ใช้ am / is / are + กริยาเติม ing
+tr: I | am | working
+tr: He / She / It | is | sleeping
+tr: You / We / They | are | eating
+ok: I am working now. | ตอนนี้ฉันกำลังทำงาน
+no: I working now. | ผิด — ลืม am อีกแล้ว!
+no: I am work now. | ผิด — ต้องเติม ing
+trick: กำลัง = am / is / are + ing ต้องมาคู่กันเสมอ เหมือน I กับ am
+
+@lesson 9.1 | I am working | ฉันกำลังทำงาน
+new: read book study wait_for
+I am working now. = ตอนนี้ฉันกำลังทำงาน
+I am eating rice. = ฉันกำลังกินข้าว
+I am drinking coffee. = ฉันกำลังดื่มกาแฟ
+I'm cooking dinner. = ฉันกำลังทำอาหารเย็น
+I'm waiting for the bus. = ฉันกำลังรอรถบัส | wait for = รอ…
+I am reading a book. = ฉันกำลังอ่านหนังสือ
+I'm studying English. = ฉันกำลังเรียนภาษาอังกฤษ
+I am not sleeping. = ฉันไม่ได้นอนอยู่นะ
+
+@lesson 9.2 | She is sleeping | เธอกำลังนอนหลับ
+new: cry rain on_the_phone baby talk
+She is sleeping. = เธอกำลังนอนหลับ
+He is watching TV. = เขากำลังดูทีวี
+My mother is cooking. = แม่ของฉันกำลังทำอาหาร
+The baby is crying. = เด็กทารกกำลังร้องไห้
+It is raining. = ฝนกำลังตก | พูดถึงฝน ใช้ It
+My boss is talking on the phone. = หัวหน้าของฉันกำลังคุยโทรศัพท์
+The guest is waiting in the lobby. = แขกกำลังรออยู่ที่ล็อบบี้
+She isn't working today. = วันนี้เธอไม่ได้ทำงาน
+
+@lesson 9.3 | What are you doing? | คุณกำลังทำอะไรอยู่
+new: what doing play football walk
+What are you doing? = คุณกำลังทำอะไรอยู่
+We are eating dinner. = พวกเรากำลังกินอาหารเย็น
+They are playing football. = พวกเขากำลังเล่นฟุตบอล
+Are you working now? = ตอนนี้คุณกำลังทำงานอยู่ไหม
+Is she sleeping? = เธอกำลังนอนอยู่ไหม
+No, she isn't. She is walking. = ไม่ เธอกำลังเดินเล่นอยู่
+What is he doing? = เขากำลังทำอะไรอยู่
+He is playing with the cat. = เขากำลังเล่นกับแมว
+
+@tip | ทุกวัน vs ตอนนี้
+tr: ทำเป็นประจำ (every day) | I work.
+tr: กำลังทำตอนนี้ (now) | I am working.
+ok: I usually drink tea, but now I am drinking coffee. | ปกติฉันดื่มชา แต่ตอนนี้ฉันกำลังดื่มกาแฟ
+no: I am work every day. | ผิด — ทำทุกวันใช้ I work
+trick: เห็น now / right now → am / is / are + ing · เห็น every day / usually → กริยาธรรมดา
+
+@lesson 9.4 | Every day or now? | ทุกวัน หรือ ตอนนี้
+new: right_now look listen every take
+I work every day, but today I am not working. = ฉันทำงานทุกวัน แต่วันนี้ฉันไม่ได้ทำงาน
+She usually cooks, but now she is sleeping. = ปกติเธอทำอาหาร แต่ตอนนี้เธอกำลังนอน
+He drinks coffee every morning. = เขาดื่มกาแฟทุกเช้า
+Right now, he is drinking tea. = ตอนนี้เขากำลังดื่มชา
+I usually take the bus, but today I am taking a taxi. = ปกติฉันนั่งรถบัส แต่วันนี้ฉันนั่งแท็กซี่
+Look! It is raining. = ดูสิ! ฝนกำลังตก
+Listen! The baby is crying. = ฟังสิ! เด็กทารกกำลังร้องไห้
+We always eat at home, but tonight we are eating out. = พวกเรากินที่บ้านเสมอ แต่คืนนี้เรากินข้าวนอกบ้าน
+
+@talk callnow | What are you doing? | ทำอะไรอยู่ | love | {bf} | 💙
+A: Hi Alvee! What are you doing? = หวัดดี Alvee! ทำอะไรอยู่
+B: I am cooking dinner. = ฉันกำลังทำอาหารเย็น
+x: I cooking dinner.
+x: I am cook dinner.
+A: What are you cooking? = ทำอะไรกิน
+B: I'm making green curry. = ฉันกำลังทำแกงเขียวหวาน
+x: I'm make green curry.
+x: I making green curry.
+A: Yummy! I am eating a sandwich. = น่ากินจัง! ผมกำลังกินแซนด์วิชอยู่
+B: Are you working now? = ตอนนี้คุณทำงานอยู่ไหม
+x: Are you work now?
+x: You are working now?
+A: Yes, I am. I am on a break. = ใช่ ตอนนี้ผมพักเบรกอยู่
+B: OK. Don't work too hard! = โอเค อย่าทำงานหนักเกินไปนะ!
+x: OK. Don't works too hard!
+x: OK. Not work too hard!
+
+@talk busydesk | Busy at the front desk | เคาน์เตอร์ยุ่งมาก | work | Nok | 🧑
+A: Alvee, where is the manager? = Alvee ผู้จัดการอยู่ไหน
+B: She is talking to a guest in the lobby. = เธอกำลังคุยกับแขกอยู่ที่ล็อบบี้
+x: She talking to a guest in the lobby.
+x: She is talk to a guest in the lobby.
+A: And what are the guests doing? = แล้วแขกกำลังทำอะไรกันอยู่
+B: They are waiting for a taxi. = พวกเขากำลังรอแท็กซี่
+x: They is waiting for a taxi.
+x: They are wait for a taxi.
+A: Is it raining? = ฝนตกอยู่หรือเปล่า
+B: Yes, it is. It is raining a lot. = ใช่ ฝนตกหนักมาก
+x: Yes, it does. It is raining a lot.
+x: Yes, it is. It raining a lot.
+A: OK. I am calling a taxi now. = โอเค ผมกำลังโทรเรียกแท็กซี่ให้เลย
+
+# ------------------------------------------------------------------ UNIT 10
+@unit 10 | There is · There are | มี… (ที่นี่) | 🏊 | บอกว่าที่ไหนมีอะไร ทั้งในห้องพัก โรงแรม และในเมือง
+
+@tip | There is / There are = "มี" (อยู่ที่นี่)
+p: เวลาบอกว่า "ที่นี่มี…" ภาษาอังกฤษใช้ There is (1 อย่าง) หรือ There are (หลายอย่าง) ไม่ขึ้นต้นด้วย Have
+tr: There is | a pool | มีสระว่ายน้ำ (1)
+tr: There are | two beds | มีเตียง 2 เตียง
+ok: There is a pool on the roof. | มีสระว่ายน้ำอยู่บนดาดฟ้า
+no: Have a pool on the roof. | ผิด — แบบภาษาไทย "มีสระ…" ต้องใช้ There is
+no: There are a pool. | ผิด — 1 อย่างใช้ is
+trick: ภาษาไทยพูด "มี…" ขึ้นต้นประโยคได้ แต่ภาษาอังกฤษขึ้นต้นด้วย There is / There are
+
+@lesson 10.1 | There is a pool | มีสระว่ายน้ำ
+new: there_is there's gym roof outside bank near
+There is a pool. = มีสระว่ายน้ำ
+There is a gym on the second floor. = มีฟิตเนสอยู่ที่ชั้นสอง
+There is a restaurant in the hotel. = ในโรงแรมมีร้านอาหาร
+There is a pool on the roof. = มีสระว่ายน้ำอยู่บนดาดฟ้า
+There is a shop in the lobby. = มีร้านค้าอยู่ในล็อบบี้
+There is a bank near the hotel. = มีธนาคารอยู่ใกล้โรงแรม
+There's a taxi outside. = มีแท็กซี่อยู่ข้างนอก | there's = there is
+
+@lesson 10.2 | There are two beds | มีเตียงสองเตียง
+new: there_are pillow many three chair towel bathroom
+There are two beds in the room. = ในห้องมีเตียงสองเตียง
+There are towels in the bathroom. = ในห้องน้ำมีผ้าเช็ดตัว
+There are two pillows on the bed. = บนเตียงมีหมอนสองใบ
+There are many restaurants near here. = แถวนี้มีร้านอาหารหลายร้าน
+There are a lot of guests today. = วันนี้มีแขกเยอะมาก
+There are three rooms on this floor. = ชั้นนี้มีสามห้อง
+There is a TV, and there are two chairs. = มีทีวีหนึ่งเครื่อง และมีเก้าอี้สองตัว
+
+@lesson 10.3 | Is there Wi-Fi? | มี Wi-Fi ไหม
+new: Wi-Fi any
+Is there a pool? = มีสระว่ายน้ำไหม
+Yes, there is. = มีค่ะ
+No, there isn't. = ไม่มีค่ะ
+Is there Wi-Fi in the room? = ในห้องมี Wi-Fi ไหม
+Are there towels in the room? = ในห้องมีผ้าเช็ดตัวไหม
+Yes, there are. = มีค่ะ (หลายผืน)
+Is there a bank near here? = แถวนี้มีธนาคารไหม
+There isn't any hot water. = ไม่มีน้ำร้อนเลย
+
+@lesson 10.4 | In your room | ในห้องพักของคุณ
+new: air-con fridge safe bottle kettle window light
+The air-con doesn't work. = แอร์ไม่ทำงาน (แอร์เสีย)
+There is a fridge in your room. = ในห้องของคุณมีตู้เย็น
+There is a safe in the room. = ในห้องมีตู้เซฟ
+There are two bottles of water in the fridge. = ในตู้เย็นมีน้ำสองขวด
+The kettle is on the table. = กาต้มน้ำอยู่บนโต๊ะ
+Please open the window. = กรุณาเปิดหน้าต่าง
+The light is not working. = ไฟไม่ติด
+
+@talk facilities | Is there a gym? | มีฟิตเนสไหม | hotel | Guest | 🧳
+A: Excuse me. Is there a gym in the hotel? = ขอโทษครับ ในโรงแรมมีฟิตเนสไหมครับ
+B: Yes, there is. It is on the fifth floor. = มีค่ะ อยู่ที่ชั้นห้าค่ะ
+x: Yes, there are. It is on the fifth floor.
+x: Yes, have. It is on the fifth floor.
+A: Great. Is there a pool too? = เยี่ยม แล้วมีสระว่ายน้ำด้วยไหมครับ
+B: Yes, there is a pool on the roof. = มีค่ะ มีสระว่ายน้ำอยู่บนดาดฟ้า
+x: Yes, have a pool on the roof.
+x: Yes, there are a pool on the roof.
+A: Are there any restaurants near here? = แถวนี้มีร้านอาหารไหมครับ
+B: Yes, there are many restaurants on this street. = มีค่ะ ถนนเส้นนี้มีร้านอาหารเยอะมาก
+x: Yes, there is many restaurants on this street.
+x: Yes, have many restaurants on this street.
+A: Is there Wi-Fi in my room? = ในห้องผมมี Wi-Fi ไหมครับ
+B: Yes. The password is on your key card. = มีค่ะ รหัสผ่านอยู่บนคีย์การ์ดของคุณค่ะ
+x: Yes. The password are on your key card.
+x: Yes. The password on your key card.
+A: Thank you so much! = ขอบคุณมาก ๆ ครับ!
+
+@talk newroom | My new room | ห้องใหม่ของฉัน | home | Ploy | 👩
+A: Do you like your new room? = ชอบห้องใหม่ไหม
+B: Yes! There is a big window. = ชอบ! มีหน้าต่างบานใหญ่ด้วย
+x: Yes! Have a big window.
+x: Yes! There are a big window.
+A: Is there a kitchen? = มีห้องครัวไหม
+B: Yes, there is a small kitchen. = มี มีห้องครัวเล็ก ๆ
+x: Yes, there is a kitchen small.
+x: Yes, there are a small kitchen.
+A: Are there shops near your room? = แถวห้องมีร้านค้าไหม
+B: Yes, there are. There is a market too. = มี แล้วก็มีตลาดด้วย
+x: Yes, there is. There is a market too.
+x: Yes, they are. There is a market too.
+A: I want to see it! = อยากเห็นจัง!
+B: Come on Sunday! = มาวันอาทิตย์สิ!
+x: Comes on Sunday!
+x: Coming on Sunday!
+
+# ------------------------------------------------------------------ UNIT 11
+@unit 11 | Can · Can't | ทำได้ · ทำไม่ได้ | 🚲 | บอกความสามารถ ขอร้อง และขออนุญาต
+
+@tip | can = ทำได้ · can't = ทำไม่ได้
+p: can + กริยาธรรมดา (ไม่เติม s ไม่มี to) ใช้เหมือนกันกับทุกคน
+tr: I / You / He / She / We / They | can swim
+tr: (ทำไม่ได้) | can't swim
+ok: She can speak English. | เธอพูดภาษาอังกฤษได้
+no: She cans speak English. | ผิด — can ไม่เติม s
+no: She can speaks English. | ผิด — หลัง can ใช้กริยาธรรมดา
+trick: can ใจดีกับทุกคน: I can, she can, they can — เหมือนกันหมด
+
+@lesson 11.1 | I can swim | ฉันว่ายน้ำได้
+new: can can't swim sing dance
+I can swim. = ฉันว่ายน้ำเป็น
+I can't swim. = ฉันว่ายน้ำไม่เป็น
+She can cook Thai food. = เธอทำอาหารไทยเป็น
+He can speak English and Thai. = เขาพูดภาษาอังกฤษและภาษาไทยได้
+I can sing, but I can't dance. = ฉันร้องเพลงได้ แต่เต้นไม่เป็น
+My brother can drive. = พี่ชายของฉันขับรถเป็น
+We can help you. = พวกเราช่วยคุณได้
+I can't sleep. = ฉันนอนไม่หลับ
+
+@lesson 11.2 | Can you help me? | ช่วยฉันหน่อยได้ไหม
+new: repeat call come tomorrow
+Can you swim? = คุณว่ายน้ำเป็นไหม
+Yes, I can. = เป็นค่ะ (ได้ค่ะ)
+No, I can't. = ไม่เป็นค่ะ (ไม่ได้ค่ะ)
+Can you help me? = ช่วยฉันหน่อยได้ไหม
+Can you speak slowly, please? = ช่วยพูดช้า ๆ หน่อยได้ไหมคะ
+Can you call a taxi for me? = ช่วยเรียกแท็กซี่ให้ฉันหน่อยได้ไหม
+Can you repeat, please? = ช่วยพูดอีกครั้งได้ไหมคะ
+Can she come tomorrow? = พรุ่งนี้เธอมาได้ไหม
+
+@lesson 11.3 | Can I have the bill? | ขอบิลหน่อยได้ไหม
+new: bill pay card some sit
+Can I help you? = มีอะไรให้ช่วยไหมคะ
+Can I have the bill, please? = ขอบิลหน่อยได้ไหมคะ
+Can I pay by card? = จ่ายด้วยบัตรได้ไหม
+Yes, you can. = ได้ค่ะ
+Can I have some water? = ขอน้ำหน่อยได้ไหม
+Can I sit here? = ฉันนั่งตรงนี้ได้ไหม
+Can I have two coffees, please? = ขอกาแฟสองแก้วได้ไหมคะ
+
+@lesson 11.4 | You can use the gym | คุณใช้ฟิตเนสได้
+new: use free smoke cash leave until sorry check_in
+You can use the gym for free. = คุณใช้ฟิตเนสได้ฟรี
+You can't smoke in the room. = ห้ามสูบบุหรี่ในห้อง (สูบในห้องไม่ได้)
+You can pay by cash or card. = คุณจ่ายเป็นเงินสดหรือบัตรก็ได้
+You can leave your bag here. = คุณฝากกระเป๋าไว้ที่นี่ได้
+Guests can swim until 9 at night. = แขกว่ายน้ำได้ถึงสามทุ่ม
+Can I check in early? = ฉันเช็คอินก่อนเวลาได้ไหม
+Sorry, you can't. Check-in is at 2. = ขอโทษค่ะ ไม่ได้ค่ะ เช็คอินบ่ายสองโมงนะคะ
+
+@talk pharmacy | At the pharmacy | ที่ร้านขายยา | health | Pharmacist | 🧑‍⚕️
+A: Hello. Can I help you? = สวัสดีครับ มีอะไรให้ช่วยไหมครับ
+B: Yes, please. I have a headache. = ค่ะ ฉันปวดหัว
+x: Yes, please. I am headache.
+x: Yes, please. I has a headache.
+A: Do you have a fever? = มีไข้ไหมครับ
+B: No, I don't. But I can't sleep. = ไม่มีค่ะ แต่ฉันนอนไม่หลับ
+x: No, I am not. But I can't sleep.
+x: No, I don't. But I can't sleeping.
+A: You can take this medicine. = ทานยานี้ได้ครับ
+B: Can I take it at night? = ทานตอนกลางคืนได้ไหมคะ
+x: Can I takes it at night?
+x: I can take it at night?
+A: Yes, you can. Take one after dinner. = ได้ครับ ทานหนึ่งเม็ดหลังอาหารเย็น
+B: Thank you. How much is it? = ขอบคุณค่ะ เท่าไหร่คะ
+x: Thank you. How much it is?
+x: Thank you. How much are it?
+A: It is 80 baht. = แปดสิบบาทครับ
+
+@talk swim | Can you swim? | ว่ายน้ำเป็นไหม | fun | Ploy | 👩
+A: Let's go to the beach on Sunday! = วันอาทิตย์ไปทะเลกันเถอะ!
+B: Good idea! But I can't swim. = ความคิดดี! แต่ฉันว่ายน้ำไม่เป็น
+x: Good idea! But I can't swimming.
+x: Good idea! But I don't can swim.
+A: Don't worry. I can teach you. = ไม่ต้องห่วง ฉันสอนให้ได้
+B: Really? Can you swim well? = จริงเหรอ เธอว่ายน้ำเก่งไหม
+x: Really? Do you can swim well?
+x: Really? Can you swims well?
+A: Yes, I can. I swim every week. = เก่งสิ ฉันว่ายน้ำทุกสัปดาห์
+B: Great! I can bring food. = เยี่ยม! ฉันเอาอาหารไปได้นะ
+x: Great! I can brings food.
+x: Great! I can to bring food.
+
+# ------------------------------------------------------------------ UNIT 12
+@unit 12 | Directions | บอกทาง | 🦜 | บอกทางในโรงแรมและในเมือง
+
+@tip | บอกทาง
+tr: go straight | เดินตรงไป
+tr: turn left | เลี้ยวซ้าย
+tr: turn right | เลี้ยวขวา
+tr: on your left | อยู่ทางซ้ายมือ
+tr: next to | ข้าง ๆ
+tr: opposite | ตรงข้าม
+ok: Go straight and turn left. | เดินตรงไปแล้วเลี้ยวซ้าย
+trick: บอกทางให้ขึ้นต้นด้วยกริยาได้เลย (Go… / Turn… / Take…) ไม่ต้องมี You
+
+@lesson 12.1 | Turn left | เลี้ยวซ้าย
+new: go_straight turn left street down
+Go straight. = เดินตรงไป
+Turn left. = เลี้ยวซ้าย
+Turn right at the bank. = เลี้ยวขวาที่ธนาคาร
+Go straight and turn left. = เดินตรงไปแล้วเลี้ยวซ้าย
+It is on your left. = อยู่ทางซ้ายมือของคุณ
+The pool is on your right. = สระว่ายน้ำอยู่ทางขวามือของคุณ
+Go down this street. = เดินไปตามถนนเส้นนี้
+
+@lesson 12.2 | Next to the bank | ข้างธนาคาร
+new: next_to opposite between behind pharmacy café shop
+The pharmacy is next to the bank. = ร้านขายยาอยู่ข้างธนาคาร
+The bus stop is opposite the hotel. = ป้ายรถเมล์อยู่ตรงข้ามโรงแรม
+The shop is between the bank and the café. = ร้านค้าอยู่ระหว่างธนาคารกับร้านกาแฟ
+The car park is behind the hotel. = ที่จอดรถอยู่หลังโรงแรม
+The taxi is in front of the hotel. = แท็กซี่อยู่หน้าโรงแรม
+The restaurant is next to the lobby. = ห้องอาหารอยู่ข้างล็อบบี้
+The café is opposite the pool. = ร้านกาแฟอยู่ตรงข้ามสระว่ายน้ำ
+
+@lesson 12.3 | In the hotel | ในโรงแรม
+new: elevator stairs upstairs downstairs toilet spa fifth door
+Take the elevator to the fifth floor. = ขึ้นลิฟต์ไปชั้นห้า
+The stairs are on your right. = บันไดอยู่ทางขวามือ
+The gym is upstairs. = ฟิตเนสอยู่ชั้นบน
+The restaurant is downstairs. = ห้องอาหารอยู่ชั้นล่าง
+The toilet is next to the elevator. = ห้องน้ำอยู่ข้างลิฟต์
+Your room is the second door on the left. = ห้องของคุณคือประตูที่สองทางซ้าย
+The spa is on the first floor. = สปาอยู่ชั้นหนึ่ง
+
+@lesson 12.4 | How do I get there? | ไปที่นั่นยังไง
+new: get_to far number ATM nearest
+How do I get to the beach? = ไปชายหาดยังไงคะ
+Is it far? = ไกลไหม
+No, it isn't. It is very near. = ไม่ไกลค่ะ ใกล้มาก
+You can walk there in 5 minutes. = คุณเดินไปถึงได้ในห้านาที
+Take a taxi. It is far. = นั่งแท็กซี่ไปนะคะ มันไกล
+You can take bus number 8. = คุณขึ้นรถบัสสาย 8 ได้
+Where is the nearest ATM? = ตู้เอทีเอ็มที่ใกล้ที่สุดอยู่ที่ไหน
+
+@talk directions | How do I get to the market? | ไปตลาดยังไง | travel | Guest | 🧳
+A: Excuse me. How do I get to the night market? = ขอโทษครับ ไปตลาดกลางคืนยังไงครับ
+B: Go out of the hotel and turn right. = ออกจากโรงแรมแล้วเลี้ยวขวาค่ะ
+x: Go out of the hotel and turns right.
+x: Going out of the hotel and turn right.
+A: OK. Is it far? = โอเค ไกลไหมครับ
+B: No, it isn't. You can walk there in 10 minutes. = ไม่ไกลค่ะ เดินไปได้ในสิบนาทีค่ะ
+x: No, it doesn't. You can walk there in 10 minutes.
+x: No, it isn't. You can walks there in 10 minutes.
+A: Is it next to the bank? = อยู่ข้างธนาคารไหมครับ
+B: No. It is opposite the bank. = ไม่ใช่ค่ะ อยู่ตรงข้ามธนาคาร
+x: No. It opposite the bank.
+x: No. It are opposite the bank.
+A: Great. What time does it open? = เยี่ยม เปิดกี่โมงครับ
+B: It opens at 6 in the evening. = เปิดหกโมงเย็นค่ะ
+x: It open at 6 in the evening.
+x: It is opens at 6 in the evening.
+A: Thank you very much! = ขอบคุณมากครับ!
+
+@talk hoteldirections | Where is the spa? | สปาอยู่ไหน | hotel | Guest | 🧳
+A: Hi. Where is the spa, please? = สวัสดีครับ สปาอยู่ที่ไหนครับ
+B: It is on the first floor, next to the gym. = อยู่ชั้นหนึ่ง ข้างฟิตเนสค่ะ
+x: It on the first floor, next to the gym.
+x: It is on the first floor, next the gym.
+A: And how do I get to my room? = แล้วผมไปห้องยังไงครับ
+B: Take the elevator to the fifth floor and turn left. = ขึ้นลิฟต์ไปชั้นห้าแล้วเลี้ยวซ้ายค่ะ
+x: Takes the elevator to the fifth floor and turn left.
+x: Take the elevator to the five floor and turn left.
+A: Is the restaurant upstairs? = ห้องอาหารอยู่ชั้นบนไหมครับ
+B: No, it is downstairs, behind the lobby. = ไม่ใช่ค่ะ อยู่ชั้นล่าง หลังล็อบบี้ค่ะ
+x: No, it downstairs, behind the lobby.
+x: No, it is downstairs, behind of the lobby.
+A: Thank you! = ขอบคุณครับ!
+B: You're welcome. Enjoy your stay! = ยินดีค่ะ ขอให้พักผ่อนอย่างมีความสุขนะคะ!
+x: You're welcome. Enjoy you stay!
+x: You're welcome. Enjoys your stay!

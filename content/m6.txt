@@ -1,0 +1,360 @@
+# MONTH 6 — real conversations
+@month 6 | Real conversations | คุยได้จริง | Grand Resort | แกรนด์รีสอร์ท
+
+# ------------------------------------------------------------------ UNIT 21
+@unit 21 | What · When · Why | คำถาม Wh- | 🐢 | ถามคำถาม what / when / why / how many ได้
+
+@tip | คำถาม Wh-
+tr: What | อะไร
+tr: Where | ที่ไหน
+tr: When | เมื่อไหร่
+tr: Who | ใคร
+tr: Why | ทำไม
+tr: How | อย่างไร
+tr: How much | เท่าไหร่ (ราคา / นับไม่ได้)
+tr: How many | กี่… (นับได้)
+p: คำถามเรียงแบบนี้: คำถาม + is / are / do / does / did / will / can + คน + …
+ok: Where do you live? | คุณอาศัยอยู่ที่ไหน
+no: Where you live? | ผิด — ขาด do
+trick: ตอบ Why ด้วย Because… (เพราะว่า…)
+
+@lesson 21.1 | What and where | อะไร และ ที่ไหน
+new: what_kind_of
+What is your name? = คุณชื่ออะไร
+Where do you live? = คุณอาศัยอยู่ที่ไหน
+What do you do? = คุณทำงานอะไร
+Where are you from? = คุณมาจากที่ไหน
+What kind of food do you like? = คุณชอบอาหารแบบไหน
+Where is your hotel? = โรงแรมของคุณอยู่ที่ไหน
+What time do you finish work? = คุณเลิกงานกี่โมง
+
+@lesson 21.2 | When and who | เมื่อไหร่ และ ใคร
+new: when best_friend
+When is your birthday? = วันเกิดของคุณคือเมื่อไหร่
+When did you arrive? = คุณมาถึงเมื่อไหร่
+When will you come back? = คุณจะกลับมาเมื่อไหร่
+Who is your best friend? = เพื่อนสนิทที่สุดของคุณคือใคร
+Who did you go with? = คุณไปกับใคร
+Who is in room 305? = ใครพักอยู่ห้อง 305
+When does the restaurant open? = ห้องอาหารเปิดเมื่อไหร่
+
+@lesson 21.3 | Why? Because… | ทำไม? เพราะว่า…
+new: why
+Why are you tired? = ทำไมคุณเหนื่อย
+Because I worked all day. = เพราะฉันทำงานทั้งวัน
+Why do you study English? = ทำไมคุณเรียนภาษาอังกฤษ
+Because I want to talk to the guests. = เพราะฉันอยากคุยกับแขก
+Why didn't you call me? = ทำไมคุณไม่โทรหาฉัน
+Because my phone was broken. = เพราะโทรศัพท์ของฉันเสีย
+Why is the room so cold? = ทำไมห้องเย็นจัง
+
+@lesson 21.4 | How much? How many? | เท่าไหร่? กี่…?
+new: how_many how_old how_far which
+How much is this bag? = กระเป๋าใบนี้ราคาเท่าไหร่
+How many nights will you stay? = คุณจะพักกี่คืน
+How many people are in your family? = ครอบครัวของคุณมีกี่คน
+How much water do you drink? = คุณดื่มน้ำเท่าไหร่
+How old are you? = คุณอายุเท่าไหร่
+How far is the airport? = สนามบินไกลแค่ไหน
+Which room do you like? = คุณชอบห้องไหน
+
+@talk smalltalk | Small talk with a guest | คุยเล่นกับแขก | hotel | Guest | 🧳
+B: Where are you from? = คุณมาจากที่ไหนคะ
+x: Where you are from?
+x: Where do you from?
+A: I'm from Australia. = ผมมาจากออสเตรเลียครับ
+B: Is this your first time in Thailand? = นี่เป็นครั้งแรกที่คุณมาประเทศไทยไหมคะ
+x: Is this you first time in Thailand?
+x: Are this your first time in Thailand?
+A: No, it's my third time. I love Thailand! = ไม่ครับ ครั้งที่สามแล้ว ผมรักประเทศไทย!
+B: How long will you stay? = คุณจะพักนานแค่ไหนคะ
+x: How long you will stay?
+x: How long will you staying?
+A: One week. What can I do here? = หนึ่งสัปดาห์ครับ ที่นี่มีอะไรให้ทำบ้างครับ
+B: You can visit the old town and the night market. = คุณไปเที่ยวเมืองเก่าและตลาดกลางคืนได้ค่ะ
+x: You can visits the old town and the night market.
+x: You can to visit the old town and the night market.
+A: Why is it called the old town? = ทำไมถึงเรียกว่าเมืองเก่าครับ
+B: Because the buildings are very old and beautiful. = เพราะตึกเก่าแก่และสวยงามมากค่ะ
+x: Because the buildings is very old and beautiful.
+x: Because the buildings very old and beautiful.
+
+@talk newfriend | A new friend | เพื่อนใหม่ | friends | Anna | 👱‍♀️
+A: Hi! I'm Anna. What's your name? = หวัดดี ฉันชื่อแอนนา เธอชื่ออะไร
+B: Hi Anna! My name is Alvee. = หวัดดีแอนนา ฉันชื่อ Alvee
+x: Hi Anna! My name Alvee.
+x: Hi Anna! I name is Alvee.
+A: What do you do, Alvee? = Alvee ทำงานอะไร
+B: I'm a receptionist. I work at a hotel. = ฉันเป็นพนักงานต้อนรับ ฉันทำงานที่โรงแรม
+x: I'm a receptionist. I works at a hotel.
+x: I'm receptionist. I work at a hotel.
+A: Cool! Why do you like your job? = เจ๋ง! ทำไมเธอถึงชอบงานของเธอ
+B: Because I meet people from many countries. = เพราะฉันได้เจอคนจากหลายประเทศ
+x: Because I meets people from many countries.
+x: Because I meet people from many country.
+A: When did you start learning English? = เธอเริ่มเรียนภาษาอังกฤษตอนไหน
+B: Six months ago. I study every day. = หกเดือนที่แล้ว ฉันเรียนทุกวัน
+x: Six months ago. I studies every day.
+x: Six month ago. I study every day.
+
+# ------------------------------------------------------------------ UNIT 22
+@unit 22 | My story | เล่าเรื่องของฉัน | 🎈 | เล่าเรื่องเมื่อวาน วันนี้ และพรุ่งนี้ได้ในบทสนทนาเดียว
+
+@tip | เล่าเรื่องด้วย 3 เวลา
+tr: Yesterday (อดีต) | I worked. · I was tired.
+tr: Today (ปัจจุบัน) | I work. · I am working.
+tr: Tomorrow (อนาคต) | I will work. · I'm going to work.
+ok: Yesterday I was busy, today I am tired, and tomorrow I will rest. | เมื่อวานฉันยุ่ง วันนี้ฉันเหนื่อย และพรุ่งนี้ฉันจะพักผ่อน
+trick: ดูคำบอกเวลาก่อนเสมอ (yesterday / now / tomorrow) แล้วค่อยเลือกรูปกริยา
+
+@lesson 22.1 | Yesterday, today, tomorrow | เมื่อวาน วันนี้ พรุ่งนี้
+Yesterday I worked at the hotel. = เมื่อวานฉันทำงานที่โรงแรม
+Today I am working too. = วันนี้ฉันก็ทำงานเหมือนกัน
+Tomorrow I will have a day off. = พรุ่งนี้ฉันจะได้หยุด
+Last week I was sick, but now I am fine. = สัปดาห์ที่แล้วฉันป่วย แต่ตอนนี้สบายดีแล้ว
+I usually walk to work, but yesterday I took a taxi. = ปกติฉันเดินไปทำงาน แต่เมื่อวานฉันนั่งแท็กซี่
+Next week I am going to visit my family. = สัปดาห์หน้าฉันจะไปเยี่ยมครอบครัว
+I didn't sleep well, so I am tired now. = ฉันนอนไม่ค่อยหลับ ตอนนี้ก็เลยเหนื่อย | so = ก็เลย / ดังนั้น
+
+@lesson 22.2 | About me | เกี่ยวกับตัวฉัน
+new: free_time important
+I live in a small city near the sea. = ฉันอาศัยอยู่ในเมืองเล็ก ๆ ใกล้ทะเล
+I started this job two years ago. = ฉันเริ่มงานนี้เมื่อสองปีก่อน
+I like my job because I meet many people. = ฉันชอบงานของฉันเพราะได้เจอคนมากมาย
+In my free time, I watch movies and cook. = เวลาว่างฉันดูหนังและทำอาหาร
+I am learning English every day. = ฉันกำลังเรียนภาษาอังกฤษทุกวัน
+One day, I want to travel to many countries. = สักวันหนึ่งฉันอยากเดินทางไปหลายประเทศ
+My family is very important to me. = ครอบครัวสำคัญกับฉันมาก
+
+@lesson 22.3 | Telling a story | เล่าเรื่อง
+new: then after_that everywhere finally
+First, I woke up at 6. = อย่างแรก ฉันตื่นตอนหกโมง
+Then I took a shower and had breakfast. = จากนั้นฉันอาบน้ำและกินอาหารเช้า
+After that, I went to work by bus. = หลังจากนั้น ฉันไปทำงานโดยรถบัส
+At work, a guest lost his passport. = ที่ทำงาน มีแขกทำพาสปอร์ตหาย
+We looked everywhere. = พวกเราหาทุกที่
+Finally, we found it in the restaurant. = ในที่สุดพวกเราก็เจอมันในห้องอาหาร
+The guest was very happy and said thank you. = แขกดีใจมากและพูดขอบคุณ
+
+@lesson 22.4 | I feel… I think… | ฉันรู้สึก… ฉันคิดว่า…
+new: feel agree opinion worried think_so
+I feel happy today. = วันนี้ฉันรู้สึกมีความสุข
+I feel a little tired. = ฉันรู้สึกเหนื่อยนิดหน่อย
+I think this hotel is very nice. = ฉันคิดว่าโรงแรมนี้ดีมาก
+I don't think so. = ฉันไม่คิดอย่างนั้น
+I agree with you. = ฉันเห็นด้วยกับคุณ
+In my opinion, Thai food is the best. = ในความคิดของฉัน อาหารไทยดีที่สุด
+I'm worried about my mother. = ฉันเป็นห่วงแม่
+
+@talk yourday | Tell me about your day | เล่าเรื่องวันนี้ให้ฟัง | love | {bf} | 💙
+A: Tell me about your day! = เล่าเรื่องวันนี้ให้ฟังหน่อย!
+B: It was a long day. We had a lot of guests. = วันนี้ยาวนานมาก มีแขกเยอะมาก
+x: It is a long day yesterday. We had a lot of guests.
+x: It was a long day. We have a lot of guests yesterday.
+A: Are you tired now? = ตอนนี้เหนื่อยไหม
+B: Yes, I am. But I'm happy because I helped many people. = เหนื่อยค่ะ แต่มีความสุขเพราะได้ช่วยคนเยอะ
+x: Yes, I am. But I happy because I helped many people.
+x: Yes, I do. But I'm happy because I helped many people.
+A: What are you going to do tomorrow? = พรุ่งนี้จะทำอะไร
+B: Tomorrow is my day off. I'm going to sleep a lot! = พรุ่งนี้วันหยุด ฉันจะนอนเยอะ ๆ!
+x: Tomorrow is my day off. I going to sleep a lot!
+x: Tomorrow is my day off. I'm going to slept a lot!
+A: Good idea. You worked very hard. = ความคิดดี เธอทำงานหนักมาก
+B: Thank you. I feel better now. = ขอบคุณค่ะ ตอนนี้รู้สึกดีขึ้นแล้ว
+x: Thank you. I feel gooder now.
+x: Thank you. I am feel better now.
+
+@talk interview | A job interview | สัมภาษณ์งาน | work | Manager | 👩‍💼
+A: Please tell me about yourself. = กรุณาเล่าเกี่ยวกับตัวคุณหน่อยค่ะ
+B: I am a receptionist. I worked at Sunshine Hotel for two years. = ฉันเป็นพนักงานต้อนรับ ฉันทำงานที่โรงแรมซันไชน์มาสองปีค่ะ
+x: I am a receptionist. I work at Sunshine Hotel for two years ago.
+x: I am receptionist. I worked at Sunshine Hotel for two years.
+A: Why do you want this job? = ทำไมคุณถึงอยากได้งานนี้
+B: Because I love helping people. = เพราะฉันชอบช่วยเหลือผู้คนค่ะ
+x: Because I love help people.
+x: Because I am love helping people.
+A: Can you speak English? = คุณพูดภาษาอังกฤษได้ไหม
+B: Yes, I can. I studied English every day for six months. = ได้ค่ะ ฉันเรียนภาษาอังกฤษทุกวันมาหกเดือน
+x: Yes, I can. I study English every day for six months ago.
+x: Yes, I can't. I studied English every day for six months.
+A: Great. When can you start? = เยี่ยม คุณเริ่มงานได้เมื่อไหร่
+B: I can start next month. = ฉันเริ่มได้เดือนหน้าค่ะ
+x: I can starting next month.
+x: I can to start next month.
+
+# ------------------------------------------------------------------ UNIT 23
+@unit 23 | Hotel pro | มือโปรงานโรงแรม | 🎆 | รับมือแขกได้ทุกสถานการณ์
+
+@tip | ประโยคทองของพนักงานต้อนรับ
+tr: Welcome to our hotel. | ยินดีต้อนรับ
+tr: How can I help you? | มีอะไรให้ช่วยไหมคะ
+tr: Let me check. | ขอเช็คก่อนนะคะ
+tr: One moment, please. | รอสักครู่นะคะ
+tr: I'm sorry for the trouble. | ขอโทษที่ทำให้ลำบาก
+tr: Enjoy your stay! | ขอให้พักผ่อนอย่างมีความสุข
+ok: If you need anything, please call the front desk. | ถ้าต้องการอะไร กรุณาโทรหาแผนกต้อนรับ
+trick: ยิ้ม + please + thank you = แขกประทับใจทุกครั้ง 😊
+
+@lesson 23.1 | Full check-in | เช็คอินแบบมือโปร
+new: double_room
+Welcome to Sunshine Hotel. Do you have a reservation? = ยินดีต้อนรับสู่โรงแรมซันไชน์ค่ะ คุณจองห้องไว้หรือเปล่าคะ
+Could I see your passport, please? = ขอดูพาสปอร์ตของคุณหน่อยได้ไหมคะ
+You booked a double room for three nights. = คุณจองห้องดับเบิลไว้สามคืนค่ะ
+Breakfast is from 6:30 to 10 on the first floor. = อาหารเช้ามีตั้งแต่หกโมงครึ่งถึงสิบโมงที่ชั้นหนึ่งค่ะ
+Here is your key card. Your room is 512. = นี่คือคีย์การ์ดของคุณค่ะ ห้องของคุณคือห้อง 512
+The elevator is on your right. = ลิฟต์อยู่ทางขวามือค่ะ
+Enjoy your stay! = ขอให้พักผ่อนอย่างมีความสุขนะคะ!
+
+@lesson 23.2 | Special requests | คำขอพิเศษ
+new: late_check-out wake-up_call extra luggage keep
+Can I have a late check-out? = ขอเช็คเอาท์ช้าได้ไหม
+Of course. You can check out at 2. = ได้ค่ะ คุณเช็คเอาท์ได้ตอนบ่ายสองโมง
+I would like a wake-up call at 6. = ฉันต้องการให้โทรปลุกตอนหกโมง
+Could we have an extra bed? = ขอเตียงเสริมได้ไหม
+Can I leave my luggage here? = ฝากกระเป๋าเดินทางไว้ที่นี่ได้ไหม
+Yes, we will keep it for you. = ได้ค่ะ เราจะเก็บไว้ให้
+An extra bed is 500 baht a night. = เตียงเสริมคืนละห้าร้อยบาทค่ะ
+
+@lesson 23.3 | What do you recommend? | คุณแนะนำอะไร
+new: recommend should try tour sunscreen pad_thai
+What do you recommend? = คุณแนะนำอะไรบ้าง
+I recommend the night market. It's great! = ฉันแนะนำตลาดกลางคืนค่ะ เยี่ยมมาก!
+You should try pad thai. = คุณควรลองผัดไทยนะคะ
+The best time to visit is in the evening. = เวลาที่ดีที่สุดที่จะไปคือตอนเย็น
+You can book a tour at the front desk. = คุณจองทัวร์ได้ที่เคาน์เตอร์ต้อนรับค่ะ
+It takes about 20 minutes by taxi. = นั่งแท็กซี่ไปใช้เวลาประมาณยี่สิบนาที
+Don't forget your sunscreen! = อย่าลืมครีมกันแดดนะคะ!
+
+@lesson 23.4 | Taxi to the airport | แท็กซี่ไปสนามบิน
+new: flight cost
+Could you call a taxi to the airport? = ช่วยเรียกแท็กซี่ไปสนามบินให้หน่อยได้ไหม
+What time is your flight? = เที่ยวบินของคุณกี่โมงคะ
+You should leave at 9. = คุณควรออกเดินทางตอนเก้าโมงค่ะ
+The taxi will be here in 15 minutes. = แท็กซี่จะมาถึงในสิบห้านาทีค่ะ
+It costs about 400 baht. = ราคาประมาณสี่ร้อยบาทค่ะ
+Have a safe flight! = ขอให้เดินทางปลอดภัยนะคะ!
+We hope to see you again. = หวังว่าจะได้พบคุณอีกนะคะ
+
+@talk requests | Special requests | คำขอพิเศษ | hotel | Guest | 🧳
+A: Hi. Can I have a late check-out tomorrow? = สวัสดีครับ พรุ่งนี้ขอเช็คเอาท์ช้าได้ไหมครับ
+B: Let me check. Yes, you can check out at 2 o'clock. = ขอเช็คก่อนนะคะ ได้ค่ะ คุณเช็คเอาท์ได้ตอนบ่ายสองโมง
+x: Let me checks. Yes, you can check out at 2 o'clock.
+x: Let me check. Yes, you can checked out at 2 o'clock.
+A: Great. My flight is at 6 in the evening. = เยี่ยม เที่ยวบินของผมหกโมงเย็น
+B: Would you like me to book a taxi for you? = ต้องการให้ฉันจองแท็กซี่ให้ไหมคะ
+x: Would you like me book a taxi for you?
+x: Would you likes me to book a taxi for you?
+A: Yes, please. How much is it? = ครับ ราคาเท่าไหร่ครับ
+B: It costs about 400 baht. It takes 30 minutes. = ประมาณสี่ร้อยบาทค่ะ ใช้เวลาสามสิบนาที
+x: It cost about 400 baht. It takes 30 minutes.
+x: It costs about 400 baht. It take 30 minutes.
+A: Perfect. Can I leave my luggage here after check-out? = เยี่ยม ฝากกระเป๋าไว้ที่นี่หลังเช็คเอาท์ได้ไหมครับ
+B: Of course. We will keep it at the front desk. = ได้แน่นอนค่ะ เราจะเก็บไว้ที่เคาน์เตอร์ต้อนรับค่ะ
+x: Of course. We will keeps it at the front desk.
+x: Of course. We keeping it at the front desk.
+
+@talk airport | At the airport | ที่สนามบิน | travel | Officer | 👮
+A: Good morning. Can I see your passport? = อรุณสวัสดิ์ครับ ขอดูพาสปอร์ตหน่อยครับ
+B: Here you are. = นี่ค่ะ
+x: Here you is.
+x: Here are you.
+A: Where are you going? = คุณจะไปไหนครับ
+B: I'm going to the Maldives. = ฉันจะไปมัลดีฟส์ค่ะ
+x: I going to the Maldives.
+x: I'm go to the Maldives.
+A: How long will you stay there? = จะอยู่ที่นั่นนานแค่ไหนครับ
+B: I will stay for two weeks. = ฉันจะอยู่สองสัปดาห์ค่ะ
+x: I will staying for two weeks.
+x: I will stay for two week.
+A: Is this your first visit? = นี่เป็นการไปครั้งแรกหรือเปล่าครับ
+B: Yes, it is. I'm visiting my boyfriend. = ใช่ค่ะ ฉันไปเยี่ยมแฟน
+x: Yes, it is. I visiting my boyfriend.
+x: Yes, it are. I'm visiting my boyfriend.
+A: Have a nice trip! = เดินทางให้สนุกนะครับ!
+
+# ------------------------------------------------------------------ UNIT 24
+@unit 24 | Graduation | จบหลักสูตร | 👑 | คุยเรื่องทั่วไปได้อย่างมั่นใจ
+
+@tip | สรุปทั้งหมดใน 6 เดือน
+tr: am / is / are | I am happy.
+tr: ทำเป็นประจำ | She works here.
+tr: กำลังทำ | I am working.
+tr: อดีต | I worked. · I went.
+tr: อนาคต | I will go. · I'm going to go.
+tr: ถ้า | If it rains, I will stay home.
+trick: คุณเรียนครบทุกอย่างแล้ว! ฝึกพูดวันละนิด แล้วจะเก่งขึ้นทุกวัน 🎓
+
+@lesson 24.1 | Small talk | คุยเล่น
+new: practice plan shirt
+It's a beautiful day, isn't it? = วันนี้อากาศดีนะคะ ว่าไหม
+Your English is very good! = ภาษาอังกฤษของคุณเก่งมาก!
+Thank you! I practice every day. = ขอบคุณค่ะ! ฉันฝึกทุกวัน
+Do you have any plans for today? = วันนี้คุณมีแผนอะไรไหมคะ
+I like your shirt. = ฉันชอบเสื้อของคุณ
+Is everything OK with your room? = ห้องพักเรียบร้อยดีไหมคะ
+Nice to see you again! = ดีใจที่ได้เจอคุณอีกครั้ง!
+
+@lesson 24.2 | I miss you | ฉันคิดถึงคุณ
+new: miss sad take_care congratulations can't_wait yourself
+I miss you. = ฉันคิดถึงคุณ
+I'm so happy for you! = ฉันดีใจด้วยนะ!
+Don't be sad. Everything will be OK. = อย่าเศร้าเลย ทุกอย่างจะโอเค
+I'm here for you. = ฉันอยู่ตรงนี้เพื่อคุณนะ
+Take care of yourself. = ดูแลตัวเองด้วยนะ
+Congratulations! = ยินดีด้วย!
+I can't wait to see you! = อยากเจอคุณจะแย่แล้ว!
+
+@lesson 24.3 | My English journey | เส้นทางภาษาอังกฤษของฉัน
+new: anymore word
+Six months ago, I didn't speak much English. = หกเดือนที่แล้ว ฉันพูดภาษาอังกฤษได้ไม่มาก
+Now I can talk to guests every day. = ตอนนี้ฉันคุยกับแขกได้ทุกวัน
+I don't forget "am" anymore! = ฉันไม่ลืมคำว่า am อีกแล้ว!
+I learned a lot of new words. = ฉันได้เรียนคำศัพท์ใหม่มากมาย
+English is not so hard now. = ตอนนี้ภาษาอังกฤษไม่ยากขนาดนั้นแล้ว
+I will keep studying. = ฉันจะเรียนต่อไปเรื่อย ๆ
+I'm proud of myself. = ฉันภูมิใจในตัวเอง
+
+@lesson 24.4 | Graduation day | วันจบการศึกษา
+new: special without couldn't confidence celebrate beginning
+Today is a special day. = วันนี้เป็นวันพิเศษ
+I finished the English course! = ฉันเรียนจบคอร์สภาษาอังกฤษแล้ว!
+Thank you for helping me. = ขอบคุณที่ช่วยฉันนะ
+I couldn't do it without you. = ถ้าไม่มีคุณ ฉันคงทำไม่ได้
+Now I can speak English with confidence. = ตอนนี้ฉันพูดภาษาอังกฤษได้อย่างมั่นใจ
+Let's celebrate! = มาฉลองกันเถอะ!
+This is just the beginning. = นี่เป็นแค่จุดเริ่มต้น
+
+@talk graduation | I did it! | ฉันทำได้แล้ว! | love | {bf} | 💙
+B: Guess what? I finished my English course today! = รู้อะไรไหม วันนี้ฉันเรียนจบคอร์สภาษาอังกฤษแล้ว!
+x: Guess what? I finish my English course yesterday!
+x: Guess what? I finished my English course tomorrow!
+A: Congratulations! I'm so proud of you! = ยินดีด้วย! ภูมิใจในตัวเธอมาก!
+B: Thank you! I studied every day for six months. = ขอบคุณค่ะ! ฉันเรียนทุกวันตลอดหกเดือน
+x: Thank you! I study every day for six months ago.
+x: Thank you! I studyed every day for six months.
+A: Your English is really good now. = ตอนนี้ภาษาอังกฤษของเธอเก่งมากจริง ๆ
+B: I can talk to guests, and I never forget "am"! = ฉันคุยกับแขกได้ และฉันไม่เคยลืม am เลย!
+x: I can talks to guests, and I never forget "am"!
+x: I can talk to guests, and I never forgets "am"!
+A: Let's celebrate! What would you like to do? = มาฉลองกัน! อยากทำอะไร
+B: I would like to have dinner with you. = ฉันอยากกินข้าวเย็นกับคุณ
+x: I would like have dinner with you.
+x: I would likes to have dinner with you.
+A: It's a date! = ตกลง นัดกันแล้วนะ!
+
+@talk welcomeback | Welcome back! | ยินดีต้อนรับกลับมา | hotel | Guest | 🧳
+B: Welcome back, Mr. Smith! Nice to see you again. = ยินดีต้อนรับกลับมาค่ะ คุณสมิธ ดีใจที่ได้พบคุณอีกครั้ง
+x: Welcome back, Mr. Smith! Nice to sees you again.
+x: Welcome back, Mr. Smith! Nice see you again.
+A: Thank you, Alvee! Your English is great now! = ขอบคุณครับ Alvee! ตอนนี้ภาษาอังกฤษของคุณเก่งมาก!
+B: Thank you! I practiced a lot. How was your flight? = ขอบคุณค่ะ! ฉันฝึกเยอะมาก เที่ยวบินเป็นยังไงบ้างคะ
+x: Thank you! I practice a lot yesterday. How was your flight?
+x: Thank you! I practiced a lot. How were your flight?
+A: It was long, but I slept well. = นานครับ แต่ผมนอนหลับสบาย
+B: Your room is ready. I gave you a room with a sea view. = ห้องของคุณพร้อมแล้วค่ะ ฉันจัดห้องวิวทะเลให้คุณค่ะ
+x: Your room ready. I gave you a room with a sea view.
+x: Your room is ready. I give you a room with a sea view yesterday.
+A: Wonderful! Thank you so much. = วิเศษมาก! ขอบคุณมาก ๆ ครับ
+B: You're welcome. If you need anything, just call me. = ยินดีค่ะ ถ้าต้องการอะไร โทรหาฉันได้เลยนะคะ
+x: You're welcome. If you will need anything, just call me.
+x: You're welcome. If you need anything, just calls me.
