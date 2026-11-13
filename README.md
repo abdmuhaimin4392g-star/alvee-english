@@ -17,11 +17,13 @@ Open http://localhost:8080. The first time, the server prints a **setup code**; 
 
 ## Put it on your Ubuntu server
 
-Copy this folder to the server (or `git clone` it), then:
+On the server, paste this one line (it downloads this repo and installs it):
 
 ```
-sudo bash deploy/install.sh english.yourdomain.com
+curl -fsSL https://github.com/abdmuhaimin4392g-star/alvee-english/archive/refs/heads/main.tar.gz | tar -xz -C /tmp && sudo bash /tmp/alvee-english-main/deploy/install.sh english.raaverifarmai.com
 ```
+
+Or copy this folder to the server yourself and run `sudo bash deploy/install.sh english.raaverifarmai.com`.
 
 - Without a domain (`sudo bash deploy/install.sh`) it runs on `http://SERVER-IP:3088`.
 - With a domain, first add a DNS **A record** for that name pointing to the server. The script adds a new site to Caddy or nginx (existing sites are not changed; if the config check fails it rolls back).
