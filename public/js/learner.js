@@ -289,13 +289,13 @@
 
     const unread = (A.msgs || []).filter((m) => !m.readAt && A.msgUnlocked(m, st));
     if (unread.length) {
-      root.append(h('button', { class: 'card msg-card', style: { border: '2px solid #F7BFCD', textAlign: 'left' }, onclick: () => openMsg(unread[0]) },
+      root.append(h('button', { class: 'card msg-card', style: { textAlign: 'left' }, onclick: () => openMsg(unread[0]) },
         h('span', { class: 'env' }, '💌'),
         h('div', null, h('b', null, 'New message from ' + A.bf.name), h('div', { class: 'small th' }, 'มีข้อความใหม่ แตะเพื่ออ่าน'))));
     }
 
     const pct = Math.min(1, xpToday / goal);
-    const ring = h('div', { class: 'ring', html: `<svg viewBox="0 0 36 36" width="58" height="58"><circle cx="18" cy="18" r="15.5" fill="none" stroke="#D9F0EE" stroke-width="4"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="${pct >= 1 ? '#17955A' : '#FFB21E'}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(pct * 97.4).toFixed(1)} 97.4"/></svg>` }, h('span', null, pct >= 1 ? '✓' : Math.round(pct * 100) + '%'));
+    const ring = h('div', { class: 'ring', html: `<svg viewBox="0 0 36 36" width="58" height="58"><circle cx="18" cy="18" r="15.5" fill="none" style="stroke:var(--sea-tint)" stroke-width="4"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="${pct >= 1 ? '#17955A' : '#FFB21E'}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(pct * 97.4).toFixed(1)} 97.4"/></svg>` }, h('span', null, pct >= 1 ? '✓' : Math.round(pct * 100) + '%'));
     const today = h('div', { class: 'card today' });
     if (next) {
       const t = A.nodeTitle(next);
@@ -510,7 +510,8 @@
       sw('🐢 เสียงพูดช้าลง · Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
       sw('🔔 เสียงเอฟเฟกต์ · Sound effects', set.sfx, () => { set.sfx = !set.sfx; applySettings(); A.saveSoon(); A.go('me'); }),
       sw('🔠 ตัวหนังสือใหญ่ · Bigger text', set.big, () => { set.big = !set.big; applySettings(); A.saveSoon(); A.go('me'); }),
-      sw('🇹🇭 แสดงคำแปลเสมอ · Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); })));
+      sw('🇹🇭 แสดงคำแปลเสมอ · Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); }),
+      h('div', { class: 'switch' }, h('span', { class: 'th' }, '🌙 โหมดกลางคืน · Night mode', h('div', { class: 'tiny muted' }, 'Auto = ตามโทรศัพท์')), A.theme.picker((v) => { A.track('night_mode', { v }); A.go('me'); }))));
     if (!A.speech.ok) root.append(h('div', { class: 'note' }, 'เครื่องนี้ไม่รองรับเสียงพูด ลองเปิดใน Safari บน iPhone นะ'));
     root.append(h('button', { class: 'btn ghost block', onclick: async () => { await A.flush(); await A.api.logout(); A.user = null; A.state = null; A.go('login'); } }, 'Log out · ออกจากระบบ'));
     return root;

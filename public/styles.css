@@ -29,6 +29,7 @@
   --shadow: 0 1px 0 rgba(18, 49, 58, .04), 0 6px 18px rgba(18, 49, 58, .07);
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
+  --nav-bg: rgba(255, 255, 255, .96);
   color-scheme: light;
   font-size: 17px;
 }
@@ -163,7 +164,7 @@ p { margin: 0; }
 /* ---------- bottom nav */
 .nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  background: rgba(255, 255, 255, .96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  background: var(--nav-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid var(--line); padding: 6px 6px calc(6px + var(--safe-b));
 }
 .nav .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); }
@@ -449,3 +450,54 @@ select.input { appearance: none; background-image: linear-gradient(45deg, transp
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ---------- night mode: the lagoon after sunset. Same layout, deep-sea colours, softer glare */
+:root.dark {
+  --bg: #0A1A1F;
+  --surface: #11262D;
+  --surface-2: #163038;
+  --ink: #E2EFED;
+  --muted: #8FAAAE;
+  --line: #24414A;
+  --sea: #1FA7A3;
+  --sea-deep: #0F6E6D;
+  --sea-tint: #123B3E;
+  --mango: #FFB21E;
+  --mango-deep: #B87700;
+  --mango-tint: #3A2C0F;
+  --hibiscus: #FF6E8E;
+  --hibiscus-tint: #3A1823;
+  --good: #33C27B;
+  --good-deep: #5FD99A;
+  --good-bg: #0F2E1F;
+  --bad: #F06A61;
+  --bad-deep: #FF8F87;
+  --bad-bg: #3A1715;
+  --nav-bg: rgba(14, 33, 39, .94);
+  --shadow: 0 1px 0 rgba(0, 0, 0, .25), 0 6px 18px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+:root.dark .pill.grey { background: #1C3740; }
+:root.dark .pill.mango, :root.dark .badge.on { color: #FFCF6E; }
+:root.dark .pill.love { color: #FF9DB4; }
+:root.dark .stars .off { color: #36545C; }
+:root.dark .msg-card { border-color: #6B2A3D; }
+:root.dark .month-head.locked .mn { background: #2A454D; }
+:root.dark .node { box-shadow: 0 4px 0 #07141A; }
+:root.dark .node.open { box-shadow: 0 4px 0 var(--mango-deep); }
+:root.dark .node.done { box-shadow: 0 4px 0 var(--sea-deep); }
+:root.dark .node .st { text-shadow: 0 1px 0 #000; }
+:root.dark .fb .why { background: rgba(0, 0, 0, .25); }
+:root.dark .toast { background: #E2EFED; color: #0A1A1F; }
+:root.dark .toggle, :root.dark .str i, :root.dark .dot { background: #2E4A52; }
+:root.dark .toggle.on { background: var(--sea); }
+:root.dark .dot.on { background: #22C55E; }
+:root.dark .veil { background: rgba(0, 0, 0, .6); }
+:root.dark .btn:disabled { box-shadow: 0 4px 0 #2E4A52; }
+:root.dark .btn.mango { color: #2A1B00; }
+:root.dark .resort svg { filter: brightness(.9); }
+
+/* night mode picker */
+.seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 3px; flex: none; }
+.seg3 button { border: 0; background: none; border-radius: 9px; padding: 6px 10px; font-size: .85rem; color: var(--muted); }
+.seg3 button.on { background: var(--sea); color: #fff; }

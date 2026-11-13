@@ -329,6 +329,7 @@
       A.api.mode === 'server' ? f('s-mypass', 'Your new password', '', 'password') : null,
       A.api.mode === 'server' ? h('button', { class: 'btn ghost block', onclick: async () => { const p = document.getElementById('s-mypass').value; if (p.length < 4) { msg3.textContent = 'Use at least 4 characters.'; return; } await A.api.updateUser(A.user.id, { password: p }); msg3.textContent = 'Password changed.'; } }, 'Change your password') : null,
       msg3));
+    box.append(h('div', { class: 'card stack' }, h('div', { class: 'switch', style: { padding: 0 } }, h('div', null, h('b', null, '🌙 Night mode'), h('div', { class: 'small muted' }, 'On this phone. Auto follows the phone\'s dark mode.')), A.theme.picker(() => {}))));
     if (A.api.mode === 'demo') {
       box.append(h('div', { class: 'card stack' }, h('b', null, 'Preview tools'),
         h('div', { class: 'small muted' }, 'Fill the dashboard with a made-up week of practice so you can see how it looks. This replaces the preview progress.'),

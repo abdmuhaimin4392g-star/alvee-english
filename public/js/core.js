@@ -20,6 +20,24 @@
     for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid instanceof Node ? kid : String(kid));
     return el;
   };
+  // ------------------------------------------------------------- night mode (per phone: auto / dark / light)
+  A.theme = {
+    get() { try { return localStorage.getItem('ae.theme') || 'auto'; } catch (e) { return 'auto'; } },
+    set(v) { try { localStorage.setItem('ae.theme', v); } catch (e) { /* private mode */ } A.theme.apply(); },
+    isDark() { const v = A.theme.get(); return v === 'dark' || (v === 'auto' && !!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); },
+    apply() {
+      const d = A.theme.isDark();
+      document.documentElement.classList.toggle('dark', d);
+      const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = d ? '#0A1A1F' : '#0E8A8A';
+    },
+    picker(onChange) {
+      const cur = A.theme.get();
+      return A.h('div', { class: 'seg3', role: 'radiogroup', 'aria-label': 'Night mode' },
+        [['auto', 'Auto'], ['dark', 'On'], ['light', 'Off']].map(([v, t]) => A.h('button', { class: cur === v ? 'on' : '', role: 'radio', 'aria-checked': cur === v ? 'true' : 'false', onclick: () => { A.theme.set(v); onChange && onChange(v); } }, t)));
+    },
+  };
+  A.theme.apply();
+  if (window.matchMedia) { try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => A.theme.apply()); } catch (e) { /* old Safari */ } }
   A.$ = (s, el = document) => el.querySelector(s);
   A.clear = (el) => { while (el.firstChild) el.removeChild(el.firstChild); return el; };
   A.debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
