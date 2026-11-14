@@ -1,0 +1,304 @@
+/* voyage.js — Alvee's voyage from Thailand to the Maldives.
+   Every lesson, conversation and test is an island. Her boat sails to the next island when she finishes one.
+   On the way: shells, pearls, chests (opened with a small English task), bottles, side islands and daily quests.
+   No money and no trading: pearls unlock boats, chests fill the treasure book. */
+(function () {
+  'use strict';
+  const A = window.AE, C = A.C, h = A.h;
+  const T = A.treasure, SC = A.scenes;
+  const V = (A.voyage = {});
+
+  // ---------------------------------------------------------------- the eight seas (3 units each)
+  V.SEAS = [
+    { id: 'cp', en: 'Chao Phraya River', th: 'แม่น้ำเจ้าพระยา', from: 1, to: 3, ter: 'river', col: ['#4FA59C', '#2B6E6A'], art: ['th1', 'th2', 'th10'], flag: 'th',
+      names: ['Bangkok Pier', 'Wat Arun Steps', 'Grand Palace Quay', 'Tha Tien', 'Chinatown Dock', 'Flower Market Pier', 'Asiatique', 'Thonburi Canal', 'Rama VIII Bridge', 'Ko Kret', 'Nonthaburi Pier', 'Bang Krachao', 'Sathorn Pier', 'Khlong Lat Mayom', 'Damnoen Saduak', 'Amphawa', 'Mae Klong', 'Samut Prakan', 'Bang Pu', 'River Mouth'] },
+    { id: 'gulf', en: 'Gulf of Thailand', th: 'อ่าวไทย', from: 4, to: 6, ter: 'jungle', col: ['#38B6C4', '#16707F'], art: ['th6', 'th5', 'th9'], flag: 'th',
+      names: ['Bang Saen', 'Ko Si Chang', 'Pattaya', 'Ko Lan', 'Sattahip', 'Ko Samet', 'Ko Chang', 'Ko Kut', 'Ko Mak', 'Hua Hin', 'Pranburi', 'Prachuap Bay', 'Chumphon', 'Ko Tao', 'Ko Nang Yuan', 'Ko Pha Ngan', 'Ko Samui', 'Ang Thong', 'Nakhon Si Thammarat', 'Songkhla'] },
+    { id: 'mal', en: 'Strait of Malacca', th: 'ช่องแคบมะละกา', from: 7, to: 9, ter: 'jungle', col: ['#2E9FB2', '#145F74'], art: ['th3', 'th4'], flag: 'th',
+      names: ['Pattani Bay', 'Kota Bharu', 'Redang', 'Perhentian', 'Tioman', 'Singapore Strait', 'Johor Shoals', 'Port Dickson', 'Malacca Lighthouse', 'Pangkor', 'Penang', 'Langkawi', 'Ko Lipe', 'Ko Adang', 'Ko Tarutao', 'Ko Bulon', 'Ko Kradan', 'Ko Mook', 'Ko Ngai', 'Trang Coast'] },
+    { id: 'and', en: 'Andaman Sea', th: 'ทะเลอันดามัน', from: 10, to: 12, ter: 'karst', col: ['#20B7B0', '#0B6E7A'], art: ['th7', 'th8'], flag: 'th',
+      names: ['Ko Lanta', 'Ko Phi Phi', 'Loh Samah', 'Railay', 'Ao Nang', 'Ko Hong', 'Phang Nga Bay', 'Ko Tapu', 'Ko Yao Noi', 'Ko Yao Yai', 'Phuket', 'Promthep Cape', 'Ko Racha', 'Khao Lak', 'Similan Islands', 'Ko Tachai', 'Ko Bon', 'Surin Islands', 'Richelieu Rock', 'Andaman Gate'] },
+    { id: 'bob', en: 'Bay of Bengal', th: 'อ่าวเบงกอล', from: 13, to: 15, ter: 'open', col: ['#2C7FB8', '#123E73'], art: ['mv4', 'mv6'], flag: 'th',
+      names: ['Ten Degree Channel', 'Havelock Island', 'Neil Island', 'Barren Island', 'Car Nicobar', 'Great Nicobar', 'Dolphin Drift', 'Flying Fish Reach', 'Whale Road', 'Monsoon Gate', 'Star Compass Rock', 'Albatross Rest', 'Moonwater', 'Six Degree Channel', 'Turtle Current', 'Coral Garden', 'Sailor’s Rest', 'Lantern Shoal', 'Blue Hole', 'Lighthouse of Hope'] },
+    { id: 'sl', en: 'Sri Lanka Coast', th: 'ชายฝั่งศรีลังกา', from: 16, to: 18, ter: 'jungle', col: ['#2EA59A', '#0E6460'], art: ['mv7', 'mv10'], flag: 'th',
+      names: ['Trincomalee', 'Pigeon Island', 'Batticaloa', 'Arugam Bay', 'Yala Coast', 'Hambantota', 'Dondra Head', 'Mirissa', 'Weligama', 'Galle Fort', 'Unawatuna', 'Hikkaduwa', 'Bentota', 'Colombo', 'Negombo', 'Kalpitiya', 'Cape Comorin', 'Spice Harbour', 'Tea Hills Bay', 'Whale Watch Point'] },
+    { id: 'nm', en: 'Northern Atolls', th: 'อะทอลล์ตอนเหนือ (มัลดีฟส์)', from: 19, to: 21, ter: 'atoll', col: ['#2FD0C6', '#0F8792'], art: ['mv3', 'mv5', 'mv9'], flag: 'mv',
+      names: ['Minicoy Light', 'Eight Degree Channel', 'Haa Alif', 'Ihavandhoo', 'Dhidhdhoo', 'Hanimaadhoo', 'Kulhudhuffushi', 'Noonu', 'Raa', 'Baa Atoll', 'Hanifaru Bay', 'Dharavandhoo', 'Lhaviyani', 'Naifaru', 'Thoddoo', 'Rasdhoo', 'Ari Atoll', 'Maamigili', 'Dhigurah', 'Fenfushi'] },
+    { id: 'south', en: 'Malé to Addu', th: 'จากมาเลถึงอัดดู', from: 22, to: 24, ter: 'atoll', col: ['#3DDCCB', '#0C97A0'], art: ['mv1', 'mv2', 'mv8'], flag: 'mv',
+      names: ['Hulhulé', 'Malé', 'Hulhumalé', 'Maafushi', 'Gulhi', 'Vaavu', 'Fotteyo', 'Meemu', 'Faafu', 'Dhaalu', 'Thaa', 'Laamu', 'Huvadhu', 'Fuvahmulah', 'Equator Line', 'Addu Gan', 'Feydhoo', 'Maradhoo', 'Hithadhoo', 'Hulhumeedhoo'] },
+  ];
+  V.seaOfUnit = (u) => V.SEAS.find((s) => u >= s.from && u <= s.to) || V.SEAS[V.SEAS.length - 1];
+
+  // ---------------------------------------------------------------- shells (a collection of 16 kinds)
+  // [id, English, Thai, rarity, shape, main colour, second colour]
+  V.SHELLS = [
+    ['cowrie', 'Cowrie', 'หอยเบี้ย', 'c', 'cowrie', '#F2D6A2', '#B07A3A'],
+    ['scallop', 'Scallop', 'หอยพัด', 'c', 'scallop', '#F6A07B', '#C8563A'],
+    ['clam', 'Clam', 'หอยลาย', 'c', 'clam', '#E9E1CF', '#9C8A6A'],
+    ['auger', 'Auger', 'หอยเจดีย์', 'c', 'auger', '#E8C9A0', '#8C5A2B'],
+    ['turban', 'Turban', 'หอยนมสาว', 'c', 'turban', '#9FD2B8', '#3E7F64'],
+    ['cone', 'Cone', 'หอยเต้าปูน', 'u', 'cone', '#F7E6B8', '#B5651D'],
+    ['moon', 'Moon Snail', 'หอยพระจันทร์', 'u', 'turban', '#DCD6F2', '#7D73B8'],
+    ['tiger', 'Tiger Cowrie', 'หอยเบี้ยลายเสือ', 'u', 'cowrie', '#F4C77C', '#5A3A1E'],
+    ['sanddollar', 'Sand Dollar', 'เหรียญทะเล', 'u', 'dollar', '#F1E7D0', '#BBA57E'],
+    ['conch', 'Queen Conch', 'หอยสังข์', 'r', 'conch', '#FFC1A8', '#E0607A'],
+    ['murex', 'Murex', 'หอยหนาม', 'r', 'murex', '#EFE3CF', '#8E6B4A'],
+    ['spider', 'Spider Conch', 'หอยแมงมุม', 'r', 'murex', '#F7D9B0', '#C96A3A'],
+    ['abalone', 'Abalone', 'หอยเป๋าฮื้อ', 'e', 'abalone', '#8FD3E8', '#B184E0'],
+    ['giantclam', 'Giant Clam', 'หอยมือเสือ', 'e', 'clam', '#7EE0C6', '#3B6FD8'],
+    ['nautilus', 'Nautilus', 'หอยงวงช้าง', 'e', 'nautilus', '#FFF3DE', '#C2622E'],
+    ['goldcowrie', 'Golden Cowrie', 'หอยเบี้ยทองคำ', 'l', 'cowrie', '#FFE17A', '#C58A00'],
+  ];
+  V.shell = (id) => V.SHELLS.find((s) => s[0] === id);
+  const SHAPE = {
+    cowrie: (a, b) => `<ellipse cx="30" cy="30" rx="20" ry="25" fill="${a}"/><ellipse cx="30" cy="24" rx="15" ry="16" fill="#fff" opacity=".25"/><path d="M30 8v44" stroke="${b}" stroke-width="3"/><path d="M27 14h-4M27 20h-5M27 26h-5M27 32h-5M27 38h-5M27 44h-4M33 14h4M33 20h5M33 26h5M33 32h5M33 38h5M33 44h4" stroke="${b}" stroke-width="1.6"/>`,
+    scallop: (a, b) => `<path d="M30 52L8 24Q30 0 52 24Z" fill="${a}"/><path d="M30 52L12 22M30 52L19 15M30 52L25 11M30 52V10M30 52L35 11M30 52L41 15M30 52L48 22" stroke="${b}" stroke-width="1.8"/><path d="M22 52h16l-3 5h-10z" fill="${b}"/>`,
+    clam: (a, b) => `<path d="M8 32Q8 8 30 8T52 32Q52 50 30 52Q8 50 8 32Z" fill="${a}"/><path d="M14 32Q14 14 30 14T46 32M19 33Q19 20 30 20T41 33M24 34Q24 26 30 26T36 34" stroke="${b}" stroke-width="1.6" fill="none"/>`,
+    auger: (a, b) => `<path d="M30 4L42 54H18Z" fill="${a}"/><path d="M22 46L38 42M23 38L37 34M25 30L35 27M26 22L34 20M28 15L33 13" stroke="${b}" stroke-width="2"/>`,
+    turban: (a, b) => `<path d="M10 40Q10 14 32 12Q52 14 50 36Q48 52 28 52Q10 52 10 40Z" fill="${a}"/><path d="M18 40Q18 22 32 22Q42 24 41 34Q40 42 30 42Q24 42 24 36" stroke="${b}" stroke-width="2.4" fill="none"/>`,
+    cone: (a, b) => `<path d="M14 10H46L30 56Z" fill="${a}"/><g fill="${b}"><path d="M18 14h6l-2 5h-5zM28 14h6l-2 5h-5zM38 14h5l-2 5h-4zM21 24h6l-2 5h-5zM32 24h6l-2 5h-5zM25 35h5l-2 5h-4zM32 35h4l-1 4h-4zM28 45h4l-2 4h-3z"/></g>`,
+    dollar: (a, b) => `<circle cx="30" cy="30" r="24" fill="${a}"/><g fill="none" stroke="${b}" stroke-width="2"><path d="M30 14Q34 22 30 28Q26 22 30 14Z"/><path d="M45 25Q37 28 32 31Q38 22 45 25Z"/><path d="M15 25Q23 28 28 31Q22 22 15 25Z"/><path d="M40 44Q34 38 32 33Q41 37 40 44Z"/><path d="M20 44Q26 38 28 33Q19 37 20 44Z"/></g>`,
+    conch: (a, b) => `<path d="M14 18Q30 2 48 14L56 34Q44 56 22 52Q8 46 14 18Z" fill="${a}"/><path d="M48 14L56 34Q46 40 36 34Q42 24 48 14Z" fill="${b}" opacity=".8"/><path d="M16 22l-6-6M22 14l-3-8M30 10l1-8M40 10l5-6" stroke="${a}" stroke-width="4" stroke-linecap="round"/>`,
+    murex: (a, b) => `<path d="M30 6L42 30L34 56H26L18 30Z" fill="${a}"/><path d="M18 30L6 24M19 38L8 40M42 30L54 24M41 38L52 40M22 20L12 14M38 20L48 14M26 48L18 54M34 48L42 54" stroke="${b}" stroke-width="3" stroke-linecap="round"/>`,
+    abalone: (a, b) => `<defs><linearGradient id="abg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".5" stop-color="#F5D0F0"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><path d="M8 30Q8 8 34 8Q54 10 52 32Q50 52 26 52Q8 50 8 30Z" fill="url(#abg)"/><g fill="#fff" opacity=".7"><circle cx="18" cy="20" r="2.2"/><circle cx="25" cy="15" r="2.2"/><circle cx="33" cy="13" r="2.2"/><circle cx="41" cy="14" r="2.2"/></g>`,
+    nautilus: (a, b) => `<circle cx="30" cy="30" r="24" fill="${a}"/><path d="M30 6Q54 8 54 30M30 54Q8 52 8 30M14 14Q22 24 22 34M44 46Q38 38 34 28M42 10Q40 20 36 26" stroke="${b}" stroke-width="3" fill="none"/><path d="M30 30m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" fill="${b}" opacity=".5"/>`,
+  };
+  V.shellSVG = (id, size) => { const s = V.shell(id) || V.SHELLS[0]; return `<svg class="shell-svg" viewBox="0 0 60 60" width="${size || 40}" height="${size || 40}" aria-hidden="true">${SHAPE[s[4]](s[5], s[6])}<ellipse cx="22" cy="18" rx="6" ry="3" fill="#fff" opacity=".35"/></svg>`; };
+
+  // ---------------------------------------------------------------- boats (all the Op Crab boats, unlocked with pearls)
+  V.BOATS = [
+    { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', p: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
+    { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', p: 25, isl: 10, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
+    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', p: 50, isl: 22, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
+    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', p: 90, isl: 38, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
+    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', p: 140, isl: 58, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
+    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', p: 200, isl: 80, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
+    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', p: 270, isl: 100, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
+    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', p: 350, isl: 122, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
+    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', p: 450, isl: 145, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
+  ];
+  V.boat = (id) => V.BOATS.find((b) => b.id === id) || V.BOATS[0];
+  V.boatPic = (id, flip, cls) => {
+    const b = V.boat(id);
+    if (b.id === 'sloop') return `<span class="boat-pic ${cls || ''}" style="--bw:${b.w}px">${T.sloop(flip)}</span>`;
+    return `<img class="boat-pic ${cls || ''}" src="img/boats/${b.id}.webp" alt="" draggable="false" style="--bw:${b.w}px${flip ? ';transform:scaleX(-1)' : ''}">`;
+  };
+
+  // ---------------------------------------------------------------- state
+  V.st = (st) => {
+    st = st || A.state;
+    const s = st.sea || (st.sea = {});
+    s.p = s.p || 0; s.pt = s.pt || 0; s.sh = s.sh || {}; s.tre = s.tre || {}; s.got = s.got || {};
+    s.boats = s.boats || ['sloop']; s.boat = s.boat || 'sloop'; s.side = s.side || {}; s.q = s.q || {}; s.pc = s.pc || {};
+    if (s.at == null) s.at = -1;
+    return s;
+  };
+  V.ctl = () => A.ctl || {};
+  const mult = () => { const m = V.ctl().mult; return m && m.until > Date.now() ? m : null; };
+  V.addPearls = (n, st) => { const s = V.st(st); const m = mult(); const k = Math.round(n * (m && m.p ? m.p : 1)); s.p += k; s.pt += k; return k; };
+  V.shellCount = (st) => Object.values(V.st(st).sh).reduce((a, b) => a + b, 0);
+  V.treCount = (st) => Object.keys(V.st(st).tre).length;
+
+  // daily quest counters
+  const QDEF = [
+    ['les1', 'Finish 1 island', 'จบ 1 เกาะ', (d) => (d.les || 0) >= 1],
+    ['les2', 'Finish 2 islands', 'จบ 2 เกาะ', (d) => (d.les || 0) >= 2],
+    ['les3', 'Finish 3 islands', 'จบ 3 เกาะ', (d) => (d.les || 0) >= 3],
+    ['shell5', 'Pick up 5 shells', 'เก็บเปลือกหอย 5 ชิ้น', (d) => (d.shells || 0) >= 5],
+    ['pearl3', 'Find 3 pearls on the sea', 'เก็บไข่มุกในทะเล 3 เม็ด', (d) => (d.pearls || 0) >= 3],
+    ['chest1', 'Open a treasure chest', 'เปิดหีบสมบัติ 1 ใบ', (d) => (d.chest || 0) >= 1],
+    ['ans25', 'Answer 25 questions', 'ตอบคำถาม 25 ข้อ', (d) => (d.ans || 0) >= 25],
+    ['ans50', 'Answer 50 questions', 'ตอบคำถาม 50 ข้อ', (d) => (d.ans || 0) >= 50],
+    ['focus', 'Practise your weak spot', 'ฝึกจุดอ่อน 1 ครั้ง', (d) => (d.focus || 0) >= 1],
+    ['talk', 'Finish a conversation', 'ฝึกบทสนทนาจบ 1 เรื่อง', (d) => (d.talk || 0) >= 1],
+    ['perfect', 'Get 100% on an island', 'ได้ 100% ใน 1 เกาะ', (d) => (d.perfect || 0) >= 1],
+    ['review', 'Do one review', 'ทบทวน 1 ครั้ง', (d) => (d.review || 0) >= 1],
+  ];
+  const seeded = (seed) => { let a = seed * 7919 + 13; return () => ((a = (a * 16807) % 2147483647) / 2147483647); };
+  const hashStr = (s) => { let x = 0; for (let i = 0; i < s.length; i++) x = (x * 31 + s.charCodeAt(i)) | 0; return Math.abs(x) + 1; };
+  V.qday = (st) => { const s = V.st(st); const k = A.dkey(); if (!s.q[k]) { s.q = { [k]: { claimed: {} } }; } return s.q[k]; };
+  V.count = (key, n) => { if (V.ctl().questOff) return; const d = V.qday(); d[key] = (d[key] || 0) + (n || 1); };
+  V.quests = () => {
+    const r = seeded(hashStr(A.dkey()));
+    const pool = QDEF.slice(), out = [];
+    const fam = (id) => id.replace(/\d+$/, '');
+    while (out.length < 3 && pool.length) { const q = pool.splice(Math.floor(r() * pool.length), 1)[0]; if (!out.some((x) => fam(x[0]) === fam(q[0]))) out.push(q); }
+    const d = V.qday();
+    return out.map(([id, en, th, test]) => ({ id, en, th, done: test(d), claimed: !!d.claimed[id] }));
+  };
+  V.claimQuest = (id) => {
+    const d = V.qday(); if (d.claimed[id]) return 0;
+    const q = V.quests().find((x) => x.id === id); if (!q || !q.done) return 0;
+    d.claimed[id] = Date.now();
+    let got = V.addPearls(3);
+    if (V.quests().every((x) => x.claimed)) got += V.addPearls(5);
+    A.track('quest_claim', { id, got });
+    A.saveSoon();
+    return got;
+  };
+
+  // ---------------------------------------------------------------- the route: one island per lesson / conversation / test, plus side islands
+  let ROUTE = null;
+  V.route = () => {
+    if (ROUTE) return ROUTE;
+    const main = [], all = [];
+    V.SEAS.forEach((sea, si) => {
+      const nodes = A.nodes.filter((n) => n.u >= sea.from && n.u <= sea.to);
+      nodes.forEach((n, k) => {
+        const name = sea.names[k % sea.names.length] + (k >= sea.names.length ? ' ' + 'II III IV'.split(' ')[Math.floor(k / sea.names.length) - 1] : '');
+        const isl = { kind: 'node', node: n, sea: si, k, name, gi: main.length };
+        main.push(isl); all.push(isl);
+        // a side island after every fifth island
+        if (k % 5 === 3) {
+          const sid = 'side:' + sea.id + ':' + Math.floor(k / 5);
+          const MISS = ['speed', 'listen', 'talk', 'words', 'build'];
+          all.push({ kind: 'side', id: sid, sea: si, k, anchor: isl, mission: MISS[(si * 3 + Math.floor(k / 5)) % MISS.length], name: ['Hidden Cove', 'Secret Lagoon', 'Pirate Rock', 'Mermaid Bay', 'Lost Lighthouse', 'Firefly Isle', 'Treasure Key', 'Coconut Cay'][(si * 2 + Math.floor(k / 5)) % 8] });
+        }
+      });
+    });
+    ROUTE = { main, all };
+    return ROUTE;
+  };
+  // where the boat is: the first island not finished yet
+  V.curIndex = (st) => { const r = V.route().main; const i = r.findIndex((x) => !(st || A.state).done[x.node.id]); return i < 0 ? r.length - 1 : i; };
+  V.islandOpen = (st, isl) => {
+    if (isl.kind === 'side') return !!st.done[isl.anchor.node.id] && !V.ctl().sideOff;
+    const idx = A.nodes.indexOf(isl.node);
+    return A.isOpen(st, idx, A.user && A.user.cfg);
+  };
+  V.seasDone = (st) => V.SEAS.filter((s) => A.nodes.filter((n) => n.u >= s.from && n.u <= s.to).every((n) => st.done[n.id])).length;
+
+  // postcards: the painted scenes, earned as she sails through each sea
+  V.postcards = (st) => {
+    const out = [];
+    V.SEAS.forEach((sea, si) => {
+      const nodes = A.nodes.filter((n) => n.u >= sea.from && n.u <= sea.to);
+      const done = nodes.filter((n) => st.done[n.id]).length, frac = nodes.length ? done / nodes.length : 0;
+      const entered = si === 0 || V.route().main.some((x) => x.sea === si && st.done[x.node.id]) || (V.route().main[V.curIndex(st)] || {}).sea === si;
+      sea.art.forEach((id, k) => {
+        const need = k / Math.max(1, sea.art.length - 1);
+        out.push({ id, sea: si, on: entered && (k === 0 || frac >= need), alt: SC.ALT[id] });
+      });
+    });
+    return out;
+  };
+
+  // ---------------------------------------------------------------- things floating on the sea
+  // between island i and i+1: a shell, a pearl, a chest or a bottle (the same for ever, so she can plan)
+  V.spawnsFor = (gi) => {
+    const r = seeded(gi * 13 + 7), out = [];
+    const n = 1 + (r() < 0.55 ? 1 : 0);
+    for (let j = 0; j < n; j++) {
+      const x = r();
+      const kind = x < 0.46 ? 'shell' : x < 0.72 ? 'pearl' : x < 0.88 ? 'chest' : 'bottle';
+      out.push({ id: `s${gi}.${j}`, kind, gi, fx: 0.25 + r() * 0.5, fy: 0.3 + r() * 0.4, shell: kind === 'shell' ? pickShell(r) : null });
+    }
+    return out;
+  };
+  function pickShell(r) {
+    const W = { c: 60, u: 26, r: 10, e: 3.6, l: 0.4 }; let t = r() * 100;
+    for (const rar of ['c', 'u', 'r', 'e', 'l']) { t -= W[rar]; if (t <= 0 || rar === 'l') { const L = V.SHELLS.filter((s) => s[3] === rar); return L[Math.floor(r() * L.length)][0]; } }
+    return 'cowrie';
+  }
+  // three gifts from the tide each day, near the boat
+  V.dailySpawns = () => {
+    const k = A.dkey(), r = seeded(hashStr(k));
+    return [0, 1, 2].map((j) => { const x = r(); return { id: 'd' + k + '.' + j, kind: x < 0.6 ? 'shell' : x < 0.9 ? 'pearl' : 'chest', daily: 1, shell: pickShell(r), fx: r(), fy: r() }; });
+  };
+  V.gifts = () => (V.ctl().gifts || []).map((g) => ({ id: 'g' + g.id, kind: g.kind, gift: g }));
+
+  // ---------------------------------------------------------------- treasure rolls
+  V.rollTreasure = (golden) => {
+    const W = golden ? { c: 30, u: 34, r: 22, e: 12, l: 2 } : { c: 56, u: 26, r: 12.5, e: 4.5, l: 1 };
+    let t = Math.random() * Object.values(W).reduce((a, b) => a + b, 0), rar = 'c';
+    for (const k of T.ORDER) { t -= W[k]; if (t <= 0) { rar = k; break; } }
+    const s = V.st();
+    const L = T.ITEMS.filter((x) => x[3] === rar);
+    const fresh = L.filter((x) => !s.tre[x[0]]);
+    const it = (fresh.length && Math.random() < 0.75 ? A.pick(fresh) : A.pick(L));
+    const cur = s.tre[it[0]];
+    s.tre[it[0]] = { n: ((cur && cur.n) || 0) + 1, t: (cur && cur.t) || Date.now() };
+    return { item: it, isNew: !cur };
+  };
+
+  // ---------------------------------------------------------------- rewards after a session (called by the lesson player)
+  V.reward = (ses, acc, passed) => {
+    const st = A.state, s = V.st(st), out = { lines: [] };
+    const add = (n, en, th) => { const k = V.addPearls(n); out.pearls = (out.pearls || 0) + k; out.lines.push([`+${k} pearls · ${en}`, th]); };
+    V.count('ans', ses.graded);
+    const node = ses.node;
+    if (node && passed) {
+      const first = !ses.wasDone;
+      V.count('les');
+      if (acc === 100) V.count('perfect');
+      if (node.kind === 'lesson') add(first ? 3 + (acc === 100 ? 2 : 0) : 1, 'island finished', 'จบเกาะ');
+      else if (node.kind === 'talk') { add(first ? 3 : 1, 'conversation', 'บทสนทนา'); V.count('talk'); }
+      else { add(first ? 6 + (acc === 100 ? 3 : 0) : 2, 'test passed', 'ผ่านการสอบ'); if (first) { out.chest = V.rollTreasure(true); out.golden = 1; } }
+    }
+    if (ses.kind === 'talk') V.count('talk');
+    if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice', 'ฝึกฝน'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
+    if (ses.kind === 'chest') {
+      const sp = ses.arg;
+      if (ses.firstOk >= Math.ceil(ses.graded * 0.6)) {
+        s.got[sp.id] = Date.now(); V.count('chest');
+        out.chest = V.rollTreasure(sp.golden); out.golden = sp.golden ? 1 : 0;
+        add(1 + Math.floor(Math.random() * 3), 'from the chest', 'จากหีบ');
+        out.opened = 1;
+      } else out.locked = 1;
+    }
+    if (ses.kind === 'bottle') {
+      const sp = ses.arg;
+      if (acc >= 60) { s.got[sp.id] = Date.now(); add(3, 'message in a bottle', 'ข้อความในขวด'); if (Math.random() < 0.5) out.chest = V.rollTreasure(false); out.opened = 1; }
+      else out.locked = 1;
+    }
+    if (ses.kind === 'side') {
+      const isl = ses.arg;
+      if (acc >= 70) {
+        const first = !s.side[isl.id];
+        s.side[isl.id] = { a: Math.max(acc, (s.side[isl.id] && s.side[isl.id].a) || 0), t: Date.now() };
+        if (first) { add(5, 'side mission', 'ภารกิจเสริม'); out.chest = V.rollTreasure(true); out.golden = 1; } else add(1, 'side mission', 'ภารกิจเสริม');
+        out.opened = 1;
+      } else out.locked = 1;
+    }
+    A.saveSoon();
+    return out;
+  };
+
+  // ---------------------------------------------------------------- drawings
+  const ISL = {
+    river: (r, c) => `<ellipse cx="60" cy="70" rx="50" ry="13" fill="#9FD58F"/><ellipse cx="60" cy="66" rx="44" ry="10" fill="#6CBF6A"/>
+      <rect x="20" y="66" width="42" height="5" fill="#8a5a2e"/><g fill="#6b4423"><rect x="24" y="70" width="3" height="8"/><rect x="40" y="70" width="3" height="8"/><rect x="56" y="70" width="3" height="8"/></g>
+      <g transform="translate(70 34)"><rect x="-12" y="16" width="24" height="16" fill="#FBEBD0"/><path d="M-18 18L0 4 18 18Z" fill="#C8102E"/><path d="M-14 10L0 -2 14 10Z" fill="#E0A100"/><path d="M-9 2L0 -10 9 2Z" fill="#C8102E"/><path d="M0 -10V-18" stroke="#E0A100" stroke-width="2"/><rect x="-4" y="22" width="8" height="10" fill="#7a2a1a"/></g>
+      ${palm(30, 64, 0.55, c)}`,
+    jungle: (r, c) => `<ellipse cx="60" cy="72" rx="52" ry="12" fill="#F3DFA6"/><path d="M14 70Q24 30 52 36Q64 18 84 34Q104 38 106 70Z" fill="${r() < 0.5 ? '#3FA45E' : '#2F9150'}"/><path d="M30 68Q38 46 56 50Q70 40 86 52" stroke="#1F6E3B" stroke-width="2" fill="none" opacity=".5"/>${palm(24, 70, 0.6, c)}${palm(96, 70, 0.55, c, 1)}${r() < 0.4 ? '<g transform="translate(60 40)"><rect x="-6" y="-14" width="12" height="16" fill="#fff"/><path d="M-9 -14L0 -22 9 -14Z" fill="#E5476C"/></g>' : ''}`,
+    karst: (r, c) => `<ellipse cx="60" cy="74" rx="50" ry="10" fill="#F3DFA6"/>${karst(42, 72, 1.15, '#3C8F6B')}${karst(74, 74, 0.85, '#2F7F5F')}${r() < 0.6 ? karst(92, 74, 0.6, '#4A9E7A') : ''}${palm(22, 74, 0.5, c)}`,
+    open: (r, c) => `<ellipse cx="60" cy="72" rx="34" ry="10" fill="#C9B79A"/><path d="M34 72Q44 52 62 56Q80 50 88 72Z" fill="#8E8572"/><g transform="translate(64 30)"><rect x="-5" y="0" width="10" height="28" fill="#F6F6F2"/><rect x="-5" y="8" width="10" height="5" fill="#E5476C"/><rect x="-7" y="-8" width="14" height="9" rx="2" fill="#FFB21E"/><path d="M-8 -8l8 -7 8 7z" fill="#E5476C"/></g>${r() < 0.5 ? palm(40, 70, 0.4, c) : ''}`,
+    atoll: (r, c) => `<ellipse cx="60" cy="66" rx="52" ry="20" fill="#FBE6B0"/><ellipse cx="60" cy="66" rx="38" ry="12" fill="#5EE3D3"/><ellipse cx="60" cy="66" rx="28" ry="7" fill="#9AF3E6" opacity=".7"/>${palm(22, 62, 0.6, c)}${palm(98, 64, 0.55, c, 1)}${r() < 0.55 ? '<g transform="translate(74 50)"><path d="M0 14V24M12 14V24" stroke="#8a5a2e" stroke-width="1.6"/><rect x="-3" y="6" width="18" height="9" fill="#F8EBD3"/><path d="M-5 7L6 -2 17 7Z" fill="#B97A3E"/></g>' : ''}`,
+  };
+  function palm(x, y, s, c, flip) {
+    const night = c && c.night;
+    const lf = night ? '#1F5A4A' : '#2FA36B', lf2 = night ? '#174636' : '#1F8455', tr = night ? '#5E4A36' : '#9A6B42';
+    return `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s})"><path d="M0 0C2 -18 6 -34 14 -48" stroke="${tr}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M14 -48C2 -56 -12 -52 -18 -40C-8 -48 4 -50 14 -46Z M14 -48C26 -58 40 -54 44 -42C34 -50 24 -50 14 -46Z" fill="${lf}"/><path d="M14 -48C8 -64 18 -72 30 -70C20 -66 16 -58 15 -48Z M14 -48C4 -62 -8 -64 -14 -58C-4 -58 6 -54 13 -47Z" fill="${lf2}"/><circle cx="12" cy="-45" r="2.6" fill="#7A4E2A"/></g>`;
+  }
+  function karst(x, y, s, col) { return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0L-9 -34 -4 -26 1 -48 6 -30 12 -38 16 0Z" fill="${col}"/><path d="M-14 0L-9 -34 -4 -26 -3 0Z" fill="#000" opacity=".18"/><path d="M-6 -30q4 6 10 2" stroke="#7FD49C" stroke-width="3" fill="none" stroke-linecap="round"/></g>`; }
+  V.islandSVG = (isl, opts) => {
+    const o = opts || {};
+    const sea = V.SEAS[isl.sea];
+    const r = seeded(hashStr(isl.kind === 'side' ? isl.id : isl.node.id));
+    const ter = isl.kind === 'side' ? 'jungle' : (isl.node.kind === 'check' && sea.ter === 'river' ? 'jungle' : sea.ter);
+    let body = (ISL[ter] || ISL.atoll)(r, { night: o.night });
+    if (isl.kind === 'node' && isl.node.kind === 'check') body += `<g transform="translate(60 30)"><path d="M-14 22V0h28v22Z" fill="#D9CBB0"/><path d="M-16 0v-6h6v4h4v-4h4v4h4v-4h4v4h4v-4h2v6Z" fill="#C2B190"/><rect x="-4" y="10" width="8" height="12" rx="4" fill="#6B4F35"/><path d="M0 -6V-20" stroke="#5B4130" stroke-width="1.6"/><path d="M0 -20h12l-3 4 3 4H0Z" fill="#FFB21E"/></g>`;
+    if (isl.final) body += `<g transform="translate(60 20)"><path d="M0 10C-10 -2 -14 -10 -6 -14C-2 -16 0 -12 0 -10C0 -12 2 -16 6 -14C14 -10 10 -2 0 10Z" fill="#E5476C"/></g>`;
+    return `<svg class="isl-svg" viewBox="0 0 120 90" aria-hidden="true">${body}</svg>`;
+  };
+  V.chestSVG = (golden, open) => `<svg class="chest-svg" viewBox="0 0 64 56" aria-hidden="true">
+    <defs><linearGradient id="chw${golden ? 'g' : 'n'}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${golden ? '#FFE07D' : '#B9733A'}"/><stop offset="1" stop-color="${golden ? '#D29A0B' : '#7A4520'}"/></linearGradient></defs>
+    <rect x="6" y="24" width="52" height="28" rx="4" fill="url(#chw${golden ? 'g' : 'n'})" stroke="#4A2A10" stroke-width="2"/>
+    ${open ? `<path d="M8 24L14 6H50L56 24Z" fill="#5A3416" stroke="#4A2A10" stroke-width="2"/><ellipse cx="32" cy="24" rx="22" ry="5" fill="#FFE27A"/><g class="sparkle-rise" fill="#FFF6C8"><circle cx="22" cy="16" r="2"/><circle cx="40" cy="12" r="2.6"/><circle cx="32" cy="6" r="1.8"/></g>`
+      : `<path d="M6 26Q6 8 32 8T58 26Z" fill="url(#chw${golden ? 'g' : 'n'})" stroke="#4A2A10" stroke-width="2"/>`}
+    <rect x="6" y="24" width="52" height="5" fill="${golden ? '#FFF3B8' : '#E3B347'}" stroke="#4A2A10" stroke-width="1.4"/>
+    <rect x="16" y="24" width="5" height="28" fill="${golden ? '#FFF3B8' : '#E3B347'}"/><rect x="43" y="24" width="5" height="28" fill="${golden ? '#FFF3B8' : '#E3B347'}"/>
+    <rect x="27" y="26" width="10" height="12" rx="2" fill="#3A2210"/><circle cx="32" cy="31" r="2" fill="#FFD27A"/></svg>`;
+  V.bottleSVG = () => `<svg class="bottle-svg" viewBox="0 0 40 60" aria-hidden="true"><rect x="15" y="2" width="10" height="8" rx="2" fill="#A8743A"/><path d="M14 10h12v8q8 6 8 16v18q0 6 -6 6H12q-6 0 -6 -6V34q0 -10 8 -16Z" fill="#9EE6D8" opacity=".75" stroke="#3D8F84" stroke-width="1.5"/><rect x="12" y="28" width="16" height="20" rx="2" fill="#F8EBC8" transform="rotate(-8 20 38)"/><path d="M15 33h10M15 37h8M15 41h10" stroke="#B49A6A" stroke-width="1.2" transform="rotate(-8 20 38)"/><ellipse cx="13" cy="30" rx="2" ry="8" fill="#fff" opacity=".5"/></svg>`;
+  V.pearlEl = (cls) => h('span', { class: 'pearl ' + (cls || '') });
+})();

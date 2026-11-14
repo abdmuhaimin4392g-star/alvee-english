@@ -279,17 +279,19 @@
     const V = VIEWS[view];
     if (!V) return;
     root.append(V(arg));
-    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals'].includes(view)) {
+    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure'].includes(view)) {
       root.append(nav(view));
       A.setPresence({ screen: view });
     }
   };
   function nav(cur) {
-    const items = [['home', 'home', 'Home'], ['journey', 'map', 'Journey'], ['talks', 'chat', 'Talk'], ['words', 'words', 'Words'], ['me', 'user', 'Me']];
-    return h('nav', { class: 'nav' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: cur === v || ((cur === 'grammar' || cur === 'medals') && v === 'me') ? 'on' : '', onclick: () => A.go(v) }, h('span', { class: 'e', html: A.art.icon(ic, 24) }), t))));
+    const items = [['home', 'home', 'Home'], ['journey', 'map', 'Voyage'], ['talks', 'chat', 'Talk'], ['treasure', 'gem', 'Treasure'], ['me', 'user', 'Me']];
+    const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words') && v === 'me');
+    return h('nav', { class: 'nav' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', onclick: () => A.go(v) }, h('span', { class: 'e', html: A.art.icon(ic, 24) }), t))));
   }
 
   const VIEWS = {};
+  A.VIEWS = VIEWS;
 
   // ---------------------------------------------------------------- login
   VIEWS.login = () => {
@@ -356,7 +358,6 @@
     const due = A.dueItems(st).length;
     const lessonsToday = (st.days[tk] && st.days[tk].les) || 0;
     const capped = cfg.newLimit > 0 && lessonsToday >= cfg.newLimit;
-    const md = A.monthsDone(st), cm = Math.min(6, md + 1), month = C.months[cm - 1];
     const root = h('div', { class: 'screen' });
 
     root.append(A.topStrip());
@@ -380,8 +381,9 @@
     if (next) {
       const t = A.nodeTitle(next);
       const u = A.unit(next.u);
+      const isl = A.voyage.route().main[A.voyage.curIndex(st)];
       today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' },
-        h('div', { class: 'k' }, (pct >= 1 ? 'Goal done! ' : 'Today · ') + 'Unit ' + next.u + ' · ' + t.k),
+        h('div', { class: 'k' }, (pct >= 1 ? 'Goal done! ' : 'Next island · ') + isl.name + ' · ' + t.k),
         h('h2', null, t.en), h('div', { class: 'th muted small' }, t.th + ' · ' + u.th))));
       if (capped) today.append(h('div', { class: 'note' }, 'วันนี้เรียนบทใหม่ครบแล้ว เก่งมาก! ทบทวนคำเก่าเพื่อให้จำได้นานขึ้นนะ'));
       else today.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', next.id) }, t.icon + ' Start · เริ่มเลย'));
@@ -404,18 +406,13 @@
           h('b', null, nm[0]), h('div', { class: 'th small' }, 'เรื่อง “' + nm[1] + '” ยังผิดบ่อย มาฝึกเพิ่มกันนะ (' + Math.round(weak.acc * 100) + '% ถูก)')),
         h('button', { class: 'btn mango', style: { minHeight: '44px', padding: '8px 14px' }, onclick: () => A.play('focus') }, '💪 Practice')));
     }
-    const resort = h('div', { class: 'card resort' });
-    resort.innerHTML = A.resortSVG(st, A.user.name);
-    resort.append(h('div', { class: 'cap' },
-      h('div', null, h('b', null, month.resort), h('div', { class: 'small muted th' }, 'เดือนที่ ' + cm + ' · ' + month.resortTh)),
-      h('div', { class: 'stars', 'aria-label': md + ' of 5 stars' }, '★'.repeat(Math.min(5, md)), h('span', { class: 'off' }, '★'.repeat(Math.max(0, 5 - md))))));
-    root.append(resort);
+    root.append(A.voyage.homeCard(st));
 
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
     root.append(h('div', { class: 'tiles' },
       h('button', { class: 'tile t-talk', onclick: () => A.go('talks') }, h('span', { class: 'blob', html: A.art.icon('chat', 26) }), 'Talk', h('span', { class: 'th' }, 'ฝึกบทสนทนา')),
       h('button', { class: 'tile t-words', onclick: () => A.go('words') }, h('span', { class: 'blob', html: A.art.icon('sprout', 26) }), 'Words', h('span', { class: 'th' }, A.wordCount(st) + ' คำ')),
-      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Treasure', h('span', { class: 'th' }, got + ' เหรียญ')),
+      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Medals', h('span', { class: 'th' }, got + ' เหรียญ')),
       h('button', { class: 'tile t-gram', onclick: () => A.go('grammar') }, h('span', { class: 'blob', html: A.art.icon('book', 26) }), 'Grammar', h('span', { class: 'th' }, 'คู่มือไวยากรณ์'))));
     return root;
   };
@@ -699,9 +696,10 @@
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'ยังไม่มีคำให้ทบทวน — เรียนบทใหม่ก่อนนะ' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'focus' ? 'Extra practice' : 'Mistakes';
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'focus' ? 'Extra practice'
+      : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
     ses.title = title;
-    ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind;
+    ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind === 'side' ? arg.id : kind === 'chest' || kind === 'bottle' ? kind + ':' + arg.id : kind;
     A.track('lesson_start', { node: ses.nodeId, kind: ses.node ? ses.node.kind : kind, title, steps: ses.steps.length });
     A.go('player');
   };
@@ -714,15 +712,39 @@
       h('button', { class: 'icon-btn', 'aria-label': 'Close lesson', onclick: () => quit() }, '✕'),
       h('div', { class: 'progress' }, bar),
       h('span', { class: 'small muted num', id: 'step-n' }, ''));
+    // a timer is always on screen: a stopwatch per question, or a countdown in tests
+    const timer = h('div', { class: 'q-timer' + (ses.timed ? ' countdown' : ''), role: 'timer', 'aria-live': 'off' });
     const body = h('div', { class: 'player-body' });
-    root.append(top, body);
+    root.append(top, timer, body);
     let stepStart = Date.now();
+    const fmt = (ms) => { const t = Math.max(0, Math.round(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+    const tick = setInterval(() => {
+      if (!root.isConnected) { clearInterval(tick); return; }
+      if (ses.timed) {
+        const left = ses.limit - (Date.now() - ses.started);
+        timer.innerHTML = '';
+        timer.append(h('span', { class: 'tm-ic' }, '⏳'), h('b', { class: 'num' }, fmt(left)), h('span', { class: 'tm-bar' }, h('i', { style: { width: Math.max(0, (left / ses.limit) * 100) + '%' } })), h('span', { class: 'small' }, 'test · สอบจับเวลา'));
+        timer.classList.toggle('hurry', left < 20000);
+        if (left <= 0 && !ses.timeUp) { ses.timeUp = true; clearInterval(tick); timeUp(); }
+      } else {
+        timer.innerHTML = '';
+        timer.append(h('span', { class: 'tm-ic' }, '⏱️'), h('b', { class: 'num' }, fmt(Date.now() - stepStart)), h('span', { class: 'small muted' }, 'this question · ' + fmt(Date.now() - ses.started) + ' total'));
+      }
+    }, 250);
+    function timeUp() {
+      document.querySelectorAll('.fb').forEach((x) => x.remove());
+      const left = ses.steps.slice(ses.i).filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type) && !x.retry).length;
+      ses.graded += left;
+      A.track('test_timeup', { node: ses.nodeId, unanswered: left });
+      A.toast('⏰ Time is up! · หมดเวลาแล้ว', 2600);
+      finish();
+    }
 
     function quit() {
       const sh = A.sheet(h('div', { class: 'stack', style: { gap: '12px', textAlign: 'center' } },
         h('div', { style: { fontSize: '2.6rem' } }, '🥺'), h('h2', null, 'Leave the lesson?'), h('p', { class: 'th muted' }, 'ถ้าออกตอนนี้ ความคืบหน้าของบทนี้จะไม่ถูกบันทึกนะ'),
         h('button', { class: 'btn block', onclick: () => sh.close() }, 'Keep learning · เรียนต่อ'),
-        h('button', { class: 'btn ghost block', onclick: () => { sh.close(); A.track('lesson_quit', { node: ses.nodeId, at: ses.i + 1, of: ses.steps.length }); A.session = null; A.flush(); A.go('home'); } }, 'Quit · ออก')));
+        h('button', { class: 'btn ghost block', onclick: () => { sh.close(); A.track('lesson_quit', { node: ses.nodeId, at: ses.i + 1, of: ses.steps.length }); A.session = null; A.flush(); A.go(ses.node || ['chest', 'bottle', 'side'].includes(ses.kind) ? 'journey' : 'home'); } }, 'Quit · ออก')));
     }
 
     function render() {
@@ -755,7 +777,7 @@
         A.track('answer', { node: ses.nodeId, ex: step.type, item: step.item, q: info.q, a: info.a, c: info.c, ok: ok ? 1 : 0, ms, retry: retry ? 1 : 0, rev: step.review ? 1 : 0, sk, tag: ok ? undefined : info.tag, u, focus: step.focus, th: ses.thaiUsed ? 1 : undefined });
         ses.thaiUsed = 0;
         A.sfx.play(ok ? 'good' : 'bad');
-        if (!ok && !ses.test && step.item) {
+        if (!ok && !ses.test && !ses.timed && step.item) {
           ses.retries[step.item] = (ses.retries[step.item] || 0) + 1;
           if (ses.retries[step.item] <= 2) { const r = A.retryFor(step, A.state); if (r) ses.steps.push({ ...r, retry: 1 }); }
         }
@@ -814,6 +836,7 @@
       if (hr >= 22) st.tod.night = st.tod.night || now;
       const sk = A.streak(st);
       if (sk > 0 && sk % 7 === 0 && !st.badges['fz' + sk]) { st.badges['fz' + sk] = now; st.freezes = Math.min(2, (st.freezes || 0) + 1); }
+      const rw = A.voyage.reward(ses, acc, passed);
       const newBadges = A.checkBadges(st);
       const after = { units: A.unitsDone(st), months: A.monthsDone(st) };
       A.saveSoon();
@@ -821,7 +844,8 @@
       A.track('lesson_end', { node: ses.nodeId, title: ses.title, acc, xp, secs, passed: passed ? 1 : 0, wrong: ses.graded - ses.firstOk, graded: ses.graded, looks: ses.lookups, badges: newBadges.join(',') || undefined, unitDone: after.units > before.units ? 1 : undefined, lvl: lvlAfter > lvlBefore ? lvlAfter : undefined });
       A.flush();
       A.session = null;
-      A.go('result', { ses, acc, xp, secs, passed, stars, newBadges, unitUp: after.units > before.units, monthUp: after.months > before.months, lvlUp: lvlAfter > lvlBefore ? lvlAfter : 0 });
+      if (ses.timeUp) A.session = null;
+      A.go('result', { ses, acc, xp, secs, passed, stars, newBadges, rw, unitUp: after.units > before.units, monthUp: after.months > before.months, lvlUp: lvlAfter > lvlBefore ? lvlAfter : 0 });
     }
 
     setTimeout(render, 0);
@@ -831,27 +855,31 @@
   // ---------------------------------------------------------------- result
   VIEWS.result = (r) => {
     const st = A.state;
-    if (r.passed) { A.sfx.play('done'); setTimeout(A.confetti, 120); }
+    if (r.passed && !(r.rw && r.rw.locked)) { A.sfx.play('done'); setTimeout(A.confetti, 120); }
     const ses = r.ses;
     const root = h('div', { class: 'screen full result' });
-    const head = !r.passed ? ['🌱', 'Almost there!', 'เกือบผ่านแล้ว! ต้องได้ 70% ขึ้นไป ลองทบทวนแล้วทำใหม่นะ']
-      : r.monthUp ? ['🏆', 'Month complete!', 'จบเดือนแล้ว! รีสอร์ทของคุณได้ดาวเพิ่ม ★']
-        : r.unitUp ? ['🎊', 'Unit complete!', 'จบบทแล้ว! รีสอร์ทของคุณมีของตกแต่งใหม่']
-          : r.acc === 100 ? ['💯', 'Perfect!', 'ไม่ผิดเลยสักข้อ เก่งมาก!'] : ['🎉', 'Lesson done!', 'เรียนจบแล้ว เก่งมาก!'];
+    const rw = r.rw || {};
+    const voy = ['chest', 'bottle', 'side'].includes(ses.kind);
+    const seaUp = r.passed && ses.node && A.voyage.seasDone(st) > A.voyage.seasDone({ done: Object.fromEntries(Object.entries(st.done).filter(([k]) => k !== ses.node.id)) });
+    const head = voy ? (rw.locked ? ['🔒', 'Not this time', 'ยังไม่สำเร็จ ลองอีกครั้งนะ'] : ses.kind === 'side' ? ['🧭', 'Mission complete!', 'ภารกิจเสริมสำเร็จ!'] : ['🗝️', 'Unlocked!', 'เปิดได้แล้ว!'])
+      : ses.timeUp && !r.passed ? ['⏰', 'Time is up', 'หมดเวลา! ลองอีกครั้ง ตอบให้เร็วขึ้นนิดนะ']
+        : !r.passed ? ['🌱', 'Almost there!', 'เกือบผ่านแล้ว! ต้องได้ 70% ขึ้นไป ลองทบทวนแล้วทำใหม่นะ']
+          : seaUp ? ['🌊', 'New sea reached!', 'ผ่านทะเลนี้แล้ว! ได้โปสการ์ดใหม่ด้วย']
+            : r.acc === 100 ? ['💯', 'Perfect!', 'ไม่ผิดเลยสักข้อ เก่งมาก!'] : ['🎉', ses.node ? 'Island done!' : 'Well done!', 'เก่งมาก! เรือพร้อมออกเดินทางต่อ'];
     root.append(h('div', { class: 'big-e' }, head[0]), h('h1', null, head[1]), h('p', { class: 'th muted' }, head[2]));
     if (r.passed && ses.node && ses.node.kind !== 'check') root.append(h('div', { class: 'stars', style: { fontSize: '2rem' } }, '★'.repeat(r.stars), h('span', { class: 'off' }, '★'.repeat(3 - r.stars))));
     root.append(h('div', { class: 'boxes' },
       h('div', { class: 'box' }, h('b', null, '+' + r.xp), h('span', null, 'XP')),
       h('div', { class: 'box' }, h('b', null, r.acc + '%'), h('span', null, 'Correct · ถูก')),
       h('div', { class: 'box' }, h('b', null, Math.max(1, Math.round(r.secs / 60)) + 'm'), h('span', null, 'Time · เวลา'))));
-    if (r.unitUp || r.monthUp) { const card = h('div', { class: 'card resort', style: { width: '100%' } }); card.innerHTML = A.resortSVG(st, A.user.name); root.append(card); }
-    if (r.monthUp && A.monthsDone(st) >= 6) {
+    const blk = A.voyage.resultBlock(rw, ses); if (blk) root.append(blk);
+    if (ses.node && r.passed && !A.nextNode(st)) {
       root.append(h('div', { class: 'card stack', style: { width: '100%', border: '3px double var(--mango)', background: 'var(--mango-tint)', textAlign: 'center' } },
         h('div', { style: { fontSize: '2.6rem' } }, '🎓'),
         h('div', { class: 'small muted' }, 'CERTIFICATE · ประกาศนียบัตร'),
         h('h2', null, A.user.name),
-        h('div', null, 'completed the 6-month English course'),
-        h('div', { class: 'th small' }, 'เรียนจบหลักสูตรภาษาอังกฤษ 6 เดือน — พูดภาษาอังกฤษพื้นฐานได้อย่างมั่นใจ'),
+        h('div', null, 'sailed all the way from Thailand to the Maldives in English'),
+        h('div', { class: 'th small' }, 'ล่องเรือจากประเทศไทยถึงมัลดีฟส์สำเร็จ — พูดภาษาอังกฤษพื้นฐานได้อย่างมั่นใจ'),
         h('div', { class: 'small muted' }, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' · ' + A.wordCount(st) + ' words · ' + A.totalXP(st) + ' XP')));
     }
     if (r.lvlUp) root.append(h('div', { class: 'pill mango', style: { fontSize: '1rem', padding: '8px 14px' } }, '⬆️ Level ' + r.lvlUp + ' · ' + A.title(r.lvlUp)[2]));
@@ -866,10 +894,12 @@
       root.append(h('div', { class: 'card can-say stack' }, h('div', { class: 'sec-title' }, 'Now you can say · ตอนนี้คุณพูดได้แล้ว'),
         lessonSents.map((sid) => h('div', { class: 'ex' }, A.sayBtns(A.S(sid).en, { sm: true, noSlow: true }), h('div', null, h('div', { class: 'en' }, A.S(sid).en), h('div', { class: 'thx' }, A.S(sid).th))))));
     }
-    const nextN = A.nextNode(st);
     const btns = h('div', { class: 'stack', style: { width: '100%' } });
-    if (!r.passed) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again · ลองอีกครั้ง'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first · ทบทวนก่อน'));
-    else if (nextN && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', nextN.id) }, 'Next: ' + A.nodeTitle(nextN).en));
+    if (voy) {
+      if (rw.locked) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again · ลองอีกครั้ง'));
+      btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea · กลับสู่ทะเล'));
+    } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again · ลองอีกครั้ง'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first · ทบทวนก่อน'));
+    else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island · ล่องเรือต่อ'));
     btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home · กลับหน้าแรก'));
     root.append(btns);
     return root;
@@ -1223,6 +1253,8 @@
     if (me.role === 'admin') { A.bf.name = me.name; return A.admin.start(); }
     try { A.bf.name = await A.api.coachName(); } catch (e) { /* keep default */ }
     A.loadQueue();
+    A.ctl = A.store.get('ae.ctl', {}) || {};
+    await Promise.race([A.loadCtl(), new Promise((r) => setTimeout(r, 2500))]);
     A.state = A.fixState(A.newerState(await A.api.loadState().catch(() => null)));
     applySettings();
     const fz = A.applyFreezes(A.state);

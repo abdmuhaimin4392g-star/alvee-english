@@ -409,9 +409,10 @@
       chunk.forEach((k) => steps.push({ type: 'wintro', key: k, item: 'w:' + k }));
       chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'listenw' : 'wfit', L.u); if (q) steps.push(q); });
     }
-    const review = reviewPicks(st, 2, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
+    const review = reviewPicks(st, 4, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
     const sentSteps = [];
-    const practise = L.sents.length > 6 ? [...L.sents.slice(0, 2), ...A.shuffle(L.sents.slice(2)).slice(0, 4)] : L.sents;
+    // longer islands: every sentence of the lesson is practised
+    const practise = L.sents.slice(0, 9);
     practise.forEach((sid, i) => {
       if (i < 2) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
       const q = sentQuiz(sid, spool, i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'listen']));
@@ -423,8 +424,8 @@
     // the app adapts: extra practice on her weakest grammar point
     steps.push(...focusSteps(st, L.u, 2, new Set(L.sents)));
     // finish with a second look at a new sentence and a new word
-    A.shuffle(L.sents.slice(0, 4)).slice(0, 1).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'gap', 'pick'])); if (q) steps.push(q); });
-    A.shuffle(words).slice(0, 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'wfit']), L.u); if (q) steps.push(q); });
+    A.shuffle(L.sents.slice(0, 6)).slice(0, 2).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'gap', 'pick', 'build'])); if (q) steps.push(q); });
+    A.shuffle(words).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'wfit']), L.u); if (q) steps.push(q); });
     return noRepeatTypes(steps);
   }
 
@@ -432,7 +433,7 @@
     const t = C.talks[talkId];
     const steps = [{ type: 'talkread', talk: talkId }, { type: 'talkplay', talk: talkId }];
     const spool = A.uniq([...t.lines.map((l) => l.id), ...A.sentsUpTo(t.u || 1)]);
-    A.shuffle(t.lines.filter((l) => l.s === 'B')).slice(0, 2).forEach((l) => {
+    A.shuffle(t.lines.filter((l) => l.s === 'B')).slice(0, 3).forEach((l) => {
       const q = sentQuiz(l.id, spool, ['build', 'gap']);
       if (q) steps.push(q);
     });
@@ -480,6 +481,41 @@
     return sentQuiz(step.sid, spool, order);
   };
 
+  // short sessions for chests, bottles and side islands, from what she has already learned
+  function miniSteps(st, n, prefer, words) {
+    const mu = A.reachedUnit(st);
+    const pool = A.lessonWordsUpTo(mu), spool = A.sentsUpTo(mu);
+    const out = [];
+    const learnedS = A.shuffle(spool.filter((sid) => A.S(sid) && (st.srs['s:' + sid] || A.S(sid).u < mu))).concat(A.shuffle(spool));
+    const learnedW = A.shuffle(pool.filter((k) => st.srs['w:' + k])).concat(A.shuffle(pool));
+    let guard = 0;
+    while (out.length < n && guard++ < n * 8) {
+      if (words || (prefer.includes('wfit') && Math.random() < 0.5)) {
+        const k = learnedW[guard % Math.max(1, learnedW.length)];
+        const q = k && wordQuiz(k, pool, A.pick(['wfit', 'listenw', 'pic'].filter((t) => prefer.includes(t) || words)), mu);
+        if (q && !out.some((x) => x.item === q.item)) { out.push(q); continue; }
+        if (words) continue;
+      }
+      const sid = learnedS[guard % Math.max(1, learnedS.length)];
+      const q = sid && sentQuiz(sid, spool, A.shuffle(prefer.slice()));
+      if (q && !out.some((x) => x.item === q.item)) out.push(q);
+    }
+    return noRepeatTypes(out);
+  }
+  function sideSteps(isl, st) {
+    const m = isl.mission;
+    if (m === 'talk') {
+      const reach = A.reachedUnit(st);
+      const talks = Object.keys(C.talks).filter((id) => (C.talks[id].u || 1) <= Math.max(1, Math.min(reach, isl.anchor.node.u)));
+      const id = talks.length ? talks[(isl.k + isl.sea * 7) % talks.length] : Object.keys(C.talks)[0];
+      return talkSteps(id, st);
+    }
+    if (m === 'listen') return miniSteps(st, 8, ['listen', 'listenw', 'listen', 'build']);
+    if (m === 'words') return miniSteps(st, 10, ['wfit', 'pic', 'listenw'], true);
+    if (m === 'build') return miniSteps(st, 8, ['build']);
+    return miniSteps(st, 10, ['gap', 'pick', 'wfit', 'build', 'listen']);
+  }
+
   A.buildSession = (kind, arg, st) => {
     let steps = [], node = null;
     if (kind === 'node') {
@@ -491,10 +527,19 @@
     else if (kind === 'mistakes') steps = reviewSteps(st, true);
     else if (kind === 'focus') steps = noRepeatTypes(focusSteps(st, A.reachedUnit(st), 8, new Set()));
     else if (kind === 'talk') steps = talkSteps(arg, st);
+    else if (kind === 'chest') steps = miniSteps(st, 3, ['gap', 'pick', 'wfit', 'listenw']);
+    else if (kind === 'bottle') steps = miniSteps(st, 5, ['listen', 'build', 'listen', 'gap']);
+    else if (kind === 'side') steps = sideSteps(arg, st);
     steps = steps.filter(Boolean);
+    const test = !!(node && node.kind === 'check');
+    // tests and speed rounds run against the clock; everything else just shows a stopwatch
+    const ctl = A.ctl || {};
+    const timed = test || (kind === 'side' && arg && arg.mission === 'speed');
+    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
-      test: !!(node && node.kind === 'check'), lookups: 0,
+      test, lookups: 0, timed, limit: timed ? graded * (test ? +ctl.testSec || 30 : 15) * 1000 : 0,
+      wasDone: !!(node && st.done[node.id]),
     };
   };
 })();

@@ -12,7 +12,7 @@
       const v = props[k];
       if (v == null || v === false) continue;
       if (k === 'class') el.className = v;
-      else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+      else if (k === 'style' && typeof v === 'object') { for (const sk in v) { if (sk.startsWith('--')) el.style.setProperty(sk, v[sk]); else el.style[sk] = v[sk]; } }
       else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
       else if (k === 'html') el.innerHTML = v;
       else el.setAttribute(k, v === true ? '' : v);
@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '3.1';
+  A.VERSION = '4.0';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -274,7 +274,26 @@
       A.store.set(key, all.length > 6000 ? all.slice(-6000) : all);
     }
     async log(evs) { const me = await this.me(); if (me && me.role === 'learner') this.append(me.id, evs); }
-    async beat(info) { const me = await this.me(); if (me && me.role === 'learner') A.store.set(this.k('presence.' + me.id), { ...info, t: Date.now() }); }
+    async beat(info) {
+      const me = await this.me();
+      if (me && me.role === 'learner') A.store.set(this.k('presence.' + me.id), { ...info, t: Date.now() });
+      const c = me ? A.store.get(this.k('ctl.' + me.id), {}) : {};
+      return { w: me && (A.store.get(this.k('watch.' + me.id), 0) > Date.now()) ? 1 : 0, cr: c.rev || 0 };
+    }
+    // control room (gifts, events, unlocks) and the live view
+    async ctl() { const me = await this.me(); return me ? A.store.get(this.k('ctl.' + me.id), {}) : {}; }
+    async adminCtl(uid) { return A.store.get(this.k('ctl.' + uid), {}); }
+    async setCtl(uid, body) {
+      const c = A.store.get(this.k('ctl.' + uid), {});
+      if (body.patch) Object.assign(c, body.patch);
+      if (body.gift) { c.gifts = (c.gifts || []).concat([{ ...body.gift, id: Math.random().toString(36).slice(2, 9), t: Date.now() }]).slice(-40); }
+      if (body.delGift) c.gifts = (c.gifts || []).filter((g) => g.id !== body.delGift);
+      c.rev = (c.rev || 0) + 1;
+      A.store.set(this.k('ctl.' + uid), c);
+      return c;
+    }
+    async livePush(snap) { const me = await this.me(); if (!me) return { w: 0 }; A.store.set(this.k('live.' + me.id), { ...snap, t: Date.now() }); return { w: A.store.get(this.k('watch.' + me.id), 0) > Date.now() ? 1 : 0 }; }
+    async liveGet(uid) { A.store.set(this.k('watch.' + uid), Date.now() + 10000); return A.store.get(this.k('live.' + uid), null); }
     async inbox() {
       const me = await this.me();
       return A.store.get(this.k('msgs'), []).filter((m) => m.to === me.id);
@@ -372,7 +391,12 @@
     async loadState() { return (await this.call('state')).state; }
     async saveState(st) { await this.call('state', { state: st }, 'PUT'); }
     async log(evs) { await this.call('events', { events: evs }); }
-    async beat(info) { await this.call('beat', info); }
+    async beat(info) { return this.call('beat', info); }
+    async ctl() { return (await this.call('ctl')).ctl || {}; }
+    async adminCtl(uid) { return (await this.call('admin/ctl?uid=' + encodeURIComponent(uid))).ctl || {}; }
+    async setCtl(uid, body) { return (await this.call('admin/ctl', { uid, ...body })).ctl; }
+    async livePush(snap) { return this.call('live', snap); }
+    async liveGet(uid) { return (await this.call('admin/live?uid=' + encodeURIComponent(uid))).live; }
     async inbox() { return (await this.call('inbox')).msgs; }
     async readMsg(id) { await this.call('inbox/read', { id }); }
     async coachName() { return (await this.call('coach')).name; }
@@ -429,12 +453,21 @@
   A.nodeTitle = (n) => {
     if (n.kind === 'lesson') { const l = C.lessons[n.id]; return { en: l.en, th: l.th, icon: '📖', k: 'Lesson ' + n.id }; }
     if (n.kind === 'talk') { const t = C.talks[n.talk]; return { en: A.fill(t.en), th: t.th, icon: '💬', k: 'Conversation' }; }
-    const month = n.u % 4 === 0;
-    return month
-      ? { en: 'Month ' + Math.ceil(n.u / 4) + ' test', th: 'สอบประจำเดือน', icon: '🏆', k: 'Big test' }
-      : { en: 'Unit ' + n.u + ' test', th: 'ทดสอบท้ายบท', icon: '🎯', k: 'Test' };
+    const big = n.u % 3 === 0;
+    return big
+      ? { en: 'Big sea test (timed)', th: 'สอบใหญ่ท้ายทะเล (จับเวลา)', icon: '🏆', k: 'Big test' }
+      : { en: 'Fortress test (timed)', th: 'สอบป้อมปราการ (จับเวลา)', icon: '⏱️', k: 'Test' };
   };
-  A.isOpen = (st, idx, cfg) => idx === 0 || !!(cfg && cfg.unlockAll) || !!st.done[A.nodes[idx - 1].id] || !!st.done[A.nodes[idx].id];
+  // islands open one after another; the dashboard can open islands ahead (unlockTo) or keep her at one (holdAt)
+  A.isOpen = (st, idx, cfg) => {
+    const c = A.ctl || {};
+    if (c.holdAt != null && c.holdAt !== '' && idx > +c.holdAt && !st.done[A.nodes[idx].id]) return false;
+    if (c.unlockTo != null && c.unlockTo !== '' && idx <= +c.unlockTo) return true;
+    return idx === 0 || !!(cfg && cfg.unlockAll) || !!st.done[A.nodes[idx - 1].id] || !!st.done[A.nodes[idx].id];
+  };
+  A.ctl = A.ctl || {};
+  // seas: three units each, Thailand to the Maldives
+  A.seasDone = (st) => { let n = 0; for (let k = 0; k < 8; k++) { const ns = A.nodes.filter((x) => x.u > k * 3 && x.u <= k * 3 + 3); if (ns.length && ns.every((x) => st.done[x.id])) n++; } return n; };
   A.nextNode = (st) => A.nodes.find((n) => !st.done[n.id]) || null;
   A.unitDone = (st, u) => { const ns = A.nodes.filter((n) => n.u === u); return ns.length > 0 && ns.every((n) => st.done[n.id]); };
   A.unitsDone = (st) => C.units.filter((u) => A.unitDone(st, u.id)).length;
@@ -539,12 +572,17 @@
     ['early', 'sunrise', 'silver', 'time', 'Early Bird', 'นกตื่นเช้า', 'เรียนก่อน 8 โมงเช้า', (st) => [st.badges.early || (st.tod && st.tod.early) ? 1 : 0, 1]],
     ['night', 'moon', 'silver', 'time', 'Night Owl', 'นกฮูกกลางคืน', 'เรียนหลัง 4 ทุ่ม', (st) => [st.badges.night || (st.tod && st.tod.night) ? 1 : 0, 1]],
     ['xp1000', 'bolt', 'gold', 'star', '1000 XP', 'พลัง 1000 XP', 'สะสม 1000 XP', (st) => [A.totalXP(st), 1000]],
-    ['month1', 'shell', 'bronze', 'month', 'Month 1', 'จบเดือนที่ 1', 'จบเดือนที่ 1', (st) => [Math.min(1, A.monthsDone(st)), 1]],
-    ['month2', 'wave', 'silver', 'month', 'Month 2', 'จบเดือนที่ 2', 'จบเดือนที่ 2', (st) => [Math.min(2, A.monthsDone(st)), 2]],
-    ['month3', 'palm', 'silver', 'month', 'Month 3', 'จบเดือนที่ 3', 'จบเดือนที่ 3', (st) => [Math.min(3, A.monthsDone(st)), 3]],
-    ['month4', 'sun', 'gold', 'month', 'Month 4', 'จบเดือนที่ 4', 'จบเดือนที่ 4', (st) => [Math.min(4, A.monthsDone(st)), 4]],
-    ['month5', 'hotel', 'gold', 'month', 'Month 5', 'จบเดือนที่ 5', 'จบเดือนที่ 5', (st) => [Math.min(5, A.monthsDone(st)), 5]],
-    ['grad', 'grad', 'pearl', 'month', 'Graduate', 'จบหลักสูตร', 'จบหลักสูตร 6 เดือน', (st) => [A.monthsDone(st), 6]],
+    ['month1', 'shell', 'bronze', 'month', 'River Leaver', 'ลาก่อนเจ้าพระยา', 'ล่องผ่านแม่น้ำเจ้าพระยา (ทะเลที่ 1)', (st) => [Math.min(1, A.seasDone(st)), 1]],
+    ['month2', 'wave', 'silver', 'month', 'Gulf Sailor', 'กะลาสีอ่าวไทย', 'ล่องผ่านอ่าวไทย (ทะเลที่ 2)', (st) => [Math.min(2, A.seasDone(st)), 2]],
+    ['month3', 'palm', 'silver', 'month', 'Strait Runner', 'นักเดินเรือช่องแคบ', 'ล่องผ่านช่องแคบมะละกา (ทะเลที่ 3)', (st) => [Math.min(3, A.seasDone(st)), 3]],
+    ['month4', 'sun', 'gold', 'month', 'Andaman Explorer', 'นักสำรวจอันดามัน', 'ล่องผ่านทะเลอันดามัน (ทะเลที่ 4)', (st) => [Math.min(4, A.seasDone(st)), 4]],
+    ['month5', 'hotel', 'gold', 'month', 'Ocean Crosser', 'ข้ามมหาสมุทร', 'ล่องถึงชายฝั่งศรีลังกา (ทะเลที่ 6)', (st) => [Math.min(6, A.seasDone(st)), 6]],
+    ['grad', 'heart', 'pearl', 'month', 'Arrived in the Maldives', 'ถึงมัลดีฟส์แล้ว', 'ล่องเรือถึงอัดดู มัลดีฟส์', (st) => [A.seasDone(st), 8]],
+    ['tre10', 'gem', 'bronze', 'star', 'Treasure Hunter', 'นักล่าสมบัติ', 'พบสมบัติ 10 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 10]],
+    ['tre50', 'gem', 'gold', 'star', 'Treasure Queen', 'ราชินีสมบัติ', 'พบสมบัติ 50 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 50]],
+    ['shells8', 'shell', 'silver', 'words', 'Shell Collector', 'นักสะสมเปลือกหอย', 'เก็บเปลือกหอยครบ 8 ชนิด', (st) => [Object.keys((st.sea && st.sea.sh) || {}).length, 8]],
+    ['boat3', 'wave', 'silver', 'time', 'Fleet Captain', 'กัปตันกองเรือ', 'มีเรือ 3 ลำ', (st) => [((st.sea && st.sea.boats) || ['sloop']).length, 3]],
+    ['side5', 'search', 'gold', 'learn', 'Explorer', 'นักผจญภัย', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
   ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how, prog }));
   A.medal = (id) => A.MEDALS.find((m) => m.id === id);
   A.BADGES = A.MEDALS.map((m) => [m.id, '', m.en, m.th]); // older code paths
@@ -565,6 +603,7 @@
     if (t.type === 'now') return true;
     if (t.type === 'unit') return A.unitDone(st, +t.v);
     if (t.type === 'month') return A.monthsDone(st) >= +t.v;
+    if (t.type === 'sea') return A.seasDone(st) >= +t.v;
     if (t.type === 'streak') return A.streak(st) >= +t.v;
     if (t.type === 'xp') return A.totalXP(st) >= +t.v;
     if (t.type === 'node') return !!st.done[t.v];
@@ -575,6 +614,7 @@
     if (t.type === 'now') return 'Right away';
     if (t.type === 'unit') return 'After Unit ' + t.v;
     if (t.type === 'month') return 'After Month ' + t.v;
+    if (t.type === 'sea') return 'After sea ' + t.v;
     if (t.type === 'streak') return 'At a ' + t.v + '-day streak';
     if (t.type === 'xp') return 'At ' + t.v + ' XP';
     if (t.type === 'node') return 'After lesson ' + t.v;
@@ -606,9 +646,45 @@
     if (!A.user || A.user.role !== 'learner' || !A.api) return;
     if (!force && Date.now() - lastBeat < 4000) return;
     lastBeat = Date.now();
-    try { await A.api.beat({ ...A.presence, hidden: document.visibilityState === 'visible' ? 0 : 1 }); } catch (e) { /* offline */ }
+    try {
+      const r = await A.api.beat({ ...A.presence, hidden: document.visibilityState === 'visible' ? 0 : 1 });
+      if (r && r.cr != null && r.cr !== (A.ctl.rev || 0)) A.loadCtl();
+      if (r && r.w && A.live) A.live.start();
+    } catch (e) { /* offline */ }
   };
   A.setPresence = (p) => { A.presence = { ...p }; A.beat(true); };
+  A.loadCtl = async () => {
+    try {
+      const c = await A.api.ctl();
+      const before = A.ctl.rev;
+      A.ctl = c || {};
+      A.store.set('ae.ctl', A.ctl);
+      if (before != null && before !== A.ctl.rev && A.user && A.user.role === 'learner' && !A.session && ['journey', 'home'].includes(A.view)) A.go(A.view);
+    } catch (e) { A.ctl = A.store.get('ae.ctl', {}) || {}; }
+  };
+  // the live view: while the dashboard is watching, her screen is mirrored to it (she is not told)
+  A.live = {
+    on: false, last: '', timer: null,
+    start() { if (this.on || !A.user || A.user.role !== 'learner') return; this.on = true; this.loop(); },
+    snap() {
+      const app = document.getElementById('app'); if (!app) return '';
+      const parts = [app.outerHTML];
+      document.querySelectorAll('body > .fb, body > .sheet, body > .veil, body > .toast').forEach((x) => parts.push(x.outerHTML));
+      return parts.join('').replace(/<script[\s\S]*?<\/script>/gi, '').slice(0, 400000);
+    },
+    async loop() {
+      if (!this.on) return;
+      try {
+        const html = this.snap();
+        const meta = { view: A.view, title: A.presence.title || '', step: A.presence.step, total: A.presence.total, dark: document.documentElement.classList.contains('dark') ? 1 : 0, sx: Math.round(window.scrollY), timer: (document.querySelector('.q-timer') || {}).textContent || '' };
+        const changed = html !== this.last;
+        const r = await A.api.livePush(changed ? { html, ...meta } : { same: 1, ...meta });
+        this.last = html;
+        if (!r || !r.w) { this.on = false; this.last = ''; return; }
+      } catch (e) { /* offline */ }
+      this.timer = setTimeout(() => this.loop(), 1000);
+    },
+  };
   setInterval(() => { A.flush(); }, 4000);
   setInterval(() => { if (document.visibilityState === 'visible') A.beat(true); }, 20000);
   document.addEventListener('visibilitychange', () => {

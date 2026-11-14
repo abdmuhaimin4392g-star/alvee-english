@@ -46,7 +46,7 @@
       h('button', { class: 'btn ghost', style: { minHeight: '40px', padding: '8px 12px' }, onclick: async () => { clearInterval(ADM.timer); await A.api.logout(); A.user = null; A.go('login'); } }, 'Log out')));
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
-    const tabs = [['live', '⚡ Live'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    const tabs = [['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);
@@ -60,6 +60,8 @@
     if (ADM.cur === 'live') return live();
     if (ADM.cur === 'progress') return progress();
     if (ADM.cur === 'insights') return insights();
+    if (ADM.cur === 'control') return control();
+    if (ADM.cur === 'watch') return watch();
     if (ADM.cur === 'mistakes') return mistakes();
     if (ADM.cur === 'words') return words();
     if (ADM.cur === 'msgs') return messages();
@@ -155,6 +157,11 @@
       case 'msg_read': icon = '💌'; main = 'Read your message'; break;
       case 'audio': icon = '🔊'; main = 'Played audio' + (e.slow ? ' (slow)' : ''); detail = e.text; break;
       case 'rest_day_used': icon = '🧊'; main = 'Used ' + e.days + ' rest day(s)'; break;
+      case 'collect': icon = e.k === 'pearl' ? '⚪' : e.k === 'shell' ? '🐚' : e.k === 'boat' ? '⛵' : '💎'; main = (e.gift ? 'Picked up your gift: ' : 'Picked up ') + (e.k === 'pearl' ? (e.n || 1) + ' pearl(s)' : e.k === 'shell' ? 'a ' + (A.voyage.shell(e.id) || [0, 'shell'])[1] : e.k === 'boat' ? A.voyage.boat(e.id).n : ((A.treasure.byId[e.id] || [])[2] || 'treasure')); break;
+      case 'quest_claim': icon = '📜'; main = 'Finished a daily quest'; detail = '+' + e.got + ' pearls'; break;
+      case 'boat_unlock': icon = '⛵'; main = 'Unlocked a boat: ' + A.voyage.boat(e.id).n; detail = e.p + ' pearls'; break;
+      case 'boat_select': icon = '⛵'; main = 'Now sailing: ' + A.voyage.boat(e.id).n; break;
+      case 'test_timeup': icon = '⏰'; main = 'Time ran out in a test'; detail = e.unanswered + ' questions not answered'; break;
       case 'admin_reset': icon = '↺'; main = 'You reset ' + (e.what || 'lessons'); detail = (e.n || 0) + ' finished steps cleared'; break;
       case 'night_mode': icon = '🌙'; main = 'Night mode: ' + e.v; break;
       case 'install_help': case 'install_prompt': case 'app_installed': icon = '📲'; main = e.type === 'app_installed' ? 'Installed the app' : 'Looked at how to install the app'; break;
@@ -172,19 +179,14 @@
   function progress() {
     const st = stOf(), l = L(), cfg = l.cfg || {};
     const xp = A.totalXP(st), lvl = A.level(xp);
-    const startNum = A.dnum(cfg.start || A.dkey());
-    const week = Math.max(1, Math.floor((A.todayNum() - startNum) / 7) + 1);
-    const nextN = A.nextNode(st);
-    const unitNow = nextN ? nextN.u : 24;
-    const diff = unitNow - week;
-    const pace = diff >= 1 ? ['Ahead of plan', 'good'] : diff <= -2 ? ['Behind plan', 'bad'] : ['On track', 'sea'];
+    const V = A.voyage, R = V.route(), cur = V.curIndex(st), isl = R.main[cur];
     const totalNodes = A.nodes.length, doneNodes = A.nodes.filter((n) => st.done[n.id]).length;
     const days = Object.entries(st.days);
     const box = h('div', { class: 'stack', style: { gap: '14px' } });
     box.append(h('div', { class: 'card stack' },
-      h('div', { class: 'row between' }, h('b', null, 'Week ' + Math.min(24, week) + ' of 24 · now in Unit ' + unitNow), h('span', { class: 'pill ' + pace[1] }, pace[0])),
-      h('div', { class: 'progress' }, h('i', { style: { width: Math.round((unitNow - 1) / 24 * 100) + '%' } })),
-      h('div', { class: 'small muted' }, `Plan: one unit a week (4 lessons, 1 conversation, 1 test) for 24 weeks. Started ${cfg.start || '—'}. She has finished ${doneNodes} of ${totalNodes} steps.`)));
+      h('div', { class: 'row between' }, h('b', null, 'Island ' + (cur + 1) + ' of ' + R.main.length + ' · ' + isl.name), h('span', { class: 'pill sea' }, V.SEAS[isl.sea].en)),
+      h('div', { class: 'progress' }, h('i', { style: { width: Math.round((doneNodes / totalNodes) * 100) + '%' } })),
+      h('div', { class: 'small muted' }, `No fixed timeline: she sails at her own pace. She has finished ${doneNodes} of ${totalNodes} islands (lessons, conversations and timed tests) and ${Object.keys(V.st(st).side).length} side missions.`)));
     const secs = days.reduce((a, [, d]) => a + (d.sec || 0), 0);
     const n = days.reduce((a, [, d]) => a + (d.n || 0), 0), ok = days.reduce((a, [, d]) => a + (d.ok || 0), 0);
     box.append(h('div', { class: 'kpis' },
@@ -201,10 +203,10 @@
     // journey grid with reset: tap a lesson to reset it, or reset a whole unit / month
     const grid = h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Lessons'), h('span', { class: 'small muted' }, 'Tap ↺ to reset')),
       h('div', { class: 'small muted' }, 'Reset makes her do it again. Other lessons, her streak, medals and history stay.'));
-    C.months.forEach((m) => {
-      const units = C.units.filter((u) => u.m === m.n && A.nodes.some((x) => x.u === u.id));
+    A.voyage.SEAS.forEach((sea, si) => {
+      const units = C.units.filter((u) => u.id >= sea.from && u.id <= sea.to && A.nodes.some((x) => x.u === u.id));
       const mNodes = A.nodes.filter((x) => units.some((u) => u.id === x.u));
-      grid.append(h('div', { class: 'row between month-reset' }, h('b', { class: 'small' }, 'Month ' + m.n + ' · ' + m.en), resetBtn('Reset month ' + m.n, mNodes, 'month')));
+      grid.append(h('div', { class: 'row between month-reset' }, h('b', { class: 'small' }, 'Sea ' + (si + 1) + ' · ' + sea.en), resetBtn('Reset sea ' + (si + 1), mNodes, 'month')));
       units.forEach((u) => {
         const ns = A.nodes.filter((x) => x.u === u.id);
         grid.append(h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexWrap: 'wrap' } }, h('span', { class: 'small', style: { width: '52px', flex: 'none' } }, u.deco + ' U' + u.id),
@@ -214,6 +216,115 @@
     });
     box.append(grid);
     return box;
+  }
+
+  // ---------------------------------------------------------------- her screen, live
+  function watch() {
+    const box = h('div', { class: 'stack', style: { gap: '10px' } });
+    const meta = h('div', { class: 'card watch-meta' }, h('span', { class: 'small muted' }, 'Connecting to her phone…'));
+    const frame = h('iframe', { class: 'live-frame', title: 'Her screen', sandbox: 'allow-same-origin', referrerpolicy: 'no-referrer' });
+    const phone = h('div', { class: 'phone' }, h('div', { class: 'phone-notch' }), frame);
+    box.append(meta, phone, h('div', { class: 'small muted' }, 'Her phone only sends its screen while this tab is open. She is not told and sees nothing different. It updates about once a second while the app is open on her phone.'));
+    let lastHtml = '', lastT = 0;
+    const base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, '');
+    const tick = async () => {
+      if (!box.isConnected || ADM.cur !== 'watch') return;
+      try {
+        const lv = await A.api.liveGet(ADM.uid);
+        const l = L() || {};
+        if (lv && Date.now() - lv.t < 15000) {
+          A.clear(meta).append(h('div', { class: 'row between' }, h('b', null, (l.online ? '🟢 ' : '🟡 ') + (l.name || 'Alvee') + ' is on: ' + (lv.title || lv.view || '')), h('span', { class: 'small muted' }, A.ago(lv.t))),
+            h('div', { class: 'small muted' }, (lv.step ? 'Step ' + lv.step + ' of ' + lv.total + ' · ' : '') + (lv.timer || '')));
+          if (lv.html && lv.html !== lastHtml) {
+            lastHtml = lv.html;
+            frame.srcdoc = `<!doctype html><html class="${lv.dark ? 'dark' : ''}"><head><meta charset="utf-8"><base href="${base}"><link rel="stylesheet" href="styles.css"><style>body{pointer-events:none;margin:0}.nav{position:fixed}</style></head><body>${lv.html}</body></html>`;
+            frame.onload = () => { try { frame.contentWindow.scrollTo(0, lv.sx || 0); } catch (e) { /* ignore */ } };
+          } else if (lv.t !== lastT) { try { frame.contentWindow.scrollTo(0, lv.sx || 0); } catch (e) { /* ignore */ } }
+          lastT = lv.t;
+        } else {
+          A.clear(meta).append(h('b', null, '⚪ Her app is not open right now'), h('div', { class: 'small muted' }, 'As soon as she opens it, her screen appears here (within ~20 seconds).'));
+        }
+      } catch (e) { /* offline */ }
+      setTimeout(tick, 1000);
+    };
+    setTimeout(tick, 50);
+    return box;
+  }
+
+  // ---------------------------------------------------------------- control room
+  function control() {
+    const st = stOf(), V = A.voyage, s = V.st(st), T = A.treasure;
+    const box = h('div', { class: 'stack', style: { gap: '14px' } });
+    const ctlBox = h('div', { class: 'stack', style: { gap: '14px' } }, h('div', { class: 'small muted' }, 'Loading…'));
+    const R = V.route(), cur = V.curIndex(st), isl = R.main[cur], sea = V.SEAS[isl.sea];
+    box.append(h('div', { class: 'card ctl-sum' },
+      h('div', { class: 'cs-boat', html: V.boatPic(s.boat) }),
+      h('div', { style: { flex: 1 } }, h('b', null, 'Island ' + (cur + 1) + ' of ' + R.main.length + ': ' + isl.name), h('div', { class: 'small muted' }, sea.en + ' · boat: ' + V.boat(s.boat).n),
+        h('div', { class: 'row wrap small', style: { gap: '10px', marginTop: '6px' } }, h('span', null, V.pearlEl(), ' ' + s.p + ' pearls'), h('span', null, '🐚 ' + V.shellCount(st)), h('span', null, '💎 ' + V.treCount(st) + '/' + T.ITEMS.length), h('span', null, '🧭 ' + Object.keys(s.side).length + ' side'), h('span', null, '⛵ ' + s.boats.length + ' boats'))),
+      h('button', { class: 'btn', style: { minHeight: '42px' }, onclick: () => herMap(st) }, '🗺️ Her map')));
+    box.append(ctlBox);
+    (async () => {
+      let c = {};
+      try { c = await A.api.adminCtl(ADM.uid); } catch (e) { /* offline */ }
+      A.clear(ctlBox).append(...controlCards(c, st));
+    })();
+    return box;
+  }
+  async function setCtl(body, msg) {
+    try { await A.api.setCtl(ADM.uid, body); A.toast(msg || 'Sent to her phone'); ADM.tab('control'); }
+    catch (e) { A.toast(e.message || 'Could not save'); }
+  }
+  function controlCards(c, st) {
+    const V = A.voyage, T = A.treasure, s = V.st(st), R = V.route();
+    const out = [];
+    // gifts
+    const kind = h('select', { class: 'input' }, [['chest', '🧰 Treasure chest (she answers 3 questions)'], ['golden', '🏆 Golden chest (better treasure)'], ['bottle', '🍾 Message in a bottle'], ['pearls', '⚪ Pearls'], ['shells', '🐚 Shells'], ['item', '💎 A treasure item'], ['boat', '⛵ A boat']].map(([v, t]) => h('option', { value: v }, t)));
+    const n = h('input', { class: 'input', type: 'number', min: 1, max: 500, value: 10, style: { maxWidth: '110px' } });
+    const item = h('select', { class: 'input' }, Object.entries(T.SETS).map(([k, set]) => h('optgroup', { label: set.ic + ' ' + set.n }, T.ITEMS.filter((x) => x[4] === k).map((x) => h('option', { value: x[0] }, x[1] + ' ' + x[2] + ' (' + T.RAR[x[3]].n + ')' + (s.tre[x[0]] ? ' ✓' : ''))))));
+    const boat = h('select', { class: 'input' }, V.BOATS.filter((b) => b.id !== 'sloop').map((b) => h('option', { value: b.id }, b.n + (s.boats.includes(b.id) ? ' (she has it)' : ''))));
+    const note = h('input', { class: 'input', maxlength: 160, placeholder: 'A note she sees when she picks it up (optional)' });
+    const nRow = h('div', { class: 'row', style: { gap: '8px' } }, h('span', { class: 'small' }, 'How many'), n), iRow = h('div', null, item), bRow = h('div', null, boat);
+    const sync = () => { nRow.style.display = ['pearls', 'shells'].includes(kind.value) ? '' : 'none'; iRow.style.display = kind.value === 'item' ? '' : 'none'; bRow.style.display = kind.value === 'boat' ? '' : 'none'; };
+    kind.onchange = sync; sync();
+    const gifts = (c.gifts || []).slice().reverse();
+    out.push(h('div', { class: 'card stack' }, h('b', null, '🎁 Drop a gift on her sea'), h('div', { class: 'small muted' }, 'It floats next to her boat on the map. She taps it to collect.'),
+      kind, nRow, iRow, bRow, note,
+      h('button', { class: 'btn mango block', onclick: () => setCtl({ gift: { kind: kind.value, n: +n.value, item: kind.value === 'item' ? item.value : undefined, boat: kind.value === 'boat' ? boat.value : undefined, note: note.value.trim() || undefined } }, 'Gift dropped on her sea') }, 'Drop it'),
+      gifts.length ? h('div', { class: 'stack', style: { gap: '6px' } }, h('div', { class: 'small muted' }, 'Gifts you sent'), gifts.slice(0, 12).map((g) => {
+        const got = s.got['g' + g.id];
+        const what = g.kind === 'item' ? (T.byId[g.item] || [])[2] : g.kind === 'boat' ? V.boat(g.boat).n : (['pearls', 'shells'].includes(g.kind) ? g.n + ' ' : '') + g.kind;
+        return h('div', { class: 'row between gift-row' }, h('span', { class: 'small' }, (got ? '✅ ' : '⏳ ') + what + (g.note ? ' · “' + g.note + '”' : '')), got ? h('span', { class: 'small muted' }, A.ago(got)) : h('button', { class: 'icon-btn', 'aria-label': 'Remove gift', onclick: () => setCtl({ delGift: g.id }, 'Removed') }, '🗑️'));
+      })) : null));
+    // events
+    const m = c.mult && c.mult.until > Date.now() ? c.mult : null;
+    const ev = (p, hrs, label) => h('button', { class: 'btn ghost', style: { minHeight: '42px' }, onclick: () => setCtl({ patch: { mult: { p, until: Date.now() + hrs * 3600e3, label } } }, label + ' started') }, label + ' · ' + hrs + 'h');
+    out.push(h('div', { class: 'card stack' }, h('b', null, '✨ Events'), h('div', { class: 'small muted' }, m ? '🟢 Now: ×' + m.p + ' pearls until ' + new Date(m.until).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : 'No event running.'),
+      h('div', { class: 'row wrap', style: { gap: '8px' } }, ev(2, 2, 'Double pearls'), ev(2, 24, 'Double pearls'), ev(3, 3, 'Triple pearls'), m ? h('button', { class: 'btn bad', style: { minHeight: '42px' }, onclick: () => setCtl({ patch: { mult: null } }, 'Event stopped') }, 'Stop') : null)));
+    // islands
+    const opt = (sel) => [h('option', { value: '' }, '— off —'), ...R.main.map((x, i) => h('option', { value: i, selected: String(sel) === String(i) ? true : null }, (i + 1) + '. ' + x.name + ' · ' + A.nodeTitle(x.node).en))];
+    const unlock = h('select', { class: 'input' }, opt(c.unlockTo));
+    const hold = h('select', { class: 'input' }, opt(c.holdAt));
+    out.push(h('div', { class: 'card stack' }, h('b', null, '🏝️ Islands'),
+      h('div', { class: 'small muted' }, 'Open islands ahead of her (she can jump forward), or keep her at an island until you say so. Islands still open one by one otherwise.'),
+      h('label', { class: 'small' }, 'Open every island up to:'), unlock,
+      h('label', { class: 'small' }, 'Keep her at (nothing after this opens):'), hold,
+      h('button', { class: 'btn block', onclick: () => setCtl({ patch: { unlockTo: unlock.value === '' ? null : +unlock.value, holdAt: hold.value === '' ? null : +hold.value } }, 'Islands updated') }, 'Save islands')));
+    // tests + switches
+    const sec = h('input', { class: 'input', type: 'range', min: 10, max: 90, step: 5, value: c.testSec || 30 });
+    const secL = h('b', null, (c.testSec || 30) + ' s');
+    sec.oninput = () => { secL.textContent = sec.value + ' s'; };
+    const sw = (k, label) => h('label', { class: 'row between' }, h('span', null, label), h('input', { type: 'checkbox', checked: c[k] ? null : true, onchange: (e) => setCtl({ patch: { [k]: !e.target.checked } }, 'Saved') }));
+    out.push(h('div', { class: 'card stack' }, h('b', null, '⏱️ Tests and extras'),
+      h('div', { class: 'row between' }, h('span', null, 'Time per test question'), secL), sec,
+      h('button', { class: 'btn ghost block', onclick: () => setCtl({ patch: { testSec: +sec.value } }, 'Test time saved') }, 'Save test time'),
+      sw('sideOff', 'Side missions on'), sw('questOff', 'Daily quests on')));
+    return out;
+  }
+  function herMap(st) {
+    const veil = h('div', { class: 'map-modal' });
+    const close = h('button', { class: 'btn map-close', onclick: () => veil.remove() }, '✕ Close');
+    veil.append(close, A.voyage.mapView(st, { readOnly: true, name: (L() || {}).name || 'Alvee' }));
+    document.body.append(veil);
   }
 
   // ---------------------------------------------------------------- insights: what to change in the next update
@@ -329,7 +440,7 @@
   function resetBtn(label, nodes, kind) {
     const st = stOf();
     const n = nodes.filter((x) => st.done[x.id]).length;
-    return h('button', { class: 'chip reset-chip', disabled: n ? null : true, onclick: () => resetSheet(nodes, label.replace(/^Reset /, '')) }, '↺ ' + (kind === 'month' ? 'month' : 'unit'));
+    return h('button', { class: 'chip reset-chip', disabled: n ? null : true, onclick: () => resetSheet(nodes, label.replace(/^Reset /, '')) }, '↺ ' + (kind === 'month' ? 'sea' : 'unit'));
   }
   function resetSheet(nodes, label) {
     const st = stOf();
@@ -416,7 +527,7 @@
     const sel = h('select', { class: 'input', id: 'msg-trig' },
       h('option', { value: 'now' }, 'Show it now'),
       ...C.units.filter((u) => A.nodes.some((n) => n.u === u.id)).map((u) => h('option', { value: 'unit:' + u.id }, 'When she finishes Unit ' + u.id)),
-      ...[1, 2, 3, 4, 5, 6].map((m) => h('option', { value: 'month:' + m }, 'When she finishes Month ' + m)),
+      ...[1, 2, 3, 4, 5, 6, 7, 8].map((m) => h('option', { value: 'sea:' + m }, 'When she finishes sea ' + m + ' (' + A.voyage.SEAS[m - 1].en + ')')),
       ...[3, 7, 14, 30, 60, 100].map((n) => h('option', { value: 'streak:' + n }, 'At a ' + n + '-day streak')),
       ...[500, 1000, 2500, 5000].map((n) => h('option', { value: 'xp:' + n }, 'At ' + n + ' XP')));
     const out = h('div', { class: 'small muted' });

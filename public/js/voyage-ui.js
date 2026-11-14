@@ -1,0 +1,379 @@
+/* voyage-ui.js — the voyage map, islands, chests, the treasure book, the fleet and daily quests */
+(function () {
+  'use strict';
+  const A = window.AE, C = A.C, h = A.h, V = A.voyage, T = A.treasure, SC = A.scenes;
+  const VIEWS = A.VIEWS;
+  const mascot = (m, s) => A.art.mascotEl(m, s);
+  const STEP = 128;
+  const RAR = T.RAR;
+
+  // ---------------------------------------------------------------- HUD (pearls, shells, treasure, boat, quests)
+  V.hud = (st) => {
+    const s = V.st(st);
+    const q = V.ctl().questOff ? [] : V.quests();
+    const qOpen = q.filter((x) => x.done && !x.claimed).length;
+    return h('div', { class: 'v-hud' },
+      h('button', { class: 'hud-i', 'aria-label': s.p + ' pearls', onclick: () => A.go('treasure', 'fleet') }, V.pearlEl(), h('b', { class: 'num' }, s.p)),
+      h('button', { class: 'hud-i', 'aria-label': V.shellCount(st) + ' shells', onclick: () => A.go('treasure', 'shells') }, h('span', { html: V.shellSVG('scallop', 22) }), h('b', { class: 'num' }, V.shellCount(st))),
+      h('button', { class: 'hud-i', 'aria-label': 'Treasure', onclick: () => A.go('treasure', 'book') }, h('span', { html: V.chestSVG(false, true) }), h('b', { class: 'num' }, V.treCount(st))),
+      q.length ? h('button', { class: 'hud-i quest-btn' + (qOpen ? ' ping' : ''), 'aria-label': 'Daily quests', onclick: () => questSheet() }, '📜', h('b', { class: 'num' }, q.filter((x) => x.claimed).length + '/3')) : null,
+      h('button', { class: 'hud-i boat-btn', 'aria-label': 'Your boats', onclick: () => A.go('treasure', 'fleet'), html: V.boatPic(s.boat, false, 'hud-boat') }));
+  };
+
+  // ---------------------------------------------------------------- the map
+  const posX = (k, si) => 50 + Math.sin(k * 0.95 + si * 1.7) * 30;
+  VIEWS.journey = () => V.mapView(A.state, {});
+  V.mapView = (st, opts) => {
+    const o = opts || {};
+    const s = V.st(st), R = V.route(), cur = V.curIndex(st), night = A.art.phase() === 'night';
+    const root = h('div', { class: 'screen voyage' + (o.readOnly ? ' read-only' : '') });
+    if (!o.readOnly) root.append(V.hud(st));
+    const total = R.main.length;
+    const pct = Math.round((cur / Math.max(1, total - 1)) * 100);
+    root.append(h('div', { class: 'v-title' },
+      h('div', null, h('h1', null, (o.name || A.user.name) + '’s Voyage'), h('p', { class: 'th muted' }, 'ล่องเรือจากประเทศไทยสู่มัลดีฟส์ · Thailand → Maldives')),
+      h('div', { class: 'route-bar', 'aria-label': 'Island ' + (cur + 1) + ' of ' + total },
+        h('span', { class: 'flagc', html: flag('th') }), h('div', { class: 'rb' }, h('i', { style: { width: pct + '%' } }), h('span', { class: 'rb-boat', style: { left: pct + '%' }, html: V.boatPic(s.boat, false, 'tiny') })), h('span', { class: 'flagc', html: flag('mv') })),
+      h('div', { class: 'small muted num' }, 'Island ' + (cur + 1) + ' of ' + total + ' · ' + V.SEAS[R.main[cur].sea].en)));
+    const map = h('div', { class: 'v-map' });
+    root.append(map);
+    const islEls = {};
+    V.SEAS.forEach((sea, si) => {
+      const isles = R.all.filter((x) => x.sea === si);
+      const mains = isles.filter((x) => x.kind === 'node');
+      const firstGi = mains.length ? mains[0].gi : 0;
+      const reached = firstGi <= cur;
+      const sec = h('section', { class: 'sea-sec ter-' + sea.ter + (reached ? '' : ' far'), style: { '--s1': sea.col[0], '--s2': sea.col[1] } });
+      const doneN = mains.filter((x) => st.done[x.node.id]).length;
+      const pc = sea.art[0];
+      sec.append(h('div', { class: 'sea-head' },
+        h('div', { class: 'sea-art' + (reached ? '' : ' blur'), html: SC.svg(pc, 'art') }),
+        h('div', { class: 'sea-tx' },
+          h('div', { class: 'small' }, h('span', { class: 'flagc sm', html: flag(sea.flag) }), ' Sea ' + (si + 1) + ' of ' + V.SEAS.length),
+          h('h2', null, sea.en), h('div', { class: 'th' }, sea.th),
+          h('div', { class: 'mini-bar wide' }, h('i', { style: { width: (mains.length ? (doneN / mains.length) * 100 : 0) + '%' } })),
+          h('div', { class: 'small num' }, doneN + ' / ' + mains.length + ' islands' + (reached ? '' : ' · 🔒')))));
+      const H = mains.length * STEP + 40;
+      const field = h('div', { class: 'field', style: { height: H + 'px' } });
+      // the dotted sea route between this sea's islands
+      const pts = mains.map((x, k) => [posX(k, si), k * STEP + 54]);
+      if (pts.length > 1) {
+        let d = `M${pts[0][0]} ${pts[0][1]}`;
+        for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += ` C${x0} ${y0 + STEP / 2} ${x1} ${y1 - STEP / 2} ${x1} ${y1}`; }
+        const doneTo = mains.filter((x) => st.done[x.node.id]).length;
+        field.innerHTML = `<svg class="route-svg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" class="rt-bg"/><path d="${d}" class="rt-done" pathLength="100" style="stroke-dasharray:${(doneTo / Math.max(1, mains.length - 1)) * 100} 100"/></svg>`;
+      }
+      // waves
+      field.append(h('div', { class: 'waves-bg', 'aria-hidden': 'true' }));
+      isles.forEach((isl) => {
+        let x, y;
+        if (isl.kind === 'node') { x = posX(isl.k, si); y = isl.k * STEP + 54; }
+        else { const ak = isl.anchor.k; const ax = posX(ak, si); x = ax > 50 ? 13 : 87; y = ak * STEP + 54 + STEP * 0.5; }
+        if (isl.kind === 'node' && isl.gi === total - 1) isl.final = 1;
+        const el = islandEl(st, isl, cur, o);
+        el.style.left = x + '%'; el.style.top = y + 'px';
+        if (isl.kind === 'side') field.append(h('div', { class: 'side-link' + (x > 50 ? ' r' : ''), style: { top: y - STEP * 0.5 + 'px', left: Math.min(x, posX(isl.anchor.k, si)) + '%', width: Math.abs(x - posX(isl.anchor.k, si)) + '%', height: STEP * 0.5 + 'px' } }));
+        field.append(el);
+        if (isl.kind === 'node') islEls[isl.gi] = { el, x, y, field };
+      });
+      // things floating between islands
+      if (!o.readOnly) mains.forEach((isl, k) => {
+        if (k === mains.length - 1) return;
+        V.spawnsFor(isl.gi).forEach((sp) => {
+          if (s.got[sp.id]) return;
+          const [x0, y0] = pts[k], [x1, y1] = pts[k + 1];
+          // float on open water beside the route, away from the islands and their names
+          const mx = (x0 + x1) / 2, side = mx < 50 ? 1 : -1, j = +sp.id.split('.')[1] || 0;
+          const x = Math.max(7, Math.min(93, mx + side * (26 + sp.fx * 12) - side * j * 14)), y = (y0 + y1) / 2 + (sp.fy - 0.5) * 34 + j * 22;
+          field.append(spawnEl(sp, x, y, isl.gi < cur));
+        });
+      });
+      sec.append(field);
+      map.append(sec);
+    });
+    // destination card
+    map.append(h('div', { class: 'card dest-card' }, h('div', { html: SC.svg('mv3', 'art') }), h('div', { class: 'dest-tx' }, h('b', null, '❤️ Destination: Addu Atoll, Maldives'), h('div', { class: 'th small' }, 'จุดหมายปลายทาง: อัดดู มัลดีฟส์ — มีคนรออยู่ที่นั่น'))));
+
+    // boat + daily tide + gifts, placed once the map is drawn
+    const boat = h('div', { class: 'v-boat', 'aria-label': 'Your boat' });
+    const paintBoat = (flip) => { boat.innerHTML = `<div class="wake"></div>${V.boatPic(s.boat, flip)}`; boat.append(h('div', { class: 'boat-tao', html: A.art.mascot('happy', 34) })); };
+    paintBoat(false);
+    requestAnimationFrame(() => {
+      const target = islEls[cur];
+      if (!target) return;
+      const place = (gi, flip) => { const t = islEls[gi]; if (!t) return; if (boat.parentNode !== t.field) t.field.append(boat); boat.style.left = (t.x > 50 ? t.x - 33 : t.x + 33) + '%'; boat.style.top = t.y + 10 + 'px'; if (flip != null) paintBoat(flip); };
+      if (!o.readOnly) {
+        V.dailySpawns().concat(V.gifts()).forEach((sp, j) => {
+          if (s.got[sp.id]) return;
+          const side = target.x > 50 ? -1 : 1;
+          const x = Math.max(7, Math.min(93, target.x + side * (22 + j * 9))), y = target.y + 52 + j * 24;
+          target.field.append(spawnEl(sp, x, y, true));
+        });
+      }
+      const from = Math.max(0, Math.min(s.at < 0 ? cur : s.at, cur));
+      place(from, false);
+      const scrollTo = (gi) => { const t = islEls[gi]; if (t) t.el.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+      if (o.readOnly || from >= cur) { place(cur); setTimeout(() => scrollTo(cur), 60); if (!o.readOnly && s.at !== cur) { s.at = cur; A.saveSoon(); } return; }
+      // sail island by island
+      let gi = from;
+      scrollTo(gi);
+      boat.classList.add('sailing');
+      const hop = () => {
+        if (!boat.isConnected) return;
+        if (gi >= cur) { boat.classList.remove('sailing'); s.at = cur; A.saveSoon(); A.sfx.play('done'); landBubble(islEls[cur]); return; }
+        const a = islEls[gi], b = islEls[gi + 1];
+        gi++;
+        place(gi, b && a ? b.x > a.x : false);
+        scrollTo(gi);
+        setTimeout(hop, 950);
+      };
+      setTimeout(hop, 700);
+    });
+    if (!o.readOnly) A.presence = { screen: 'voyage', title: 'Island ' + (cur + 1) };
+    return root;
+  };
+  function landBubble(t) { if (!t) return; const b = h('div', { class: 'land-bubble' }, '⚓ Land ho! · ถึงเกาะใหม่แล้ว!'); t.field.append(b); b.style.left = t.x + '%'; b.style.top = t.y - 70 + 'px'; setTimeout(() => b.remove(), 2600); }
+  const flag = (k) => k === 'mv'
+    ? '<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#d21034"/><rect x="7" y="5" width="16" height="10" fill="#007e3a"/><circle cx="15.4" cy="10" r="3.7" fill="#fff"/><circle cx="16.9" cy="10" r="3.1" fill="#007e3a"/></svg>'
+    : '<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#a51931"/><rect y="3.34" width="30" height="13.33" fill="#f4f5f8"/><rect y="6.67" width="30" height="6.66" fill="#2c3590"/></svg>';
+  V.flag = flag;
+
+  function islandEl(st, isl, cur, o) {
+    const s = V.st(st);
+    let done, open, isCur, kindIc, label;
+    if (isl.kind === 'node') {
+      const d = st.done[isl.node.id];
+      done = !!d; open = V.islandOpen(st, isl); isCur = isl.gi === cur && !done;
+      const t = A.nodeTitle(isl.node);
+      kindIc = isl.node.kind === 'lesson' ? 'book' : isl.node.kind === 'talk' ? 'chat' : 'trophy';
+      label = h('div', { class: 'isl-lbl' }, h('b', null, isl.name), h('span', null, t.en), d && d.s ? h('span', { class: 'isl-stars' }, '★'.repeat(d.s), h('i', null, '★'.repeat(3 - d.s))) : null);
+    } else {
+      const d = s.side[isl.id];
+      done = !!d; open = V.islandOpen(st, isl); isCur = false; kindIc = 'search';
+      label = h('div', { class: 'isl-lbl side' }, h('b', null, isl.name), h('span', null, 'Side mission · ภารกิจเสริม'));
+    }
+    const el = h('button', { class: 'isl' + (done ? ' done' : '') + (open ? ' open' : ' locked') + (isCur ? ' cur' : '') + (isl.kind === 'side' ? ' side' : '') + (isl.final ? ' final' : '') + (isl.kind === 'node' && isl.node.kind === 'check' ? ' test' : ''),
+      'data-gi': isl.gi != null ? isl.gi : '', 'aria-label': (isl.name || '') + (done ? ', done' : open ? ', open' : ', locked'),
+      onclick: () => (o.readOnly ? null : islandSheet(isl)) },
+      h('div', { class: 'isl-art', html: V.islandSVG(isl, { night: false }) }),
+      h('span', { class: 'isl-badge', html: A.art.icon(done ? 'check' : open ? kindIc : 'lock', 16) }),
+      done ? h('span', { class: 'isl-flag', html: flag(V.SEAS[isl.sea].flag) }) : null,
+      isCur ? h('span', { class: 'isl-go' }, '▶ START') : null,
+      label);
+    return el;
+  }
+
+  function spawnEl(sp, x, y, reach) {
+    let inner;
+    if (sp.kind === 'shell') inner = h('span', { html: V.shellSVG(sp.shell || (sp.gift && sp.gift.shell) || 'cowrie', 30) });
+    else if (sp.kind === 'pearl' || sp.kind === 'pearls') inner = V.pearlEl('big');
+    else if (sp.kind === 'chest' || sp.kind === 'golden') inner = h('span', { html: V.chestSVG(sp.kind === 'golden' || (sp.gift && sp.gift.kind === 'golden')) });
+    else if (sp.kind === 'bottle') inner = h('span', { html: V.bottleSVG() });
+    else if (sp.kind === 'item' || sp.kind === 'boat' || sp.kind === 'shells') inner = h('span', { class: 'gift-box' }, '🎁');
+    else inner = h('span', null, '✨');
+    const el = h('button', { class: 'spawn k-' + sp.kind + (reach ? '' : ' far') + (sp.gift ? ' gift' : '') + (sp.daily ? ' daily' : ''), style: { left: x + '%', top: y + 'px' }, 'aria-label': sp.gift ? 'A gift for you' : sp.kind,
+      onclick: (e) => { e.stopPropagation(); collect(sp, el, reach); } }, inner, sp.gift ? h('span', { class: 'gift-tag' }, '🎁') : null);
+    return el;
+  }
+  function floatText(el, txt) { const r = el.getBoundingClientRect(); const f = h('div', { class: 'float-txt', style: { left: r.left + r.width / 2 + 'px', top: r.top + 'px' } }, txt); document.body.append(f); setTimeout(() => f.remove(), 1300); }
+  function collect(sp, el, reach) {
+    if (!reach) { A.toast('Sail closer first · ล่องเรือไปให้ถึงก่อนนะ ⛵'); return; }
+    const s = V.st();
+    const g = sp.gift;
+    if (g && g.note) A.toast('💌 ' + g.note, 3200);
+    if (sp.kind === 'shell' || (g && g.kind === 'shells')) {
+      const n = g ? Math.max(1, g.n || 1) : 1;
+      const id = sp.shell || (g && g.shell) || 'cowrie';
+      for (let i = 0; i < n; i++) { const sid = g && !g.shell ? A.pick(V.SHELLS.filter((x) => x[3] !== 'l'))[0] : id; s.sh[sid] = (s.sh[sid] || 0) + 1; }
+      s.got[sp.id] = Date.now(); V.count('shells', n);
+      const sh = V.shell(id);
+      A.sfx.play('good'); floatText(el, g ? '+' + n + ' shells' : '+1 ' + sh[1]);
+      A.track('collect', { k: 'shell', id, gift: g ? 1 : undefined });
+      el.classList.add('picked'); setTimeout(() => el.remove(), 500);
+      if (!g && (s.sh[id] === 1)) setTimeout(() => A.sheet(h('div', { class: 'stack', style: { alignItems: 'center', textAlign: 'center', gap: '8px' } }, h('div', { class: 'shell-stage', html: V.shellSVG(id, 120) }), h('div', { class: 'small muted' }, 'New shell! · เปลือกหอยชนิดใหม่'), h('h2', null, sh[1]), h('div', { class: 'th' }, sh[2]), h('span', { class: 'rar-chip', style: { '--rc': RAR[sh[3]].col } }, RAR[sh[3]].n))), 400);
+      A.saveSoon(); refreshHud(); return;
+    }
+    if (sp.kind === 'pearl' || (g && g.kind === 'pearls')) {
+      const k = V.addPearls(g ? Math.max(1, g.n || 1) : 1);
+      s.got[sp.id] = Date.now(); V.count('pearls', g ? 0 : 1);
+      A.sfx.play('good'); floatText(el, '+' + k + ' pearl' + (k > 1 ? 's' : ''));
+      A.track('collect', { k: 'pearl', n: k, gift: g ? 1 : undefined });
+      el.classList.add('picked'); setTimeout(() => el.remove(), 500);
+      A.saveSoon(); refreshHud(); return;
+    }
+    if (g && g.kind === 'item') {
+      const cur = s.tre[g.item]; s.tre[g.item] = { n: ((cur && cur.n) || 0) + 1, t: (cur && cur.t) || Date.now() }; s.got[sp.id] = Date.now();
+      A.saveSoon(); el.remove(); A.track('collect', { k: 'item', id: g.item, gift: 1 });
+      treasureReveal({ item: T.byId[g.item], isNew: !cur }, true); return;
+    }
+    if (g && g.kind === 'boat') {
+      if (!s.boats.includes(g.boat)) s.boats.push(g.boat);
+      s.got[sp.id] = Date.now(); A.saveSoon(); el.remove(); A.track('collect', { k: 'boat', id: g.boat, gift: 1 });
+      const b = V.boat(g.boat);
+      A.sheet(h('div', { class: 'stack', style: { alignItems: 'center', textAlign: 'center' } }, h('div', { class: 'boat-stage', html: V.boatPic(b.id) }), h('div', { class: 'small muted' }, '🎁 A new boat! · ได้เรือลำใหม่'), h('h2', null, b.n), h('div', { class: 'th' }, b.th), h('button', { class: 'btn block', onclick: () => { s.boat = b.id; A.saveSoon(); A.go('journey'); document.querySelectorAll('.sheet,.veil').forEach((x) => x.remove()); } }, '⛵ Sail it now')));
+      return;
+    }
+    // chests and bottles open with a small English task
+    const golden = sp.kind === 'golden' || (g && g.kind === 'golden');
+    const isBottle = sp.kind === 'bottle';
+    const sh = A.sheet(h('div', { class: 'stack', style: { alignItems: 'center', textAlign: 'center', gap: '10px' } },
+      h('div', { class: 'chest-stage wobble', html: isBottle ? V.bottleSVG() : V.chestSVG(golden) }),
+      h('h2', null, isBottle ? 'A message in a bottle!' : golden ? 'A golden chest!' : 'A treasure chest!'),
+      h('div', { class: 'th' }, isBottle ? 'มีข้อความในขวด! ฟังและตอบ 5 ข้อเพื่อเปิดอ่าน' : 'หีบสมบัติล็อกอยู่! ตอบคำถามภาษาอังกฤษ 3 ข้อเพื่อเปิด'),
+      h('div', { class: 'small muted' }, isBottle ? 'Listen and answer 5 questions to open it.' : 'Answer 3 English questions to unlock it. Get 2 right!'),
+      h('button', { class: 'btn mango block', onclick: () => { sh.close(); A.play(isBottle ? 'bottle' : 'chest', { id: sp.id, golden }); } }, isBottle ? '🍾 Open it' : '🗝️ Unlock'),
+      h('button', { class: 'btn ghost block', onclick: () => sh.close() }, 'Later · ไว้ทีหลัง')));
+  }
+  function refreshHud() { const old = document.querySelector('.v-hud'); if (old) old.replaceWith(V.hud(A.state)); }
+
+  // ---------------------------------------------------------------- island details
+  function islandSheet(isl) {
+    const st = A.state, sea = V.SEAS[isl.sea];
+    const open = V.islandOpen(st, isl);
+    const content = h('div', { class: 'stack isl-sheet', style: { gap: '10px' } });
+    content.append(h('div', { class: 'isl-hero', style: { '--s1': sea.col[0], '--s2': sea.col[1] }, html: V.islandSVG(isl, {}) }));
+    content.append(h('div', { class: 'small muted' }, h('span', { class: 'flagc sm', html: flag(sea.flag) }), ' ' + sea.en + ' · ' + sea.th));
+    if (isl.kind === 'node') {
+      const n = isl.node, t = A.nodeTitle(n), d = st.done[n.id];
+      const kind = n.kind === 'lesson' ? ['📖', 'Lesson island', 'เกาะบทเรียน'] : n.kind === 'talk' ? ['💬', 'Conversation island', 'เกาะบทสนทนา'] : ['⏱️', 'Timed test fortress', 'ป้อมสอบจับเวลา'];
+      content.append(h('h2', null, isl.name), h('div', { class: 'pill sea' }, kind[0] + ' ' + kind[1] + ' · ' + kind[2]),
+        h('div', null, h('b', null, t.en), h('div', { class: 'th muted' }, t.th)));
+      if (n.kind === 'check') {
+        const sec = V.ctl().testSec || 30;
+        content.append(h('div', { class: 'note th' }, '⏱️ Timed test: about ' + sec + ' seconds per question. Pass with 70%. · สอบจับเวลา ข้อละประมาณ ' + sec + ' วินาที ต้องได้ 70% ขึ้นไป · Prize: golden chest 🏆'));
+      }
+      if (d) content.append(h('div', { class: 'small' }, 'Best: ' + d.a + '% · ' + '★'.repeat(d.s) + ' · played ' + d.n + '×'));
+      if (open) content.append(h('button', { class: 'btn mango block', onclick: () => { sh.close(); A.play('node', n.id); } }, d ? '🔁 Sail here again' : '⛵ Start · เริ่มเลย'));
+      else {
+        const prev = V.route().main[isl.gi - 1];
+        content.append(h('div', { class: 'note th' }, '🔒 ยังไปไม่ได้ — ทำเกาะ “' + (prev ? prev.name : '') + '” ให้จบก่อนนะ · Finish the island before this one first.'));
+      }
+    } else {
+      const MS = {
+        speed: ['⚡ Speed round', 'ตอบเร็ว 10 ข้อ ทันเวลา', 'Answer 10 questions against the clock.'],
+        listen: ['👂 Listening cove', 'ฟังแล้วตอบ 8 ข้อ', 'Listen and answer 8 questions.'],
+        talk: ['💬 Islanders’ chat', 'คุยกับคนบนเกาะ', 'Help the islanders in a conversation.'],
+        words: ['🧩 Word hunt', 'ล่าคำศัพท์ 10 คำ', 'Find the right words 10 times.'],
+        build: ['🧱 Sentence builders', 'เรียงประโยค 8 ประโยค', 'Build 8 sentences.'],
+      }[isl.mission];
+      const d = V.st(st).side[isl.id];
+      content.append(h('h2', null, isl.name), h('div', { class: 'pill mango' }, MS[0]), h('div', null, MS[2]), h('div', { class: 'th muted' }, MS[1]),
+        h('div', { class: 'note th' }, '🎁 Prize: golden chest + 5 pearls (first time) · รางวัล: หีบทอง + ไข่มุก 5 เม็ด'));
+      if (d) content.append(h('div', { class: 'small' }, '✅ Done · best ' + d.a + '%'));
+      if (open) content.append(h('button', { class: 'btn mango block', onclick: () => { sh.close(); A.play('side', isl); } }, d ? '🔁 Play again' : '🧭 Start the mission'));
+      else content.append(h('div', { class: 'note th' }, V.ctl().sideOff ? 'ภารกิจเสริมปิดอยู่ตอนนี้' : '🔒 ทำเกาะ “' + isl.anchor.name + '” ให้จบก่อน แล้วภารกิจนี้จะเปิด'));
+    }
+    const sh = A.sheet(content);
+  }
+  V.islandSheet = islandSheet;
+
+  // ---------------------------------------------------------------- treasure reveal (after a chest)
+  function treasureCard(it, isNew, big) {
+    const r = RAR[it[3]], set = T.SETS[it[4]];
+    return h('div', { class: 'tre-card r-' + it[3] + (big ? ' big' : ''), style: { '--rc': r.col } },
+      h('div', { class: 'tre-e' }, it[1]),
+      h('div', { class: 'tre-n' }, it[2]),
+      h('div', { class: 'tre-m' }, h('span', { class: 'rar-chip', style: { '--rc': r.col } }, r.n), ' ' + set.ic + ' ' + set.n, isNew ? h('span', { class: 'new-chip' }, 'NEW') : null),
+      big ? h('p', { class: 'tre-story' }, it[5]) : null);
+  }
+  V.treasureCard = treasureCard;
+  function treasureReveal(roll, gift) {
+    A.sfx.play('done'); setTimeout(A.confetti, 100);
+    A.sheet(h('div', { class: 'stack', style: { alignItems: 'center', textAlign: 'center', gap: '10px' } },
+      h('div', { class: 'small muted' }, gift ? '🎁 A gift for you · ของขวัญสำหรับคุณ' : '✨ You found · คุณพบ'),
+      treasureCard(roll.item, roll.isNew, true)));
+  }
+  V.treasureReveal = treasureReveal;
+
+  // result-screen block for voyage rewards
+  V.resultBlock = (rw, ses) => {
+    if (!rw) return null;
+    const box = h('div', { class: 'stack', style: { width: '100%', gap: '10px', alignItems: 'center' } });
+    if (rw.locked) box.append(h('div', { class: 'card stack', style: { width: '100%', textAlign: 'center' } }, h('div', { class: 'chest-stage', html: ses.kind === 'bottle' ? V.bottleSVG() : V.chestSVG(ses.arg && ses.arg.golden) }), h('b', null, 'The lock stayed shut'), h('div', { class: 'th small' }, 'ยังเปิดไม่ได้ ลองใหม่อีกครั้งนะ — หีบยังอยู่ที่เดิม')));
+    if (rw.chest) {
+      box.append(h('div', { class: 'chest-stage open', html: V.chestSVG(!!rw.golden, true) }));
+      box.append(treasureCard(rw.chest.item, rw.chest.isNew, true));
+    }
+    if (rw.lines && rw.lines.length) box.append(h('div', { class: 'reward-lines' }, rw.lines.map(([en, th]) => h('div', { class: 'rw' }, V.pearlEl(), h('span', null, en), h('span', { class: 'th small muted' }, th)))));
+    return box;
+  };
+
+  // ---------------------------------------------------------------- daily quests
+  function questSheet() {
+    const q = V.quests();
+    const box = h('div', { class: 'stack', style: { gap: '10px' } },
+      h('div', { class: 'row', style: { gap: '10px' } }, mascot('party', 56), h('div', null, h('h2', null, 'Today’s quests'), h('div', { class: 'th muted small' }, 'ภารกิจประจำวัน · ทำครบ 3 อย่างได้ไข่มุกโบนัส'))));
+    q.forEach((x) => box.append(h('div', { class: 'quest' + (x.claimed ? ' claimed' : x.done ? ' ready' : '') },
+      h('span', { class: 'qi' }, x.claimed ? '✅' : x.done ? '🎁' : '⬜'),
+      h('div', { style: { flex: 1 } }, h('b', null, x.en), h('div', { class: 'th small muted' }, x.th)),
+      x.done && !x.claimed ? h('button', { class: 'btn mango', style: { minHeight: '40px', padding: '6px 12px' }, onclick: () => { const k = V.claimQuest(x.id); A.sfx.play('good'); A.toast('+' + k + ' pearls'); sh.close(); refreshHud(); questSheet(); } }, 'Claim +3') : h('span', { class: 'small muted' }, x.claimed ? 'claimed' : '+3 🫧'))));
+    box.append(h('div', { class: 'small muted' }, 'New quests every day. Finish all three for +5 bonus pearls.'));
+    const sh = A.sheet(box);
+  }
+  V.questSheet = questSheet;
+
+  // ---------------------------------------------------------------- treasure: book, shells, postcards, medals, fleet
+  VIEWS.treasure = (tab) => {
+    const st = A.state, s = V.st(st);
+    tab = tab || 'book';
+    const root = h('div', { class: 'screen treasure-scr' });
+    root.append(V.hud(st));
+    root.append(h('div', null, h('h1', null, 'Treasure'), h('p', { class: 'th muted' }, 'ของสะสมจากการเดินทาง')));
+    const tabs = [['book', '📖 Book'], ['shells', '🐚 Shells'], ['cards', '🖼️ Postcards'], ['medals', '🏅 Medals'], ['fleet', '⛵ Boats']];
+    root.append(h('div', { class: 'tabs scroll' }, tabs.map(([k, t]) => h('button', { class: k === tab ? 'on' : '', onclick: () => (k === 'medals' ? A.go('medals') : A.go('treasure', k)) }, t))));
+    if (tab === 'book') {
+      const got = Object.keys(s.tre).length;
+      root.append(h('div', { class: 'card chest' }, h('div', { html: V.chestSVG(true, true), class: 'chest-mini' }), h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + T.ITEMS.length), h('div', { class: 'small th muted' }, 'สมบัติที่พบ · open chests on the sea to fill the book'), h('div', { class: 'goal-bar', style: { marginTop: '6px' } }, h('i', { style: { width: (got / T.ITEMS.length) * 100 + '%' } })))));
+      Object.entries(T.SETS).forEach(([k, set]) => {
+        const items = T.ITEMS.filter((x) => x[4] === k).sort((a, b) => T.ORDER.indexOf(a[3]) - T.ORDER.indexOf(b[3]));
+        const n = items.filter((x) => s.tre[x[0]]).length;
+        root.append(h('div', { class: 'set-head' }, h('span', { class: 'set-ic' }, set.ic), h('div', { style: { flex: 1 } }, h('b', null, set.n), h('div', { class: 'small muted' }, n === items.length ? '👑 ' + set.gt : n >= items.length / 2 ? '🎖️ ' + set.title : n + ' / ' + items.length)), h('span', { class: 'pill' + (n === items.length ? ' good' : '') }, n + '/' + items.length)));
+        root.append(h('div', { class: 'tre-grid' }, items.map((it) => {
+          const own = s.tre[it[0]];
+          return h('button', { class: 'tre-cell r-' + it[3] + (own ? ' own' : ''), style: { '--rc': RAR[it[3]].col }, onclick: () => own ? A.sheet(h('div', { class: 'stack', style: { alignItems: 'center' } }, treasureCard(it, false, true), h('div', { class: 'small muted' }, '× ' + own.n + ' · found ' + new Date(own.t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })))) : A.toast('Not found yet · ยังไม่พบ — ' + RAR[it[3]].n) },
+            h('span', { class: 'te' }, own ? it[1] : '❔'), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
+        })));
+      });
+    } else if (tab === 'shells') {
+      const kinds = V.SHELLS.filter((x) => s.sh[x[0]]).length;
+      root.append(h('div', { class: 'card chest' }, h('div', { html: V.shellSVG('conch', 64) }), h('div', null, h('div', { class: 'chest-n' }, h('b', null, kinds), ' / ' + V.SHELLS.length + ' kinds'), h('div', { class: 'small th muted' }, 'เปลือกหอยทั้งหมด ' + V.shellCount(st) + ' ชิ้น · pick them up on the sea'))));
+      root.append(h('div', { class: 'shell-grid' }, V.SHELLS.map((x) => {
+        const n = s.sh[x[0]] || 0;
+        return h('div', { class: 'shell-cell' + (n ? ' own' : ''), style: { '--rc': RAR[x[3]].col } }, h('span', { html: V.shellSVG(x[0], 54) }), h('b', null, n ? x[1] : '???'), h('span', { class: 'th small muted' }, n ? x[2] : RAR[x[3]].n), n ? h('span', { class: 'tx' }, '×' + n) : null);
+      })));
+    } else if (tab === 'cards') {
+      const pcs = V.postcards(st);
+      root.append(h('div', { class: 'small muted th' }, 'โปสการ์ดภาพวาดจากแต่ละทะเล ได้ระหว่างการเดินทาง · ' + pcs.filter((p) => p.on).length + ' / ' + pcs.length));
+      root.append(h('div', { class: 'pc-grid' }, pcs.map((p) => h('button', { class: 'pc' + (p.on ? ' on' : ''), onclick: () => p.on ? A.sheet(h('div', { class: 'stack' }, h('div', { class: 'pc-big', html: SC.svg(p.id, 'art') }), h('b', null, p.alt), h('div', { class: 'small muted' }, V.SEAS[p.sea].en + ' · ' + V.SEAS[p.sea].th))) : A.toast('Sail further to get this postcard · ล่องเรือต่อไปอีกนิด') },
+        h('div', { class: 'pc-art', html: SC.svg(p.id, 'art') }), h('span', { class: 'pc-cap' }, p.on ? V.SEAS[p.sea].en : '🔒')))));
+    } else if (tab === 'fleet') {
+      const cur = V.curIndex(st);
+      root.append(h('div', { class: 'card chest' }, V.pearlEl('big'), h('div', null, h('div', { class: 'chest-n' }, h('b', null, s.p), ' pearls'), h('div', { class: 'small th muted' }, 'ไข่มุกใช้ปลดล็อกเรือลำใหม่ · get pearls from islands, quests, chests and the sea'))));
+      root.append(h('div', { class: 'fleet' }, V.BOATS.map((b) => {
+        const own = s.boats.includes(b.id), on = s.boat === b.id, islOk = cur >= b.isl || own, can = !own && islOk && s.p >= b.p;
+        return h('div', { class: 'boat-card' + (on ? ' on' : '') + (own ? ' own' : '') },
+          h('div', { class: 'bc-pic', html: V.boatPic(b.id) }),
+          h('div', { class: 'bc-tx' }, h('b', null, b.n), h('div', { class: 'th small' }, b.th), h('div', { class: 'small muted' }, b.d),
+            own ? null : h('div', { class: 'small num' }, (islOk ? '✅' : '🔒') + ' Island ' + (b.isl + 1) + ' · ', V.pearlEl(), ' ' + b.p)),
+          on ? h('span', { class: 'pill good' }, 'Sailing') : own ? h('button', { class: 'btn', onclick: () => { s.boat = b.id; A.saveSoon(); A.track('boat_select', { id: b.id }); A.go('treasure', 'fleet'); } }, 'Sail it')
+            : h('button', { class: 'btn ' + (can ? 'mango' : 'ghost'), disabled: can ? null : true, onclick: () => { if (!can) return; s.p -= b.p; s.boats.push(b.id); s.boat = b.id; A.saveSoon(); A.track('boat_unlock', { id: b.id, p: b.p }); A.sfx.play('done'); A.confetti(); A.go('treasure', 'fleet'); } }, can ? 'Unlock' : islOk ? 'Need ' + (b.p - s.p) : 'Locked'));
+      })));
+    }
+    return root;
+  };
+
+  // ---------------------------------------------------------------- home: the voyage card
+  V.homeCard = (st) => {
+    const s = V.st(st), R = V.route(), cur = V.curIndex(st), isl = R.main[cur], sea = V.SEAS[isl.sea];
+    const card = h('button', { class: 'card voyage-card', style: { '--s1': sea.col[0], '--s2': sea.col[1] }, onclick: () => A.go('journey') },
+      h('div', { class: 'vc-sea' },
+        h('div', { class: 'vc-isl', html: V.islandSVG(isl, {}) }),
+        h('div', { class: 'vc-boat', html: V.boatPic(s.boat, false) }, h('span', { class: 'boat-tao', html: A.art.mascot('happy', 26) })),
+        h('div', { class: 'waves-bg', 'aria-hidden': 'true' })),
+      h('div', { class: 'vc-tx' },
+        h('div', { class: 'small' }, h('span', { class: 'flagc sm', html: flag(sea.flag) }), ' ' + sea.en),
+        h('b', null, isl.name), h('div', { class: 'small num' }, 'Island ' + (cur + 1) + ' of ' + R.main.length),
+        h('span', { class: 'pill mango' }, '🗺️ Open the map')));
+    return card;
+  };
+})();

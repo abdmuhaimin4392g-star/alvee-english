@@ -71,6 +71,7 @@ const newUser = (role, name, username, password) => {
 const newSession = (uid) => { const token = crypto.randomBytes(24).toString('hex'); db.sessions[token] = { uid, t: Date.now() }; saveDB(); return token; };
 // stay signed in: a login lasts until "Log out" or a password change. It only ends if the app
 // is not opened at all for 5 years (the clock restarts every time the app is used).
+const LIVE = {}, WATCH = {}; // the live view lives in memory only
 const SESSION_DAYS = 5 * 365;
 let sessSave = 0;
 function authUser(req) {
@@ -179,7 +180,15 @@ async function api(req, res, route, query) {
       const b = await readBody(req, 4000);
       db.presence[me.id] = { t: Date.now(), screen: str(b.screen, 30), node: str(b.node, 40), title: str(b.title, 80), step: +b.step || undefined, total: +b.total || undefined, hidden: b.hidden ? 1 : 0 };
       saveDB();
-      return send(res, 200, { ok: 1 });
+      // w = the dashboard is watching (her phone then mirrors its screen), cr = control-room version
+      return send(res, 200, { ok: 1, w: (WATCH[me.id] || 0) > Date.now() ? 1 : 0, cr: ((db.ctl || {})[me.id] || {}).rev || 0 });
+    }
+    if (route === 'ctl' && method === 'GET') return send(res, 200, { ctl: (db.ctl || {})[me.id] || {} });
+    if (route === 'live' && method === 'POST') {
+      const b = await readBody(req, 600000);
+      const prev = LIVE[me.id] || {};
+      LIVE[me.id] = { html: b.same ? prev.html : str(b.html, 500000), view: str(b.view, 30), title: str(b.title, 80), step: +b.step || undefined, total: +b.total || undefined, dark: b.dark ? 1 : 0, sx: +b.sx || 0, timer: str(b.timer, 80), t: Date.now() };
+      return send(res, 200, { w: (WATCH[me.id] || 0) > Date.now() ? 1 : 0 });
     }
     if (route === 'inbox' && method === 'GET') return send(res, 200, { msgs: db.msgs.filter((m) => m.to === me.id) });
     if (route === 'inbox/read' && method === 'POST') {
@@ -196,6 +205,36 @@ async function api(req, res, route, query) {
   const learner = (uid) => db.users.find((u) => u.id === uid && u.role === 'learner');
   if (route === 'state') return send(res, 200, { state: null });
   if (route === 'beat' || route === 'events') return send(res, 200, { ok: 1 });
+  if (route === 'admin/ctl' && method === 'GET') { const u = learner(query.get('uid')); if (!u) return send(res, 404, { error: 'No such learner' }); return send(res, 200, { ctl: (db.ctl || {})[u.id] || {} }); }
+  if (route === 'admin/ctl' && method === 'POST') {
+    const b = await readBody(req, 20000);
+    const u = learner(b.uid);
+    if (!u) return send(res, 404, { error: 'No such learner' });
+    db.ctl = db.ctl || {};
+    const c = db.ctl[u.id] || (db.ctl[u.id] = {});
+    const p = b.patch || {};
+    if ('testSec' in p) c.testSec = Math.max(5, Math.min(180, +p.testSec || 30));
+    if ('mult' in p) c.mult = p.mult ? { p: Math.max(1, Math.min(5, +p.mult.p || 1)), until: +p.mult.until || 0, label: str(p.mult.label, 60) } : null;
+    if ('unlockTo' in p) c.unlockTo = p.unlockTo === null || p.unlockTo === '' ? null : Math.max(0, parseInt(p.unlockTo, 10) || 0);
+    if ('holdAt' in p) c.holdAt = p.holdAt === null || p.holdAt === '' ? null : Math.max(0, parseInt(p.holdAt, 10) || 0);
+    if ('sideOff' in p) c.sideOff = !!p.sideOff;
+    if ('questOff' in p) c.questOff = !!p.questOff;
+    if (b.gift) {
+      const g = b.gift, KINDS = ['chest', 'golden', 'pearls', 'shells', 'item', 'boat', 'bottle'];
+      if (!KINDS.includes(g.kind)) return send(res, 400, { error: 'Unknown gift' });
+      c.gifts = (c.gifts || []).concat([{ id: crypto.randomBytes(4).toString('hex'), kind: g.kind, n: Math.max(1, Math.min(500, +g.n || 1)), item: str(g.item, 20) || undefined, boat: str(g.boat, 12) || undefined, shell: str(g.shell, 20) || undefined, note: str(g.note, 160) || undefined, t: Date.now() }]).slice(-60);
+    }
+    if (b.delGift) c.gifts = (c.gifts || []).filter((g) => g.id !== b.delGift);
+    c.rev = (c.rev || 0) + 1;
+    saveDB();
+    return send(res, 200, { ctl: c });
+  }
+  if (route === 'admin/live') {
+    const u = learner(query.get('uid'));
+    if (!u) return send(res, 404, { error: 'No such learner' });
+    WATCH[u.id] = Date.now() + 10000;
+    return send(res, 200, { live: LIVE[u.id] || null });
+  }
   if (route === 'admin/learners') return send(res, 200, { learners: db.users.filter((u) => u.role === 'learner').map((u) => ({ ...pub(u), ...presenceOf(u.id) })) });
   if (route === 'admin/learner') {
     const u = learner(query.get('uid'));
@@ -364,7 +403,7 @@ function appendEvents(uid, list) {
 }
 
 // ------------------------------------------------------------------ static files
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8' };
 const cache = new Map();
 function loadStatic(file) {
   const st = fs.statSync(file);
