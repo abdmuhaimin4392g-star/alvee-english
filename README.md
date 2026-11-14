@@ -2,10 +2,15 @@
 
 A 6-month English course for Alvee, built as a phone app that opens in Safari and can be added to the iPhone Home Screen.
 
-- **The voyage (v4)**: no months and no fixed timeline. Alvee sails from Bangkok to Addu Atoll in the Maldives across 8 seas (Chao Phraya River, Gulf of Thailand, Strait of Malacca, Andaman Sea, Bay of Bengal, Sri Lanka, the northern atolls, Malé to Addu). Every lesson, conversation and timed test is an island (156 islands) plus side-mission islands. Her boat sails to the next island after each one, with Tao the turtle on deck.
-- **Things to collect** (no money, no trading): shells (16 kinds), pearls, treasure chests and bottles floating on the sea. Chests and bottles open after a short English task. The treasure book has 121 pieces in six sets (Maldives, Thailand, Pirate Hoard, Police Locker, Love and Spice, Deep Sea), plus 20 painted postcards and the medals. Pearls unlock the 8 Op Crab boats, from the Harbour Houseboat to the Leviathan Liner. Daily quests and side missions on the way.
+- **The voyage (v5)**: the Operation Crab 3D map (three.js, self-hosted in `public/vendor/`), with the same sea, sky, live weather, land, lighthouse, islands, palms, clouds, rain, dolphins, route ribbons, boats, wakes and chests. The route leaves the Andaman coast below Thailand and sails south, island after island, across 8 seas to Addu Atoll in the Maldives (the last two seas are atolls). Every lesson, conversation and timed test is an island (156 plus side missions and booster islands), all with English names. Drag the sea up and down to look along the route; the camera follows her boat. If a phone cannot do 3D, the older 2D map is shown.
+- **Things to collect**: shells (16 kinds), oysters with white, pink, black or golden pearls, treasure chests, golden chests, sealed chests (need a 🔑 key) and bottles. Chests open with the Operation Crab opening animation after a short English task. The treasure book has 73 pieces in five sets (Maldives, Thailand, Pirate Hoard, Love and Spice, Deep Sea); epic and legendary pieces only come from golden and sealed chests, and the ones she has not found show as dark shapes.
+- **Gold and the shop**: pearls sell for gold at the pearl market (the price moves every day). Boats cost gold, and the bigger ones only appear in the boatyard once she reaches a certain island. Keys come from finishing all three daily quests and from passing a timed test the first time.
+- **Pop-ups and notifications**: new treasure, rare pearls, keys, quests to claim, gifts, new boats in the boatyard. Tapping one takes her straight to that thing. The 🔔 keeps the list, and the menu shows a dot on the tab with something new.
+- **Voyage music**: an original tune played live by the phone (marimba, pads, the sea and gulls) while the map is open. 🎵 turns it off.
+- **Booster islands**: extra lessons for her weakest grammar points, made from sentences she has already met, placed just before the test of the unit that teaches that point.
+- **English everywhere**: menus, collections and the map are English only, so she learns from them too. Thai stays as lesson help (the 🇹🇭 button, tapping a word, the explanations).
 - **Timers**: a stopwatch on every question; the island tests are timed (seconds per question set in the dashboard).
-- **Control Room** (dashboard): drop gifts on her sea (chests, golden chests, bottles, pearls, shells, any treasure, a boat) with a note, start double-pearl events, open islands ahead or hold her at one, set the test time, switch side missions or quests off, and open her map. **Her screen** shows exactly what she sees, live.
+- **Control Room** (dashboard): drop gifts on her sea (chests, golden chests, sealed chests, bottles, pearls, gold, keys, shells, any treasure, a boat) with a note, start double-pearl events, open islands ahead or hold her at one, set the test time, switch side missions or quests off, and open her map. **Her screen** shows exactly what she sees, live.
 - **24 weekly units, 108 lessons**: am / is / are → I like / she likes → do / does → time and routine → -ing → there is / are → can → directions → was / were → -ed → went / ate → did → will → going to → if → polite English → questions → telling her story → hotel pro → graduation. Months 4–6 have an extra real-life lesson in every unit.
 - **50 conversations** of every kind: friends, family, love, work, hotel, food, shopping, health, travel, phone calls, home, weather.
 - **English first, Thai as a helper**: no Thai↔English word matching. Exercises are “Which word fits?”, listening, pictures, fill the gap, build the sentence, pick the correct sentence and replies. Thai is behind a 🇹🇭 *Thai help* button (or always on, if she turns that on), and every word can be tapped for its meaning.
@@ -56,6 +61,14 @@ node tools/build.mjs
 ```
 
 It rebuilds the app data and lists any English word that is missing a Thai entry or has fewer than two examples.
+
+## Version 5 update: a fresh start
+
+When version 5 is installed, `server/migrate-v5.js` runs once. It reads her answers on the server, works out her weakest grammar points (printed in the install output), keeps a full copy of her progress in `/var/lib/alvee-english/archive/`, adds booster islands for those points, and starts the voyage again from island 1. Her treasure, shells, pearls, boats, medals, streak days and mistake statistics stay. Running the install again does not reset her a second time.
+
+## The 3D map
+
+`public/js/crab3d.js` is built from the Operation Crab map code by `tools/crab3d/build.py` (the Operation Crab blocks are in `tools/crab3d/src/`, Alvee's route and screens are in `glue_*.js`). Run `python3 tools/crab3d/build.py` after changing them. The styles are `public/crab.css`.
 
 ## Checks
 

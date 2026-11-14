@@ -24,6 +24,11 @@ NODE_BIN="$(command -v node)"
 mkdir -p "$APP_DIR" "$DATA_DIR"
 cp -r "$SRC/server" "$SRC/public" "$SRC/package.json" "$APP_DIR/"
 [ -d "$SRC/content" ] && cp -r "$SRC/content" "$SRC/tools" "$APP_DIR/" || true
+# one-time data steps for this version (a full copy of her progress is kept in $DATA_DIR/archive first)
+if [ -f "$APP_DIR/server/migrate-v5.js" ]; then
+  systemctl stop alvee-english 2>/dev/null || true
+  DATA_DIR="$DATA_DIR" "$NODE_BIN" "$APP_DIR/server/migrate-v5.js" || true
+fi
 id alvee-english >/dev/null 2>&1 || useradd --system --home "$DATA_DIR" --shell /usr/sbin/nologin alvee-english
 chown -R alvee-english:alvee-english "$DATA_DIR"
 

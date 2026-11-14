@@ -220,9 +220,9 @@ async function api(req, res, route, query) {
     if ('sideOff' in p) c.sideOff = !!p.sideOff;
     if ('questOff' in p) c.questOff = !!p.questOff;
     if (b.gift) {
-      const g = b.gift, KINDS = ['chest', 'golden', 'pearls', 'shells', 'item', 'boat', 'bottle'];
+      const g = b.gift, KINDS = ['chest', 'golden', 'pearls', 'shells', 'item', 'boat', 'bottle', 'gold', 'key', 'sealed'];
       if (!KINDS.includes(g.kind)) return send(res, 400, { error: 'Unknown gift' });
-      c.gifts = (c.gifts || []).concat([{ id: crypto.randomBytes(4).toString('hex'), kind: g.kind, n: Math.max(1, Math.min(500, +g.n || 1)), item: str(g.item, 20) || undefined, boat: str(g.boat, 12) || undefined, shell: str(g.shell, 20) || undefined, note: str(g.note, 160) || undefined, t: Date.now() }]).slice(-60);
+      c.gifts = (c.gifts || []).concat([{ id: crypto.randomBytes(4).toString('hex'), kind: g.kind, n: Math.max(1, Math.min(5000, +g.n || 1)), item: str(g.item, 20) || undefined, boat: str(g.boat, 12) || undefined, shell: str(g.shell, 20) || undefined, note: str(g.note, 160) || undefined, t: Date.now() }]).slice(-60);
     }
     if (b.delGift) c.gifts = (c.gifts || []).filter((g) => g.id !== b.delGift);
     c.rev = (c.rev || 0) + 1;

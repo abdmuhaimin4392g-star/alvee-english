@@ -1,0 +1,41 @@
+/* ===== Alvee's voyage on the Operation Crab map ===== */
+.oc,#trv,.trv{--paper:#e8f4f1;--gold:#ffbf47;--coral:#ff5f7e;--lagoon:#1fe0cf;--line:rgba(120,230,220,.18);--mute:#8fb2b3;--f-display:'Lexend',system-ui,sans-serif;--f-body:'Lexend',system-ui,sans-serif;--f-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.screen.voyage3{padding-top:calc(8px + var(--safe-t,0px));padding-bottom:0;gap:8px;pointer-events:none;position:relative;z-index:2;min-height:0}
+.screen.voyage3>*{pointer-events:auto}
+.voyage3 .oc{position:fixed;left:0;right:0;top:0;bottom:64px;margin:0 auto;width:100%;max-width:560px;aspect-ratio:auto;border-radius:0;border:0;z-index:-1;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:none;color:var(--paper)}
+.voyage3 .oc #m3cv{touch-action:none}
+.voyage3 .v-hud{position:relative;top:0}
+.v3-chip{align-self:center;display:flex;align-items:center;gap:7px;max-width:100%;background:rgba(5,18,28,.8);color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:99px;padding:6px 14px 6px 8px;font:500 .74rem var(--f-body,inherit);box-shadow:0 6px 18px rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);cursor:pointer;white-space:nowrap;overflow:hidden}
+.v3-chip b{font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.v3-chip .num{opacity:.75;overflow:hidden;text-overflow:ellipsis}
+.v3-chip .flagc svg{width:20px;height:14px;border-radius:2px;display:block}
+.v3-ctr{position:absolute;right:12px;bottom:14px;z-index:9;display:none;border:1.5px solid var(--gold);background:rgba(5,18,28,.86);color:var(--gold);border-radius:99px;padding:8px 14px;font:700 .74rem var(--f-body);box-shadow:0 6px 18px rgba(0,0,0,.4);cursor:pointer}
+.v3-ctr.show{display:block;animation:shin .5s ease-out}
+.plab.pb{pointer-events:none;cursor:default}
+.plab.pb:after{content:none}
+.plab.v3sea{opacity:.72;font-size:.5rem;letter-spacing:.24em;max-width:150px;white-space:normal;line-height:1.5}
+.isl.side .ig{font-size:.9rem}
+.oc.m3 .isl.side .ig{width:26px;height:26px;top:-30px;border-style:dashed}
+.oc.m3 .isl.test .ig{border-color:#ff9a5c}
+.oc.m3 .isl.test.done .ig{border-color:#46e39a}
+.isl.side .il{font-style:italic;background:rgba(40,22,60,.8)}
+.isl .flags .pf .fl{width:15px;height:10px}
+.isl.land .ig{animation:v3land 1.2s ease-out 2}
+@keyframes v3land{0%{box-shadow:0 0 0 0 rgba(255,191,71,.9)}100%{box-shadow:0 0 0 22px rgba(255,191,71,0)}}
+.shell.far,.tchest.far{opacity:.55;filter:saturate(.55)}
+.shell.bottle svg{width:24px;height:36px;display:block;filter:drop-shadow(0 2px 3px rgba(0,30,60,.6))}
+.shell.bottle:after{box-shadow:0 0 12px 3px rgba(160,240,230,.7)}
+.boat .nm{font-family:var(--f-body)}
+.oc .float{font:800 .9rem var(--f-body);background:rgba(10,30,50,.88);color:#fff;padding:5px 11px;border-radius:14px;white-space:nowrap}
+.oc.m3 .isl,.oc.m3 .boat,.oc.m3 .shell,.oc.m3 .gaplab,.oc.m3 .plab,.oc.m3 .tchest{left:0!important;top:0!important;transform-origin:0 0;transition:none}
+.oc .boat{animation:none}
+.shell.far,.tchest.far{opacity:.78;filter:saturate(.7)}
+.trcard{color:var(--paper);font-family:var(--f-body)}
+.trcard .row{display:flex;gap:8px}
+.trcard .btn{min-height:46px}
+.trcard h3{margin:0;color:#fff}
+.trcard .trd{margin:0}
+.tchest.sealed .tch-in{filter:grayscale(.85) brightness(.9) drop-shadow(0 0 7px rgba(150,200,255,.95)) drop-shadow(0 0 18px rgba(90,140,255,.7))}
+.tchest.sealed .tch-rays{background:repeating-conic-gradient(rgba(150,200,255,.5) 0 7deg,transparent 7deg 24deg)}
+.tchest.sealed:before{box-shadow:0 0 0 2px rgba(160,200,255,.6),0 0 30px 8px rgba(90,140,255,.5)}
+.isl.ping .ig,.shell.ping,.tchest.ping{animation:v3land 1s ease-out 5}

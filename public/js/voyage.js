@@ -10,22 +10,22 @@
 
   // ---------------------------------------------------------------- the eight seas (3 units each)
   V.SEAS = [
-    { id: 'cp', en: 'Chao Phraya River', th: 'แม่น้ำเจ้าพระยา', from: 1, to: 3, ter: 'river', col: ['#4FA59C', '#2B6E6A'], art: ['th1', 'th2', 'th10'], flag: 'th',
-      names: ['Bangkok Pier', 'Wat Arun Steps', 'Grand Palace Quay', 'Tha Tien', 'Chinatown Dock', 'Flower Market Pier', 'Asiatique', 'Thonburi Canal', 'Rama VIII Bridge', 'Ko Kret', 'Nonthaburi Pier', 'Bang Krachao', 'Sathorn Pier', 'Khlong Lat Mayom', 'Damnoen Saduak', 'Amphawa', 'Mae Klong', 'Samut Prakan', 'Bang Pu', 'River Mouth'] },
+    { id: 'cp', en: 'The Golden River', th: 'แม่น้ำสายทอง', from: 1, to: 3, ter: 'river', col: ['#4FA59C', '#2B6E6A'], art: ['th1', 'th2', 'th10'], flag: 'th',
+      names: ['Sunrise Pier', 'Lotus Landing', 'Golden Steps', 'Temple Bend', 'Lantern Dock', 'Flower Market Quay', 'Night Market Wharf', 'Bamboo Bridge', 'Kingfisher Bend', 'Mango Grove', 'Rice Barge Rest', 'Teak House Pier', 'Floating Market', 'Orchid Garden', 'Silk Weaver Landing', 'Paper Kite Point', 'Elephant Rock', 'Willow Creek', 'Firefly Bend', 'River Mouth', 'Lily Pad Pond', 'Boat Noodle Dock'] },
     { id: 'gulf', en: 'Gulf of Thailand', th: 'อ่าวไทย', from: 4, to: 6, ter: 'jungle', col: ['#38B6C4', '#16707F'], art: ['th6', 'th5', 'th9'], flag: 'th',
-      names: ['Bang Saen', 'Ko Si Chang', 'Pattaya', 'Ko Lan', 'Sattahip', 'Ko Samet', 'Ko Chang', 'Ko Kut', 'Ko Mak', 'Hua Hin', 'Pranburi', 'Prachuap Bay', 'Chumphon', 'Ko Tao', 'Ko Nang Yuan', 'Ko Pha Ngan', 'Ko Samui', 'Ang Thong', 'Nakhon Si Thammarat', 'Songkhla'] },
+      names: ['Coconut Cove', 'Seashell Beach', 'Parrot Point', 'Sandy Bay', 'Pineapple Isle', 'Starfish Shoal', 'Jade Lagoon', 'Pearl Diver Rock', 'Sunset Point', 'Hammock Island', 'Turtle Bay', 'Crystal Cove', 'Coral Garden', 'Sea Breeze Cay', 'Lighthouse Hill', 'Mangrove Maze', 'Butterfly Isle', 'Fisherman’s Rest', 'Rainbow Reef', 'Moonlight Bay', 'Palm Tree Point', 'Kite Beach'] },
     { id: 'mal', en: 'Strait of Malacca', th: 'ช่องแคบมะละกา', from: 7, to: 9, ter: 'jungle', col: ['#2E9FB2', '#145F74'], art: ['th3', 'th4'], flag: 'th',
-      names: ['Pattani Bay', 'Kota Bharu', 'Redang', 'Perhentian', 'Tioman', 'Singapore Strait', 'Johor Shoals', 'Port Dickson', 'Malacca Lighthouse', 'Pangkor', 'Penang', 'Langkawi', 'Ko Lipe', 'Ko Adang', 'Ko Tarutao', 'Ko Bulon', 'Ko Kradan', 'Ko Mook', 'Ko Ngai', 'Trang Coast'] },
+      names: ['Spice Harbour', 'Monsoon Gate', 'Merchant’s Wharf', 'Old Fort Point', 'Clocktower Quay', 'Copper Bell Isle', 'Cinnamon Cove', 'Sailmaker’s Rest', 'Anchor Rock', 'Lantern Strait', 'Silver Fish Bay', 'Tea Clipper Point', 'Compass Rose Isle', 'Hidden Harbour', 'Captain’s Table', 'Ginger Island', 'Nutmeg Cay', 'Windmill Point', 'Rope Walk', 'Harbour Light', 'Seagull Rock', 'Pirate’s Rest'] },
     { id: 'and', en: 'Andaman Sea', th: 'ทะเลอันดามัน', from: 10, to: 12, ter: 'karst', col: ['#20B7B0', '#0B6E7A'], art: ['th7', 'th8'], flag: 'th',
-      names: ['Ko Lanta', 'Ko Phi Phi', 'Loh Samah', 'Railay', 'Ao Nang', 'Ko Hong', 'Phang Nga Bay', 'Ko Tapu', 'Ko Yao Noi', 'Ko Yao Yai', 'Phuket', 'Promthep Cape', 'Ko Racha', 'Khao Lak', 'Similan Islands', 'Ko Tachai', 'Ko Bon', 'Surin Islands', 'Richelieu Rock', 'Andaman Gate'] },
+      names: ['Emerald Cliffs', 'Limestone Towers', 'Monkey Island', 'Cave Lagoon', 'Sea Eagle Rock', 'Jungle Falls', 'Hornbill Ridge', 'Secret Beach', 'Blue Grotto', 'Dragon’s Back', 'Whale Shark Point', 'Manta Bay', 'Coral Castle', 'Sea Nomad Village', 'Granite Arch', 'Turquoise Pool', 'Banyan Isle', 'Thunder Rock', 'Andaman Gate', 'Twin Peaks', 'Kayak Cove', 'Seahorse Reef'] },
     { id: 'bob', en: 'Bay of Bengal', th: 'อ่าวเบงกอล', from: 13, to: 15, ter: 'open', col: ['#2C7FB8', '#123E73'], art: ['mv4', 'mv6'], flag: 'th',
-      names: ['Ten Degree Channel', 'Havelock Island', 'Neil Island', 'Barren Island', 'Car Nicobar', 'Great Nicobar', 'Dolphin Drift', 'Flying Fish Reach', 'Whale Road', 'Monsoon Gate', 'Star Compass Rock', 'Albatross Rest', 'Moonwater', 'Six Degree Channel', 'Turtle Current', 'Coral Garden', 'Sailor’s Rest', 'Lantern Shoal', 'Blue Hole', 'Lighthouse of Hope'] },
+      names: ['Open Water', 'Dolphin Drift', 'Flying Fish Reach', 'Whale Road', 'Albatross Rest', 'Star Compass Rock', 'Moonwater', 'Turtle Current', 'Lantern Shoal', 'Blue Hole', 'Sailor’s Rest', 'Storm Petrel Isle', 'Wave Rider', 'Driftwood Cay', 'Northern Star', 'Deep Blue', 'Calm Water', 'Trade Wind Isle', 'Cloud Harbour', 'Horizon Point', 'Morning Mist', 'Rainbow Shoal'] },
     { id: 'sl', en: 'Sri Lanka Coast', th: 'ชายฝั่งศรีลังกา', from: 16, to: 18, ter: 'jungle', col: ['#2EA59A', '#0E6460'], art: ['mv7', 'mv10'], flag: 'th',
-      names: ['Trincomalee', 'Pigeon Island', 'Batticaloa', 'Arugam Bay', 'Yala Coast', 'Hambantota', 'Dondra Head', 'Mirissa', 'Weligama', 'Galle Fort', 'Unawatuna', 'Hikkaduwa', 'Bentota', 'Colombo', 'Negombo', 'Kalpitiya', 'Cape Comorin', 'Spice Harbour', 'Tea Hills Bay', 'Whale Watch Point'] },
+      names: ['Tea Hills Bay', 'Spice Garden', 'Elephant Beach', 'Peacock Point', 'Cinnamon Cliffs', 'Stilt Fisher Bay', 'Leopard Rock', 'Gem Market', 'Lighthouse of Hope', 'Whale Watch Point', 'Surfer’s Bay', 'Coconut Hill', 'Lotus Pond', 'Sea Fort', 'Golden Sands', 'Rock Temple Cove', 'Cricket Green', 'Monsoon Bay', 'Mango Cliff', 'Sapphire Point', 'Kite Hill', 'Lagoon Gate'] },
     { id: 'nm', en: 'Northern Atolls', th: 'อะทอลล์ตอนเหนือ (มัลดีฟส์)', from: 19, to: 21, ter: 'atoll', col: ['#2FD0C6', '#0F8792'], art: ['mv3', 'mv5', 'mv9'], flag: 'mv',
-      names: ['Minicoy Light', 'Eight Degree Channel', 'Haa Alif', 'Ihavandhoo', 'Dhidhdhoo', 'Hanimaadhoo', 'Kulhudhuffushi', 'Noonu', 'Raa', 'Baa Atoll', 'Hanifaru Bay', 'Dharavandhoo', 'Lhaviyani', 'Naifaru', 'Thoddoo', 'Rasdhoo', 'Ari Atoll', 'Maamigili', 'Dhigurah', 'Fenfushi'] },
+      names: ['Coral Gate', 'Lagoon Light', 'White Sand Isle', 'Manta Point', 'Reef Garden', 'Hammock Cay', 'Turtle Nest Island', 'Palm Shadow', 'Glass Water', 'Fish Market Isle', 'Shark Fin Reef', 'Pearl Lagoon', 'Sea Star Sandbank', 'Sun Deck Island', 'Dhoni Harbour', 'Seaplane Bay', 'Coconut Crab Isle', 'Lagoon Swing', 'Starlight Beach', 'Glowing Bay', 'Driftwood Isle', 'Sandbar Picnic'] },
     { id: 'south', en: 'Malé to Addu', th: 'จากมาเลถึงอัดดู', from: 22, to: 24, ter: 'atoll', col: ['#3DDCCB', '#0C97A0'], art: ['mv1', 'mv2', 'mv8'], flag: 'mv',
-      names: ['Hulhulé', 'Malé', 'Hulhumalé', 'Maafushi', 'Gulhi', 'Vaavu', 'Fotteyo', 'Meemu', 'Faafu', 'Dhaalu', 'Thaa', 'Laamu', 'Huvadhu', 'Fuvahmulah', 'Equator Line', 'Addu Gan', 'Feydhoo', 'Maradhoo', 'Hithadhoo', 'Hulhumeedhoo'] },
+      names: ['Capital Harbour', 'Airport Island', 'Blue Mosque Point', 'Sunset Jetty', 'Surf Point', 'Garden Island', 'Fish Market Pier', 'Wedding Beach', 'Equator Line', 'Coral Stone Mosque', 'Mangrove Lake', 'Seven Wonders Reef', 'Kite Lagoon', 'Banana Reef', 'Swing Beach', 'Runway Island', 'Link Road', 'Freshwater Lake', 'Turtle Sands', 'Last Lighthouse', 'Almost Home', 'Harbour of Dreams'] },
   ];
   V.seaOfUnit = (u) => V.SEAS.find((s) => u >= s.from && u <= s.to) || V.SEAS[V.SEAS.length - 1];
 
@@ -67,15 +67,15 @@
 
   // ---------------------------------------------------------------- boats (all the Op Crab boats, unlocked with pearls)
   V.BOATS = [
-    { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', p: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
-    { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', p: 25, isl: 10, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
-    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', p: 50, isl: 22, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
-    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', p: 90, isl: 38, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
-    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', p: 140, isl: 58, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
-    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', p: 200, isl: 80, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
-    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', p: 270, isl: 100, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
-    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', p: 350, isl: 122, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
-    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', p: 450, isl: 145, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
+    { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', g: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
+    { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', g: 300, isl: 8, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
+    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', g: 700, isl: 20, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
+    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', g: 1400, isl: 35, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
+    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', g: 2400, isl: 55, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
+    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', g: 3600, isl: 75, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
+    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', g: 5200, isl: 95, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
+    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', g: 7000, isl: 118, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
+    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 9000, isl: 140, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
   ];
   V.boat = (id) => V.BOATS.find((b) => b.id === id) || V.BOATS[0];
   V.boatPic = (id, flip, cls) => {
@@ -89,15 +89,33 @@
     st = st || A.state;
     const s = st.sea || (st.sea = {});
     s.p = s.p || 0; s.pt = s.pt || 0; s.sh = s.sh || {}; s.tre = s.tre || {}; s.got = s.got || {};
-    s.boats = s.boats || ['sloop']; s.boat = s.boat || 'sloop'; s.side = s.side || {}; s.q = s.q || {}; s.pc = s.pc || {};
+    s.boats = s.boats || ['sloop']; s.rp = s.rp || { p: 0, b: 0, g: 0 }; s.gold = s.gold || 0; s.goldT = s.goldT || 0; s.keys = s.keys || 0; s.boat = s.boat || 'sloop'; s.side = s.side || {}; s.q = s.q || {}; s.pc = s.pc || {};
     if (s.at == null) s.at = -1;
     return s;
   };
   V.ctl = () => A.ctl || {};
   const mult = () => { const m = V.ctl().mult; return m && m.until > Date.now() ? m : null; };
   V.addPearls = (n, st) => { const s = V.st(st); const m = mult(); const k = Math.round(n * (m && m.p ? m.p : 1)); s.p += k; s.pt += k; return k; };
+  // ---------------------------------------------------------------- pearls and gold
+  // White pearls are the everyday ones. Oysters sometimes hold a pink, black or (very rarely) golden pearl.
+  // Pearls sell for gold at the pearl market; the price moves a little every day, so some days are better than others.
+  V.PEARLS = [['w', 'White pearl', 8, '#F4F1EA'], ['p', 'Pink pearl', 30, '#FFB3C8'], ['b', 'Black pearl', 90, '#3B3F4A'], ['g', 'Golden pearl', 300, '#FFCF4A']];
+  V.pearlN = (k, st) => { const s = V.st(st); return k === 'w' ? s.p : s.rp[k] || 0; };
+  V.pearlTotal = (st) => { const s = V.st(st); return s.p + s.rp.p + s.rp.b + s.rp.g; };
+  V.market = (day) => { const r = seeded(hashStr('mk' + (day || A.dkey()))); r(); return 0.75 + r() * 0.6; };
+  V.price = (k, day) => { const P = V.PEARLS.find((x) => x[0] === k); return Math.max(1, Math.round(P[2] * V.market(day))); };
+  V.yesterday = () => { const d = new Date(Date.now() - 864e5); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  V.sell = (k, n) => {
+    const s = V.st(); n = Math.min(n, V.pearlN(k)); if (n <= 0) return 0;
+    if (k === 'w') s.p -= n; else s.rp[k] -= n;
+    const g = n * V.price(k); s.gold += g; s.goldT += g; s.sold = (s.sold || 0) + n;
+    A.track('sell', { k: V.PEARLS.find((x) => x[0] === k)[1].split(' ')[0].toLowerCase(), n, gold: g }); A.saveSoon(); return g;
+  };
+  V.addGold = (n) => { const s = V.st(); s.gold += n; s.goldT += n; return n; };
+  // an oyster: what is inside?
+  V.oyster = () => { const x = Math.random(); const k = x < 0.62 ? 'w' : x < 0.87 ? 'p' : x < 0.97 ? 'b' : 'g'; const s = V.st(); if (k === 'w') V.addPearls(1); else s.rp[k] += 1; return k; };
   V.shellCount = (st) => Object.values(V.st(st).sh).reduce((a, b) => a + b, 0);
-  V.treCount = (st) => Object.keys(V.st(st).tre).length;
+  V.treCount = (st) => Object.keys(V.st(st).tre).filter((k) => T.byId[k]).length;
 
   // daily quest counters
   const QDEF = [
@@ -131,7 +149,7 @@
     const q = V.quests().find((x) => x.id === id); if (!q || !q.done) return 0;
     d.claimed[id] = Date.now();
     let got = V.addPearls(3);
-    if (V.quests().every((x) => x.claimed)) got += V.addPearls(5);
+    if (V.quests().every((x) => x.claimed)) { got += V.addPearls(5); V.st().keys += 1; d.key = 1; }
     A.track('quest_claim', { id, got });
     A.saveSoon();
     return got;
@@ -139,13 +157,14 @@
 
   // ---------------------------------------------------------------- the route: one island per lesson / conversation / test, plus side islands
   let ROUTE = null;
+  V.resetRoute = () => { ROUTE = null; };
   V.route = () => {
     if (ROUTE) return ROUTE;
     const main = [], all = [];
     V.SEAS.forEach((sea, si) => {
       const nodes = A.nodes.filter((n) => n.u >= sea.from && n.u <= sea.to);
       nodes.forEach((n, k) => {
-        const name = sea.names[k % sea.names.length] + (k >= sea.names.length ? ' ' + 'II III IV'.split(' ')[Math.floor(k / sea.names.length) - 1] : '');
+        const name = n.boost ? ['Booster Reef', 'Practice Point', 'Strong Wind Rock', 'Second Try Cove'][k % 4] : sea.names[k % sea.names.length] + (k >= sea.names.length ? ' ' + 'II III IV'.split(' ')[Math.floor(k / sea.names.length) - 1] : '');
         const isl = { kind: 'node', node: n, sea: si, k, name, gi: main.length };
         main.push(isl); all.push(isl);
         // a side island after every fifth island
@@ -156,6 +175,7 @@
         }
       });
     });
+    if (main.length) { const last = main[main.length - 1]; last.name = 'Home: Addu Atoll'; last.final = 1; }
     ROUTE = { main, all };
     return ROUTE;
   };
@@ -193,6 +213,7 @@
       const kind = x < 0.46 ? 'shell' : x < 0.72 ? 'pearl' : x < 0.88 ? 'chest' : 'bottle';
       out.push({ id: `s${gi}.${j}`, kind, gi, fx: 0.25 + r() * 0.5, fy: 0.3 + r() * 0.4, shell: kind === 'shell' ? pickShell(r) : null });
     }
+    if (gi % 9 === 5) out.push({ id: `k${gi}`, kind: 'sealed', gi, fx: r(), fy: r() });
     return out;
   };
   function pickShell(r) {
@@ -209,13 +230,14 @@
 
   // ---------------------------------------------------------------- treasure rolls
   V.rollTreasure = (golden) => {
-    const W = golden ? { c: 30, u: 34, r: 22, e: 12, l: 2 } : { c: 56, u: 26, r: 12.5, e: 4.5, l: 1 };
+    // ordinary chests never hold legendary things; golden chests rarely; sealed chests (opened with a key) hold only rare and better
+    const W = golden === 'sealed' ? { c: 0, u: 0, r: 62, e: 32, l: 6 } : golden ? { c: 34, u: 36, r: 22, e: 7, l: 1 } : { c: 62, u: 27, r: 9.2, e: 1.8, l: 0 };
     let t = Math.random() * Object.values(W).reduce((a, b) => a + b, 0), rar = 'c';
     for (const k of T.ORDER) { t -= W[k]; if (t <= 0) { rar = k; break; } }
     const s = V.st();
     const L = T.ITEMS.filter((x) => x[3] === rar);
     const fresh = L.filter((x) => !s.tre[x[0]]);
-    const it = (fresh.length && Math.random() < 0.75 ? A.pick(fresh) : A.pick(L));
+    const it = (fresh.length && Math.random() < (rar === 'e' || rar === 'l' ? 0.5 : 0.7) ? A.pick(fresh) : A.pick(L));
     const cur = s.tre[it[0]];
     s.tre[it[0]] = { n: ((cur && cur.n) || 0) + 1, t: (cur && cur.t) || Date.now() };
     return { item: it, isNew: !cur };
@@ -224,31 +246,32 @@
   // ---------------------------------------------------------------- rewards after a session (called by the lesson player)
   V.reward = (ses, acc, passed) => {
     const st = A.state, s = V.st(st), out = { lines: [] };
-    const add = (n, en, th) => { const k = V.addPearls(n); out.pearls = (out.pearls || 0) + k; out.lines.push([`+${k} pearls · ${en}`, th]); };
+    const add = (n, en) => { const k = V.addPearls(n); out.pearls = (out.pearls || 0) + k; out.lines.push([`+${k} pearl${k > 1 ? 's' : ''} · ${en}`]); };
     V.count('ans', ses.graded);
     const node = ses.node;
     if (node && passed) {
       const first = !ses.wasDone;
       V.count('les');
       if (acc === 100) V.count('perfect');
-      if (node.kind === 'lesson') add(first ? 3 + (acc === 100 ? 2 : 0) : 1, 'island finished', 'จบเกาะ');
-      else if (node.kind === 'talk') { add(first ? 3 : 1, 'conversation', 'บทสนทนา'); V.count('talk'); }
-      else { add(first ? 6 + (acc === 100 ? 3 : 0) : 2, 'test passed', 'ผ่านการสอบ'); if (first) { out.chest = V.rollTreasure(true); out.golden = 1; } }
+      if (node.kind === 'lesson') add(first ? 3 + (acc === 100 ? 2 : 0) : 1, 'island finished');
+      else if (node.kind === 'talk') { add(first ? 3 : 1, 'conversation'); V.count('talk'); }
+      else { add(first ? 6 + (acc === 100 ? 3 : 0) : 2, 'test passed'); if (first) { out.chest = V.rollTreasure(true); out.golden = 1; s.keys += 1; out.lines.push(['+1 key 🔑 · test passed']); } }
     }
     if (ses.kind === 'talk') V.count('talk');
-    if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice', 'ฝึกฝน'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
+    if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
     if (ses.kind === 'chest') {
       const sp = ses.arg;
       if (ses.firstOk >= Math.ceil(ses.graded * 0.6)) {
         s.got[sp.id] = Date.now(); V.count('chest');
-        out.chest = V.rollTreasure(sp.golden); out.golden = sp.golden ? 1 : 0;
-        add(1 + Math.floor(Math.random() * 3), 'from the chest', 'จากหีบ');
+        if (sp.sealed) { if (s.keys > 0) s.keys -= 1; out.sealed = 1; }
+        out.chest = V.rollTreasure(sp.sealed ? 'sealed' : sp.golden); out.golden = sp.golden ? 1 : 0;
+        add(1 + Math.floor(Math.random() * 3), 'from the chest');
         out.opened = 1;
       } else out.locked = 1;
     }
     if (ses.kind === 'bottle') {
       const sp = ses.arg;
-      if (acc >= 60) { s.got[sp.id] = Date.now(); add(3, 'message in a bottle', 'ข้อความในขวด'); if (Math.random() < 0.5) out.chest = V.rollTreasure(false); out.opened = 1; }
+      if (acc >= 60) { s.got[sp.id] = Date.now(); add(3, 'message in a bottle'); if (Math.random() < 0.5) out.chest = V.rollTreasure(false); out.opened = 1; }
       else out.locked = 1;
     }
     if (ses.kind === 'side') {
@@ -256,7 +279,7 @@
       if (acc >= 70) {
         const first = !s.side[isl.id];
         s.side[isl.id] = { a: Math.max(acc, (s.side[isl.id] && s.side[isl.id].a) || 0), t: Date.now() };
-        if (first) { add(5, 'side mission', 'ภารกิจเสริม'); out.chest = V.rollTreasure(true); out.golden = 1; } else add(1, 'side mission', 'ภารกิจเสริม');
+        if (first) { add(5, 'side mission'); out.chest = V.rollTreasure(true); out.golden = 1; } else add(1, 'side mission');
         out.opened = 1;
       } else out.locked = 1;
     }

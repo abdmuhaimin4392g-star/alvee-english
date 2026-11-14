@@ -1,0 +1,11 @@
+const TR_SVG=`<svg class="tcs" viewBox="0 0 80 72" aria-hidden="true"><ellipse cx="40" cy="66" rx="30" ry="5" fill="#000" opacity=".28"/>
+ <g class="tcbody"><rect x="9" y="32" width="62" height="32" rx="5" fill="url(#trw)"/><rect x="9" y="32" width="62" height="7" fill="#000" opacity=".16"/>
+  <rect x="17" y="32" width="8" height="32" fill="url(#trg)"/><rect x="55" y="32" width="8" height="32" fill="url(#trg)"/><rect x="9" y="58" width="62" height="6" rx="3" fill="url(#trg)"/>
+  <g fill="#fff6c8"><circle cx="21" cy="40" r="1.6"/><circle cx="21" cy="54" r="1.6"/><circle cx="59" cy="40" r="1.6"/><circle cx="59" cy="54" r="1.6"/></g>
+  <ellipse class="tcin" cx="40" cy="33" rx="29" ry="5" fill="#fff6c8" opacity="0"/></g>
+ <g class="lid"><path d="M9 32V25C9 12 22 6 40 6s31 6 31 19v7z" fill="url(#trw)"/><path d="M9 32V25C9 12 22 6 40 6s31 6 31 19v7z" fill="url(#trh)"/>
+  <rect x="17" y="8" width="8" height="25" fill="url(#trg)" transform="skewX(-0)"/><rect x="55" y="8" width="8" height="25" fill="url(#trg)"/>
+  <path d="M9 32h62" stroke="#ffe08a" stroke-width="3"/><path d="M16 17C24 10 34 8 40 8" stroke="#fff" stroke-opacity=".6" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <rect x="33" y="27" width="14" height="13" rx="3" fill="url(#trg)" stroke="#8a5a14" stroke-width="1.2"/><circle cx="40" cy="32" r="2.2" fill="#3a2008"/><rect x="39" y="32" width="2" height="5" rx="1" fill="#3a2008"/></g></svg>`;
+function trDefsOnce(){if(document.getElementById('trdefs'))return;const d=document.createElement('div');d.id='trdefs';d.setAttribute('aria-hidden','true');d.style.cssText='position:absolute;width:0;height:0;overflow:hidden';
+  d.innerHTML=`<svg width="0" height="0"><defs><linearGradient id="trg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".45" stop-color="#ffbf47"/><stop offset="1" stop-color="#b96e12"/></linearGradient><linearGradient id="trw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9772f"/><stop offset="1" stop-color="#6a3b12"/></linearGradient><linearGradient id="trh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs></svg>`;document.body.appendChild(d)}

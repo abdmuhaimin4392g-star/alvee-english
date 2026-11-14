@@ -193,11 +193,11 @@
   A.lessonWordsUpTo = (u) => A.uniq(Object.values(C.lessons).filter((l) => l.u <= u).flatMap((l) => l.words)).filter((k) => D[k]);
   const LESSON_ORDER = A.nodes.filter((n) => n.kind === 'lesson').map((n) => n.id);
   A.wordsThrough = (lessonId) => {
-    const i = LESSON_ORDER.indexOf(lessonId);
+    const i = LESSON_ORDER.indexOf((C.lessons[lessonId] && C.lessons[lessonId].after) || lessonId);
     return A.uniq(LESSON_ORDER.slice(0, i + 1).flatMap((id) => C.lessons[id].words)).filter((k) => D[k]);
   };
   const ALL_LESSON_WORDS = A.uniq(LESSON_ORDER.flatMap((id) => C.lessons[id].words)).filter((k) => D[k]);
-  A.sentsUpTo = (u) => Object.values(C.lessons).filter((l) => l.u <= u).flatMap((l) => l.sents);
+  A.sentsUpTo = (u) => Object.values(C.lessons).filter((l) => l.u <= u && !l.boost).flatMap((l) => l.sents);
 
   // English word options. Never two options that look or sound the same, and never Thai.
   function wordOptions(key, pool, n, filter, learnedOnly) {
@@ -332,8 +332,8 @@
 
   // extra practice for her weakest grammar point (the app adapts to her mistakes)
   const FOCUS_TYPE = { vocab: null, listen: 'listen', talk: 'reply' };
-  function focusSteps(st, maxUnit, n, skip) {
-    const weak = A.weakSkills(st).filter((w) => !['vocab', 'other'].includes(w.id));
+  function focusSteps(st, maxUnit, n, skip, only) {
+    const weak = only ? [{ id: only }] : A.weakSkills(st).filter((w) => !['vocab', 'other'].includes(w.id));
     if (!weak.length) return [];
     const sk = weak[0].id;
     const spool = A.sentsUpTo(maxUnit);
@@ -415,14 +415,14 @@
     const practise = L.sents.slice(0, 9);
     practise.forEach((sid, i) => {
       if (i < 2) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
-      const q = sentQuiz(sid, spool, i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'listen']));
+      const q = sentQuiz(sid, spool, L.boost ? A.shuffle(['gap', 'gap', 'pick', 'build']) : i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'listen']));
       if (q) sentSteps.push(q);
       if (i % 3 === 2 && review.length) { const r = quizForItem(review.shift(), st, pool, spool); if (r) sentSteps.push({ ...r, review: 1 }); }
     });
     steps.push(...sentSteps);
     review.forEach((id) => { const r = quizForItem(id, st, pool, spool); if (r) steps.push({ ...r, review: 1 }); });
     // the app adapts: extra practice on her weakest grammar point
-    steps.push(...focusSteps(st, L.u, 2, new Set(L.sents)));
+    steps.push(...focusSteps(st, L.u, L.boost ? 4 : 2, new Set(L.sents), L.boost));
     // finish with a second look at a new sentence and a new word
     A.shuffle(L.sents.slice(0, 6)).slice(0, 2).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'gap', 'pick', 'build'])); if (q) steps.push(q); });
     A.shuffle(words).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'wfit']), L.u); if (q) steps.push(q); });

@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '4.0';
+  A.VERSION = '5.0';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -436,12 +436,42 @@
   };
 
   // ordered path of nodes: lessons, then the unit conversation, then the unit test
+  // Booster islands: extra lessons for the grammar points she finds hardest (worked out from her own answers).
+  // Each one sits just before the test of the unit that teaches that point, so she practises it when it is fresh.
+  A.BOOST_AT = { be: 4, art: 4, s3: 6, have: 6, do: 7, order: 7, ing: 9, can: 11, prep: 12, bep: 13, past: 15, question: 16, will: 17, going: 18, if: 19 };
   A.nodes = [];
-  C.units.forEach((u) => {
-    u.lessons.forEach((id) => A.nodes.push({ id, kind: 'lesson', u: u.id }));
-    if (u.talks.length) A.nodes.push({ id: 'talk:' + u.talks[0], kind: 'talk', u: u.id, talk: u.talks[0] });
-    if (u.lessons.length) A.nodes.push({ id: 'check:' + u.id, kind: 'check', u: u.id });
-  });
+  A.buildNodes = (boost) => {
+    A.nodes.length = 0;
+    const want = (boost || []).filter((k) => A.BOOST_AT[k]);
+    C.units.forEach((u) => {
+      u.lessons.forEach((id) => A.nodes.push({ id, kind: 'lesson', u: u.id }));
+      want.filter((k) => A.BOOST_AT[k] === u.id).forEach((k) => [1, 2].forEach((n) => { const id = 'boost:' + k + ':' + n; if (C.lessons[id]) A.nodes.push({ id, kind: 'lesson', u: u.id, boost: k }); }));
+      if (u.talks.length) A.nodes.push({ id: 'talk:' + u.talks[0], kind: 'talk', u: u.id, talk: u.talks[0] });
+      if (u.lessons.length) A.nodes.push({ id: 'check:' + u.id, kind: 'check', u: u.id });
+    });
+  };
+  A.buildNodes([]);
+  // make the booster lessons from sentences she has already met (they are checked and translated)
+  A.applyBoost = (st) => {
+    const want = ((st && st.boost) || []).filter((k) => A.BOOST_AT[k]);
+    want.forEach((k) => {
+      if (C.lessons['boost:' + k + ':1']) return;
+      const u = A.BOOST_AT[k], unit = A.unit(u), after = unit.lessons[unit.lessons.length - 1];
+      const hsh = (s) => { let x = 7; for (let i = 0; i < s.length; i++) x = (x * 31 + s.charCodeAt(i)) >>> 0; return x; };
+      const pool = A.uniq(Object.values(C.lessons).filter((l) => !l.boost && l.u <= u).flatMap((l) => l.sents)).filter((sid) => { const s = A.S(sid); if (!s) return false; if (k === 'prep') return /\b(in|on|at)\b/i.test(s.en); if (k === 'art') return /\b(a|an|the)\b/i.test(s.en); return A.sentSkills(sid).includes(k); });
+      // the newest sentences for this point first, then older ones
+      const near = pool.filter((sid) => { const s = A.S(sid); return s && s.u >= u - 2; }), far = pool.filter((sid) => !near.includes(sid));
+      const pick = near.sort((a, b) => hsh(a) - hsh(b)).concat(far.sort((a, b) => hsh(a) - hsh(b))).slice(0, 16);
+      if (pick.length < 4) return;
+      const half = Math.ceil(pick.length / 2), name = (A.SKILLS[k] || [k])[0];
+      [pick.slice(0, half), pick.slice(half)].forEach((sents, j) => {
+        if (sents.length < 3) return;
+        const id = 'boost:' + k + ':' + (j + 1);
+        C.lessons[id] = { id, u, en: 'Booster: ' + name + (j ? ' II' : ''), th: '', words: [], sents, boost: k, after };
+      });
+    });
+    A.buildNodes(want);
+  };
   A.nodeById = (id) => A.nodes.find((n) => n.id === id);
   // progress that belongs to a node (used by the dashboard's reset)
   A.nodeItems = (n) => {
@@ -451,7 +481,7 @@
   };
   A.unit = (n) => C.units.find((u) => u.id === n);
   A.nodeTitle = (n) => {
-    if (n.kind === 'lesson') { const l = C.lessons[n.id]; return { en: l.en, th: l.th, icon: '📖', k: 'Lesson ' + n.id }; }
+    if (n.kind === 'lesson') { const l = C.lessons[n.id]; return l.boost ? { en: l.en, th: l.th, icon: '💪', k: 'Booster' } : { en: l.en, th: l.th, icon: '📖', k: 'Lesson ' + n.id }; }
     if (n.kind === 'talk') { const t = C.talks[n.talk]; return { en: A.fill(t.en), th: t.th, icon: '💬', k: 'Conversation' }; }
     const big = n.u % 3 === 0;
     return big
@@ -547,6 +577,7 @@
   const lookups = (st) => Object.values(st.look).reduce((a, b) => a + b, 0);
   const hotelTalk = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel').length;
   const bestStreak = (st) => Math.max(A.streak(st), st.best || 0);
+  const MEDAL_HOW = {"first": "Finish your first lesson", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn 3 days in a row", "streak7": "Learn 7 days in a row", "streak14": "Learn 14 days in a row", "streak30": "Learn 30 days in a row", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
   // [id, icon, tier, category, English name, Thai name, how to get it (Thai), progress(st) -> [now, goal]]
   A.MEDALS = [
     ['first', 'book', 'bronze', 'learn', 'First Step', 'ก้าวแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
@@ -583,7 +614,7 @@
     ['shells8', 'shell', 'silver', 'words', 'Shell Collector', 'นักสะสมเปลือกหอย', 'เก็บเปลือกหอยครบ 8 ชนิด', (st) => [Object.keys((st.sea && st.sea.sh) || {}).length, 8]],
     ['boat3', 'wave', 'silver', 'time', 'Fleet Captain', 'กัปตันกองเรือ', 'มีเรือ 3 ลำ', (st) => [((st.sea && st.sea.boats) || ['sloop']).length, 3]],
     ['side5', 'search', 'gold', 'learn', 'Explorer', 'นักผจญภัย', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
-  ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how, prog }));
+  ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how: MEDAL_HOW[id] || how, prog }));
   A.medal = (id) => A.MEDALS.find((m) => m.id === id);
   A.BADGES = A.MEDALS.map((m) => [m.id, '', m.en, m.th]); // older code paths
   A.checkBadges = (st) => {

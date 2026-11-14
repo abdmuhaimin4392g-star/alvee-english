@@ -34,7 +34,7 @@
   };
 
   const L = () => ADM.learners.find((l) => l.id === ADM.uid);
-  const stOf = () => A.fixState(ADM.data && ADM.data.state);
+  const stOf = () => { const st = A.fixState(ADM.data && ADM.data.state); if (ADM.boostKey !== String(st.boost)) { ADM.boostKey = String(st.boost); try { A.applyBoost(st); if (A.voyage) A.voyage.resetRoute(); } catch (e) { /* extras */ } } return st; };
 
   // ---------------------------------------------------------------- frame
   ADM.render = () => {
@@ -159,7 +159,8 @@
       case 'rest_day_used': icon = '🧊'; main = 'Used ' + e.days + ' rest day(s)'; break;
       case 'collect': icon = e.k === 'pearl' ? '⚪' : e.k === 'shell' ? '🐚' : e.k === 'boat' ? '⛵' : '💎'; main = (e.gift ? 'Picked up your gift: ' : 'Picked up ') + (e.k === 'pearl' ? (e.n || 1) + ' pearl(s)' : e.k === 'shell' ? 'a ' + (A.voyage.shell(e.id) || [0, 'shell'])[1] : e.k === 'boat' ? A.voyage.boat(e.id).n : ((A.treasure.byId[e.id] || [])[2] || 'treasure')); break;
       case 'quest_claim': icon = '📜'; main = 'Finished a daily quest'; detail = '+' + e.got + ' pearls'; break;
-      case 'boat_unlock': icon = '⛵'; main = 'Unlocked a boat: ' + A.voyage.boat(e.id).n; detail = e.p + ' pearls'; break;
+      case 'boat_unlock': icon = '⛵'; main = 'Bought a boat: ' + A.voyage.boat(e.id).n; detail = (e.g != null ? e.g + ' gold' : e.p + ' pearls'); break;
+      case 'sell': icon = '🪙'; main = 'Sold ' + e.n + ' ' + e.k + ' pearl' + (e.n > 1 ? 's' : ''); detail = '+' + e.gold + ' gold'; break;
       case 'boat_select': icon = '⛵'; main = 'Now sailing: ' + A.voyage.boat(e.id).n; break;
       case 'test_timeup': icon = '⏰'; main = 'Time ran out in a test'; detail = e.unanswered + ' questions not answered'; break;
       case 'admin_reset': icon = '↺'; main = 'You reset ' + (e.what || 'lessons'); detail = (e.n || 0) + ' finished steps cleared'; break;
@@ -260,7 +261,7 @@
     box.append(h('div', { class: 'card ctl-sum' },
       h('div', { class: 'cs-boat', html: V.boatPic(s.boat) }),
       h('div', { style: { flex: 1 } }, h('b', null, 'Island ' + (cur + 1) + ' of ' + R.main.length + ': ' + isl.name), h('div', { class: 'small muted' }, sea.en + ' · boat: ' + V.boat(s.boat).n),
-        h('div', { class: 'row wrap small', style: { gap: '10px', marginTop: '6px' } }, h('span', null, V.pearlEl(), ' ' + s.p + ' pearls'), h('span', null, '🐚 ' + V.shellCount(st)), h('span', null, '💎 ' + V.treCount(st) + '/' + T.ITEMS.length), h('span', null, '🧭 ' + Object.keys(s.side).length + ' side'), h('span', null, '⛵ ' + s.boats.length + ' boats'))),
+        h('div', { class: 'row wrap small', style: { gap: '10px', marginTop: '6px' } }, h('span', null, V.pearlEl(), ' ' + V.pearlTotal(st) + ' pearls'), h('span', null, '🪙 ' + s.gold + ' gold'), h('span', null, '🔑 ' + s.keys), h('span', null, '🐚 ' + V.shellCount(st)), h('span', null, '💎 ' + V.treCount(st) + '/' + T.ITEMS.length), h('span', null, '🧭 ' + Object.keys(s.side).length + ' side'), h('span', null, '⛵ ' + s.boats.length + ' boats'))),
       h('button', { class: 'btn', style: { minHeight: '42px' }, onclick: () => herMap(st) }, '🗺️ Her map')));
     box.append(ctlBox);
     (async () => {
@@ -278,13 +279,13 @@
     const V = A.voyage, T = A.treasure, s = V.st(st), R = V.route();
     const out = [];
     // gifts
-    const kind = h('select', { class: 'input' }, [['chest', '🧰 Treasure chest (she answers 3 questions)'], ['golden', '🏆 Golden chest (better treasure)'], ['bottle', '🍾 Message in a bottle'], ['pearls', '⚪ Pearls'], ['shells', '🐚 Shells'], ['item', '💎 A treasure item'], ['boat', '⛵ A boat']].map(([v, t]) => h('option', { value: v }, t)));
-    const n = h('input', { class: 'input', type: 'number', min: 1, max: 500, value: 10, style: { maxWidth: '110px' } });
+    const kind = h('select', { class: 'input' }, [['chest', '🧰 Treasure chest (she answers 3 questions)'], ['golden', '🏆 Golden chest (better treasure)'], ['bottle', '🍾 Message in a bottle'], ['pearls', '⚪ Pearls'], ['gold', '🪙 Gold coins'], ['key', '🔑 Keys (open sealed chests)'], ['sealed', '🔒 Sealed chest (rare treasure, needs a key)'], ['shells', '🐚 Shells'], ['item', '💎 A treasure item'], ['boat', '⛵ A boat']].map(([v, t]) => h('option', { value: v }, t)));
+    const n = h('input', { class: 'input', type: 'number', min: 1, max: 5000, value: 10, style: { maxWidth: '110px' } });
     const item = h('select', { class: 'input' }, Object.entries(T.SETS).map(([k, set]) => h('optgroup', { label: set.ic + ' ' + set.n }, T.ITEMS.filter((x) => x[4] === k).map((x) => h('option', { value: x[0] }, x[1] + ' ' + x[2] + ' (' + T.RAR[x[3]].n + ')' + (s.tre[x[0]] ? ' ✓' : ''))))));
     const boat = h('select', { class: 'input' }, V.BOATS.filter((b) => b.id !== 'sloop').map((b) => h('option', { value: b.id }, b.n + (s.boats.includes(b.id) ? ' (she has it)' : ''))));
     const note = h('input', { class: 'input', maxlength: 160, placeholder: 'A note she sees when she picks it up (optional)' });
     const nRow = h('div', { class: 'row', style: { gap: '8px' } }, h('span', { class: 'small' }, 'How many'), n), iRow = h('div', null, item), bRow = h('div', null, boat);
-    const sync = () => { nRow.style.display = ['pearls', 'shells'].includes(kind.value) ? '' : 'none'; iRow.style.display = kind.value === 'item' ? '' : 'none'; bRow.style.display = kind.value === 'boat' ? '' : 'none'; };
+    const sync = () => { nRow.style.display = ['pearls', 'shells', 'gold', 'key'].includes(kind.value) ? '' : 'none'; iRow.style.display = kind.value === 'item' ? '' : 'none'; bRow.style.display = kind.value === 'boat' ? '' : 'none'; };
     kind.onchange = sync; sync();
     const gifts = (c.gifts || []).slice().reverse();
     out.push(h('div', { class: 'card stack' }, h('b', null, '🎁 Drop a gift on her sea'), h('div', { class: 'small muted' }, 'It floats next to her boat on the map. She taps it to collect.'),
@@ -292,7 +293,7 @@
       h('button', { class: 'btn mango block', onclick: () => setCtl({ gift: { kind: kind.value, n: +n.value, item: kind.value === 'item' ? item.value : undefined, boat: kind.value === 'boat' ? boat.value : undefined, note: note.value.trim() || undefined } }, 'Gift dropped on her sea') }, 'Drop it'),
       gifts.length ? h('div', { class: 'stack', style: { gap: '6px' } }, h('div', { class: 'small muted' }, 'Gifts you sent'), gifts.slice(0, 12).map((g) => {
         const got = s.got['g' + g.id];
-        const what = g.kind === 'item' ? (T.byId[g.item] || [])[2] : g.kind === 'boat' ? V.boat(g.boat).n : (['pearls', 'shells'].includes(g.kind) ? g.n + ' ' : '') + g.kind;
+        const what = g.kind === 'item' ? (T.byId[g.item] || [])[2] : g.kind === 'boat' ? V.boat(g.boat).n : (['pearls', 'shells', 'gold', 'key'].includes(g.kind) ? g.n + ' ' : '') + g.kind;
         return h('div', { class: 'row between gift-row' }, h('span', { class: 'small' }, (got ? '✅ ' : '⏳ ') + what + (g.note ? ' · “' + g.note + '”' : '')), got ? h('span', { class: 'small muted' }, A.ago(got)) : h('button', { class: 'icon-btn', 'aria-label': 'Remove gift', onclick: () => setCtl({ delGift: g.id }, 'Removed') }, '🗑️'));
       })) : null));
     // events

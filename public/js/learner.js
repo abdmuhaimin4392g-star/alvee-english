@@ -274,6 +274,7 @@
     if (A.updateWaiting && !A.session && view !== 'result') { A.updateWaiting = false; A.checkUpdate(true); }
     if (openSheet) { openSheet.close(); openSheet = null; }
     A.view = view;
+    try { if (view === 'journey') A.music.start(); else if (view !== 'result') A.music.stop(); } catch (e) { /* no sound */ }
     const root = A.clear(app());
     window.scrollTo(0, 0);
     const V = VIEWS[view];
@@ -281,13 +282,14 @@
     root.append(V(arg));
     if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure'].includes(view)) {
       root.append(nav(view));
+      if (A.paintBadges) A.paintBadges();
       A.setPresence({ screen: view });
     }
   };
   function nav(cur) {
-    const items = [['home', 'home', 'Home'], ['journey', 'map', 'Voyage'], ['talks', 'chat', 'Talk'], ['treasure', 'gem', 'Treasure'], ['me', 'user', 'Me']];
+    const items = [['home', '🏝️', 'Home'], ['journey', '🧭', 'Voyage'], ['talks', '💬', 'Talk'], ['treasure', '💰', 'Treasure'], ['me', '🐢', 'Me']];
     const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words') && v === 'me');
-    return h('nav', { class: 'nav' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', onclick: () => A.go(v) }, h('span', { class: 'e', html: A.art.icon(ic, 24) }), t))));
+    return h('nav', { class: 'nav crab-nav', 'aria-label': 'Main menu' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', 'data-v': v, 'aria-current': on(v) ? 'page' : null, onclick: () => { try { A.sfx.play('tap'); } catch (e) { /* quiet */ } A.go(v); } }, h('i', { class: 'e' }, ic), h('span', { class: 'lb' }, t)))));
   }
 
   const VIEWS = {};
@@ -317,13 +319,13 @@
     return h('form', { class: 'screen full login', onsubmit: go },
       A.topStrip(),
       scene,
-      h('div', { class: 'login-title' }, h('h1', null, 'Alvee English'), h('p', { class: 'th muted' }, 'เรียนภาษาอังกฤษวันละนิด · 6 เดือนพูดได้')),
+      h('div', { class: 'login-title' }, h('h1', null, 'Alvee English'), h('p', { class: 'muted' }, 'A little English every day')),
       A.install.standalone() ? null : A.install.button(true),
       h('div', { class: 'card stack login-card' },
-        h('div', { class: 'field' }, h('label', { for: 'lg-user' }, 'Username · ชื่อผู้ใช้'), u),
-        h('div', { class: 'field' }, h('label', { for: 'lg-pass' }, 'Password · รหัสผ่าน'), p),
+        h('div', { class: 'field' }, h('label', { for: 'lg-user' }, 'Username'), u),
+        h('div', { class: 'field' }, h('label', { for: 'lg-pass' }, 'Password'), p),
         err,
-        h('button', { class: 'btn block', type: 'submit' }, 'Log in · เข้าสู่ระบบ')),
+        h('button', { class: 'btn block', type: 'submit' }, 'Log in')),
       demo);
   };
 
@@ -363,16 +365,16 @@
     root.append(A.topStrip());
     root.append(h('div', { class: 'hello-hero' },
       mascot('wave', 76),
-      h('div', { class: 'hello' }, h('h1', null, gEn + ', ' + A.user.name + '!'), h('p', { class: 'th' }, gTh + ' · ', h('span', null, 'ตอนนี้ทักทายว่า "' + gEn + '"'))),
+      h('div', { class: 'hello' }, h('h1', null, gEn + ', ' + A.user.name + '!'), h('p', { class: 'muted' }, 'Ready for today’s voyage?')),
       h('div', { class: 'stats-col' },
-        h('span', { class: 'stat fire', title: 'Streak · วันติดต่อกัน' }, icon('flame', 18), sk),
+        h('span', { class: 'stat fire', title: 'Streak' }, icon('flame', 18), sk),
         h('span', { class: 'stat lvl', title: 'Level' }, icon('star', 18), lvl))));
 
     const unread = (A.msgs || []).filter((m) => !m.readAt && A.msgUnlocked(m, st));
     if (unread.length) {
       root.append(h('button', { class: 'card msg-card', style: { textAlign: 'left' }, onclick: () => openMsg(unread[0]) },
         h('span', { class: 'env' }, '💌'),
-        h('div', null, h('b', null, 'New message from ' + A.bf.name), h('div', { class: 'small th' }, 'มีข้อความใหม่ แตะเพื่ออ่าน'))));
+        h('div', null, h('b', null, 'New message from ' + A.bf.name), h('div', { class: 'small' }, 'Tap to read it'))));
     }
 
     const pct = Math.min(1, xpToday / goal);
@@ -385,16 +387,16 @@
       today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' },
         h('div', { class: 'k' }, (pct >= 1 ? 'Goal done! ' : 'Next island · ') + isl.name + ' · ' + t.k),
         h('h2', null, t.en), h('div', { class: 'th muted small' }, t.th + ' · ' + u.th))));
-      if (capped) today.append(h('div', { class: 'note' }, 'วันนี้เรียนบทใหม่ครบแล้ว เก่งมาก! ทบทวนคำเก่าเพื่อให้จำได้นานขึ้นนะ'));
-      else today.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', next.id) }, t.icon + ' Start · เริ่มเลย'));
+      if (capped) today.append(h('div', { class: 'note' }, 'You finished today’s new lessons. Great job! A quick review helps you remember.'));
+      else today.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', next.id) }, t.icon + ' Start'));
     } else {
-      today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' }, h('h2', null, 'All lessons done for now!'), h('div', { class: 'th muted small' }, 'บทเรียนใหม่กำลังจะมา ระหว่างนี้ทบทวนกันนะ'))));
+      today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' }, h('h2', null, 'All lessons done for now!'), h('div', { class: 'muted small' }, 'New lessons are coming. Review in the meantime!'))));
     }
     today.append(h('div', { class: 'row' },
       h('button', { class: 'btn ghost', style: { flex: 1 }, disabled: Object.keys(st.srs).length ? null : true, onclick: () => A.play('review') }, '🔁 Review', due ? h('span', { class: 'pill mango' }, due) : null),
       h('button', { class: 'btn ghost', style: { flex: 1 }, disabled: Object.values(st.srs).some((s) => s.w > 0) ? null : true, onclick: () => A.play('mistakes') }, '🩹 Mistakes')));
     today.append(h('div', { class: 'stack', style: { gap: '6px' } },
-      h('div', { class: 'row between small' }, h('span', { class: 'th' }, 'เป้าหมายวันนี้ · Daily goal'), h('b', { class: 'num' }, xpToday + ' / ' + goal + ' XP')),
+      h('div', { class: 'row between small' }, h('span', { class: 'th' }, 'Daily goal'), h('b', { class: 'num' }, xpToday + ' / ' + goal + ' XP')),
       h('div', { class: 'goal-bar' }, h('i', { style: { width: pct * 100 + '%' } }))));
     root.append(today);
     // the app learns: show her weakest point and a quick practice button
@@ -402,18 +404,18 @@
     if (weak) {
       const nm = A.SKILLS[weak.id] || [weak.id, weak.id];
       root.append(h('div', { class: 'card focus-card' }, mascot('think', 58),
-        h('div', { style: { flex: 1, minWidth: 0 } }, h('div', { class: 'small muted' }, 'Tao noticed · เต่าน้อยสังเกตว่า'),
-          h('b', null, nm[0]), h('div', { class: 'th small' }, 'เรื่อง “' + nm[1] + '” ยังผิดบ่อย มาฝึกเพิ่มกันนะ (' + Math.round(weak.acc * 100) + '% ถูก)')),
+        h('div', { style: { flex: 1, minWidth: 0 } }, h('div', { class: 'small muted' }, 'Tao noticed'),
+          h('b', null, nm[0]), h('div', { class: 'small' }, 'This one is still tricky. Let’s practise it! (' + Math.round(weak.acc * 100) + '% right)')),
         h('button', { class: 'btn mango', style: { minHeight: '44px', padding: '8px 14px' }, onclick: () => A.play('focus') }, '💪 Practice')));
     }
     root.append(A.voyage.homeCard(st));
 
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
     root.append(h('div', { class: 'tiles' },
-      h('button', { class: 'tile t-talk', onclick: () => A.go('talks') }, h('span', { class: 'blob', html: A.art.icon('chat', 26) }), 'Talk', h('span', { class: 'th' }, 'ฝึกบทสนทนา')),
-      h('button', { class: 'tile t-words', onclick: () => A.go('words') }, h('span', { class: 'blob', html: A.art.icon('sprout', 26) }), 'Words', h('span', { class: 'th' }, A.wordCount(st) + ' คำ')),
-      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Medals', h('span', { class: 'th' }, got + ' เหรียญ')),
-      h('button', { class: 'tile t-gram', onclick: () => A.go('grammar') }, h('span', { class: 'blob', html: A.art.icon('book', 26) }), 'Grammar', h('span', { class: 'th' }, 'คู่มือไวยากรณ์'))));
+      h('button', { class: 'tile t-talk', onclick: () => A.go('talks') }, h('span', { class: 'blob', html: A.art.icon('chat', 26) }), 'Talk', h('span', { class: 'sub' }, 'Real conversations')),
+      h('button', { class: 'tile t-words', onclick: () => A.go('words') }, h('span', { class: 'blob', html: A.art.icon('sprout', 26) }), 'Words', h('span', { class: 'sub' }, A.wordCount(st) + ' words')),
+      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Medals', h('span', { class: 'sub' }, got + ' medals')),
+      h('button', { class: 'tile t-gram', onclick: () => A.go('grammar') }, h('span', { class: 'blob', html: A.art.icon('book', 26) }), 'Grammar', h('span', { class: 'sub' }, 'All the rules'))));
     return root;
   };
 
@@ -432,7 +434,7 @@
   VIEWS.journey = () => {
     const st = A.state, cfg = A.user.cfg || {};
     const root = h('div', { class: 'screen' });
-    root.append(h('div', null, h('h1', null, 'Your 6-month journey'), h('p', { class: 'th muted' }, 'เส้นทาง 6 เดือน · ทีละขั้น พูดได้จริง')));
+    root.append(h('div', null, h('h1', null, 'Your 6-month journey'), h('p', { class: 'muted' }, 'Step by step, six months to real English')));
     const nextId = (A.nextNode(st) || {}).id;
     let firstOpenEl = null;
     C.months.forEach((m) => {
@@ -443,13 +445,13 @@
       const sec = h('section', { class: 'month' });
       sec.append(h('div', { class: 'month-head' + (locked || !nodes.length ? ' locked' : '') },
         h('div', { class: 'mn' }, m.n),
-        h('div', { style: { flex: 1 } }, h('h2', null, 'Month ' + m.n + ' · ' + m.en), h('div', { class: 'small th muted' }, m.th + ' · ' + m.resortTh)),
+        h('div', { style: { flex: 1 } }, h('h2', null, 'Month ' + m.n + ' · ' + m.en), h('div', { class: 'small muted' }, m.resort)),
         nodes.length ? h('span', { class: 'pill sea num' }, doneN + '/' + nodes.length) : h('span', { class: 'pill grey' }, 'soon')));
       units.forEach((u) => {
         const card = h('div', { class: 'card unit' });
         const un = A.nodes.filter((n) => n.u === u.id);
         card.append(h('div', { class: 'unit-head' }, h('div', { class: 'deco' }, u.deco),
-          h('div', { style: { flex: 1 } }, h('h3', null, 'Unit ' + u.id + ' · ' + u.en), h('div', { class: 'small th muted' }, u.th + ' — ' + u.goal))));
+          h('div', { style: { flex: 1 } }, h('h3', null, 'Unit ' + u.id + ' · ' + u.en), null)));
         // a winding trail: nodes swing left and right, joined by a dotted path
         const STEP = 86, row = h('div', { class: 'trail', style: { height: Math.max(1, un.length) * STEP + 'px' } });
         const pts = un.map((n, i) => [50 + Math.sin(i * 1.15 + u.id) * 28, i * STEP + 38]);
@@ -459,7 +461,7 @@
           const doneUpTo = un.filter((n) => st.done[n.id]).length;
           row.innerHTML = `<svg class="trail-svg" viewBox="0 0 100 ${un.length * STEP}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" class="trail-bg"/><path d="${d}" class="trail-done" style="stroke-dasharray:${doneUpTo / un.length * 100} 100" pathLength="100"/></svg>`;
         }
-        if (!un.length) row.append(h('div', { class: 'small th muted soon-note' }, 'เนื้อหากำลังมา · coming soon'));
+        if (!un.length) row.append(h('div', { class: 'small th muted soon-note' }, 'coming soon'));
         un.forEach((n, ni) => {
           const idx = A.nodes.indexOf(n);
           const done = st.done[n.id];
@@ -468,7 +470,7 @@
           const b = h('button', {
             class: 'node' + (done ? ' done' : n.id === nextId ? ' open' : open ? '' : ' locked'),
             'aria-label': t.en + (done ? ' (done)' : open ? '' : ' (locked)'),
-            onclick: () => (open ? nodeSheet(n) : A.toast('🔒 ทำบทก่อนหน้าให้เสร็จก่อนนะ')),
+            onclick: () => (open ? nodeSheet(n) : A.toast('🔒 Finish the lesson before this one first.')),
           }, done ? A.art.iconEl('check', 26) : open ? A.art.iconEl(n.kind === 'lesson' ? 'book' : n.kind === 'talk' ? 'chat' : 'trophy', 26) : A.art.iconEl('lock', 22), done && done.s ? h('span', { class: 'st' }, '★'.repeat(done.s)) : null);
           if (n.id === nextId) firstOpenEl = b;
           const [px, py] = pts[ni];
@@ -487,13 +489,13 @@
   };
   function nodeSheet(n) {
     const t = A.nodeTitle(n), d = A.state.done[n.id];
-    const extra = n.kind === 'lesson' ? C.lessons[n.id].words.slice(0, 8).map((k) => D[k] ? D[k].w : k).join(' · ') : n.kind === 'talk' ? C.talks[n.talk].th : 'ต้องได้ 70% ขึ้นไปจึงผ่าน · Pass with 70%';
+    const extra = n.kind === 'lesson' ? C.lessons[n.id].words.slice(0, 8).map((k) => D[k] ? D[k].w : k).join(' · ') : n.kind === 'talk' ? C.talks[n.talk].th : 'Pass with 70%';
     const sh = A.sheet(h('div', { class: 'stack', style: { gap: '12px' } },
       h('div', { class: 'small muted' }, 'Unit ' + n.u + ' · ' + t.k),
       h('h2', null, t.icon + ' ' + t.en), h('div', { class: 'th muted' }, t.th),
       h('div', { class: 'note' }, extra),
       d ? h('div', { class: 'row' }, h('span', { class: 'pill good' }, '✓ Done'), h('span', { class: 'stars' }, '★'.repeat(d.s || 0)), h('span', { class: 'small muted' }, (d.a || 0) + '%')) : null,
-      h('button', { class: 'btn mango block', onclick: () => { sh.close(); A.play('node', n.id); } }, d ? 'Practice again · ทำอีกครั้ง' : 'Start · เริ่ม')));
+      h('button', { class: 'btn mango block', onclick: () => { sh.close(); A.play('node', n.id); } }, d ? 'Practice again' : 'Start')));
   }
 
   // ---------------------------------------------------------------- talks library
@@ -502,7 +504,7 @@
   VIEWS.talks = () => {
     const st = A.state, reach = A.reachedUnit(st, A.user.cfg);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', null, h('h1', null, 'Conversations'), h('p', { class: 'th muted' }, 'ฝึกคุยในชีวิตจริง — เพื่อน ครอบครัว แฟน งาน โรงแรม และอีกมากมาย')));
+    root.append(h('div', null, h('h1', null, 'Conversations'), h('p', { class: 'muted' }, 'Real-life talk: friends, family, love, work, the hotel and more')));
     const talks = Object.values(C.talks);
     const used = A.uniq(talks.map((t) => t.cat));
     const cats = h('div', { class: 'cats' }, ['all', ...Object.keys(CATS).filter((c) => used.includes(c))].map((c) => h('button', { class: 'chip' + (c === talkCat ? ' on' : ''), onclick: () => { talkCat = c; A.go('talks'); } }, CATS[c][2] + ' ' + CATS[c][0])));
@@ -511,9 +513,9 @@
     talks.filter((t) => talkCat === 'all' || t.cat === talkCat).sort((a, b) => a.u - b.u).forEach((t) => {
       const open = (t.u || 1) <= reach;
       const done = st.done['talk:' + t.id];
-      list.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.play('talk', t.id) : A.toast('🔒 เปิดเมื่อถึง Unit ' + t.u)) },
+      list.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.play('talk', t.id) : A.toast('🔒 Opens at Unit ' + t.u)) },
         h('div', { class: 'av' }, A.fill(t.ae)),
-        h('div', { style: { flex: 1, minWidth: 0 } }, h('b', null, A.fill(t.en)), h('div', { class: 'small th muted' }, t.th + ' · ' + (CATS[t.cat] ? CATS[t.cat][1] : t.cat))),
+        h('div', { style: { flex: 1, minWidth: 0 } }, h('b', null, A.fill(t.en)), h('div', { class: 'small muted' }, CATS[t.cat] ? CATS[t.cat][0] : t.cat)),
         open ? (done ? h('span', { class: 'pill good' }, '✓') : h('span', { class: 'pill sea' }, 'Unit ' + t.u)) : h('span', { class: 'pill grey' }, '🔒 ' + t.u)));
     });
     root.append(list);
@@ -525,10 +527,10 @@
   VIEWS.words = () => {
     const st = A.state, reach = A.reachedUnit(st, A.user.cfg);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', null, h('h1', null, 'Words'), h('p', { class: 'th muted' }, 'แตะคำเพื่อดูคำแปล คำอ่าน และตัวอย่างประโยค')));
-    const input = h('input', { class: 'input', id: 'w-search', placeholder: 'Search English or Thai · ค้นหา', value: wordQ, oninput: (e) => { wordQ = e.target.value; render(); } });
+    root.append(h('div', null, h('h1', null, 'Words'), h('p', { class: 'muted' }, 'Tap a word to see its meaning, how to say it and examples')));
+    const input = h('input', { class: 'input', id: 'w-search', placeholder: 'Search English or Thai', value: wordQ, oninput: (e) => { wordQ = e.target.value; render(); } });
     root.append(h('div', { class: 'search' }, input));
-    root.append(h('div', { class: 'row' }, [['mine', 'My words · คำที่เรียนแล้ว'], ['all', 'All · ทั้งหมด']].map(([k, t]) => h('button', { class: 'chip' + (wordTab === k ? ' on' : ''), onclick: () => { wordTab = k; A.go('words'); } }, t))));
+    root.append(h('div', { class: 'row' }, [['mine', 'My words'], ['all', 'All']].map(([k, t]) => h('button', { class: 'chip' + (wordTab === k ? ' on' : ''), onclick: () => { wordTab = k; A.go('words'); } }, t))));
     const list = h('div', { class: 'card wlist', style: { padding: '4px 14px' } });
     root.append(list);
     function render() {
@@ -539,7 +541,7 @@
       else keys = Object.keys(D).filter((k) => !D[k].base && (D[k].u || 99) <= Math.max(reach, 1) + 0);
       if (q) keys = Object.keys(D).filter((k) => !D[k].base && (k.toLowerCase().includes(q) || D[k].th.includes(q)));
       keys.sort((a, b) => (wordTab === 'mine' && !q ? (st.srs['w:' + a].b - st.srs['w:' + b].b) : 0) || a.localeCompare(b));
-      if (!keys.length) list.append(h('p', { class: 'th muted', style: { padding: '14px 0' } }, wordTab === 'mine' ? 'ยังไม่มีคำ — เริ่มบทเรียนแรกกันเลย!' : 'ไม่พบคำนี้'));
+      if (!keys.length) list.append(h('p', { class: 'th muted', style: { padding: '14px 0' } }, wordTab === 'mine' ? 'No words yet. Start your first lesson!' : 'No word found'));
       keys.slice(0, 300).forEach((k) => {
         const e = D[k], s = st.srs['w:' + k];
         const str = h('span', { class: 'str' + (s && s.w > s.c ? ' weak' : ''), 'aria-label': 'strength' }, Array.from({ length: 5 }, (_, i) => h('i', { class: s && s.b > i ? 'on' : '' })));
@@ -555,17 +557,17 @@
   VIEWS.grammar = () => {
     const reach = A.reachedUnit(A.state, A.user.cfg);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'th muted' }, 'คู่มือไวยากรณ์ฉบับภาษาไทย'))));
+    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'muted' }, 'Every grammar tip you have met'))));
     Object.values(C.tips).forEach((t) => {
       const open = (t.u || 1) <= reach;
-      root.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.sheet(tipView(t.id)) : A.toast('🔒 เปิดเมื่อถึง Unit ' + t.u)) },
+      root.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.sheet(tipView(t.id)) : A.toast('🔒 Opens at Unit ' + t.u)) },
         h('div', { class: 'av' }, '📖'), h('div', { style: { flex: 1 } }, h('b', null, t.title), h('div', { class: 'small muted' }, 'Unit ' + t.u)), open ? '›' : '🔒'));
     });
     return root;
   };
   function tipView(id) {
     const t = C.tips[id];
-    const box = h('div', { class: 'tip-card' }, h('div', { class: 'q-kind' }, '📖 Grammar tip · เคล็ดลับ'), h('h2', null, t.title));
+    const box = h('div', { class: 'tip-card' }, h('div', { class: 'q-kind' }, '📖 Grammar tip'), h('h2', null, t.title));
     let table = null;
     t.blocks.forEach((b) => {
       if (b.k !== 'tr') table = null;
@@ -589,22 +591,22 @@
     const root = h('div', { class: 'screen' });
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
     root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'),
-      h('div', { style: { flex: 1 } }, h('h1', null, 'Treasure chest'), h('p', { class: 'th muted' }, 'หีบสมบัติของ ' + A.user.name))));
+      h('div', { style: { flex: 1 } }, h('h1', null, 'Treasure chest'), h('p', { class: 'muted' }, A.user.name + '’s medals'))));
     const tiers = ['bronze', 'silver', 'gold', 'pearl'].map((t) => [t, A.MEDALS.filter((m) => m.tier === t && st.badges[m.id]).length, A.MEDALS.filter((m) => m.tier === t).length]);
     root.append(h('div', { class: 'card chest' }, mascot(got ? 'party' : 'wave', 70),
-      h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + A.MEDALS.length), h('div', { class: 'small th muted' }, 'เหรียญที่สะสมได้ · medals collected'),
+      h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + A.MEDALS.length), h('div', { class: 'small th muted' }, 'medals collected'),
         h('div', { class: 'goal-bar', style: { marginTop: '8px' } }, h('i', { style: { width: (got / A.MEDALS.length) * 100 + '%' } })),
         h('div', { class: 'tier-row' }, tiers.map(([t, n, all]) => h('span', { class: 'tier-chip ' + t }, A.art.TIERS[t].n + ' ' + n + '/' + all))))));
     Object.keys(CAT).forEach((cat) => {
       const ms = A.MEDALS.filter((m) => m.cat === cat);
       if (!ms.length) return;
-      root.append(h('div', { class: 'sec-title' }, CAT[cat][0] + ' · ', h('span', { class: 'th' }, CAT[cat][1])));
+      root.append(h('div', { class: 'sec-title' }, CAT[cat][0]));
       root.append(h('div', { class: 'medal-grid' }, ms.map((m) => {
         const on = !!st.badges[m.id];
         const [now, goal] = m.prog(st);
         return h('button', { class: 'medal-cell' + (on ? ' on' : ''), onclick: () => medalSheet(m) },
           h('span', { html: A.art.medal(m, { size: 84, locked: !on }) }),
-          h('b', null, on ? m.en : '???'), h('span', { class: 'th small muted' }, on ? m.th : m.how),
+          h('b', null, on ? m.en : '???'), h('span', { class: 'small muted' }, m.how),
           on ? null : h('div', { class: 'mini-bar' }, h('i', { style: { width: Math.min(100, (now / goal) * 100) + '%' } })));
       })));
     });
@@ -615,10 +617,10 @@
     const [now, goal] = m.prog(st);
     A.sheet(h('div', { class: 'stack medal-detail', style: { alignItems: 'center', textAlign: 'center', gap: '10px' } },
       h('div', { class: 'medal-stage' + (on ? ' on' : ''), html: A.art.medal(m, { size: 170, locked: !on }) }),
-      h('span', { class: 'tier-chip ' + m.tier }, A.art.TIERS[m.tier].n + ' · ' + A.art.TIERS[m.tier].th),
-      h('h2', null, on ? m.en : 'Locked · ยังไม่ปลดล็อก'), h('div', { class: 'th' }, on ? m.th : ''),
+      h('span', { class: 'tier-chip ' + m.tier }, A.art.TIERS[m.tier].n),
+      h('h2', null, on ? m.en : 'Locked'),
       h('div', { class: 'note th', style: { width: '100%' } }, '🎯 ' + m.how),
-      on ? h('div', { class: 'small muted' }, 'Earned · ได้รับเมื่อ ' + new Date(on).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))
+      on ? h('div', { class: 'small muted' }, 'Earned ' + new Date(on).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))
         : h('div', { style: { width: '100%' } }, h('div', { class: 'goal-bar' }, h('i', { style: { width: Math.min(100, (now / goal) * 100) + '%' } })), h('div', { class: 'small muted num', style: { marginTop: '6px' } }, Math.min(now, goal) + ' / ' + goal))));
   }
   A.medalSheet = medalSheet;
@@ -631,34 +633,34 @@
     const n = Object.values(st.days).reduce((a, d) => a + (d.n || 0), 0), ok = Object.values(st.days).reduce((a, d) => a + (d.ok || 0), 0);
     const root = h('div', { class: 'screen' });
     root.append(h('div', { class: 'card stack', style: { alignItems: 'center', textAlign: 'center' } },
-      h('div', { style: { fontSize: '3rem' } }, tl[3]), h('h1', null, A.user.name), h('div', { class: 'th muted' }, tl[2] + ' · ' + tl[1] + ' · Level ' + lvl),
+      h('div', { style: { fontSize: '3rem' } }, tl[3]), h('h1', null, A.user.name), h('div', { class: 'muted' }, tl[1] + ' · Level ' + lvl),
       h('div', { class: 'goal-bar', style: { width: '100%' } }, h('i', { style: { width: ((xp - A.levelXP(lvl)) / (A.levelXP(lvl + 1) - A.levelXP(lvl))) * 100 + '%' } })),
       h('div', { class: 'small muted num' }, (A.levelXP(lvl + 1) - xp) + ' XP to level ' + (lvl + 1))));
     root.append(h('div', { class: 'kpis' },
       h('div', { class: 'kpi' }, h('b', null, xp), h('span', null, 'Total XP')),
-      h('div', { class: 'kpi' }, h('b', null, A.wordCount(st)), h('span', null, 'Words · คำ')),
-      h('div', { class: 'kpi' }, h('b', null, days), h('span', null, 'Days · วัน')),
+      h('div', { class: 'kpi' }, h('b', null, A.wordCount(st)), h('span', null, 'Words')),
+      h('div', { class: 'kpi' }, h('b', null, days), h('span', null, 'Days')),
       h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Streak')),
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
       h('div', { class: 'kpi' }, h('b', null, st.freezes + '🧊'), h('span', null, 'Rest days'))));
-    root.append(h('div', { class: 'small th muted' }, '🧊 Rest day: เรียนครบ 7 วันติด ได้วันพัก 1 วัน (เก็บได้ 2 วัน) ถ้าวันไหนไม่ได้เรียน ไฟ 🔥 จะไม่ดับ'));
+    root.append(h('div', { class: 'small th muted' }, '🧊 Rest day: learn 7 days in a row to earn a rest day (keep up to 2). Miss a day and your 🔥 stays alight.'));
     const got = A.MEDALS.filter((m) => st.badges[m.id]);
     const shelf = h('button', { class: 'card medal-shelf', onclick: () => A.go('medals') },
-      h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'Treasure chest · หีบสมบัติ'), h('div', { class: 'small muted th' }, 'เหรียญที่สะสมได้ ' + got.length + ' / ' + A.MEDALS.length)), h('span', { class: 'pill sea' }, 'See all ›')),
+      h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'Treasure chest'), h('div', { class: 'small muted' }, got.length + ' / ' + A.MEDALS.length + ' medals')), h('span', { class: 'pill sea' }, 'See all ›')),
       h('div', { class: 'shelf-row' }, (got.length ? got.slice(-5).reverse() : A.MEDALS.slice(0, 5)).map((m) => h('span', { class: 'shelf-m', html: A.art.medal(m, { size: 58, locked: !st.badges[m.id] }) }))));
     root.append(shelf);
-    root.append(h('button', { class: 'card talk-item', onclick: () => A.go('grammar') }, h('div', { class: 'av' }, '📖'), h('div', { style: { flex: 1 } }, h('b', null, 'Grammar book'), h('div', { class: 'small th muted' }, 'คู่มือไวยากรณ์')), '›'));
+    root.append(h('button', { class: 'card talk-item', onclick: () => A.go('grammar') }, h('div', { class: 'av' }, '📖'), h('div', { style: { flex: 1 } }, h('b', null, 'Grammar book'), h('div', { class: 'small muted' }, 'All the rules in one place')), '›'));
     const set = st.set;
     const sw = (label, on, fn) => h('div', { class: 'switch' }, h('span', { class: 'th' }, label), h('button', { class: 'toggle' + (on ? ' on' : ''), role: 'switch', 'aria-checked': on ? 'true' : 'false', 'aria-label': label, onclick: fn }));
     root.append(h('div', { class: 'card', style: { padding: '4px 16px' } },
-      sw('🐢 เสียงพูดช้าลง · Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
-      sw('🔔 เสียงเอฟเฟกต์ · Sound effects', set.sfx, () => { set.sfx = !set.sfx; applySettings(); A.saveSoon(); A.go('me'); }),
-      sw('🔠 ตัวหนังสือใหญ่ · Bigger text', set.big, () => { set.big = !set.big; applySettings(); A.saveSoon(); A.go('me'); }),
-      sw('🇹🇭 แสดงคำแปลเสมอ · Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); }),
-      h('div', { class: 'switch' }, h('span', { class: 'th' }, '🌙 โหมดกลางคืน · Night mode', h('div', { class: 'tiny muted' }, 'Auto = ตามโทรศัพท์')), A.theme.picker((v) => { A.track('night_mode', { v }); A.go('me'); }))));
-    if (!A.speech.ok) root.append(h('div', { class: 'note' }, 'เครื่องนี้ไม่รองรับเสียงพูด ลองเปิดใน Safari บน iPhone นะ'));
+      sw('🐢 Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
+      sw('🔔 Sound effects', set.sfx, () => { set.sfx = !set.sfx; applySettings(); A.saveSoon(); A.go('me'); }),
+      sw('🔠 Bigger text', set.big, () => { set.big = !set.big; applySettings(); A.saveSoon(); A.go('me'); }),
+      sw('🇹🇭 Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); }),
+      h('div', { class: 'switch' }, h('span', { class: 'th' }, '🌙 Night mode', h('div', { class: 'tiny muted' }, 'Auto = same as your phone')), A.theme.picker((v) => { A.track('night_mode', { v }); A.go('me'); }))));
+    if (!A.speech.ok) root.append(h('div', { class: 'note' }, 'This phone cannot speak the words. Try Safari on iPhone.'));
     if (!A.install.standalone()) root.append(A.install.button());
-    root.append(h('button', { class: 'btn ghost block', onclick: async () => { await A.flush(); await A.api.logout(); A.user = null; A.state = null; A.go('login'); } }, 'Log out · ออกจากระบบ'));
+    root.append(h('button', { class: 'btn ghost block', onclick: async () => { await A.flush(); await A.api.logout(); A.user = null; A.state = null; A.go('login'); } }, 'Log out'));
     return root;
   };
   function applySettings() {
@@ -689,12 +691,12 @@
     build: ['🧱', 'Build the sentence', 'ฟังแล้วเรียงคำให้เป็นประโยค'], pick: ['✅', 'Which one is correct?', 'ประโยคไหนถูกต้อง'],
     listen: ['👂', 'What do you hear?', 'ฟังแล้วเลือกประโยค'], reply: ['💬', 'Choose your reply', 'ตอบว่าอะไรดี'],
   };
-  const kindLabel = (t) => { const k = KIND[t]; return k ? h('div', { class: 'q-kind' }, k[0] + ' ' + k[1] + ' · ', h('span', { class: 'th', style: { fontWeight: 600 } }, k[2])) : null; };
-  const focusLabel = (sk) => h('div', { class: 'focus-tag' }, '💪 Extra practice: ' + (A.SKILLS[sk] || [sk])[0] + ' · ', h('span', { class: 'th' }, 'ฝึกเพิ่ม: ' + (A.SKILLS[sk] || [sk, sk])[1]));
+  const kindLabel = (t) => { const k = KIND[t]; return k ? h('div', { class: 'q-kind' }, k[0] + ' ' + k[1]) : null; };
+  const focusLabel = (sk) => h('div', { class: 'focus-tag' }, '💪 Extra practice: ' + (A.SKILLS[sk] || [sk])[0]);
 
   A.play = (kind, arg) => {
     const ses = A.buildSession(kind, arg, A.state);
-    if (!ses.steps.length) { A.toast(kind === 'review' ? 'ยังไม่มีคำให้ทบทวน — เรียนบทใหม่ก่อนนะ' : 'Nothing here yet'); return; }
+    if (!ses.steps.length) { A.toast(kind === 'review' ? 'Nothing to review yet. Learn a new lesson first!' : 'Nothing here yet'); return; }
     A.session = ses;
     const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'focus' ? 'Extra practice'
       : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
@@ -736,15 +738,15 @@
       const left = ses.steps.slice(ses.i).filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type) && !x.retry).length;
       ses.graded += left;
       A.track('test_timeup', { node: ses.nodeId, unanswered: left });
-      A.toast('⏰ Time is up! · หมดเวลาแล้ว', 2600);
+      A.toast('⏰ Time is up!', 2600);
       finish();
     }
 
     function quit() {
       const sh = A.sheet(h('div', { class: 'stack', style: { gap: '12px', textAlign: 'center' } },
-        h('div', { style: { fontSize: '2.6rem' } }, '🥺'), h('h2', null, 'Leave the lesson?'), h('p', { class: 'th muted' }, 'ถ้าออกตอนนี้ ความคืบหน้าของบทนี้จะไม่ถูกบันทึกนะ'),
-        h('button', { class: 'btn block', onclick: () => sh.close() }, 'Keep learning · เรียนต่อ'),
-        h('button', { class: 'btn ghost block', onclick: () => { sh.close(); A.track('lesson_quit', { node: ses.nodeId, at: ses.i + 1, of: ses.steps.length }); A.session = null; A.flush(); A.go(ses.node || ['chest', 'bottle', 'side'].includes(ses.kind) ? 'journey' : 'home'); } }, 'Quit · ออก')));
+        h('div', { style: { fontSize: '2.6rem' } }, '🥺'), h('h2', null, 'Leave the lesson?'), h('p', { class: 'muted' }, 'If you leave now, this lesson will not be saved.'),
+        h('button', { class: 'btn block', onclick: () => sh.close() }, 'Keep learning'),
+        h('button', { class: 'btn ghost block', onclick: () => { sh.close(); A.track('lesson_quit', { node: ses.nodeId, at: ses.i + 1, of: ses.steps.length }); A.session = null; A.flush(); A.go(ses.node || ['chest', 'bottle', 'side'].includes(ses.kind) ? 'journey' : 'home'); } }, 'Quit')));
     }
 
     function render() {
@@ -790,18 +792,18 @@
       const [th, en] = A.pick(ok ? PRAISE : COMFORT);
       const inn = h('div', { class: 'in' });
       const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'no'), role: 'status' }, inn);
-      inn.append(h('div', { class: 'fb-head' }, mascot(ok ? 'happy' : 'kind', 58), h('h3', null, h('span', null, en), h('span', { class: 'th' }, th))));
+      inn.append(h('div', { class: 'fb-head' }, mascot(ok ? 'happy' : 'kind', 58), h('h3', null, h('span', null, en))));
       if (info.show) {
         const [thT, thB] = thaiReveal(info.showTh || '', false, true);
         inn.append(h('div', { class: 'fb-ans' },
           h('div', { style: { flex: 1, minWidth: 0 } },
-            ok ? null : h('div', { class: 'small th lbl' }, '✅ คำตอบที่ถูก · Correct answer'),
+            ok ? null : h('div', { class: 'small th lbl' }, '✅ Correct answer'),
             h('div', { class: 'ans' }, info.show), info.showTh ? thT : null, info.showTh ? thB : null),
           info.say ? A.sayBtns(info.say, { sm: true }) : null));
       }
-      if (!ok && info.a) inn.append(h('div', { class: 'fb-you' }, h('span', { class: 'th' }, '❌ คุณตอบ · You chose: '), h('s', null, info.a)));
+      if (!ok && info.a) inn.append(h('div', { class: 'fb-you' }, h('span', { class: 'th' }, '❌ You chose: '), h('s', null, info.a)));
       if (!ok) inn.append(explainBox(info));
-      inn.append(h('button', { class: 'btn block ' + (ok ? 'good' : 'bad'), id: 'fb-next', onclick: () => { fb.remove(); cont(); } }, 'Continue · ต่อไป'));
+      inn.append(h('button', { class: 'btn block ' + (ok ? 'good' : 'bad'), id: 'fb-next', onclick: () => { fb.remove(); cont(); } }, 'Continue'));
       document.body.append(fb);
       if (info.say && ok) A.speech.say(info.say);
       setTimeout(() => { const b = document.getElementById('fb-next'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -821,7 +823,7 @@
       if (ses.kind === 'talk') xp += 6;
       const day = A.day(st);
       day.xp += xp; day.sec += secs; day.n += ses.graded; day.ok += ses.firstOk;
-      const before = { units: A.unitsDone(st), months: A.monthsDone(st) };
+      const before = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
       const doneKey = node ? node.id : ses.kind === 'talk' ? 'talk:' + ses.arg : null;
       const stars = acc >= 90 ? 3 : acc >= 70 ? 2 : 1;
       if (doneKey && passed) {
@@ -838,7 +840,13 @@
       if (sk > 0 && sk % 7 === 0 && !st.badges['fz' + sk]) { st.badges['fz' + sk] = now; st.freezes = Math.min(2, (st.freezes || 0) + 1); }
       const rw = A.voyage.reward(ses, acc, passed);
       const newBadges = A.checkBadges(st);
-      const after = { units: A.unitsDone(st), months: A.monthsDone(st) };
+      const after = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
+      try {
+        A.boatNotes(before.cur, after.cur);
+        if (after.ready > before.ready) A.notify({ ic: '📜', t: 'Quest complete!', s: 'Claim your pearls from today’s quests.', go: ['quests'] });
+        newBadges.forEach((id) => { const m = A.MEDALS.find((x) => x.id === id); if (m) A.notify({ quiet: 1, ic: '🏅', t: 'New medal: ' + m.en, go: ['medals'] }); });
+        if (after.cur > before.cur && A.voyage.route().main[after.cur]) A.notify({ quiet: 1, ic: '🏝️', t: 'Land ho! Next island: ' + A.voyage.route().main[after.cur].name, go: ['journey'] });
+      } catch (e) { /* notes are extras */ }
       A.saveSoon();
       const lvlBefore = A.level(A.totalXP(st) - xp), lvlAfter = A.level(A.totalXP(st));
       A.track('lesson_end', { node: ses.nodeId, title: ses.title, acc, xp, secs, passed: passed ? 1 : 0, wrong: ses.graded - ses.firstOk, graded: ses.graded, looks: ses.lookups, badges: newBadges.join(',') || undefined, unitDone: after.units > before.units ? 1 : undefined, lvl: lvlAfter > lvlBefore ? lvlAfter : undefined });
@@ -861,46 +869,46 @@
     const rw = r.rw || {};
     const voy = ['chest', 'bottle', 'side'].includes(ses.kind);
     const seaUp = r.passed && ses.node && A.voyage.seasDone(st) > A.voyage.seasDone({ done: Object.fromEntries(Object.entries(st.done).filter(([k]) => k !== ses.node.id)) });
-    const head = voy ? (rw.locked ? ['🔒', 'Not this time', 'ยังไม่สำเร็จ ลองอีกครั้งนะ'] : ses.kind === 'side' ? ['🧭', 'Mission complete!', 'ภารกิจเสริมสำเร็จ!'] : ['🗝️', 'Unlocked!', 'เปิดได้แล้ว!'])
-      : ses.timeUp && !r.passed ? ['⏰', 'Time is up', 'หมดเวลา! ลองอีกครั้ง ตอบให้เร็วขึ้นนิดนะ']
-        : !r.passed ? ['🌱', 'Almost there!', 'เกือบผ่านแล้ว! ต้องได้ 70% ขึ้นไป ลองทบทวนแล้วทำใหม่นะ']
-          : seaUp ? ['🌊', 'New sea reached!', 'ผ่านทะเลนี้แล้ว! ได้โปสการ์ดใหม่ด้วย']
-            : r.acc === 100 ? ['💯', 'Perfect!', 'ไม่ผิดเลยสักข้อ เก่งมาก!'] : ['🎉', ses.node ? 'Island done!' : 'Well done!', 'เก่งมาก! เรือพร้อมออกเดินทางต่อ'];
+    const head = voy ? (rw.locked ? ['🔒', 'Not this time', 'Try once more!'] : ses.kind === 'side' ? ['🧭', 'Mission complete!', 'You did it!'] : ['🗝️', 'Unlocked!', 'The treasure is yours!'])
+      : ses.timeUp && !r.passed ? ['⏰', 'Time is up', 'Try again and answer a little faster.']
+        : !r.passed ? ['🌱', 'Almost there!', 'You need 70% to pass. Review and try again!']
+          : seaUp ? ['🌊', 'New sea reached!', 'You crossed a whole sea, and got a new postcard!']
+            : r.acc === 100 ? ['💯', 'Perfect!', 'Not one mistake. Amazing!'] : ['🎉', ses.node ? 'Island done!' : 'Well done!', 'Great job! Your boat is ready to sail on.'];
     root.append(h('div', { class: 'big-e' }, head[0]), h('h1', null, head[1]), h('p', { class: 'th muted' }, head[2]));
     if (r.passed && ses.node && ses.node.kind !== 'check') root.append(h('div', { class: 'stars', style: { fontSize: '2rem' } }, '★'.repeat(r.stars), h('span', { class: 'off' }, '★'.repeat(3 - r.stars))));
     root.append(h('div', { class: 'boxes' },
       h('div', { class: 'box' }, h('b', null, '+' + r.xp), h('span', null, 'XP')),
-      h('div', { class: 'box' }, h('b', null, r.acc + '%'), h('span', null, 'Correct · ถูก')),
-      h('div', { class: 'box' }, h('b', null, Math.max(1, Math.round(r.secs / 60)) + 'm'), h('span', null, 'Time · เวลา'))));
+      h('div', { class: 'box' }, h('b', null, r.acc + '%'), h('span', null, 'Correct')),
+      h('div', { class: 'box' }, h('b', null, Math.max(1, Math.round(r.secs / 60)) + 'm'), h('span', null, 'Time'))));
     const blk = A.voyage.resultBlock(rw, ses); if (blk) root.append(blk);
     if (ses.node && r.passed && !A.nextNode(st)) {
       root.append(h('div', { class: 'card stack', style: { width: '100%', border: '3px double var(--mango)', background: 'var(--mango-tint)', textAlign: 'center' } },
         h('div', { style: { fontSize: '2.6rem' } }, '🎓'),
-        h('div', { class: 'small muted' }, 'CERTIFICATE · ประกาศนียบัตร'),
+        h('div', { class: 'small muted' }, 'CERTIFICATE'),
         h('h2', null, A.user.name),
         h('div', null, 'sailed all the way from Thailand to the Maldives in English'),
-        h('div', { class: 'th small' }, 'ล่องเรือจากประเทศไทยถึงมัลดีฟส์สำเร็จ — พูดภาษาอังกฤษพื้นฐานได้อย่างมั่นใจ'),
+        h('div', { class: 'small' }, 'Sailed all the way from Thailand to the Maldives, and speaks everyday English with confidence.'),
         h('div', { class: 'small muted' }, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' · ' + A.wordCount(st) + ' words · ' + A.totalXP(st) + ' XP')));
     }
-    if (r.lvlUp) root.append(h('div', { class: 'pill mango', style: { fontSize: '1rem', padding: '8px 14px' } }, '⬆️ Level ' + r.lvlUp + ' · ' + A.title(r.lvlUp)[2]));
+    if (r.lvlUp) root.append(h('div', { class: 'pill mango', style: { fontSize: '1rem', padding: '8px 14px' } }, '⬆️ Level ' + r.lvlUp + ' · ' + A.title(r.lvlUp)[1]));
     r.newBadges.forEach((id) => {
       const m = A.medal(id); if (!m) return;
       root.append(h('button', { class: 'card new-medal', onclick: () => medalSheet(m) },
         h('div', { class: 'medal-stage on', html: A.art.medal(m, { size: 110 }) }),
-        h('div', { style: { flex: 1, textAlign: 'left' } }, h('div', { class: 'small muted' }, '✨ New medal! · ได้เหรียญใหม่'), h('b', null, m.en), h('div', { class: 'th small' }, m.th + ' · ' + A.art.TIERS[m.tier].n))));
+        h('div', { style: { flex: 1, textAlign: 'left' } }, h('div', { class: 'small muted' }, '✨ New medal!'), h('b', null, m.en), h('div', { class: 'small muted' }, A.art.TIERS[m.tier].n))));
     });
     const lessonSents = ses.node && ses.node.kind === 'lesson' ? C.lessons[ses.node.id].sents.slice(0, 3) : ses.node && ses.node.kind === 'talk' ? C.talks[ses.node.talk].lines.filter((l) => l.s === 'B').slice(0, 3).map((l) => l.id) : [];
     if (r.passed && lessonSents.length) {
-      root.append(h('div', { class: 'card can-say stack' }, h('div', { class: 'sec-title' }, 'Now you can say · ตอนนี้คุณพูดได้แล้ว'),
+      root.append(h('div', { class: 'card can-say stack' }, h('div', { class: 'sec-title' }, 'Now you can say'),
         lessonSents.map((sid) => h('div', { class: 'ex' }, A.sayBtns(A.S(sid).en, { sm: true, noSlow: true }), h('div', null, h('div', { class: 'en' }, A.S(sid).en), h('div', { class: 'thx' }, A.S(sid).th))))));
     }
     const btns = h('div', { class: 'stack', style: { width: '100%' } });
     if (voy) {
-      if (rw.locked) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again · ลองอีกครั้ง'));
-      btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea · กลับสู่ทะเล'));
-    } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again · ลองอีกครั้ง'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first · ทบทวนก่อน'));
-    else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island · ล่องเรือต่อ'));
-    btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home · กลับหน้าแรก'));
+      if (rw.locked) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again'));
+      btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea'));
+    } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first'));
+    else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island'));
+    btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home'));
     root.append(btns);
     return root;
   };
@@ -958,7 +966,7 @@
     return [b, panel];
   }
 
-  RENDER.tip = (step, ctl) => h('div', { class: 'stack', style: { gap: '16px' } }, A.tipView(step.tip), continueBtn('เข้าใจแล้ว! · Got it', () => { A.track('tip_view', { tip: C.tips[step.tip].title }); ctl.next(); }));
+  RENDER.tip = (step, ctl) => h('div', { class: 'stack', style: { gap: '16px' } }, A.tipView(step.tip), continueBtn('Got it', () => { A.track('tip_view', { tip: C.tips[step.tip].title }); ctl.next(); }));
 
   RENDER.wintro = (step, ctl) => {
     const e = D[step.key];
@@ -968,12 +976,12 @@
       h('div', { class: 'tr' }, e.th), e.n ? h('div', { class: 'small th' }, e.n) : null,
       exs.map((x) => h('div', { class: 'small th muted' }, '• ' + x.en + ' = ' + x.th))), e.w);
     return h('div', { class: 'intro' },
-      h('div', { class: 'q-kind' }, '✨ New word · ', h('span', { class: 'th' }, 'คำใหม่')),
+      h('div', { class: 'q-kind' }, '✨ New word'),
       h('div', { class: 'card hero word-hero' }, h('div', { class: 'hero-glow', 'aria-hidden': 'true' }), e.e ? h('div', { class: 'pic' }, e.e) : null, h('div', { class: 'w' }, A.fill(e.w)), A.sayBtns(A.fill(e.w)),
         e.pr ? h('div', { class: 'pr' }, 'อ่านว่า · say: ' + e.pr) : null, h('div', { class: 'small muted th' }, A.POS[e.p] || '')),
       exs.length ? h('div', { class: 'card flat', style: { padding: '4px 14px' } }, h('div', { class: 'small muted', style: { paddingTop: '8px' } }, 'Examples · ตัวอย่าง'), exs.map((x) => h('div', { class: 'ex' }, A.sayBtns(x.en, { sm: true, noSlow: true }), h('div', null, h('div', { class: 'en' }, A.richText(x.en)))))) : null,
       tb, panel,
-      continueBtn('จำได้แล้ว! · Got it', () => ctl.next()));
+      continueBtn('Got it', () => ctl.next()));
   };
 
   RENDER.sintro = (step, ctl) => {
@@ -981,11 +989,11 @@
     setTimeout(() => A.speech.say(s.en), 150);
     const [tb, panel] = thaiPanel(h('div', { class: 'stack', style: { gap: '6px' } }, h('div', { class: 'th', style: { fontSize: '1.15rem', fontWeight: 600, color: 'var(--sea-deep)' } }, s.th), s.note ? h('div', { class: 'small th' }, '💡 ' + s.note) : null), s.en);
     return h('div', { class: 'intro' },
-      h('div', { class: 'q-kind' }, '💡 New sentence · ', h('span', { class: 'th' }, 'ประโยคใหม่')),
+      h('div', { class: 'q-kind' }, '💡 New sentence'),
       h('div', { class: 'prompt' }, mascot('talk', 64), h('div', { class: 'bubble' }, A.richS(step.sid)), A.sayBtns(s.en)),
-      h('div', { class: 'small muted th' }, '👆 แตะคำที่ไม่รู้ เพื่อดูความหมาย · Tap a word you don’t know'),
+      h('div', { class: 'small muted th' }, '👆 Tap a word you don’t know'),
       tb, panel,
-      continueBtn('เข้าใจแล้ว · Next', () => ctl.next()));
+      continueBtn('Next', () => ctl.next()));
   };
 
   function optionList(opts, render, onPick, cls) {
@@ -1074,7 +1082,7 @@
     const line = h('div', { class: 'build-line', 'aria-label': 'Your sentence' });
     const bank = h('div', { class: 'bank' });
     const placed = [];
-    const check = h('button', { class: 'btn block', disabled: true }, 'Check · ตรวจคำตอบ');
+    const check = h('button', { class: 'btn block', disabled: true }, 'Check');
     step.tiles.tiles.forEach((t) => {
       const b = h('button', { class: 'wtile', onclick: () => {
         if (b.classList.contains('used')) return;
@@ -1167,19 +1175,19 @@
     const t = C.talks[step.talk];
     let i = 0, showTh = true;
     const chat = h('div', { class: 'chat' });
-    const nextB = h('button', { class: 'btn block' }, 'Next ▶ · ต่อไป');
+    const nextB = h('button', { class: 'btn block' }, 'Next ▶');
     const thBtn = h('button', { class: 'chip on', onclick: () => { showTh = !showTh; thBtn.classList.toggle('on', showTh); chat.querySelectorAll('.thx').forEach((x) => x.classList.toggle('hidden', !showTh)); } }, '🇹🇭 คำแปล');
     const add = () => {
       const line = t.lines[i++];
       chat.append(bubble(line, t, showTh));
       A.speech.say(A.fill(A.S(line.id).en));
-      if (i >= t.lines.length) { nextB.textContent = "Let's practice! · มาฝึกพูดกัน"; nextB.classList.add('mango'); }
+      if (i >= t.lines.length) { nextB.textContent = "Let's practise!"; nextB.classList.add('mango'); }
       setTimeout(() => nextB.scrollIntoView({ behavior: 'smooth', block: 'end' }), 30);
     };
     nextB.onclick = () => { if (i >= t.lines.length) { A.track('talk_read', { talk: t.id }); ctl.next(); } else add(); };
     setTimeout(add, 120);
     return h('div', { class: 'stack', style: { gap: '14px' } },
-      h('div', { class: 'row between' }, h('div', null, h('div', { class: 'q-kind' }, '💬 Read & listen · ', h('span', { class: 'th' }, 'อ่านและฟัง')), h('div', { class: 'q-title' }, A.fill(t.en), h('span', { class: 'th' }, t.th))), thBtn),
+      h('div', { class: 'row between' }, h('div', null, h('div', { class: 'q-kind' }, '💬 Read & listen'), h('div', { class: 'q-title' }, A.fill(t.en), h('span', { class: 'th' }, t.th))), thBtn),
       chat, nextB);
   };
   RENDER.talkplay = (step, ctl) => {
@@ -1187,7 +1195,7 @@
     let i = 0;
     const chat = h('div', { class: 'chat' });
     const area = h('div', { class: 'stack' });
-    const fin = () => { A.clear(area).append(continueBtn('Finish · เสร็จแล้ว', () => ctl.next(), 'mango')); area.scrollIntoView({ behavior: 'smooth', block: 'end' }); };
+    const fin = () => { A.clear(area).append(continueBtn('Finish', () => ctl.next(), 'mango')); area.scrollIntoView({ behavior: 'smooth', block: 'end' }); };
     const advance = () => {
       if (i >= t.lines.length) return fin();
       const line = t.lines[i];
@@ -1202,7 +1210,7 @@
       let wrong = (line.x || []).map((x) => ({ s: x, tag: guessTag(x, s.en) }));
       if (wrong.length < 2) wrong = wrong.concat(A.corruptions(s.t).slice(0, 2 - wrong.length));
       const opts = A.shuffle([{ s: s.en, ok: 1 }, ...wrong.slice(0, 2)]);
-      A.clear(area).append(h('div', { class: 'q-kind' }, '💬 Your turn · ', h('span', { class: 'th' }, 'ถึงตาคุณแล้ว ตอบว่าอะไรดี')),
+      A.clear(area).append(h('div', { class: 'q-kind' }, '💬 Your turn: choose your reply'),
         optionList(opts, (o) => h('span', null, A.fill(o.s)), (o, b, box) => {
           const ok = !!o.ok;
           markOpts(box, opts.findIndex((x) => x.ok), b, ok);
@@ -1216,16 +1224,16 @@
           const go = () => { chat.append(bubble(line, t, false)); A.speech.say(A.fill(s.en)); i++; A.clear(area); setTimeout(advance, 800); };
           if (ok) setTimeout(go, 500);
           else {
-            area.append(h('div', { class: 'card stack', style: { background: 'var(--bad-bg)', gap: '8px' } }, h('div', { class: 'small th' }, '✅ คำตอบที่ถูก · Correct answer'), h('div', { class: 'row between' }, h('b', null, A.fill(s.en)), A.sayBtns(A.fill(s.en), { sm: true })), h('div', { class: 'th small muted' }, s.th),
+            area.append(h('div', { class: 'card stack', style: { background: 'var(--bad-bg)', gap: '8px' } }, h('div', { class: 'small th' }, '✅ Correct answer'), h('div', { class: 'row between' }, h('b', null, A.fill(s.en)), A.sayBtns(A.fill(s.en), { sm: true })), h('div', { class: 'th small muted' }, s.th),
               h('div', { class: 'small' }, '❌ ', h('s', null, A.fill(o.s))), A.explainBox({ exp, a: o.s, note: s.note })),
-            h('button', { class: 'btn bad block', onclick: go }, 'OK, continue · ต่อไป'));
+            h('button', { class: 'btn bad block', onclick: go }, 'OK, continue'));
           }
         }));
       area.scrollIntoView({ behavior: 'smooth', block: 'end' });
     };
     setTimeout(advance, 150);
     return h('div', { class: 'stack', style: { gap: '14px' } },
-      h('div', null, h('div', { class: 'q-kind' }, '🎭 Role-play · ', h('span', { class: 'th' }, 'เล่นบทบาท — คุณคือ ' + A.user.name)), h('div', { class: 'q-title' }, A.fill(t.en), h('span', { class: 'th' }, t.th))),
+      h('div', null, h('div', { class: 'q-kind' }, '🎭 Role-play: you are ' + A.user.name), h('div', { class: 'q-title' }, A.fill(t.en), h('span', { class: 'th' }, t.th))),
       chat, area);
   };
   function guessTag(wrong, right) {
@@ -1256,12 +1264,14 @@
     A.ctl = A.store.get('ae.ctl', {}) || {};
     await Promise.race([A.loadCtl(), new Promise((r) => setTimeout(r, 2500))]);
     A.state = A.fixState(A.newerState(await A.api.loadState().catch(() => null)));
+    try { A.applyBoost(A.state); } catch (e) { /* boosters are extras */ }
     applySettings();
     const fz = A.applyFreezes(A.state);
-    if (fz) { A.saveSoon(); A.track('rest_day_used', { days: fz }); setTimeout(() => A.toast('🧊 ใช้วันพัก ' + fz + ' วัน — ไฟ 🔥 ยังไม่ดับ!', 3200), 600); }
+    if (fz) { A.saveSoon(); A.track('rest_day_used', { days: fz }); setTimeout(() => A.toast('🧊 You used ' + fz + ' rest day' + (fz > 1 ? 's' : '') + '. Your 🔥 is still alight!', 3200), 600); }
     try { A.msgs = await A.api.inbox(); } catch (e) { A.msgs = []; }
     A.track('app_open', { ua: navigator.userAgent.slice(0, 120) });
     A.go('home');
+    setTimeout(() => { try { A.dailyNotes(); } catch (e) { /* extras */ } }, 1800);
   };
 
   async function start(hot) {
