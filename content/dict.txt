@@ -1888,3 +1888,26 @@ fried | adj | ทอด / ผัด | ฟรายด์ | 🍳 | fried rice = �
 top | n | ด้านบน / ยอด / บนสุด | ท็อป | 🔝 | the top floor = ชั้นบนสุด
 + The bar is on the top floor. = บาร์อยู่ชั้นบนสุด
 + Put it on top of the table. = วางไว้บนโต๊ะ
+
+# ---------- added for the extra advanced lessons
+Saturday | name | วันเสาร์ | แซท-เทอร์-เดย์ | 📅 | on Saturday = ในวันเสาร์
++ I don't work on Saturday. = ฉันไม่ทำงานวันเสาร์
++ See you on Saturday! = เจอกันวันเสาร์นะ!
+angry | adj | โกรธ | แอง-กรี้ | 😠 | angry with … = โกรธ… · ใช้กับ am / is / are: He is angry.
++ The guest is angry. = แขกโกรธ
++ Please don't be angry. = อย่าโกรธนะ
+nervous | adj | ประหม่า / ตื่นเต้น (กังวล) | เนิร์ฟ-เวิส | 😬 | รู้สึกกังวลก่อนทำสิ่งใหม่ ๆ เช่น ก่อนสัมภาษณ์งาน
++ I am nervous today. = วันนี้ฉันประหม่า
++ Don't be nervous. You can do it! = ไม่ต้องตื่นเต้นนะ ทำได้แน่นอน!
+air conditioner | phr | เครื่องปรับอากาศ / แอร์ | แอร์-คอน-ดิช-ชั่น-เนอร์ | ❄️ | คนไทยเรียกสั้น ๆ ว่า "แอร์" · ภาษาอังกฤษพูดสั้น ๆ ได้ว่า the AC
++ Please turn on the air conditioner. = ช่วยเปิดแอร์หน่อย
++ The air conditioner is too cold. = แอร์เย็นเกินไป
+learner | n | ผู้เรียน / มือใหม่ | เลิร์น-เนอร์ | 🧑‍🎓 | มาจาก learn (เรียนรู้) + er = คนที่เรียน
++ I am an English learner. = ฉันเป็นผู้เรียนภาษาอังกฤษ
++ She is a fast learner. = เธอเรียนรู้เร็ว
+mistake | n | ความผิดพลาด / ข้อผิด | มิส-เทค | ❌ | make a mistake = ทำผิด (ใช้ make ไม่ใช่ do)
++ We all make mistakes. = พวกเราทุกคนทำผิดพลาดได้
++ I made a mistake. Sorry! = ฉันทำผิดไป ขอโทษนะ
+conditioner | n | เครื่องปรับ (ใช้ในคำว่า air conditioner = แอร์) | คอน-ดิช-ชั่น-เนอร์ | ❄️ | มักใช้คู่กับ air: air conditioner
++ The air conditioner is new. = แอร์เครื่องนี้ใหม่
++ Is the air conditioner on? = เปิดแอร์อยู่ไหม

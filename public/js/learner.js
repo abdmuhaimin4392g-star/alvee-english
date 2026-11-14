@@ -3,6 +3,8 @@
   'use strict';
   const A = window.AE, C = A.C, h = A.h, D = C.dict;
   const app = () => document.getElementById('app');
+  const mascot = (mood, size) => A.art.mascotEl(mood, size);
+  const icon = (name, size, cls) => A.art.iconEl(name, size, cls);
 
   // ================================================================ shared UI
   A.toast = (msg, ms) => {
@@ -41,6 +43,72 @@
     const s = h('button', { class: 'say slow' + (o.sm ? ' sm' : ''), 'aria-label': 'Listen slowly', onclick: (e) => { e.stopPropagation(); A.speech.say(text, true); } }, '🐢');
     return h('span', { class: 'row', style: { gap: '6px', flex: 'none' } }, b, s);
   };
+
+  // ---------------------------------------------------------------- install ("download") + always full screen
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+  window.addEventListener('appinstalled', () => { deferredPrompt = null; A.track('app_installed', {}); });
+  const UA = navigator.userAgent || '';
+  const IOS = /iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+  const INAPP = /Line\/|FBAN|FBAV|Instagram|MicroMessenger/i.test(UA);
+  A.install = {
+    standalone: () => (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches)) || navigator.standalone === true,
+    button: (big) => h('button', { type: 'button', class: 'btn install-btn block' + (big ? ' big' : ''), onclick: () => A.install.go() }, icon('download', 22), h('span', null, 'Download the app', h('span', { class: 'sub th' }, ' · ดาวน์โหลดแอป'))),
+    async go() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        try { const r = await deferredPrompt.userChoice; A.track('install_prompt', { r: r && r.outcome }); } catch (e) { /* closed */ }
+        deferredPrompt = null;
+        return;
+      }
+      const step = (n, en, th) => h('div', { class: 'istep' }, h('span', { class: 'n' }, n), h('div', null, h('b', null, en), h('div', { class: 'th small muted' }, th)));
+      const steps = [];
+      if (INAPP) steps.push(step(1, IOS ? 'Tap ⋯ then “Open in Safari”' : 'Tap ⋮ then “Open in browser”', IOS ? 'แอปนี้เปิดอยู่ใน LINE · แตะ ⋯ แล้วเลือก “เปิดใน Safari”' : 'แอปนี้เปิดอยู่ใน LINE · แตะ ⋮ แล้วเลือก “เปิดในเบราว์เซอร์” (Chrome)'));
+      const k = steps.length;
+      if (IOS) steps.push(
+        step(k + 1, 'Tap the Share button', 'แตะปุ่มแชร์ (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ด้านล่างของ Safari'),
+        step(k + 2, 'Choose “Add to Home Screen”', 'เลื่อนลงแล้วเลือก “เพิ่มไปยังหน้าจอโฮม”'),
+        step(k + 3, 'Tap “Add”', 'แตะ “เพิ่ม” — ไอคอนเต่าน้อยจะอยู่บนหน้าจอ เปิดแล้วเต็มจอเหมือนแอปจริง'));
+      else steps.push(
+        step(k + 1, 'Open the menu ⋮ in Chrome', 'แตะปุ่ม ⋮ มุมขวาบนของ Chrome'),
+        step(k + 2, 'Choose “Install app” or “Add to Home screen”', 'เลือก “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”'),
+        step(k + 3, 'Open it from your home screen', 'เปิดจากไอคอนบนหน้าจอ แอปจะเปิดเต็มจอทุกครั้ง'));
+      A.sheet(h('div', { class: 'stack', style: { gap: '14px' } },
+        h('div', { class: 'row', style: { gap: '12px' } }, mascot('party', 64), h('div', null, h('h2', null, 'Get the app'), h('div', { class: 'th muted' }, 'ติดตั้งแอปลงโทรศัพท์ ใช้ง่าย เปิดเต็มจอ'))),
+        ...steps));
+      A.track('install_help', { ios: IOS ? 1 : 0, inapp: INAPP ? 1 : 0 });
+    },
+  };
+  // in a normal browser tab on Android, go full screen on the first tap (iPhone: use Add to Home Screen)
+  if (!IOS) {
+    const fs = () => {
+      if (A.install.standalone() || document.fullscreenElement || !document.documentElement.requestFullscreen) return;
+      document.documentElement.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+    };
+    document.addEventListener('pointerup', fs, { passive: true });
+  }
+
+  // ---------------------------------------------------------------- top strip: Maldives + Thai time, night mode
+  const fmtTime = (tz) => { try { return new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()); } catch (e) { return '--:--'; } };
+  A.clocks = () => {
+    const mv = h('b', { class: 'num' }), th = h('b', { class: 'num' });
+    const box = h('div', { class: 'clocks', 'aria-label': 'Maldives and Thailand time' },
+      h('span', { class: 'clk' }, h('span', { class: 'flag' }, '🇲🇻'), h('span', { class: 'cl-t' }, mv, h('small', null, 'Maldives'))),
+      h('span', { class: 'clk-sep', 'aria-hidden': 'true' }),
+      h('span', { class: 'clk' }, h('span', { class: 'flag' }, '🇹🇭'), h('span', { class: 'cl-t' }, th, h('small', null, 'Thailand'))));
+    const tick = () => { if (box.dataset.on && !box.isConnected) { clearInterval(t); return; } box.dataset.on = 1; mv.textContent = fmtTime('Indian/Maldives'); th.textContent = fmtTime('Asia/Bangkok'); };
+    tick();
+    const t = setInterval(tick, 15000);
+    return box;
+  };
+  A.nightBtn = () => {
+    const b = h('button', { type: 'button', class: 'night-btn', 'aria-label': 'Night mode' });
+    const paint = () => { const d = A.theme.isDark(); b.innerHTML = A.art.icon(d ? 'sun' : 'moon', 20); b.setAttribute('aria-pressed', d ? 'true' : 'false'); b.title = d ? 'Day mode · โหมดกลางวัน' : 'Night mode · โหมดกลางคืน'; };
+    b.onclick = () => { A.theme.set(A.theme.isDark() ? 'light' : 'dark'); paint(); A.track('night_mode', { v: A.theme.get() }); };
+    paint();
+    return b;
+  };
+  A.topStrip = (extra) => h('div', { class: 'top-strip' }, A.clocks(), h('div', { class: 'row', style: { gap: '6px' } }, ...(extra || []), A.nightBtn()));
 
   // English text where every word can be tapped for Thai help
   A.rich = (toks, ctx) => {
@@ -134,63 +202,69 @@
     else openSheet = A.sheet(body, { onClose: () => { openSheet = null; } });
   };
 
-  // ---------------------------------------------------------------- resort picture
+  // ---------------------------------------------------------------- resort picture (grows as she learns)
   const DECO = [[96, 152, 14], [38, 136, 36], [118, 156, 13], [205, 157, 12], [288, 164, 15], [60, 172, 12], [252, 154, 16], [110, 118, 14],
     [18, 162, 16], [304, 152, 20], [334, 164, 15], [78, 92, 16], [268, 172, 22], [128, 204, 14], [52, 124, 12], [300, 198, 22],
     [60, 202, 17], [66, 38, 16], [234, 162, 14], [336, 140, 17], [200, 210, 14], [300, 70, 18], [126, 46, 18], [0, 0, 22]];
   A.resortSVG = (st, name) => {
-    const hr = new Date().getHours();
-    const phase = hr >= 6 && hr < 11 ? 'morning' : hr >= 11 && hr < 16 ? 'day' : hr >= 16 && hr < 19 ? 'sunset' : 'night';
-    const sky = { morning: ['#BFE6F5', '#FDE6CC'], day: ['#79C9EA', '#D5F1F8'], sunset: ['#F39B79', '#FCD69A'], night: ['#16264A', '#3A4F7E'] }[phase];
+    const phase = A.art.phase();
     const W = 360, H = 220, G = 164;
+    const id = 'rs' + Math.random().toString(36).slice(2, 6);
+    const sc = A.art.scene(W, H, G, phase, id);
+    const night = sc.night;
     const ud = A.unitsDone(st), md = A.monthsDone(st);
     const floors = Math.min(6, md + 1);
     const cur = A.currentUnit(st);
     const bw = 156, bx = (W - bw) / 2, fh = 18;
     const winLit = (u) => A.unitDone(st, u);
     const part = (u) => { const ns = A.nodes.filter((n) => n.u === u); return ns.length ? ns.filter((n) => st.done[n.id]).length / ns.length : 0; };
-    let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Your resort: ${ud} of 24 units built">`;
-    s += `<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky[0]}"/><stop offset="1" stop-color="${sky[1]}"/></linearGradient>
-      <linearGradient id="se" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${phase === 'night' ? '#1D5C6B' : '#2BB3B1'}"/><stop offset="1" stop-color="${phase === 'night' ? '#0D3340' : '#0E7F86'}"/></linearGradient></defs>`;
-    s += `<rect width="${W}" height="${H}" fill="url(#sk)"/>`;
-    if (phase === 'night') {
-      s += `<circle cx="300" cy="38" r="15" fill="#FFF6D8"/><circle cx="306" cy="33" r="13" fill="${sky[0]}"/>`;
-      [[40, 30], [90, 18], [150, 34], [210, 16], [250, 44], [330, 70], [20, 70], [180, 60]].forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="1.4" fill="#fff" opacity=".85"/>`; });
-    } else {
-      const sy = phase === 'sunset' ? 92 : phase === 'morning' ? 58 : 40;
-      s += `<circle cx="300" cy="${sy}" r="${phase === 'sunset' ? 24 : 17}" fill="${phase === 'sunset' ? '#FFD27A' : '#FFE07D'}" opacity=".95"/>`;
-      s += `<g fill="#fff" opacity=".85"><ellipse cx="70" cy="56" rx="26" ry="9"/><ellipse cx="90" cy="50" rx="18" ry="9"/><ellipse cx="220" cy="34" rx="22" ry="7"/></g>`;
-    }
-    s += `<path d="M0 ${G - 14} Q 60 ${G - 44} 120 ${G - 16} T 240 ${G - 18} T 360 ${G - 26} V ${G} H 0 Z" fill="${phase === 'night' ? '#20405A' : '#8CCFB8'}" opacity=".7"/>`;
-    s += `<rect y="${G + 8}" width="${W}" height="${H - G - 8}" fill="url(#se)"/>`;
-    s += `<g stroke="#fff" stroke-width="1.6" fill="none" opacity=".45" stroke-linecap="round"><path d="M20 ${G + 26} q 8 -4 16 0"/><path d="M150 ${G + 40} q 8 -4 16 0"/><path d="M250 ${G + 30} q 8 -4 16 0"/><path d="M320 ${G + 48} q 8 -4 16 0"/></g>`;
-    s += `<path d="M0 ${G - 2} Q 180 ${G - 10} 360 ${G - 2} V ${G + 12} Q 180 ${G + 20} 0 ${G + 12} Z" fill="${phase === 'night' ? '#B9A57F' : '#F3DDB0'}"/>`;
+    let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Your resort: ${ud} of 24 units built"><defs>${sc.defs}
+      <linearGradient id="${id}wl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night ? '#E9E2D2' : '#FFFFFF'}"/><stop offset="1" stop-color="${night ? '#BDB3A0' : '#F3E9D7'}"/></linearGradient>
+      <radialGradient id="${id}gl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFD66B" stop-opacity=".8"/><stop offset="1" stop-color="#FFD66B" stop-opacity="0"/></radialGradient></defs>`;
+    s += sc.sky + sc.sea;
+    // beach
+    s += `<path d="M0 ${G - 2} Q 180 ${G - 12} 360 ${G - 2} V ${G + 12} Q 180 ${G + 20} 0 ${G + 12} Z" fill="url(#${id}sa)"/>`;
+    s += A.art.palm(26, G + 4, 0.95, false, night) + A.art.palm(W - 24, G + 6, 1.05, true, night) + A.art.palm(62, G + 2, 0.7, false, night);
     // building
     for (let f = 0; f < floors; f++) {
       const y = G - (f + 1) * fh;
-      s += `<rect x="${bx}" y="${y}" width="${bw}" height="${fh}" fill="${f % 2 ? '#FFF8EC' : '#FFFFFF'}" stroke="#D9C9AE" stroke-width="1"/>`;
+      s += `<rect x="${bx}" y="${y}" width="${bw}" height="${fh}" fill="url(#${id}wl)" stroke="${night ? '#8E8471' : '#D9C9AE'}" stroke-width="1"/>`;
+      s += `<rect x="${bx - 3}" y="${y + fh - 3}" width="${bw + 6}" height="3" rx="1.5" fill="${night ? '#7A6F5E' : '#E9D7B6'}"/>`;
       for (let w = 0; w < 4; w++) {
         const u = f * 4 + w + 1, wx = bx + 16 + w * 35, wy = y + 4;
         const lit = winLit(u), p = u === cur ? part(u) : 0;
-        const col = lit ? '#FFC94A' : p ? '#FFE7A8' : (phase === 'night' ? '#304868' : '#BFDDE8');
+        if (lit && night) s += `<circle cx="${wx + 10}" cy="${wy + 5}" r="14" fill="url(#${id}gl)"/>`;
+        const col = lit ? '#FFC94A' : p ? '#FFE7A8' : (night ? '#304868' : '#BFDDE8');
         s += `<rect x="${wx}" y="${wy}" width="20" height="10" rx="2" fill="${col}"${p && !lit ? ` opacity="${0.45 + p * 0.55}"` : ''}/>`;
+        s += `<path d="M${wx + 10} ${wy}v10" stroke="#fff" stroke-opacity=".5" stroke-width="1"/>`;
       }
     }
-    if (floors < 6) { const y = G - (floors + 1) * fh; s += `<rect x="${bx}" y="${y}" width="${bw}" height="${fh}" fill="none" stroke="#9FB7B3" stroke-width="1.2" stroke-dasharray="4 3"/>`; }
+    if (floors < 6) { const y = G - (floors + 1) * fh; s += `<rect class="build-next" x="${bx}" y="${y}" width="${bw}" height="${fh}" fill="none" stroke="${night ? '#6F8FA8' : '#9FB7B3'}" stroke-width="1.2" stroke-dasharray="4 3"/>`; }
     const top = G - floors * fh;
-    s += `<path d="M${bx - 8} ${top} L${W / 2} ${top - 20} L${bx + bw + 8} ${top} Z" fill="#E5476C"/>`;
-    s += `<rect x="${W / 2 - 60}" y="${top - 42}" width="120" height="19" rx="6" fill="#0A5F66"/>`;
-    s += `<text x="${W / 2}" y="${top - 28.5}" text-anchor="middle" font-family="Mitr, sans-serif" font-size="11" fill="#fff">${A.esc((name || 'Alvee') + ' Resort')}</text>`;
-    s += `<text x="${W / 2}" y="${top - 46}" text-anchor="middle" font-size="11" fill="#FFB21E">${'★'.repeat(Math.min(5, md))}<tspan fill="#ffffff" opacity=".7">${'☆'.repeat(Math.max(0, 5 - md))}</tspan></text>`;
-    s += `<rect x="${W / 2 - 9}" y="${G - 13}" width="18" height="13" rx="3" fill="#0E8A8A"/>`;
-    s += `<text x="${W / 2 + 22}" y="${G + 2}" font-size="16">💁‍♀️</text>`;
+    s += `<path d="M${bx - 10} ${top} L${W / 2} ${top - 22} L${bx + bw + 10} ${top} Z" fill="#E5476C"/><path d="M${bx - 10} ${top} L${W / 2} ${top - 22} L${W / 2} ${top} Z" fill="#fff" opacity=".12"/>`;
+    s += `<rect x="${W / 2 - 62}" y="${top - 46}" width="124" height="20" rx="7" fill="#0A5F66"/><rect x="${W / 2 - 62}" y="${top - 46}" width="124" height="20" rx="7" fill="none" stroke="#FFB21E" stroke-width="1.2" opacity=".8"/>`;
+    s += `<text x="${W / 2}" y="${top - 32}" text-anchor="middle" font-family="Mitr, sans-serif" font-size="11" fill="#fff">${A.esc((name || 'Alvee') + ' Resort')}</text>`;
+    s += `<text x="${W / 2}" y="${top - 50}" text-anchor="middle" font-size="11" fill="#FFB21E">${'★'.repeat(Math.min(5, md))}<tspan fill="#ffffff" opacity=".7">${'☆'.repeat(Math.max(0, 5 - md))}</tspan></text>`;
+    s += `<path d="M${W / 2 - 12} ${G} v-14 a12 6 0 0 1 24 0 v14z" fill="#0E8A8A"/>`;
+    s += `<g transform="translate(${W / 2 + 18} ${G - 26}) scale(.3)">${A.art.mascot('wave', 96).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`;
     for (let i = 0; i < 24; i++) {
       if (!winLit(i + 1)) continue;
       const u = C.units[i];
       let [x, y, z] = DECO[i];
-      if (i === 23) { x = W / 2 - 11; y = top - 50; }
+      if (i === 23) { x = W / 2 - 11; y = top - 54; }
       s += `<text x="${x}" y="${y}" font-size="${z}">${u.deco}</text>`;
     }
+    return s + '</svg>';
+  };
+  A.sceneSVG = () => {
+    const phase = A.art.phase();
+    const W = 360, H = 190, G = 128;
+    const sc = A.art.scene(W, H, G, phase, 'lg');
+    let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tao the turtle on the beach"><defs>${sc.defs}</defs>${sc.sky}${sc.sea}`;
+    s += `<path d="M60 ${G + 2} Q 190 ${G - 14} 330 ${G + 6} Q 340 ${G + 26} 300 ${G + 34} Q 180 ${G + 44} 70 ${G + 30} Q 40 ${G + 18} 60 ${G + 2}Z" fill="url(#lgsa)"/>`;
+    s += A.art.palm(96, G + 10, 1.1, false, sc.night) + A.art.palm(292, G + 12, 0.95, true, sc.night);
+    s += `<g transform="translate(150 ${G - 40}) scale(.72)"><g class="tao-bob">${A.art.mascot('wave', 96).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></g>`;
+    s += `<g transform="translate(222 ${G + 12})"><path d="M0 0l10-12 10 12z" fill="#FFB21E"/><path d="M0 0h20" stroke="#B87700" stroke-width="2"/></g>`;
     return s + '</svg>';
   };
 
@@ -204,14 +278,14 @@
     const V = VIEWS[view];
     if (!V) return;
     root.append(V(arg));
-    if (['home', 'journey', 'talks', 'words', 'me', 'grammar'].includes(view)) {
+    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals'].includes(view)) {
       root.append(nav(view));
       A.setPresence({ screen: view });
     }
   };
   function nav(cur) {
-    const items = [['home', '🏝️', 'Home'], ['journey', '🗺️', 'Journey'], ['talks', '💬', 'Talk'], ['words', '📚', 'Words'], ['me', '🙂', 'Me']];
-    return h('nav', { class: 'nav' }, h('div', { class: 'in' }, items.map(([v, e, t]) => h('button', { class: cur === v || (cur === 'grammar' && v === 'me') ? 'on' : '', onclick: () => A.go(v) }, h('span', { class: 'e' }, e), t))));
+    const items = [['home', 'home', 'Home'], ['journey', 'map', 'Journey'], ['talks', 'chat', 'Talk'], ['words', 'words', 'Words'], ['me', 'user', 'Me']];
+    return h('nav', { class: 'nav' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: cur === v || ((cur === 'grammar' || cur === 'medals') && v === 'me') ? 'on' : '', onclick: () => A.go(v) }, h('span', { class: 'e', html: A.art.icon(ic, 24) }), t))));
   }
 
   const VIEWS = {};
@@ -236,11 +310,13 @@
           h('button', { class: 'btn ghost', style: { flex: 1, minHeight: '44px' }, type: 'button', onclick: () => { u.value = 'alvee'; p.value = '1234'; } }, 'Fill Alvee'),
           h('button', { class: 'btn ghost', style: { flex: 1, minHeight: '44px' }, type: 'button', onclick: () => { u.value = 'admin'; p.value = '1234'; } }, 'Fill admin')))
       : null;
+    const scene = h('div', { class: 'login-scene', html: A.sceneSVG('login') });
     return h('form', { class: 'screen full login', onsubmit: go },
-      h('div', { class: 'logo' }, '🏝️'),
-      h('h1', null, 'Alvee English'),
-      h('p', { class: 'th muted', style: { textAlign: 'center' } }, 'เรียนภาษาอังกฤษวันละนิด · 6 เดือนพูดได้'),
-      h('div', { class: 'card stack' },
+      A.topStrip(),
+      scene,
+      h('div', { class: 'login-title' }, h('h1', null, 'Alvee English'), h('p', { class: 'th muted' }, 'เรียนภาษาอังกฤษวันละนิด · 6 เดือนพูดได้')),
+      A.install.standalone() ? null : A.install.button(true),
+      h('div', { class: 'card stack login-card' },
         h('div', { class: 'field' }, h('label', { for: 'lg-user' }, 'Username · ชื่อผู้ใช้'), u),
         h('div', { class: 'field' }, h('label', { for: 'lg-pass' }, 'Password · รหัสผ่าน'), p),
         err,
@@ -282,10 +358,13 @@
     const md = A.monthsDone(st), cm = Math.min(6, md + 1), month = C.months[cm - 1];
     const root = h('div', { class: 'screen' });
 
-    root.append(h('div', { class: 'topbar' },
+    root.append(A.topStrip());
+    root.append(h('div', { class: 'hello-hero' },
+      mascot('wave', 76),
       h('div', { class: 'hello' }, h('h1', null, gEn + ', ' + A.user.name + '!'), h('p', { class: 'th' }, gTh + ' · ', h('span', null, 'ตอนนี้ทักทายว่า "' + gEn + '"'))),
-      h('span', { class: 'stat', title: 'Streak' }, h('span', { class: 'e' }, '🔥'), sk),
-      h('span', { class: 'stat', title: 'Level' }, h('span', { class: 'e' }, A.title(lvl)[3]), lvl)));
+      h('div', { class: 'stats-col' },
+        h('span', { class: 'stat fire', title: 'Streak · วันติดต่อกัน' }, icon('flame', 18), sk),
+        h('span', { class: 'stat lvl', title: 'Level' }, icon('star', 18), lvl))));
 
     const unread = (A.msgs || []).filter((m) => !m.readAt && A.msgUnlocked(m, st));
     if (unread.length) {
@@ -315,6 +394,15 @@
       h('div', { class: 'row between small' }, h('span', { class: 'th' }, 'เป้าหมายวันนี้ · Daily goal'), h('b', { class: 'num' }, xpToday + ' / ' + goal + ' XP')),
       h('div', { class: 'goal-bar' }, h('i', { style: { width: pct * 100 + '%' } }))));
     root.append(today);
+    // the app learns: show her weakest point and a quick practice button
+    const weak = A.weakSkills(st).filter((w) => w.id !== 'other')[0];
+    if (weak) {
+      const nm = A.SKILLS[weak.id] || [weak.id, weak.id];
+      root.append(h('div', { class: 'card focus-card' }, mascot('think', 58),
+        h('div', { style: { flex: 1, minWidth: 0 } }, h('div', { class: 'small muted' }, 'Tao noticed · เต่าน้อยสังเกตว่า'),
+          h('b', null, nm[0]), h('div', { class: 'th small' }, 'เรื่อง “' + nm[1] + '” ยังผิดบ่อย มาฝึกเพิ่มกันนะ (' + Math.round(weak.acc * 100) + '% ถูก)')),
+        h('button', { class: 'btn mango', style: { minHeight: '44px', padding: '8px 14px' }, onclick: () => A.play('focus') }, '💪 Practice')));
+    }
     const resort = h('div', { class: 'card resort' });
     resort.innerHTML = A.resortSVG(st, A.user.name);
     resort.append(h('div', { class: 'cap' },
@@ -322,10 +410,12 @@
       h('div', { class: 'stars', 'aria-label': md + ' of 5 stars' }, '★'.repeat(Math.min(5, md)), h('span', { class: 'off' }, '★'.repeat(Math.max(0, 5 - md))))));
     root.append(resort);
 
+    const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
     root.append(h('div', { class: 'tiles' },
-      h('button', { class: 'tile', onclick: () => A.go('talks') }, h('span', { class: 'e' }, '💬'), 'Conversations', h('span', { class: 'th' }, 'ฝึกบทสนทนา')),
-      h('button', { class: 'tile', onclick: () => A.go('words') }, h('span', { class: 'e' }, '📚'), 'My words', h('span', { class: 'th' }, A.wordCount(st) + ' คำ')),
-      h('button', { class: 'tile', onclick: () => A.go('grammar') }, h('span', { class: 'e' }, '📖'), 'Grammar', h('span', { class: 'th' }, 'คู่มือไวยากรณ์'))));
+      h('button', { class: 'tile t-talk', onclick: () => A.go('talks') }, h('span', { class: 'blob', html: A.art.icon('chat', 26) }), 'Talk', h('span', { class: 'th' }, 'ฝึกบทสนทนา')),
+      h('button', { class: 'tile t-words', onclick: () => A.go('words') }, h('span', { class: 'blob', html: A.art.icon('sprout', 26) }), 'Words', h('span', { class: 'th' }, A.wordCount(st) + ' คำ')),
+      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Treasure', h('span', { class: 'th' }, got + ' เหรียญ')),
+      h('button', { class: 'tile t-gram', onclick: () => A.go('grammar') }, h('span', { class: 'blob', html: A.art.icon('book', 26) }), 'Grammar', h('span', { class: 'th' }, 'คู่มือไวยากรณ์'))));
     return root;
   };
 
@@ -362,9 +452,17 @@
         const un = A.nodes.filter((n) => n.u === u.id);
         card.append(h('div', { class: 'unit-head' }, h('div', { class: 'deco' }, u.deco),
           h('div', { style: { flex: 1 } }, h('h3', null, 'Unit ' + u.id + ' · ' + u.en), h('div', { class: 'small th muted' }, u.th + ' — ' + u.goal))));
-        const row = h('div', { class: 'nodes' });
-        if (!un.length) row.append(...Array.from({ length: 6 }, () => h('div', { class: 'node soon', 'aria-hidden': 'true' }, '·')), h('div', { class: 'small th muted soon-note' }, 'เนื้อหากำลังมา · coming soon'));
-        un.forEach((n) => {
+        // a winding trail: nodes swing left and right, joined by a dotted path
+        const STEP = 86, row = h('div', { class: 'trail', style: { height: Math.max(1, un.length) * STEP + 'px' } });
+        const pts = un.map((n, i) => [50 + Math.sin(i * 1.15 + u.id) * 28, i * STEP + 38]);
+        if (pts.length > 1) {
+          let d = `M${pts[0][0]} ${pts[0][1]}`;
+          for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += ` C${x0} ${y0 + STEP / 2} ${x1} ${y1 - STEP / 2} ${x1} ${y1}`; }
+          const doneUpTo = un.filter((n) => st.done[n.id]).length;
+          row.innerHTML = `<svg class="trail-svg" viewBox="0 0 100 ${un.length * STEP}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" class="trail-bg"/><path d="${d}" class="trail-done" style="stroke-dasharray:${doneUpTo / un.length * 100} 100" pathLength="100"/></svg>`;
+        }
+        if (!un.length) row.append(h('div', { class: 'small th muted soon-note' }, 'เนื้อหากำลังมา · coming soon'));
+        un.forEach((n, ni) => {
           const idx = A.nodes.indexOf(n);
           const done = st.done[n.id];
           const open = A.isOpen(st, idx, cfg);
@@ -373,9 +471,13 @@
             class: 'node' + (done ? ' done' : n.id === nextId ? ' open' : open ? '' : ' locked'),
             'aria-label': t.en + (done ? ' (done)' : open ? '' : ' (locked)'),
             onclick: () => (open ? nodeSheet(n) : A.toast('🔒 ทำบทก่อนหน้าให้เสร็จก่อนนะ')),
-          }, done ? '✓' : open ? t.icon : '🔒', done && done.s ? h('span', { class: 'st' }, '★'.repeat(done.s)) : null);
+          }, done ? A.art.iconEl('check', 26) : open ? A.art.iconEl(n.kind === 'lesson' ? 'book' : n.kind === 'talk' ? 'chat' : 'trophy', 26) : A.art.iconEl('lock', 22), done && done.s ? h('span', { class: 'st' }, '★'.repeat(done.s)) : null);
           if (n.id === nextId) firstOpenEl = b;
-          row.append(b);
+          const [px, py] = pts[ni];
+          const wrap = h('div', { class: 'trail-node' + (px > 50 ? ' right' : ''), style: { left: px + '%', top: py + 'px' } }, b,
+            h('div', { class: 'trail-lbl' }, h('b', null, t.en), h('span', { class: 'th' }, t.th)));
+          if (n.id === nextId) wrap.prepend(h('div', { class: 'you-here' }, mascot('happy', 44)));
+          row.append(wrap);
         });
         card.append(row);
         sec.append(card);
@@ -482,6 +584,47 @@
   }
   A.tipView = tipView;
 
+  // ---------------------------------------------------------------- medal collection
+  const CAT = { learn: ['Learning', 'การเรียน'], star: ['Stars', 'ดาวเด่น'], streak: ['Every day', 'เรียนทุกวัน'], words: ['Words', 'คำศัพท์'], talk: ['Talking', 'การพูด'], time: ['Special times', 'เวลาพิเศษ'], month: ['Journey', 'การเดินทาง'] };
+  VIEWS.medals = () => {
+    const st = A.state;
+    const root = h('div', { class: 'screen' });
+    const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
+    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'),
+      h('div', { style: { flex: 1 } }, h('h1', null, 'Treasure chest'), h('p', { class: 'th muted' }, 'หีบสมบัติของ ' + A.user.name))));
+    const tiers = ['bronze', 'silver', 'gold', 'pearl'].map((t) => [t, A.MEDALS.filter((m) => m.tier === t && st.badges[m.id]).length, A.MEDALS.filter((m) => m.tier === t).length]);
+    root.append(h('div', { class: 'card chest' }, mascot(got ? 'party' : 'wave', 70),
+      h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + A.MEDALS.length), h('div', { class: 'small th muted' }, 'เหรียญที่สะสมได้ · medals collected'),
+        h('div', { class: 'goal-bar', style: { marginTop: '8px' } }, h('i', { style: { width: (got / A.MEDALS.length) * 100 + '%' } })),
+        h('div', { class: 'tier-row' }, tiers.map(([t, n, all]) => h('span', { class: 'tier-chip ' + t }, A.art.TIERS[t].n + ' ' + n + '/' + all))))));
+    Object.keys(CAT).forEach((cat) => {
+      const ms = A.MEDALS.filter((m) => m.cat === cat);
+      if (!ms.length) return;
+      root.append(h('div', { class: 'sec-title' }, CAT[cat][0] + ' · ', h('span', { class: 'th' }, CAT[cat][1])));
+      root.append(h('div', { class: 'medal-grid' }, ms.map((m) => {
+        const on = !!st.badges[m.id];
+        const [now, goal] = m.prog(st);
+        return h('button', { class: 'medal-cell' + (on ? ' on' : ''), onclick: () => medalSheet(m) },
+          h('span', { html: A.art.medal(m, { size: 84, locked: !on }) }),
+          h('b', null, on ? m.en : '???'), h('span', { class: 'th small muted' }, on ? m.th : m.how),
+          on ? null : h('div', { class: 'mini-bar' }, h('i', { style: { width: Math.min(100, (now / goal) * 100) + '%' } })));
+      })));
+    });
+    return root;
+  };
+  function medalSheet(m) {
+    const st = A.state, on = st.badges[m.id];
+    const [now, goal] = m.prog(st);
+    A.sheet(h('div', { class: 'stack medal-detail', style: { alignItems: 'center', textAlign: 'center', gap: '10px' } },
+      h('div', { class: 'medal-stage' + (on ? ' on' : ''), html: A.art.medal(m, { size: 170, locked: !on }) }),
+      h('span', { class: 'tier-chip ' + m.tier }, A.art.TIERS[m.tier].n + ' · ' + A.art.TIERS[m.tier].th),
+      h('h2', null, on ? m.en : 'Locked · ยังไม่ปลดล็อก'), h('div', { class: 'th' }, on ? m.th : ''),
+      h('div', { class: 'note th', style: { width: '100%' } }, '🎯 ' + m.how),
+      on ? h('div', { class: 'small muted' }, 'Earned · ได้รับเมื่อ ' + new Date(on).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))
+        : h('div', { style: { width: '100%' } }, h('div', { class: 'goal-bar' }, h('i', { style: { width: Math.min(100, (now / goal) * 100) + '%' } })), h('div', { class: 'small muted num', style: { marginTop: '6px' } }, Math.min(now, goal) + ' / ' + goal))));
+  }
+  A.medalSheet = medalSheet;
+
   // ---------------------------------------------------------------- me
   VIEWS.me = () => {
     const st = A.state;
@@ -501,8 +644,11 @@
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
       h('div', { class: 'kpi' }, h('b', null, st.freezes + '🧊'), h('span', null, 'Rest days'))));
     root.append(h('div', { class: 'small th muted' }, '🧊 Rest day: เรียนครบ 7 วันติด ได้วันพัก 1 วัน (เก็บได้ 2 วัน) ถ้าวันไหนไม่ได้เรียน ไฟ 🔥 จะไม่ดับ'));
-    root.append(h('div', { class: 'sec-title' }, 'Badges · เหรียญรางวัล'));
-    root.append(h('div', { class: 'badges' }, A.BADGES.map(([id, e, en, th]) => h('div', { class: 'badge ' + (st.badges[id] ? 'on' : 'off'), title: en }, h('span', { class: 'e' }, e), th))));
+    const got = A.MEDALS.filter((m) => st.badges[m.id]);
+    const shelf = h('button', { class: 'card medal-shelf', onclick: () => A.go('medals') },
+      h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'Treasure chest · หีบสมบัติ'), h('div', { class: 'small muted th' }, 'เหรียญที่สะสมได้ ' + got.length + ' / ' + A.MEDALS.length)), h('span', { class: 'pill sea' }, 'See all ›')),
+      h('div', { class: 'shelf-row' }, (got.length ? got.slice(-5).reverse() : A.MEDALS.slice(0, 5)).map((m) => h('span', { class: 'shelf-m', html: A.art.medal(m, { size: 58, locked: !st.badges[m.id] }) }))));
+    root.append(shelf);
     root.append(h('button', { class: 'card talk-item', onclick: () => A.go('grammar') }, h('div', { class: 'av' }, '📖'), h('div', { style: { flex: 1 } }, h('b', null, 'Grammar book'), h('div', { class: 'small th muted' }, 'คู่มือไวยากรณ์')), '›'));
     const set = st.set;
     const sw = (label, on, fn) => h('div', { class: 'switch' }, h('span', { class: 'th' }, label), h('button', { class: 'toggle' + (on ? ' on' : ''), role: 'switch', 'aria-checked': on ? 'true' : 'false', 'aria-label': label, onclick: fn }));
@@ -513,6 +659,7 @@
       sw('🇹🇭 แสดงคำแปลเสมอ · Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); }),
       h('div', { class: 'switch' }, h('span', { class: 'th' }, '🌙 โหมดกลางคืน · Night mode', h('div', { class: 'tiny muted' }, 'Auto = ตามโทรศัพท์')), A.theme.picker((v) => { A.track('night_mode', { v }); A.go('me'); }))));
     if (!A.speech.ok) root.append(h('div', { class: 'note' }, 'เครื่องนี้ไม่รองรับเสียงพูด ลองเปิดใน Safari บน iPhone นะ'));
+    if (!A.install.standalone()) root.append(A.install.button());
     root.append(h('button', { class: 'btn ghost block', onclick: async () => { await A.flush(); await A.api.logout(); A.user = null; A.state = null; A.go('login'); } }, 'Log out · ออกจากระบบ'));
     return root;
   };
@@ -539,18 +686,19 @@
     swap: 'ดูให้ดี: do / does · have / has · a / an', context: 'ประโยคนี้ไม่ตรงกับบทสนทนา ลองอ่านสิ่งที่อีกฝ่ายพูดอีกครั้ง',
   };
   const KIND = {
-    w2th: ['🔤', 'What does it mean?', 'คำนี้แปลว่าอะไร'], th2w: ['🔤', 'Choose the English word', 'ภาษาอังกฤษคือคำไหน'], pic: ['🖼️', 'Which word is it?', 'รูปนี้คือคำไหน'],
-    listenw: ['👂', 'Listen and choose', 'ฟังแล้วเลือกคำที่ได้ยิน'], match: ['🧩', 'Match the pairs', 'จับคู่คำกับคำแปล'], gap: ['✏️', 'Fill the gap', 'เติมคำในช่องว่าง'],
-    build: ['🧱', 'Build the sentence', 'เรียงคำให้เป็นประโยค'], pick: ['✅', 'Which one is correct?', 'ประโยคไหนถูกต้อง'], meaning: ['🇹🇭', 'What does it mean?', 'ประโยคนี้แปลว่าอะไร'],
+    wfit: ['🧩', 'Which word fits?', 'คำไหนเข้ากับประโยค'], pic: ['🖼️', 'What is it in English?', 'รูปนี้ภาษาอังกฤษคือคำไหน'],
+    listenw: ['👂', 'Listen and choose', 'ฟังแล้วเลือกคำที่ได้ยิน'], gap: ['✏️', 'Fill the gap', 'เติมคำในช่องว่าง'],
+    build: ['🧱', 'Build the sentence', 'ฟังแล้วเรียงคำให้เป็นประโยค'], pick: ['✅', 'Which one is correct?', 'ประโยคไหนถูกต้อง'],
     listen: ['👂', 'What do you hear?', 'ฟังแล้วเลือกประโยค'], reply: ['💬', 'Choose your reply', 'ตอบว่าอะไรดี'],
   };
   const kindLabel = (t) => { const k = KIND[t]; return k ? h('div', { class: 'q-kind' }, k[0] + ' ' + k[1] + ' · ', h('span', { class: 'th', style: { fontWeight: 600 } }, k[2])) : null; };
+  const focusLabel = (sk) => h('div', { class: 'focus-tag' }, '💪 Extra practice: ' + (A.SKILLS[sk] || [sk])[0] + ' · ', h('span', { class: 'th' }, 'ฝึกเพิ่ม: ' + (A.SKILLS[sk] || [sk, sk])[1]));
 
   A.play = (kind, arg) => {
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'ยังไม่มีคำให้ทบทวน — เรียนบทใหม่ก่อนนะ' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : 'Mistakes';
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'focus' ? 'Extra practice' : 'Mistakes';
     ses.title = title;
     ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind;
     A.track('lesson_start', { node: ses.nodeId, kind: ses.node ? ses.node.kind : kind, title, steps: ses.steps.length });
@@ -586,6 +734,7 @@
       stepStart = Date.now();
       A.clear(body);
       const R = RENDER[step.type];
+      if (step.focus) body.append(focusLabel(step.focus));
       body.append(R ? R(step, ctl) : h('div', null, 'Unknown step'));
       window.scrollTo(0, 0);
     }
@@ -598,7 +747,12 @@
         const retry = !!step.retry;
         if (!retry) { ses.graded++; if (ok) ses.firstOk++; }
         if (step.item) ses.items[step.item] = (ses.items[step.item] !== false) && ok;
-        A.track('answer', { node: ses.nodeId, ex: step.type, item: step.item, q: info.q, a: info.a, c: info.c, ok: ok ? 1 : 0, ms, retry: retry ? 1 : 0, rev: step.review ? 1 : 0 });
+        // what this question tests; a wrong answer counts against the exact point she missed
+        const sk = !ok && info.tag ? A.keySkill(info.tag) : (step.sk || 'other');
+        if (!retry) A.skillRecord(A.state, sk, ok);
+        const u = ses.node ? ses.node.u : (step.sid && A.S(step.sid) ? A.S(step.sid).u : step.key && D[step.key] ? D[step.key].u : undefined);
+        A.track('answer', { node: ses.nodeId, ex: step.type, item: step.item, q: info.q, a: info.a, c: info.c, ok: ok ? 1 : 0, ms, retry: retry ? 1 : 0, rev: step.review ? 1 : 0, sk, tag: ok ? undefined : info.tag, u, focus: step.focus, th: ses.thaiUsed ? 1 : undefined });
+        ses.thaiUsed = 0;
         A.sfx.play(ok ? 'good' : 'bad');
         if (!ok && !ses.test && step.item) {
           ses.retries[step.item] = (ses.retries[step.item] || 0) + 1;
@@ -611,14 +765,20 @@
 
     function feedback(ok, info, cont) {
       const [th, en] = A.pick(ok ? PRAISE : COMFORT);
-      const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'no'), role: 'status' }, h('div', { class: 'in' },
-        h('h3', null, ok ? '🎉' : '💛', h('span', null, en + ' · ', h('span', { class: 'th' }, th))),
-        info.show ? h('div', { class: 'row', style: { alignItems: 'flex-start' } }, h('div', { style: { flex: 1 } },
-          ok ? null : h('div', { class: 'small th' }, 'คำตอบที่ถูก · Correct answer:'),
-          h('div', { class: 'ans' }, info.show), info.showTh ? h('div', { class: 'th small' }, info.showTh) : null),
-        info.say ? A.sayBtns(info.say, { sm: true }) : null) : null,
-        !ok && info.why ? h('div', { class: 'why' }, '💡 ' + info.why) : null,
-        h('button', { class: 'btn block ' + (ok ? 'good' : 'bad'), id: 'fb-next', onclick: () => { fb.remove(); cont(); } }, 'Continue · ต่อไป')));
+      const inn = h('div', { class: 'in' });
+      const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'no'), role: 'status' }, inn);
+      inn.append(h('div', { class: 'fb-head' }, mascot(ok ? 'happy' : 'kind', 58), h('h3', null, h('span', null, en), h('span', { class: 'th' }, th))));
+      if (info.show) {
+        const [thT, thB] = thaiReveal(info.showTh || '', false, true);
+        inn.append(h('div', { class: 'fb-ans' },
+          h('div', { style: { flex: 1, minWidth: 0 } },
+            ok ? null : h('div', { class: 'small th lbl' }, '✅ คำตอบที่ถูก · Correct answer'),
+            h('div', { class: 'ans' }, info.show), info.showTh ? thT : null, info.showTh ? thB : null),
+          info.say ? A.sayBtns(info.say, { sm: true }) : null));
+      }
+      if (!ok && info.a) inn.append(h('div', { class: 'fb-you' }, h('span', { class: 'th' }, '❌ คุณตอบ · You chose: '), h('s', null, info.a)));
+      if (!ok) inn.append(explainBox(info));
+      inn.append(h('button', { class: 'btn block ' + (ok ? 'good' : 'bad'), id: 'fb-next', onclick: () => { fb.remove(); cont(); } }, 'Continue · ต่อไป'));
       document.body.append(fb);
       if (info.say && ok) A.speech.say(info.say);
       setTimeout(() => { const b = document.getElementById('fb-next'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -634,7 +794,7 @@
       let xp = ses.firstOk;
       if (node && node.kind !== 'check') xp += 10 + (acc === 100 ? 5 : 0);
       if (ses.test && passed) xp += 20 + (acc === 100 ? 5 : 0);
-      if (ses.kind === 'review' || ses.kind === 'mistakes') { xp += 5; st.reviews = (st.reviews || 0) + 1; }
+      if (ses.kind === 'review' || ses.kind === 'mistakes' || ses.kind === 'focus') { xp += 5; st.reviews = (st.reviews || 0) + 1; }
       if (ses.kind === 'talk') xp += 6;
       const day = A.day(st);
       day.xp += xp; day.sec += secs; day.n += ses.graded; day.ok += ses.firstOk;
@@ -648,8 +808,9 @@
       }
       if (!ses.test || passed) Object.entries(ses.items).forEach(([id, ok]) => A.srsApply(st, id, ok));
       const hr = new Date().getHours();
-      if (hr < 8) st.badges.early = st.badges.early || now;
-      if (hr >= 22) st.badges.night = st.badges.night || now;
+      st.tod = st.tod || {};
+      if (hr < 8) st.tod.early = st.tod.early || now;
+      if (hr >= 22) st.tod.night = st.tod.night || now;
       const sk = A.streak(st);
       if (sk > 0 && sk % 7 === 0 && !st.badges['fz' + sk]) { st.badges['fz' + sk] = now; st.freezes = Math.min(2, (st.freezes || 0) + 1); }
       const newBadges = A.checkBadges(st);
@@ -693,7 +854,12 @@
         h('div', { class: 'small muted' }, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' · ' + A.wordCount(st) + ' words · ' + A.totalXP(st) + ' XP')));
     }
     if (r.lvlUp) root.append(h('div', { class: 'pill mango', style: { fontSize: '1rem', padding: '8px 14px' } }, '⬆️ Level ' + r.lvlUp + ' · ' + A.title(r.lvlUp)[2]));
-    r.newBadges.forEach((id) => { const b = A.BADGES.find((x) => x[0] === id); if (b) root.append(h('div', { class: 'pill love', style: { fontSize: '.95rem', padding: '8px 14px' } }, b[1] + ' New badge: ' + b[3])); });
+    r.newBadges.forEach((id) => {
+      const m = A.medal(id); if (!m) return;
+      root.append(h('button', { class: 'card new-medal', onclick: () => medalSheet(m) },
+        h('div', { class: 'medal-stage on', html: A.art.medal(m, { size: 110 }) }),
+        h('div', { style: { flex: 1, textAlign: 'left' } }, h('div', { class: 'small muted' }, '✨ New medal! · ได้เหรียญใหม่'), h('b', null, m.en), h('div', { class: 'th small' }, m.th + ' · ' + A.art.TIERS[m.tier].n))));
+    });
     const lessonSents = ses.node && ses.node.kind === 'lesson' ? C.lessons[ses.node.id].sents.slice(0, 3) : ses.node && ses.node.kind === 'talk' ? C.talks[ses.node.talk].lines.filter((l) => l.s === 'B').slice(0, 3).map((l) => l.id) : [];
     if (r.passed && lessonSents.length) {
       root.append(h('div', { class: 'card can-say stack' }, h('div', { class: 'sec-title' }, 'Now you can say · ตอนนี้คุณพูดได้แล้ว'),
@@ -708,15 +874,57 @@
     return root;
   };
 
+  // ---------------------------------------------------------------- why it is wrong (English + Thai + examples)
+  function exRow(en, th, good) {
+    return h('div', { class: 'xrow ' + (good ? 'good' : 'bad') }, h('span', { class: 'm' }, good ? '✅' : '❌'),
+      h('div', { style: { flex: 1, minWidth: 0 } }, h('div', { class: 'en' }, good ? en : h('s', null, en)), th ? h('div', { class: 'thx' }, th) : null),
+      good ? A.sayBtns(en, { sm: true, noSlow: true }) : null);
+  }
+  function explainBox(info) {
+    const exp = info.exp || {};
+    const box = h('div', { class: 'why-box' }, h('div', { class: 'why-t' }, '💡 Why? · ', h('span', { class: 'th' }, 'ทำไมถึงผิด')));
+    if (exp.key === 'vocab' && exp.word) {
+      const w = exp.word, c = exp.chosen;
+      const cw = c ? A.fill(c.w) : info.a, ww = A.fill(w.w);
+      const L = exp.mode === 'listenw' ? [`You heard “${ww}”, not “${cw}”. Listen again with 🐢 and look at the first sound.`, `เสียงที่ได้ยินคือ “${ww}” ไม่ใช่ “${cw}” ลองกด 🐢 ฟังช้า ๆ แล้วสังเกตเสียงแรกของคำ`]
+        : exp.mode === 'pic' ? [`The picture shows “${ww}”. “${cw}” is something different.`, `รูปนี้คือ “${ww}” ส่วน “${cw}” เป็นอีกคำหนึ่ง ความหมายไม่เหมือนกัน`]
+          : [`“${ww}” is the word that fits this sentence. “${cw}” is a different kind of word, so the sentence does not work.`, `คำที่เข้ากับประโยคคือ “${ww}” ส่วน “${cw}” เป็นคำคนละแบบ ใส่แล้วประโยคไม่ถูก`];
+      box.append(h('p', null, L[0]), h('p', { class: 'th' }, L[1]));
+      const cmp = h('div', { class: 'cmp' },
+        h('div', { class: 'cmp-i good' }, h('div', { class: 'w' }, (w.e ? w.e + ' ' : '') + A.fill(w.w)), h('div', { class: 'th small' }, w.th)),
+        c ? h('div', { class: 'cmp-i bad' }, h('div', { class: 'w' }, (c.e ? c.e + ' ' : '') + A.fill(c.w)), h('div', { class: 'th small' }, c.th)) : null);
+      box.append(cmp);
+      if (exp.example) box.append(h('div', { class: 'xlist' }, exRow(exp.example[0], exp.example[1], 1)));
+      return box;
+    }
+    const E = A.EXPLAIN[exp.key] || A.EXPLAIN.words;
+    if (exp.rule) box.append(h('div', { class: 'rule' }, h('b', null, exp.rule.en), h('div', { class: 'th' }, exp.rule.th)));
+    box.append(h('p', null, E.en), h('p', { class: 'th' }, E.th));
+    if (exp.words && (exp.words.missing.length || exp.words.extra.length)) {
+      box.append(h('div', { class: 'small th' }, exp.words.missing.length ? 'ขาดคำ · Missing: ' + exp.words.missing.join(', ') : '', exp.words.missing.length && exp.words.extra.length ? ' · ' : '', exp.words.extra.length ? 'เกินมา · Extra: ' + exp.words.extra.join(', ') : ''));
+    }
+    if (info.note) box.append(h('div', { class: 'small th note-x' }, '📝 ' + info.note));
+    if (E.ex && E.ex.length) box.append(h('div', { class: 'xt' }, 'Examples · ตัวอย่าง'), h('div', { class: 'xlist' }, E.ex.map(([en, th, g]) => exRow(en, th, g))));
+    return box;
+  }
+  A.explainBox = explainBox;
+
   // ================================================================ step renderers
   const RENDER = {};
   A.RENDER = RENDER;
   const continueBtn = (label, fn, cls) => h('button', { class: 'btn block ' + (cls || ''), onclick: fn }, label);
   const showThai = () => A.state && A.state.set && A.state.set.thai;
-  function thaiReveal(th, startOpen) {
+  function thaiReveal(th, startOpen, quiet) {
     const t = h('span', { class: 'hint-th th' + (startOpen || showThai() ? '' : ' hidden') }, th);
-    const b = h('button', { class: 'chip thai-toggle' + (startOpen || showThai() ? ' hidden' : ''), onclick: () => { t.classList.remove('hidden'); b.classList.add('hidden'); A.track('hint', { th: th.slice(0, 60) }); } }, '🇹🇭 แปล · Show Thai');
+    const b = h('button', { class: 'chip thai-toggle' + (startOpen || showThai() ? ' hidden' : ''), onclick: () => { t.classList.remove('hidden'); b.classList.add('hidden'); if (quiet) return; if (A.session) A.session.thaiUsed = 1; A.track('hint', { th: th.slice(0, 60), ex: A.session && A.session.steps[A.session.i] ? A.session.steps[A.session.i].type : undefined }); } }, '🇹🇭 ช่วยแปล · Thai help');
     return [t, b];
+  }
+  // a whole panel of Thai help that opens on tap
+  function thaiPanel(content, what) {
+    const open = showThai();
+    const panel = h('div', { class: 'thai-panel' + (open ? '' : ' hidden') }, content);
+    const b = h('button', { class: 'chip thai-toggle' + (open ? ' hidden' : ''), onclick: () => { panel.classList.remove('hidden'); b.classList.add('hidden'); A.track('hint', { th: String(what || '').slice(0, 60), ex: 'intro' }); } }, '🇹🇭 ช่วยแปล · Thai help');
+    return [b, panel];
   }
 
   RENDER.tip = (step, ctl) => h('div', { class: 'stack', style: { gap: '16px' } }, A.tipView(step.tip), continueBtn('เข้าใจแล้ว! · Got it', () => { A.track('tip_view', { tip: C.tips[step.tip].title }); ctl.next(); }));
@@ -724,32 +932,38 @@
   RENDER.wintro = (step, ctl) => {
     const e = D[step.key];
     setTimeout(() => A.speech.say(A.fill(e.w)), 150);
-    const exs = examplesFor(e, step.key).slice(0, 2);
+    const exs = examplesFor(e, step.key).slice(0, 3);
+    const [tb, panel] = thaiPanel(h('div', { class: 'stack', style: { gap: '6px' } },
+      h('div', { class: 'tr' }, e.th), e.n ? h('div', { class: 'small th' }, e.n) : null,
+      exs.map((x) => h('div', { class: 'small th muted' }, '• ' + x.en + ' = ' + x.th))), e.w);
     return h('div', { class: 'intro' },
       h('div', { class: 'q-kind' }, '✨ New word · ', h('span', { class: 'th' }, 'คำใหม่')),
-      h('div', { class: 'card hero' }, e.e ? h('div', { class: 'pic' }, e.e) : null, h('div', { class: 'w' }, A.fill(e.w)), A.sayBtns(A.fill(e.w)),
-        h('div', { class: 'tr' }, e.th), e.pr ? h('div', { class: 'pr' }, 'คำอ่าน: ' + e.pr) : null, h('div', { class: 'small muted th' }, A.POS[e.p] || '')),
-      e.n ? h('div', { class: 'note' }, e.n) : null,
-      exs.length ? h('div', { class: 'card flat', style: { padding: '4px 14px' } }, exs.map((x) => h('div', { class: 'ex' }, A.sayBtns(x.en, { sm: true, noSlow: true }), h('div', null, h('div', { class: 'en' }, A.richText(x.en)), h('div', { class: 'thx' }, x.th))))) : null,
+      h('div', { class: 'card hero word-hero' }, h('div', { class: 'hero-glow', 'aria-hidden': 'true' }), e.e ? h('div', { class: 'pic' }, e.e) : null, h('div', { class: 'w' }, A.fill(e.w)), A.sayBtns(A.fill(e.w)),
+        e.pr ? h('div', { class: 'pr' }, 'อ่านว่า · say: ' + e.pr) : null, h('div', { class: 'small muted th' }, A.POS[e.p] || '')),
+      exs.length ? h('div', { class: 'card flat', style: { padding: '4px 14px' } }, h('div', { class: 'small muted', style: { paddingTop: '8px' } }, 'Examples · ตัวอย่าง'), exs.map((x) => h('div', { class: 'ex' }, A.sayBtns(x.en, { sm: true, noSlow: true }), h('div', null, h('div', { class: 'en' }, A.richText(x.en)))))) : null,
+      tb, panel,
       continueBtn('จำได้แล้ว! · Got it', () => ctl.next()));
   };
 
   RENDER.sintro = (step, ctl) => {
     const s = A.S(step.sid);
     setTimeout(() => A.speech.say(s.en), 150);
-    const chips = h('div', { class: 'chips-wbw' }, A.words(s.t).map((t) => { const e = A.entry(t); return h('button', { class: 'wbw', onclick: () => A.wordPopup(t, { sentence: s.en }) }, h('b', null, A.fill(t)), h('span', null, e ? A.thShort(e.th) : '')); }));
+    const [tb, panel] = thaiPanel(h('div', { class: 'stack', style: { gap: '6px' } }, h('div', { class: 'th', style: { fontSize: '1.15rem', fontWeight: 600, color: 'var(--sea-deep)' } }, s.th), s.note ? h('div', { class: 'small th' }, '💡 ' + s.note) : null), s.en);
     return h('div', { class: 'intro' },
       h('div', { class: 'q-kind' }, '💡 New sentence · ', h('span', { class: 'th' }, 'ประโยคใหม่')),
-      h('div', { class: 'prompt' }, h('div', { class: 'bubble' }, A.richS(step.sid)), A.sayBtns(s.en)),
-      h('div', { class: 'card flat' }, h('div', { class: 'th', style: { fontSize: '1.2rem', fontWeight: 600, color: 'var(--sea-deep)' } }, s.th)),
-      h('div', { class: 'small muted th' }, 'คำต่อคำ · Word by word (แตะเพื่อดูรายละเอียด)'), chips,
-      s.note ? h('div', { class: 'note' }, '💡 ' + s.note) : null,
+      h('div', { class: 'prompt' }, mascot('talk', 64), h('div', { class: 'bubble' }, A.richS(step.sid)), A.sayBtns(s.en)),
+      h('div', { class: 'small muted th' }, '👆 แตะคำที่ไม่รู้ เพื่อดูความหมาย · Tap a word you don’t know'),
+      tb, panel,
       continueBtn('เข้าใจแล้ว · Next', () => ctl.next()));
   };
 
   function optionList(opts, render, onPick, cls) {
     const box = h('div', { class: 'opts' + (cls ? ' ' + cls : '') });
     let done = false;
+    // safety net: never show two buttons with the same text
+    const seen = new Set();
+    const keep = opts.filter((o) => { const k = render(o).textContent.trim().toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+    opts.splice(0, opts.length, ...keep);
     opts.forEach((o, i) => {
       const b = h('button', { class: 'opt', onclick: () => { if (done) return; done = true; onPick(o, b, box); } }, h('span', { class: 'k' }, i + 1), render(o));
       box.append(b);
@@ -760,90 +974,57 @@
     [...box.children].forEach((b, i) => { if (i === rightIdx) b.classList.add('right'); else if (b === pickedBtn && !ok) b.classList.add('wrong'); else b.classList.add('dim'); });
   }
 
-  // ---- word quizzes
-  RENDER.w2th = (step, ctl) => {
+  // ---- word quizzes (English-first; Thai is only a helper)
+  const wordBtn = (k) => h('span', { style: { fontSize: '1.15rem', fontWeight: 600 } }, A.fill(D[k].w));
+  function wordPicked(step, ctl, k, b, box, q) {
     const e = D[step.key];
-    return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('w2th'),
-      h('div', { class: 'card', style: { textAlign: 'center' } }, h('div', { style: { fontSize: '2rem', fontWeight: 600 } }, A.fill(e.w)), h('div', { class: 'row', style: { justifyContent: 'center', marginTop: '6px' } }, A.sayBtns(A.fill(e.w)))),
-      optionList(step.opts, (k) => h('span', { class: 'th', style: { fontSize: '1.1rem' } }, A.thShort(D[k].th)), (k, b, box) => {
-        const ok = k === step.key; markOpts(box, step.opts.indexOf(step.key), b, ok);
-        ctl.answer(step, ok, { q: e.w, a: A.thShort(D[k].th), c: A.thShort(e.th), show: A.fill(e.w) + ' = ' + e.th, say: A.fill(e.w) });
-      }));
-  };
-  RENDER.th2w = (step, ctl) => {
-    const e = D[step.key];
-    return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('th2w'),
-      h('div', { class: 'card', style: { textAlign: 'center' } }, h('div', { class: 'th', style: { fontSize: '1.7rem', fontWeight: 600, color: 'var(--sea-deep)' } }, A.thShort(e.th))),
-      optionList(step.opts, (k) => h('span', null, A.fill(D[k].w)), (k, b, box) => {
-        const ok = k === step.key; markOpts(box, step.opts.indexOf(step.key), b, ok);
-        ctl.answer(step, ok, { q: A.thShort(e.th), a: D[k].w, c: e.w, show: A.fill(e.w) + ' = ' + e.th, say: A.fill(e.w) });
+    const ok = k === step.key;
+    markOpts(box, step.opts.indexOf(step.key), b, ok);
+    ctl.answer(step, ok, { q, a: D[k].w, c: e.w, show: A.fill(e.w), showTh: e.th, say: A.fill(e.w), exp: ok ? null : { ...A.explainWord(step.key, k), mode: step.type } });
+  }
+  RENDER.wfit = (step, ctl) => {
+    const e = D[step.key], f = step.fit, s = A.S(f.sid);
+    const toks = s.t.slice(); toks[f.at] = '___';
+    const line = A.rich(toks, { en: s.en });
+    const [thT, thB] = thaiReveal(s.th);
+    return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('wfit'),
+      h('div', { class: 'prompt' }, mascot('think', 64), h('div', { class: 'bubble' }, line, thT)), thB,
+      optionList(f.opts, wordBtn, (k, b, box) => {
+        const ok = k === step.key;
+        const slot = line.querySelector('[data-gap]');
+        slot.textContent = A.fill(D[k].w); slot.classList.add(ok ? 'filled-ok' : 'filled-bad');
+        markOpts(box, f.opts.indexOf(step.key), b, ok);
+        ctl.answer(step, ok, { q: A.join(toks), a: D[k].w, c: e.w, show: s.en, showTh: s.th, say: s.en, exp: ok ? null : A.explainWord(step.key, k) });
       }));
   };
   RENDER.pic = (step, ctl) => {
     const e = D[step.key];
     return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('pic'),
-      h('div', { class: 'card', style: { textAlign: 'center', fontSize: '4.5rem', lineHeight: 1.1 } }, e.e),
-      optionList(step.opts, (k) => h('span', null, A.fill(D[k].w)), (k, b, box) => {
-        const ok = k === step.key; markOpts(box, step.opts.indexOf(step.key), b, ok);
-        ctl.answer(step, ok, { q: e.e, a: D[k].w, c: e.w, show: e.e + ' ' + A.fill(e.w) + ' = ' + e.th, say: A.fill(e.w) });
-      }));
+      h('div', { class: 'card pic-card' }, h('div', { class: 'pic-big' }, e.e)),
+      optionList(step.opts, wordBtn, (k, b, box) => wordPicked(step, ctl, k, b, box, e.e)));
   };
   RENDER.listenw = (step, ctl) => {
     const e = D[step.key];
     setTimeout(() => A.speech.say(A.fill(e.w)), 200);
     return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('listenw'),
-      h('div', { class: 'row', style: { justifyContent: 'center', gap: '14px', padding: '10px 0' } },
-        h('button', { class: 'say', style: { width: '84px', height: '84px', fontSize: '2rem' }, onclick: () => A.speech.say(A.fill(e.w)) }, '🔊'),
-        h('button', { class: 'say slow', style: { width: '60px', height: '60px', fontSize: '1.4rem' }, onclick: () => A.speech.say(A.fill(e.w), true) }, '🐢')),
-      optionList(step.opts, (k) => h('span', null, A.fill(D[k].w)), (k, b, box) => {
-        const ok = k === step.key; markOpts(box, step.opts.indexOf(step.key), b, ok);
-        ctl.answer(step, ok, { q: '🔊 ' + e.w, a: D[k].w, c: e.w, show: A.fill(e.w) + ' = ' + e.th, say: A.fill(e.w) });
-      }));
+      bigListen(A.fill(e.w)),
+      optionList(step.opts, wordBtn, (k, b, box) => wordPicked(step, ctl, k, b, box, '🔊 ' + e.w)));
   };
-  RENDER.match = (step, ctl) => {
-    const left = A.shuffle(step.keys), right = A.shuffle(step.keys);
-    let sel = null, left2 = step.keys.length;
-    const wrongs = new Set();
-    const L = h('div', { class: 'col' }), R = h('div', { class: 'col' });
-    const tryPair = (a, b) => {
-      if (!a || !b) return;
-      if (a.dataset.k === b.dataset.k) {
-        [a, b].forEach((x) => { x.classList.remove('sel'); x.classList.add('right'); setTimeout(() => x.classList.add('gone'), 350); });
-        A.sfx.play('tap');
-        A.speech.say(A.fill(D[a.dataset.k].w));
-        if (--left2 === 0) setTimeout(() => {
-          const ok = wrongs.size === 0;
-          step.keys.forEach((k) => { A.session.items['w:' + k] = (A.session.items['w:' + k] !== false) && !wrongs.has(k); });
-          ctl.answer({ ...step, item: null }, ok, { q: 'match ' + step.keys.join(', '), a: ok ? 'all right' : 'mistakes: ' + [...wrongs].join(', '), c: '', show: ok ? null : 'จับคู่ครบแล้ว! คำที่ผิด: ' + [...wrongs].join(', ') });
-        }, 450);
-      } else {
-        wrongs.add(a.dataset.k); wrongs.add(b.dataset.k);
-        [a, b].forEach((x) => { x.classList.add('wrong'); setTimeout(() => x.classList.remove('wrong', 'sel'), 450); });
-        A.sfx.play('bad');
-      }
-      sel = null;
-    };
-    left.forEach((k) => { const b = h('button', { class: 'opt', 'data-k': k, 'data-side': 'L', onclick: () => pickSide(b) }, A.fill(D[k].w)); L.append(b); });
-    right.forEach((k) => { const b = h('button', { class: 'opt th', 'data-k': k, 'data-side': 'R', onclick: () => pickSide(b) }, A.thShort(D[k].th)); R.append(b); });
-    function pickSide(b) {
-      if (b.classList.contains('right')) return;
-      if (b.dataset.side === 'L') A.speech.say(A.fill(D[b.dataset.k].w));
-      if (!sel) { sel = b; b.classList.add('sel'); return; }
-      if (sel === b) { b.classList.remove('sel'); sel = null; return; }
-      if (sel.dataset.side === b.dataset.side) { sel.classList.remove('sel'); sel = b; b.classList.add('sel'); return; }
-      tryPair(sel.dataset.side === 'L' ? sel : b, sel.dataset.side === 'L' ? b : sel);
-    }
-    return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('match'), h('div', { class: 'match' }, L, R));
-  };
+  function bigListen(text) {
+    return h('div', { class: 'listen-hero' },
+      h('div', { class: 'sound-rings', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+      h('button', { class: 'say xl', 'aria-label': 'Listen', onclick: () => A.speech.say(text) }, '🔊'),
+      h('button', { class: 'say slow lg', 'aria-label': 'Listen slowly', onclick: () => A.speech.say(text, true) }, '🐢'));
+  }
 
   // ---- sentence quizzes
   RENDER.gap = (step, ctl) => {
     const s = A.S(step.sid), g = step.gap;
     const toks = g.toks.slice(); toks[g.at] = '___';
     const line = A.rich(toks, { en: s.en });
-    const [thT, thB] = thaiReveal(s.th, true);
+    const [thT, thB] = thaiReveal(s.th);
     return h('div', { class: 'stack', style: { gap: '18px' } }, kindLabel('gap'),
-      h('div', { class: 'prompt' }, h('div', { class: 'bubble' }, line, thT)),
+      h('div', { class: 'prompt' }, mascot('think', 64), h('div', { class: 'bubble' }, line, thT)),
       thB,
       optionList(g.opts, (o) => h('span', { style: { fontSize: '1.25rem', fontWeight: 600 } }, o), (o, b, box) => {
         const ok = o.toLowerCase() === g.answer.toLowerCase();
@@ -851,7 +1032,8 @@
         slot.textContent = o; slot.classList.add(ok ? 'filled-ok' : 'filled-bad');
         markOpts(box, g.opts.findIndex((x) => x.toLowerCase() === g.answer.toLowerCase()), b, ok);
         const full = A.capFirst(A.join(g.toks));
-        ctl.answer(step, ok, { q: A.join(toks), a: o, c: g.answer, show: full, showTh: s.th, say: full, why: s.note || A.WHY[g.why] });
+        const exp = ok ? null : A.explainGap(g, o);
+        ctl.answer(step, ok, { q: A.join(toks), a: o, c: g.answer, show: full, showTh: s.th, say: full, exp, note: s.note, tag: exp && exp.key });
       }, 'grid'));
   };
 
@@ -884,40 +1066,34 @@
       const TIME = ['yesterday', 'today', 'tomorrow', 'tonight', 'now', 'sometimes', 'usually'];
       if (TIME.includes(low[0])) out.push([...low.slice(1), low[0]].join(' '));
       if (TIME.includes(low.at(-1))) out.push([low.at(-1), ...low.slice(0, -1)].join(' '));
-      return out.map((x) => x.replace(/\bi\b/g, 'i'));
+      return out;
     })();
     check.onclick = () => {
       const given = placed.map((t) => t.w);
       const ok = accepted.includes(given.join(' ').toLowerCase());
       check.disabled = true;
       [...line.children, ...bank.children].forEach((x) => { x.disabled = true; });
-      ctl.answer(step, ok, { q: s.th, a: A.capFirst(given.join(' ')), c: s.en, show: s.en, showTh: s.th, say: s.en, why: ok ? null : (s.note || 'ดูลำดับคำให้ดี: ใคร + am/is/are หรือ กริยา + ส่วนที่เหลือ') });
+      const exp = ok ? null : A.explainBuild(ans, given);
+      ctl.answer(step, ok, { q: s.en, a: A.capFirst(given.join(' ')), c: s.en, show: s.en, showTh: s.th, say: s.en, exp, note: s.note, tag: exp && exp.key });
     };
+    // she hears the sentence and builds it; Thai is there if she needs it
+    const [thT, thB] = thaiReveal(s.th, !A.speech.ok);
+    setTimeout(() => A.speech.say(s.en), 200);
     return h('div', { class: 'stack', style: { gap: '14px' } }, kindLabel('build'),
-      h('div', { class: 'prompt' }, h('div', { style: { fontSize: '2rem' } }, '🙋‍♀️'), h('div', { class: 'bubble th' }, s.th)),
-      line, bank, check);
+      h('div', { class: 'prompt' }, mascot('talk', 64), h('div', { class: 'bubble' }, h('div', { class: 'row', style: { gap: '8px' } }, A.sayBtns(s.en), h('span', { class: 'small muted' }, 'Listen, then build')), thT)),
+      thB, line, bank, check);
   };
 
   RENDER.pick = (step, ctl) => {
     const s = A.S(step.sid);
+    const [thT, thB] = thaiReveal(s.th);
     return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('pick'),
-      h('div', { class: 'card flat' }, h('div', { class: 'small muted th' }, 'ความหมาย · Meaning'), h('div', { class: 'th', style: { fontSize: '1.2rem', fontWeight: 600 } }, s.th)),
+      h('div', { class: 'row', style: { gap: '12px' } }, mascot('think', 56), h('div', { class: 'small muted th', style: { flex: 1 } }, 'มีประโยคเดียวที่ถูกต้อง ดูให้ดีนะ · Only one is right!', thT)), thB,
       optionList(step.opts, (o) => h('span', null, o.s), (o, b, box) => {
         const ok = !!o.ok;
         markOpts(box, step.opts.findIndex((x) => x.ok), b, ok);
-        ctl.answer(step, ok, { q: s.th, a: o.s, c: s.en, show: s.en, showTh: s.th, say: s.en, why: ok ? null : (TAG_WHY[o.tag] || s.note) });
-      }));
-  };
-
-  RENDER.meaning = (step, ctl) => {
-    const s = A.S(step.sid);
-    setTimeout(() => A.speech.say(s.en), 150);
-    return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('meaning'),
-      h('div', { class: 'prompt' }, h('div', { class: 'bubble' }, A.richS(step.sid)), A.sayBtns(s.en)),
-      optionList(step.opts, (sid) => h('span', { class: 'th' }, A.S(sid).th), (sid, b, box) => {
-        const ok = sid === step.sid;
-        markOpts(box, step.opts.indexOf(step.sid), b, ok);
-        ctl.answer(step, ok, { q: s.en, a: A.S(sid).th, c: s.th, show: s.en, showTh: s.th, say: s.en });
+        const exp = ok ? null : A.explainTag(o.tag, o.s + ' ' + s.en);
+        ctl.answer(step, ok, { q: s.en, a: o.s, c: s.en, show: s.en, showTh: s.th, say: s.en, exp, note: s.note, tag: exp && exp.key });
       }));
   };
 
@@ -925,13 +1101,11 @@
     const s = A.S(step.sid);
     setTimeout(() => A.speech.say(s.en), 200);
     return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('listen'),
-      h('div', { class: 'row', style: { justifyContent: 'center', gap: '14px', padding: '8px 0' } },
-        h('button', { class: 'say', style: { width: '84px', height: '84px', fontSize: '2rem' }, onclick: () => A.speech.say(s.en) }, '🔊'),
-        h('button', { class: 'say slow', style: { width: '60px', height: '60px', fontSize: '1.4rem' }, onclick: () => A.speech.say(s.en, true) }, '🐢')),
+      bigListen(s.en),
       optionList(step.opts, (sid) => h('span', null, A.S(sid).en), (sid, b, box) => {
         const ok = sid === step.sid;
         markOpts(box, step.opts.indexOf(step.sid), b, ok);
-        ctl.answer(step, ok, { q: '🔊 ' + s.en, a: A.S(sid).en, c: s.en, show: s.en, showTh: s.th, say: s.en });
+        ctl.answer(step, ok, { q: '🔊 ' + s.en, a: A.S(sid).en, c: s.en, show: s.en, showTh: s.th, say: s.en, exp: ok ? null : { key: 'listen' }, tag: ok ? null : 'listen' });
       }));
   };
 
@@ -945,7 +1119,8 @@
       optionList(step.opts, (o) => h('span', null, A.fill(o.s)), (o, b, box) => {
         const ok = !!o.ok;
         markOpts(box, step.opts.findIndex((x) => x.ok), b, ok);
-        ctl.answer(step, ok, { q: c.en, a: o.s, c: s.en, show: A.fill(s.en), showTh: s.th, say: A.fill(s.en), why: ok ? null : (TAG_WHY[o.tag] || s.note) });
+        const exp = ok ? null : A.explainTag(o.tag, o.s + ' ' + s.en);
+        ctl.answer(step, ok, { q: c.en, a: o.s, c: s.en, show: A.fill(s.en), showTh: s.th, say: A.fill(s.en), exp, note: s.note, tag: exp && exp.key });
       }));
   };
 
@@ -1002,13 +1177,16 @@
           markOpts(box, opts.findIndex((x) => x.ok), b, ok);
           A.session.graded++; if (ok) A.session.firstOk++;
           A.session.items['s:' + line.id] = (A.session.items['s:' + line.id] !== false) && ok;
-          A.track('answer', { node: A.session.nodeId, ex: 'talk', item: 's:' + line.id, q: s.ctx ? A.S(s.ctx).en : t.en, a: o.s, c: s.en, ok: ok ? 1 : 0 });
+          const exp = ok ? null : A.explainTag(o.tag, o.s + ' ' + s.en);
+          const sk = ok ? 'talk' : A.keySkill(exp.key);
+          A.skillRecord(A.state, sk, ok);
+          A.track('answer', { node: A.session.nodeId, ex: 'talk', item: 's:' + line.id, q: s.ctx ? A.S(s.ctx).en : t.en, a: o.s, c: s.en, ok: ok ? 1 : 0, sk, tag: exp ? exp.key : undefined, u: t.u });
           A.sfx.play(ok ? 'good' : 'bad');
           const go = () => { chat.append(bubble(line, t, false)); A.speech.say(A.fill(s.en)); i++; A.clear(area); setTimeout(advance, 800); };
           if (ok) setTimeout(go, 500);
           else {
-            area.append(h('div', { class: 'card', style: { background: 'var(--bad-bg)' } }, h('div', { class: 'small th' }, 'คำตอบที่ถูก:'), h('b', null, A.fill(s.en)), h('div', { class: 'th small' }, s.th),
-              TAG_WHY[o.tag] ? h('div', { class: 'why small th', style: { marginTop: '6px' } }, '💡 ' + TAG_WHY[o.tag]) : null),
+            area.append(h('div', { class: 'card stack', style: { background: 'var(--bad-bg)', gap: '8px' } }, h('div', { class: 'small th' }, '✅ คำตอบที่ถูก · Correct answer'), h('div', { class: 'row between' }, h('b', null, A.fill(s.en)), A.sayBtns(A.fill(s.en), { sm: true })), h('div', { class: 'th small muted' }, s.th),
+              h('div', { class: 'small' }, '❌ ', h('s', null, A.fill(o.s))), A.explainBox({ exp, a: o.s, note: s.note })),
             h('button', { class: 'btn bad block', onclick: go }, 'OK, continue · ต่อไป'));
           }
         }));
@@ -1028,6 +1206,15 @@
     if (cnt(w, /\b(am|is|are)\b/g) && w.replace(/\b(am|is|are)\b/g, '') === r.replace(/\b(am|is|are)\b/g, '')) return 'swap-be';
     return 'context';
   }
+
+  // a reset from the dashboard reaches her phone as soon as she comes back to the app
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !A.user || A.user.role !== 'learner' || !A.state || A.session) return;
+    try {
+      const sv = await A.api.loadState();
+      if (sv && (sv.resetAt || 0) > (A.state.resetAt || 0)) { A.state = A.fixState(sv); if (A.api.mode === 'server') A.store.set('ae.st.' + A.user.id, A.state); A.go(A.view === 'player' || A.view === 'result' ? 'home' : A.view); }
+    } catch (e) { /* offline */ }
+  });
 
   // ================================================================ boot
   A.enter = async (me) => {

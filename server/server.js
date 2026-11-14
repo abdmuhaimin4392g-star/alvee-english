@@ -260,12 +260,32 @@ async function api(req, res, route, query) {
     const u = learner(b.uid);
     if (!u) return send(res, 404, { error: 'No such learner' });
     const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const old = readJSON(stateFile(u.id), null);
     for (const [f, ext] of [[stateFile(u.id), '.json'], [eventsFile(u.id), '.jsonl']]) {
       try { fs.renameSync(f, path.join(DATA, 'archive', safeId(u.id) + '-' + stamp + ext)); } catch (e) { /* nothing to archive */ }
     }
+    // a fresh copy with a much higher number, so the copy saved on her phone cannot bring the old progress back
+    atomicWrite(stateFile(u.id), JSON.stringify({ v: 1, created: Date.now(), rev: ((old && old.rev) || 0) + 1000, resetAt: Date.now() }));
     EV[u.id] = [];
     delete db.presence[u.id]; saveDB();
     return send(res, 200, { ok: 1 });
+  }
+  // reset some lessons / units / months only; everything else (other lessons, streak, medals, history) stays
+  if (route === 'admin/reset-part' && method === 'POST') {
+    const b = await readBody(req, 200000);
+    const u = learner(b.uid);
+    if (!u) return send(res, 404, { error: 'No such learner' });
+    const st = readJSON(stateFile(u.id), null);
+    if (!st) return send(res, 200, { ok: 1, removed: 0 });
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    try { fs.copyFileSync(stateFile(u.id), path.join(DATA, 'archive', safeId(u.id) + '-' + stamp + '-before-part-reset.json')); } catch (e) { /* no copy */ }
+    let removed = 0;
+    for (const id of (Array.isArray(b.done) ? b.done : []).slice(0, 500)) if (st.done && st.done[id]) { delete st.done[id]; removed++; }
+    for (const id of (Array.isArray(b.items) ? b.items : []).slice(0, 5000)) if (st.srs && st.srs[id]) delete st.srs[id];
+    st.rev = (st.rev || 0) + 1000; st.resetAt = Date.now();
+    atomicWrite(stateFile(u.id), JSON.stringify(st));
+    appendEvents(u.id, [{ t: Date.now(), type: 'admin_reset', what: str(b.label, 120) || 'lessons', n: removed }]);
+    return send(res, 200, { ok: 1, removed });
   }
   return send(res, 404, { error: 'Not found' });
 }

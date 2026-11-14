@@ -5,7 +5,7 @@
   const app = () => document.getElementById('app');
   const ADM = (A.admin = { cur: 'live', uid: null, learners: [], events: [], since: 0, data: null, timer: null, filter: 'all', showAudio: false });
 
-  const EXL = { w2th: 'Word → Thai', th2w: 'Thai → word', pic: 'Picture → word', listenw: 'Listen → word', match: 'Match pairs', gap: 'Fill the gap', build: 'Build sentence', pick: 'Correct sentence', meaning: 'Meaning', listen: 'Listening', reply: 'Reply', talk: 'Role-play' };
+  const EXL = { wfit: 'Word fits sentence', focus: 'Extra practice', w2th: 'Word → Thai', th2w: 'Thai → word', pic: 'Picture → word', listenw: 'Listen → word', match: 'Match pairs', gap: 'Fill the gap', build: 'Build sentence', pick: 'Correct sentence', meaning: 'Meaning', listen: 'Listening', reply: 'Reply', talk: 'Role-play' };
 
   ADM.start = async () => {
     A.view = 'admin';
@@ -36,12 +36,13 @@
   ADM.render = () => {
     const root = A.clear(app());
     const s = h('div', { class: 'screen full adm' });
+    s.append(A.topStrip());
     s.append(h('div', { class: 'topbar' },
       h('div', { class: 'hello' }, h('h1', null, 'Dashboard'), h('p', null, 'Only you can see this page' + (A.api.mode === 'demo' ? ' · preview mode' : ''))),
       h('button', { class: 'btn ghost', style: { minHeight: '40px', padding: '8px 12px' }, onclick: async () => { clearInterval(ADM.timer); await A.api.logout(); A.user = null; A.go('login'); } }, 'Log out')));
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
-    const tabs = [['live', '⚡ Live'], ['progress', '📈 Progress'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    const tabs = [['live', '⚡ Live'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);
@@ -54,6 +55,7 @@
   function body() {
     if (ADM.cur === 'live') return live();
     if (ADM.cur === 'progress') return progress();
+    if (ADM.cur === 'insights') return insights();
     if (ADM.cur === 'mistakes') return mistakes();
     if (ADM.cur === 'words') return words();
     if (ADM.cur === 'msgs') return messages();
@@ -149,6 +151,9 @@
       case 'msg_read': icon = '💌'; main = 'Read your message'; break;
       case 'audio': icon = '🔊'; main = 'Played audio' + (e.slow ? ' (slow)' : ''); detail = e.text; break;
       case 'rest_day_used': icon = '🧊'; main = 'Used ' + e.days + ' rest day(s)'; break;
+      case 'admin_reset': icon = '↺'; main = 'You reset ' + (e.what || 'lessons'); detail = (e.n || 0) + ' finished steps cleared'; break;
+      case 'night_mode': icon = '🌙'; main = 'Night mode: ' + e.v; break;
+      case 'install_help': case 'install_prompt': case 'app_installed': icon = '📲'; main = e.type === 'app_installed' ? 'Installed the app' : 'Looked at how to install the app'; break;
       default: detail = JSON.stringify(e).slice(0, 80);
     }
     return h('div', { class: 'ev' + (bad ? ' bad' : '') }, h('span', { class: 'i' }, icon), h('div', null, h('div', null, main), detail ? h('div', { class: 'd' }, detail) : null), h('span', { class: 'tm' }, A.clock(e.t)));
@@ -189,22 +194,162 @@
     const max = Math.max(5, ...vals.map((v) => v[1]));
     vals.forEach(([k, v], i) => bars.append(h('div', { class: 'b' + (i === 20 ? ' today' : '') }, h('i', { style: { height: Math.round((v / max) * 100) + '%' }, title: k + ': ' + v + ' min' }), h('span', null, i % 3 === 2 || i === 20 ? (i === 20 ? 'today' : k.slice(8)) : ''))));
     box.append(h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Minutes per day'), h('span', { class: 'small muted' }, 'last 3 weeks · max ' + max + 'm')), bars));
-    // journey grid
-    const grid = h('div', { class: 'card stack' }, h('b', null, 'Lessons'));
-    C.units.forEach((u) => {
-      const ns = A.nodes.filter((x) => x.u === u.id);
-      if (!ns.length) return;
-      grid.append(h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } }, h('span', { class: 'small', style: { width: '58px', flex: 'none' } }, u.deco + ' U' + u.id),
-        ns.map((x) => { const d = st.done[x.id]; return h('span', { class: 'pill ' + (d ? (d.a >= 90 ? 'good' : d.a >= 70 ? 'sea' : 'mango') : 'grey'), title: A.nodeTitle(x).en }, d ? d.a + '%' : A.nodeTitle(x).icon); })));
+    // journey grid with reset: tap a lesson to reset it, or reset a whole unit / month
+    const grid = h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Lessons'), h('span', { class: 'small muted' }, 'Tap ↺ to reset')),
+      h('div', { class: 'small muted' }, 'Reset makes her do it again. Other lessons, her streak, medals and history stay.'));
+    C.months.forEach((m) => {
+      const units = C.units.filter((u) => u.m === m.n && A.nodes.some((x) => x.u === u.id));
+      const mNodes = A.nodes.filter((x) => units.some((u) => u.id === x.u));
+      grid.append(h('div', { class: 'row between month-reset' }, h('b', { class: 'small' }, 'Month ' + m.n + ' · ' + m.en), resetBtn('Reset month ' + m.n, mNodes, 'month')));
+      units.forEach((u) => {
+        const ns = A.nodes.filter((x) => x.u === u.id);
+        grid.append(h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexWrap: 'wrap' } }, h('span', { class: 'small', style: { width: '52px', flex: 'none' } }, u.deco + ' U' + u.id),
+          ns.map((x) => { const d = st.done[x.id]; return h('button', { class: 'pill ' + (d ? (d.a >= 90 ? 'good' : d.a >= 70 ? 'sea' : 'mango') : 'grey'), title: A.nodeTitle(x).en + (d ? ' — tap to reset' : ''), onclick: () => { if (d) resetSheet([x], A.nodeTitle(x).en); } }, d ? d.a + '% ↺' : A.nodeTitle(x).icon); }),
+          resetBtn('Reset unit ' + u.id, ns, 'unit')));
+      });
     });
     box.append(grid);
     return box;
   }
 
+  // ---------------------------------------------------------------- insights: what to change in the next update
+  const TAGL = {
+    'drop-be': 'Forgets am / is / are', 'swap-be': 'Mixes up am / is / are', 'add-be': 'Puts am / is / are before a verb (I am like…)',
+    'drop-s': 'Forgets -s with he / she / it', 'add-s': 'Adds -s with I / you / we / they', past: 'Past tense form wrong',
+    will: 'will + wrong verb form', ing: '-ing mistakes', order: 'Question word order', words: 'Word order / missing words',
+    'swap-do': "do / does / don't mixed up", neg: "Negatives (don't / doesn't)", 'swap-have': 'have / has mixed up', 'swap-art': 'a / an mixed up',
+    bep: 'was / were mixed up', prep: 'in / on / at', context: 'Reply did not fit the conversation', listen: 'Did not hear the sentence right', vocab: 'Word meaning',
+  };
+  const skillName = (k) => (A.SKILLS[k] || TOPICS[k] ? (A.SKILLS[k] ? A.SKILLS[k][0] : TOPICS[k]) : k);
+  function computeInsights() {
+    const st = stOf();
+    const ans = ADM.events.filter((e) => e.type === 'answer' && !e.retry);
+    const now = Date.now(), wk = 7 * 864e5;
+    // skills: lifetime from her saved stats, trend from the activity log
+    const skills = {};
+    Object.entries(st.sk || {}).forEach(([k, r]) => { skills[k] = { k, n: r.n, w: r.w, recent: A.skillAcc(r, true), all: A.skillAcc(r, false) }; });
+    ans.forEach((e) => {
+      const k = skillOfEv(e); const x = skills[k] || (skills[k] = { k, n: 0, w: 0, fromLog: 1 });
+      if (x.fromLog) { x.n++; if (!e.ok) x.w++; }
+      const bucket = now - e.t < wk ? 'w1' : now - e.t < 2 * wk ? 'w0' : null;
+      if (bucket) { x[bucket] = x[bucket] || { n: 0, ok: 0 }; x[bucket].n++; if (e.ok) x[bucket].ok++; }
+    });
+    Object.values(skills).forEach((x) => {
+      if (x.fromLog) { x.all = x.n ? (x.n - x.w) / x.n : 1; x.recent = x.all; }
+      x.trend = x.w1 && x.w0 && x.w1.n >= 3 && x.w0.n >= 3 ? x.w1.ok / x.w1.n - x.w0.ok / x.w0.n : null;
+      x.status = x.n < 5 ? 'new' : x.recent < 0.6 ? 'weak' : x.recent < 0.75 ? 'work' : x.recent < 0.9 ? 'good' : 'strong';
+    });
+    // repeated mistake patterns
+    const pats = {};
+    ans.filter((e) => !e.ok).forEach((e) => {
+      const key = e.tag || skillOfEv(e);
+      const p = pats[key] || (pats[key] = { key, n: 0, items: new Set(), ex: [] , last: 0});
+      p.n++; if (e.item) p.items.add(e.item); p.last = e.t;
+      if (p.ex.length < 3 && e.c) p.ex.push({ a: e.a, c: e.c });
+    });
+    const patterns = Object.values(pats).filter((p) => p.n >= 2).sort((a, b) => b.n - a.n);
+    // same item wrong again and again
+    const again = Object.entries(st.srs).filter(([, r]) => r.w >= 2).sort((a, b) => b[1].w - a[1].w).slice(0, 12);
+    // exercise types
+    const types = {};
+    ans.forEach((e) => { const t = types[e.ex] || (types[e.ex] = { n: 0, ok: 0, ms: 0, msn: 0, th: 0 }); t.n++; if (e.ok) t.ok++; if (e.ms && e.ms < 120000) { t.ms += e.ms; t.msn++; } if (e.th) t.th++; });
+    // where she stops / fails
+    const stops = {};
+    ADM.events.filter((e) => e.type === 'lesson_quit' || (e.type === 'lesson_end' && !e.passed)).forEach((e) => { const k = e.node; stops[k] = stops[k] || { node: k, quit: 0, fail: 0 }; if (e.type === 'lesson_quit') stops[k].quit++; else stops[k].fail++; });
+    const hints = {}; ADM.events.filter((e) => e.type === 'hint' || e.type === 'lookup').forEach((e) => { const k = e.w || e.th; if (k) hints[k] = (hints[k] || 0) + 1; });
+    // recommendations for the next update
+    const rec = [];
+    Object.values(skills).filter((x) => x.status === 'weak' || x.status === 'work').sort((a, b) => a.recent - b.recent).forEach((x) => {
+      rec.push(`Add more practice and a clearer tip for “${skillName(x.k)}”: ${Math.round(x.recent * 100)}% correct recently over ${x.n} answers` + (x.trend != null ? ` (${x.trend >= 0 ? 'up' : 'down'} ${Math.abs(Math.round(x.trend * 100))} points vs last week).` : '.'));
+    });
+    patterns.slice(0, 3).forEach((p) => rec.push(`Repeated mistake: ${TAGL[p.key] || skillName(p.key)} — ${p.n} times in ${p.items.size || p.n} different questions.`));
+    Object.values(stops).filter((x) => x.quit + x.fail >= 2).forEach((x) => rec.push(`Lesson ${x.node} looks too hard or long: quit ${x.quit}×, not passed ${x.fail}×.`));
+    Object.entries(types).forEach(([t, x]) => {
+      if (x.n >= 8 && x.ok / x.n < 0.6) rec.push(`Exercise “${EXL[t] || t}” is hard for her: ${Math.round(x.ok / x.n * 100)}% correct.`);
+      if (x.n >= 8 && x.th / x.n > 0.5) rec.push(`She opens Thai help in ${Math.round(x.th / x.n * 100)}% of “${EXL[t] || t}” questions — make them easier or add pictures.`);
+      if (x.msn >= 8 && x.ms / x.msn > 20000) rec.push(`“${EXL[t] || t}” takes her ${Math.round(x.ms / x.msn / 1000)} s per question on average.`);
+    });
+    if (!rec.length) rec.push(ans.length < 20 ? 'Not enough answers yet — check again after a few lessons.' : 'No big problems. Keep the current pace.');
+    return { st, ans, skills: Object.values(skills).filter((x) => x.n > 0).sort((a, b) => a.recent - b.recent), patterns, again, types, stops: Object.values(stops), hints, rec };
+  }
+  const STATUS = { weak: ['Weak', 'bad'], work: ['Needs work', 'mango'], good: ['Good', 'sea'], strong: ['Strong', 'good'], new: ['Too few answers', 'grey'] };
+  function insights() {
+    const I = computeInsights();
+    const box = h('div', { class: 'stack', style: { gap: '14px' } });
+    box.append(h('div', { class: 'card stack insight-head' }, h('div', { class: 'row', style: { gap: '12px' } }, A.art.mascotEl('think', 56),
+      h('div', { style: { flex: 1 } }, h('b', null, 'What the app learned about her'), h('div', { class: 'small muted' }, 'Every answer is tagged with the grammar point it tests. The app already gives her extra practice on her weakest point. Use the report to plan the next update.'))),
+      h('div', { class: 'row wrap' },
+        h('button', { class: 'btn', style: { flex: 1, minHeight: '44px' }, onclick: () => downloadReport(I) }, '⬇ Download report'),
+        h('button', { class: 'btn ghost', style: { flex: 1, minHeight: '44px' }, onclick: async () => { try { await navigator.clipboard.writeText(reportMD(I)); A.toast('Report copied'); } catch (e) { A.toast('Could not copy — use Download'); } } }, '📋 Copy'))));
+    box.append(h('div', { class: 'card stack' }, h('b', null, '🛠️ For the next update'), h('ol', { class: 'recs' }, I.rec.map((r) => h('li', null, r)))));
+    const sk = h('div', { class: 'card' }, h('b', null, 'Grammar & skills'), h('div', { class: 'small muted', style: { marginBottom: '8px' } }, 'Recent = her last 30 answers on that point. Arrow = this week vs last week.'));
+    if (!I.skills.length) sk.append(h('div', { class: 'small muted' }, 'No answers yet.'));
+    I.skills.forEach((x) => sk.append(h('div', { class: 'skrow' },
+      h('div', { class: 'skn' }, h('div', null, skillName(x.k)), h('span', { class: 'pill ' + STATUS[x.status][1] }, STATUS[x.status][0])),
+      h('div', { class: 'track' }, h('i', { class: x.status, style: { width: Math.round(x.recent * 100) + '%' } })),
+      h('div', { class: 'small num skv' }, Math.round(x.recent * 100) + '%', x.trend != null ? h('span', { class: x.trend >= 0 ? 'up' : 'down' }, x.trend >= 0 ? ' ▲' : ' ▼') : null, h('div', { class: 'tiny muted' }, x.w + ' wrong / ' + x.n)))));
+    box.append(sk);
+    box.append(h('div', { class: 'card feed', style: { padding: '8px 12px' } }, h('b', null, 'Repeated mistake patterns'),
+      I.patterns.length ? I.patterns.slice(0, 10).map((p) => h('div', { class: 'ev bad' }, h('span', { class: 'i' }, '×' + p.n), h('div', null, h('div', null, TAGL[p.key] || skillName(p.key)), h('div', { class: 'd' }, (p.items.size || p.n) + ' different questions', p.ex.map((x) => h('div', null, h('span', { class: 'yours' }, x.a || '—'), ' → ', h('span', { class: 'right' }, x.c))))), h('span', { class: 'tm' }, A.ago(p.last))))
+        : h('div', { class: 'small muted', style: { padding: '8px 0' } }, 'No repeated mistakes yet.')));
+    box.append(h('div', { class: 'card feed', style: { padding: '8px 12px' } }, h('b', null, 'Wrong again and again'),
+      I.again.length ? I.again.map(([id, r]) => { const w = id.startsWith('w:') ? (D[id.slice(2)] || {}).w : (A.S(id.slice(2)) || {}).en; return h('div', { class: 'ev bad' }, h('span', { class: 'i' }, '×' + r.w), h('div', null, h('div', null, w || id), h('div', { class: 'd' }, 'right ' + r.c + '× · memory box ' + r.b + '/6'))); })
+        : h('div', { class: 'small muted', style: { padding: '8px 0' } }, 'Nothing yet.')));
+    const tt = h('div', { class: 'card' }, h('b', null, 'Exercise types'), h('div', { class: 'small muted', style: { marginBottom: '6px' } }, 'Correct · average time · how often she opened Thai help'));
+    Object.entries(I.types).sort((a, b) => a[1].ok / a[1].n - b[1].ok / b[1].n).forEach(([t, x]) => tt.append(h('div', { class: 'barrow' }, h('span', null, EXL[t] || t), h('div', { class: 'track' }, h('i', { style: { width: Math.round(x.ok / x.n * 100) + '%' } })), h('span', { class: 'small num' }, Math.round(x.ok / x.n * 100) + '% · ' + (x.msn ? Math.round(x.ms / x.msn / 1000) + 's' : '–') + ' · 🇹🇭' + Math.round(x.th / x.n * 100) + '%'))));
+    box.append(tt);
+    if (I.stops.length) box.append(h('div', { class: 'card feed', style: { padding: '8px 12px' } }, h('b', null, 'Where she stops'), I.stops.sort((a, b) => b.quit + b.fail - a.quit - a.fail).slice(0, 8).map((x) => h('div', { class: 'ev' }, h('span', { class: 'i' }, '🚪'), h('div', null, h('div', null, x.node), h('div', { class: 'd' }, 'quit ' + x.quit + '× · not passed ' + x.fail + '×'))))));
+    return box;
+  }
+  function reportMD(I) {
+    const l = L() || {};
+    const lines = [`# Alvee English — learning report`, `Learner: ${l.name || ''} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`, `Lessons done: ${Object.keys(I.st.done).length} · words: ${A.wordCount(I.st)} · XP: ${A.totalXP(I.st)} · answers logged: ${I.ans.length}`, '',
+      '## For the next update', ...I.rec.map((r, i) => `${i + 1}. ${r}`), '',
+      '## Skills (recent % correct, wrong / total)', ...I.skills.map((x) => `- ${skillName(x.k)} [${x.k}]: ${Math.round(x.recent * 100)}% (${x.w}/${x.n})${x.trend != null ? ', trend ' + Math.round(x.trend * 100) : ''} — ${STATUS[x.status][0]}`), '',
+      '## Repeated mistakes', ...I.patterns.map((p) => `- ${TAGL[p.key] || p.key} [${p.key}]: ${p.n}× in ${p.items.size || p.n} questions; e.g. ${p.ex.map((x) => `"${x.a}" → "${x.c}"`).join('; ')}`), '',
+      '## Exercise types', ...Object.entries(I.types).map(([t, x]) => `- ${t}: ${Math.round(x.ok / x.n * 100)}% of ${x.n}, avg ${x.msn ? Math.round(x.ms / x.msn / 1000) : '-'}s, Thai help ${Math.round(x.th / x.n * 100)}%`), '',
+      '## Wrong again and again', ...I.again.map(([id, r]) => `- ${id}: wrong ${r.w}×, right ${r.c}×`), '',
+      '## Where she stops', ...I.stops.map((x) => `- ${x.node}: quit ${x.quit}, failed ${x.fail}`), '',
+      '## Thai help / look-ups (top)', ...Object.entries(I.hints).sort((a, b) => b[1] - a[1]).slice(0, 25).map(([k, n]) => `- ${k}: ${n}`)];
+    return lines.join('\n');
+  }
+  function downloadReport(I) {
+    const md = reportMD(I);
+    const json = JSON.stringify({ made: new Date().toISOString(), skills: I.skills, patterns: I.patterns.map((p) => ({ ...p, items: [...p.items] })), types: I.types, stops: I.stops, again: I.again, rec: I.rec, state: I.st }, null, 1);
+    const save = (text, name, type) => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
+    const day = A.dkey();
+    save(md, `alvee-report-${day}.md`, 'text/markdown');
+    setTimeout(() => save(json, `alvee-report-${day}.json`, 'application/json'), 400);
+  }
+
+  function resetBtn(label, nodes, kind) {
+    const st = stOf();
+    const n = nodes.filter((x) => st.done[x.id]).length;
+    return h('button', { class: 'chip reset-chip', disabled: n ? null : true, onclick: () => resetSheet(nodes, label.replace(/^Reset /, '')) }, '↺ ' + (kind === 'month' ? 'month' : 'unit'));
+  }
+  function resetSheet(nodes, label) {
+    const st = stOf();
+    const done = nodes.filter((x) => st.done[x.id]);
+    const sh = A.sheet(h('div', { class: 'stack', style: { gap: '12px' } },
+      h('h2', null, '↺ Reset ' + label + '?'),
+      h('div', { class: 'small muted' }, done.length + ' finished step(s) will be marked as not done, and their words and sentences start fresh in her practice. Everything else stays. A backup is saved on the server.'),
+      h('div', { class: 'small' }, done.map((x) => A.nodeTitle(x).en).join(' · ') || 'Nothing finished here yet.'),
+      h('button', { class: 'btn bad block', disabled: done.length ? null : true, onclick: async () => {
+        const items = A.uniq(done.flatMap((x) => A.nodeItems(x)));
+        try { const r = await A.api.resetPart(ADM.uid, { done: done.map((x) => x.id), items, label }); sh.close(); A.toast('Reset done · ' + ((r && r.removed) || 0) + ' steps'); await ADM.refresh(true); }
+        catch (e) { A.toast(e.message || 'Reset failed'); }
+      } }, 'Yes, reset'),
+      h('button', { class: 'btn ghost block', onclick: () => sh.close() }, 'Cancel')));
+  }
+
   // ---------------------------------------------------------------- mistakes
-  const TOPICS = { be: 'am / is / are', bep: 'was / were', s: 'he / she + s', past: 'Past tense', will: 'will / going to', do: 'do / does / don\'t', order: 'Word order', vocab: 'Vocabulary', listen: 'Listening', meaning: 'Understanding', talk: 'Conversation', other: 'Other' };
+  const TOPICS = { s3: 'he / she + s', ing: '-ing (now)', have: 'have / has', can: 'can', if: 'if', question: 'Questions', prep: 'in / on / at', art: 'a / an', going: 'going to', be: 'am / is / are', bep: 'was / were', s: 'he / she + s', past: 'Past tense', will: 'will / going to', do: 'do / does / don\'t', order: 'Word order', vocab: 'Vocabulary', listen: 'Listening', meaning: 'Understanding', talk: 'Conversation', other: 'Other' };
+  const OLD_TOPIC = { s: 's3', meaning: 'vocab' };
+  const skillOfEv = (e) => e.sk || OLD_TOPIC[topicOf(e)] || topicOf(e);
+  ADM.skillOfEv = skillOfEv;
   function topicOf(e) {
-    if (['w2th', 'th2w', 'pic', 'listenw', 'match'].includes(e.ex)) return 'vocab';
+    if (e.sk) return e.sk;
+    if (['w2th', 'th2w', 'pic', 'listenw', 'match', 'wfit'].includes(e.ex)) return 'vocab';
     if (e.ex === 'listen') return 'listen';
     if (e.ex === 'meaning') return 'meaning';
     const a = String(e.a || '').toLowerCase(), c = String(e.c || '').toLowerCase();
@@ -370,13 +515,18 @@
           if (Math.random() < 0.18) { looks++; push({ type: 'lookup', w: s.key || A.pick(A.words(A.S(s.sid) ? A.S(s.sid).t : ['am'])), s: s.sid ? A.S(s.sid).en : undefined }); }
           const sent = s.sid ? A.S(s.sid) : null;
           const hard = s.type === 'gap' || s.type === 'pick' || s.type === 'build';
-          const ok = Math.random() > (hard ? 0.3 : 0.12);
+          const weakSpot = s.sk === 'be' || s.sk === 's3';
+          const ok = Math.random() > (weakSpot ? 0.45 : hard ? 0.25 : 0.12);
           graded++; if (ok) firstOk++;
           let q = '', a = '', c = '';
-          if (s.key) { q = D[s.key].w; c = s.type === 'w2th' ? A.thShort(D[s.key].th) : D[s.key].w; a = ok ? c : (s.type === 'w2th' ? A.thShort(D[s.opts.find((o) => o !== s.key)].th) : D[s.opts.find((o) => o !== s.key)].w); }
-          else if (sent) { q = s.type === 'gap' ? A.join(s.gap.toks.map((x, i) => (i === s.gap.at ? '___' : x))) : sent.th; c = s.type === 'gap' ? s.gap.answer : sent.en; const wrongs = A.corruptions(sent.t); a = ok ? c : (s.type === 'gap' ? s.gap.opts.find((o) => o.toLowerCase() !== c.toLowerCase()) : (wrongs[0] ? wrongs[0].s : c)); }
+          let tag;
+          if (s.key) { const wo = s.opts || (s.fit && s.fit.opts) || [s.key]; q = D[s.key].w; c = D[s.key].w; const other = wo.find((o) => o !== s.key) || s.key; a = ok ? c : D[other].w; if (!ok) tag = 'vocab'; }
+          else if (sent) { q = s.type === 'gap' ? A.join(s.gap.toks.map((x, i) => (i === s.gap.at ? '___' : x))) : sent.th; c = s.type === 'gap' ? s.gap.answer : sent.en; const wrongs = A.corruptions(sent.t); a = ok ? c : (s.type === 'gap' ? s.gap.opts.find((o) => o.toLowerCase() !== c.toLowerCase()) : (wrongs[0] ? wrongs[0].s : c));
+            if (!ok) tag = s.type === 'gap' ? A.explainGap(s.gap, a).key : s.type === 'listen' ? 'listen' : wrongs[0] ? A.explainTag(wrongs[0].tag, wrongs[0].s).key : 'words'; }
+          const sk = !ok && tag ? A.keySkill(tag) : (s.sk || 'other');
+          if (s.type !== 'talkplay') A.skillRecord(st, sk, ok);
           if (s.type === 'talkplay') { const tk = C.talks[s.talk]; tk.lines.filter((ln) => ln.s === 'B').forEach((ln) => { const okk = Math.random() > 0.25; graded++; if (okk) firstOk++; const se = A.S(ln.id); push({ type: 'answer', node: node.id, ex: 'talk', item: 's:' + ln.id, q: se.ctx ? A.S(se.ctx).en : '', a: okk ? se.en : (ln.x[0] || se.en), c: se.en, ok: okk ? 1 : 0, ms: 3000 + A.rnd(6000) }); if (st) A.srsApply(st, 's:' + ln.id, okk); }); graded--; firstOk -= ok ? 1 : 0; return; }
-          push({ type: 'answer', node: node.id, ex: s.type, item: s.item, q, a, c, ok: ok ? 1 : 0, ms: 2500 + A.rnd(9000) });
+          push({ type: 'answer', node: node.id, ex: s.type, item: s.item, q, a, c, ok: ok ? 1 : 0, ms: 2500 + A.rnd(9000), sk, tag, u: node.u, th: Math.random() < 0.2 ? 1 : undefined });
           if (s.item) A.srsApply(st, s.item, ok);
         });
         const acc = graded ? Math.round(firstOk / graded * 100) : 100;

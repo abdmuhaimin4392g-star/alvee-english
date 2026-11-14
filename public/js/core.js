@@ -305,6 +305,17 @@
       A.store.del(this.k('state.' + uid)); A.store.del(this.k('events.' + uid));
       A.store.del(this.k('presence.' + uid));
     }
+    async resetPart(uid, part) {
+      const st = A.store.get(this.k('state.' + uid), null);
+      if (!st) return { removed: 0 };
+      let removed = 0;
+      (part.done || []).forEach((id) => { if (st.done && st.done[id]) { delete st.done[id]; removed++; } });
+      (part.items || []).forEach((id) => { if (st.srs) delete st.srs[id]; });
+      st.rev = (st.rev || 0) + 1000; st.resetAt = Date.now();
+      A.store.set(this.k('state.' + uid), st);
+      this.append(uid, [{ t: Date.now(), type: 'admin_reset', what: part.label, n: removed }]);
+      return { removed };
+    }
     async importDemo(uid, state, events) {
       A.store.set(this.k('state.' + uid), state);
       this.append(uid, events);
@@ -350,6 +361,7 @@
     }
     async createLearner(d) { return (await this.call('admin/user/create', d)).user; }
     async resetProgress(uid) { await this.call('admin/reset', { uid }); }
+    async resetPart(uid, part) { return this.call('admin/reset-part', { uid, ...part }); }
   }
 
   // the server rewrites <meta name="ae-mode" content="demo"> to "server"
@@ -360,7 +372,7 @@
 
   // ------------------------------------------------------------- learner progress model
   A.newState = () => ({
-    v: 1, created: Date.now(), days: {}, done: {}, srs: {}, badges: {}, look: {},
+    v: 1, created: Date.now(), days: {}, done: {}, srs: {}, badges: {}, look: {}, sk: {},
     freezes: 0, frozen: [], reviews: 0, set: { slow: false, sfx: true, big: false, thai: false }, rev: 0,
   });
   A.fixState = (s) => {
@@ -379,6 +391,12 @@
     if (u.lessons.length) A.nodes.push({ id: 'check:' + u.id, kind: 'check', u: u.id });
   });
   A.nodeById = (id) => A.nodes.find((n) => n.id === id);
+  // progress that belongs to a node (used by the dashboard's reset)
+  A.nodeItems = (n) => {
+    if (n.kind === 'lesson') { const l = C.lessons[n.id]; return [...l.words.map((k) => 'w:' + k), ...l.sents.map((x) => 's:' + x)]; }
+    if (n.kind === 'talk') return C.talks[n.talk].lines.map((l) => 's:' + l.id);
+    return [];
+  };
   A.unit = (n) => C.units.find((u) => u.id === n);
   A.nodeTitle = (n) => {
     if (n.kind === 'lesson') { const l = C.lessons[n.id]; return { en: l.en, th: l.th, icon: '📖', k: 'Lesson ' + n.id }; }
@@ -438,39 +456,78 @@
     else { s.w++; s.b = Math.max(0, Math.min(s.b - 1, 1)); s.d = today + (s.b === 0 ? 0 : 1); }
     return s;
   };
+  // skills: how often she gets each grammar point right (lifetime + last 30 answers)
+  A.SKILLS = {
+    be: ['am / is / are', 'am / is / are'], bep: ['was / were', 'was / were (อดีต)'], s3: ['he / she / it + s', 'he / she / it เติม s'],
+    past: ['Past tense', 'กริยาอดีต (went, -ed)'], will: ['will (future)', 'will (อนาคต)'], going: ['going to', 'going to (แผนการ)'],
+    ing: ['-ing (doing now)', 'กำลังทำ (-ing)'], do: ["do / does / don't", "do / does / don't"], have: ['have / has', 'have / has'],
+    can: ['can', 'can (ทำได้)'], if: ['if …', 'ถ้า … (if)'], question: ['Questions & word order', 'คำถามและการเรียงคำ'],
+    order: ['Word order', 'การเรียงคำ'], prep: ['in / on / at', 'in / on / at'], art: ['a / an / the', 'a / an / the'],
+    vocab: ['Word meaning', 'ความหมายของคำ'], listen: ['Listening', 'การฟัง'], talk: ['Conversation replies', 'การตอบในบทสนทนา'], other: ['Other', 'อื่น ๆ'],
+  };
+  A.skillRecord = (st, sk, ok) => {
+    if (!sk) return;
+    const r = st.sk[sk] || (st.sk[sk] = { n: 0, w: 0, h: '' });
+    r.n++; if (!ok) r.w++;
+    r.h = (r.h + (ok ? '1' : '0')).slice(-30);
+    r.t = Date.now();
+  };
+  A.skillAcc = (r, recent) => { const h = recent && r.h ? r.h : null; return h ? h.split('').filter((x) => x === '1').length / h.length : r.n ? (r.n - r.w) / r.n : 1; };
+  // weakest first: needs at least 5 answers and under 75% in the last 30
+  A.weakSkills = (st) => Object.entries(st.sk || {}).filter(([, r]) => r.h.length >= 5 && A.skillAcc(r, true) < 0.75)
+    .map(([id, r]) => ({ id, acc: A.skillAcc(r, true), n: r.n })).sort((a, b) => a.acc - b.acc || b.n - a.n);
   A.dueItems = (st) => { const t = A.todayNum(); return Object.keys(st.srs).filter((id) => st.srs[id].d <= t); };
   A.wordCount = (st) => Object.keys(st.srs).filter((k) => k.startsWith('w:')).length;
 
-  // badges
-  A.BADGES = [
-    ['first', '🎉', 'First lesson', 'บทเรียนแรก'], ['streak3', '🔥', '3-day streak', 'เรียน 3 วันติด'],
-    ['streak7', '⚡', '7-day streak', 'เรียน 7 วันติด'], ['streak30', '🏅', '30-day streak', 'เรียน 30 วันติด'],
-    ['perfect', '💯', 'Perfect lesson', 'ไม่ผิดเลยสักข้อ'], ['talk1', '💬', 'First talk', 'บทสนทนาแรก'],
-    ['hotel', '🛎️', 'Hotel English', 'ภาษาอังกฤษโรงแรม'], ['words25', '📗', '25 words', 'รู้ 25 คำ'],
-    ['words100', '📚', '100 words', 'รู้ 100 คำ'], ['words300', '🧠', '300 words', 'รู้ 300 คำ'],
-    ['review10', '🔁', '10 reviews', 'ทบทวน 10 ครั้ง'], ['curious', '🔎', 'Curious', 'เปิดดูคำแปล 50 ครั้ง'],
-    ['early', '🌅', 'Early bird', 'เรียนก่อน 8 โมงเช้า'], ['night', '🦉', 'Night owl', 'เรียนหลัง 4 ทุ่ม'],
-    ['month1', '⭐', 'Month 1', 'จบเดือนที่ 1'], ['month2', '🌟', 'Month 2', 'จบเดือนที่ 2'],
-    ['month3', '✨', 'Month 3', 'จบเดือนที่ 3'], ['month4', '🏖️', 'Month 4', 'จบเดือนที่ 4'],
-    ['month5', '🏨', 'Month 5', 'จบเดือนที่ 5'], ['grad', '🎓', 'Graduate', 'จบหลักสูตร 6 เดือน'],
-  ];
+  // medals — a collection with bronze / silver / gold / pearl tiers. ids of medals already earned never change.
+  const lessonsDone = (st) => Object.keys(st.done).filter((k) => C.lessons[k]).length;
+  const talksDone = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:')).length;
+  const perfects = (st) => Object.values(st.done).filter((d) => d.a === 100).length;
+  const lookups = (st) => Object.values(st.look).reduce((a, b) => a + b, 0);
+  const hotelTalk = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel').length;
+  const bestStreak = (st) => Math.max(A.streak(st), st.best || 0);
+  // [id, icon, tier, category, English name, Thai name, how to get it (Thai), progress(st) -> [now, goal]]
+  A.MEDALS = [
+    ['first', 'book', 'bronze', 'learn', 'First Step', 'ก้าวแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
+    ['lessons10', 'book', 'silver', 'learn', 'Bookworm', 'หนอนหนังสือ', 'เรียนจบ 10 บท', (st) => [lessonsDone(st), 10]],
+    ['lessons40', 'book', 'gold', 'learn', 'Scholar', 'นักปราชญ์ตัวน้อย', 'เรียนจบ 40 บท', (st) => [lessonsDone(st), 40]],
+    ['perfect', 'target', 'bronze', 'star', 'Bullseye', 'เป๊ะทุกข้อ', 'ไม่ผิดเลยสักข้อใน 1 บท', (st) => [Math.min(1, perfects(st)), 1]],
+    ['perfect10', 'hundred', 'gold', 'star', 'Perfectionist', 'สมบูรณ์แบบ', 'ได้ 100% ครบ 10 บท', (st) => [perfects(st), 10]],
+    ['streak3', 'flame', 'bronze', 'streak', 'Warm Up', 'อุ่นเครื่อง', 'เรียน 3 วันติดกัน', (st) => [bestStreak(st), 3]],
+    ['streak7', 'flame', 'silver', 'streak', 'On Fire', 'ไฟลุก', 'เรียน 7 วันติดกัน', (st) => [bestStreak(st), 7]],
+    ['streak14', 'bolt', 'gold', 'streak', 'Unstoppable', 'หยุดไม่อยู่', 'เรียน 14 วันติดกัน', (st) => [bestStreak(st), 14]],
+    ['streak30', 'crown', 'pearl', 'streak', 'Ocean Queen', 'ราชินีแห่งท้องทะเล', 'เรียน 30 วันติดกัน', (st) => [bestStreak(st), 30]],
+    ['words25', 'sprout', 'bronze', 'words', 'Seedling', 'ต้นกล้า', 'รู้ 25 คำ', (st) => [A.wordCount(st), 25]],
+    ['words100', 'sprout', 'silver', 'words', 'Word Garden', 'สวนคำศัพท์', 'รู้ 100 คำ', (st) => [A.wordCount(st), 100]],
+    ['words300', 'palm', 'gold', 'words', 'Word Forest', 'ป่าคำศัพท์', 'รู้ 300 คำ', (st) => [A.wordCount(st), 300]],
+    ['words600', 'gem', 'pearl', 'words', 'Word Treasure', 'ขุมทรัพย์คำศัพท์', 'รู้ 600 คำ', (st) => [A.wordCount(st), 600]],
+    ['talk1', 'chat', 'bronze', 'talk', 'Hello!', 'สวัสดี!', 'ฝึกบทสนทนาครั้งแรก', (st) => [Math.min(1, talksDone(st)), 1]],
+    ['talks10', 'chat', 'silver', 'talk', 'Chatterbox', 'ช่างคุย', 'ฝึกบทสนทนา 10 เรื่อง', (st) => [talksDone(st), 10]],
+    ['talks25', 'music', 'gold', 'talk', 'Smooth Talker', 'พูดคล่อง', 'ฝึกบทสนทนา 25 เรื่อง', (st) => [talksDone(st), 25]],
+    ['hotel', 'bell', 'silver', 'talk', 'Front Desk Star', 'ดาวเด่นแผนกต้อนรับ', 'ฝึกบทสนทนาเรื่องโรงแรม', (st) => [Math.min(1, hotelTalk(st)), 1]],
+    ['review10', 'repeat', 'bronze', 'learn', 'Never Forget', 'ไม่มีวันลืม', 'ทบทวน 10 ครั้ง', (st) => [st.reviews || 0, 10]],
+    ['review50', 'repeat', 'gold', 'learn', 'Memory Master', 'เซียนความจำ', 'ทบทวน 50 ครั้ง', (st) => [st.reviews || 0, 50]],
+    ['curious', 'search', 'bronze', 'learn', 'Curious Cat', 'ช่างสงสัย', 'แตะดูความหมายคำ 50 ครั้ง', (st) => [lookups(st), 50]],
+    ['early', 'sunrise', 'silver', 'time', 'Early Bird', 'นกตื่นเช้า', 'เรียนก่อน 8 โมงเช้า', (st) => [st.badges.early || (st.tod && st.tod.early) ? 1 : 0, 1]],
+    ['night', 'moon', 'silver', 'time', 'Night Owl', 'นกฮูกกลางคืน', 'เรียนหลัง 4 ทุ่ม', (st) => [st.badges.night || (st.tod && st.tod.night) ? 1 : 0, 1]],
+    ['xp1000', 'bolt', 'gold', 'star', '1000 XP', 'พลัง 1000 XP', 'สะสม 1000 XP', (st) => [A.totalXP(st), 1000]],
+    ['month1', 'shell', 'bronze', 'month', 'Month 1', 'จบเดือนที่ 1', 'จบเดือนที่ 1', (st) => [Math.min(1, A.monthsDone(st)), 1]],
+    ['month2', 'wave', 'silver', 'month', 'Month 2', 'จบเดือนที่ 2', 'จบเดือนที่ 2', (st) => [Math.min(2, A.monthsDone(st)), 2]],
+    ['month3', 'palm', 'silver', 'month', 'Month 3', 'จบเดือนที่ 3', 'จบเดือนที่ 3', (st) => [Math.min(3, A.monthsDone(st)), 3]],
+    ['month4', 'sun', 'gold', 'month', 'Month 4', 'จบเดือนที่ 4', 'จบเดือนที่ 4', (st) => [Math.min(4, A.monthsDone(st)), 4]],
+    ['month5', 'hotel', 'gold', 'month', 'Month 5', 'จบเดือนที่ 5', 'จบเดือนที่ 5', (st) => [Math.min(5, A.monthsDone(st)), 5]],
+    ['grad', 'grad', 'pearl', 'month', 'Graduate', 'จบหลักสูตร', 'จบหลักสูตร 6 เดือน', (st) => [A.monthsDone(st), 6]],
+  ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how, prog }));
+  A.medal = (id) => A.MEDALS.find((m) => m.id === id);
+  A.BADGES = A.MEDALS.map((m) => [m.id, '', m.en, m.th]); // older code paths
   A.checkBadges = (st) => {
     const got = [];
-    const give = (id) => { if (!st.badges[id]) { st.badges[id] = Date.now(); got.push(id); } };
-    const doneN = Object.keys(st.done).length;
-    if (doneN >= 1) give('first');
-    const sk = A.streak(st);
-    if (sk >= 3) give('streak3'); if (sk >= 7) give('streak7'); if (sk >= 30) give('streak30');
-    const wc = A.wordCount(st);
-    if (wc >= 25) give('words25'); if (wc >= 100) give('words100'); if (wc >= 300) give('words300');
-    if (st.reviews >= 10) give('review10');
-    if (Object.values(st.look).reduce((a, b) => a + b, 0) >= 50) give('curious');
-    if (Object.keys(st.done).some((k) => k.startsWith('talk:'))) give('talk1');
-    if (Object.keys(st.done).some((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel')) give('hotel');
-    if (Object.values(st.done).some((d) => d.a === 100)) give('perfect');
-    const md = A.monthsDone(st);
-    for (let m = 1; m <= Math.min(5, md); m++) give('month' + m);
-    if (md >= 6) give('grad');
+    st.best = Math.max(st.best || 0, A.streak(st));
+    A.MEDALS.forEach((m) => {
+      if (st.badges[m.id]) return;
+      const [now, goal] = m.prog(st);
+      if (now >= goal) { st.badges[m.id] = Date.now(); got.push(m.id); }
+    });
     return got;
   };
 
@@ -546,6 +603,8 @@
   A.newerState = (server) => {
     if (!A.api || A.api.mode !== 'server') return server;
     const local = A.store.get('ae.st.' + A.user.id, null);
+    // a reset from the dashboard always wins over an older copy on this phone
+    if (server && (server.resetAt || 0) > ((local && local.resetAt) || 0)) return server;
     if (local && (!server || (local.rev || 0) > (server.rev || 0))) { setTimeout(A.saveSoon, 1000); return local; }
     return server;
   };

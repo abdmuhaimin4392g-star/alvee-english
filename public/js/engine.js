@@ -106,8 +106,10 @@
     const out = [];
     for (const tag of PRIORITY) { for (const c of byTag(tag)) { if (out.length >= n) break; if (!out.some((o) => o.tag === c.tag) || out.length >= PRIORITY.length) out.push(c); } }
     for (const c of A.shuffle(all)) { if (out.length >= n) break; if (!out.includes(c)) out.push(c); }
-    while (out.length < n) { const s = swapAdjacent(toks); if (!s || out.some((o) => o.s === s) || s === sentText(toks)) break; out.push({ s, tag: 'order' }); }
-    return out.slice(0, n);
+    const orig = lo(sentText(toks));
+    for (let tries = 0; out.length < n && tries < 6; tries++) { const s = swapAdjacent(toks); if (s && lo(s) !== orig && !out.some((o) => lo(o.s) === lo(s))) out.push({ s, tag: 'order' }); }
+    const seen = new Set([orig]);
+    return out.filter((o) => { const k = lo(o.s); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, n);
   }
 
   // ------------------------------------------------------------------ gap (fill the blank)
@@ -197,29 +199,61 @@
   const ALL_LESSON_WORDS = A.uniq(LESSON_ORDER.flatMap((id) => C.lessons[id].words)).filter((k) => D[k]);
   A.sentsUpTo = (u) => Object.values(C.lessons).filter((l) => l.u <= u).flatMap((l) => l.sents);
 
-  function wordOptions(key, pool, n) {
+  // English word options. Never two options that look or sound the same, and never Thai.
+  function wordOptions(key, pool, n, filter, learnedOnly) {
     const e = D[key];
-    const ok = (k) => k !== key && D[k] && D[k].th !== e.th && lo(D[k].w) !== lo(e.w) && !D[k].base;
-    const cand = A.shuffle(A.uniq(pool).filter(ok));
-    const same = cand.filter((k) => D[k].p === e.p);
-    const rest = cand.filter((k) => D[k].p !== e.p);
+    const same = (k) => lo(D[k].w) === lo(e.w) || (e.forms || []).map(lo).includes(lo(D[k].w)) || D[k].base === key || (D[k].forms || []).map(lo).includes(lo(e.w));
+    const ok = (k) => k !== key && D[k] && !D[k].base && !/\s/.test(D[k].w) === !/\s/.test(e.w) && !same(k) && (!filter || filter(D[k]));
     const out = [key];
-    for (const k of [...same, ...rest]) { if (out.length >= n) break; if (!out.some((o) => D[o].th === D[k].th)) out.push(k); }
-    if (out.length < n) for (const k of [...A.shuffle(A.lessonWordsUpTo(unitOf(key))), ...A.shuffle(ALL_LESSON_WORDS)].filter(ok)) { if (out.length >= n) break; if (!out.some((o) => D[o].th === D[k].th)) out.push(k); }
-    return A.shuffle(out);
+    const add = (k) => { if (out.length < n && ok(k) && !out.some((o) => lo(D[o].w) === lo(D[k].w))) out.push(k); };
+    const cand = A.shuffle(A.uniq(pool));
+    cand.filter((k) => D[k] && D[k].p === e.p).forEach(add);
+    cand.forEach(add);
+    if (out.length < n && !learnedOnly) [...A.shuffle(A.lessonWordsUpTo(unitOf(key))), ...A.shuffle(ALL_LESSON_WORDS)].forEach(add);
+    return out.length >= Math.min(n, 3) ? A.shuffle(out) : null;
   }
   const thShort = (th) => th.split(' / ')[0].split(' · ')[0].trim();
   A.thShort = thShort;
 
+  // a learned sentence that uses this word, with the word blanked out ("Which word fits?")
+  const CONTENT_POS = ['n', 'v', 'adj'];
+  function fitFor(key, maxUnit) {
+    const e = D[key];
+    if (!e || !CONTENT_POS.includes(e.p) || /\s/.test(e.w)) return null;
+    const ids = A.shuffle((e.xs || []).filter((sid) => A.S(sid) && (maxUnit == null || (A.S(sid).u || 1) <= maxUnit)));
+    for (const sid of ids) {
+      const s = A.S(sid);
+      const at = s.t.findIndex((t) => A.keyOf(t) === key);
+      if (at < 0 || A.words(s.t).length < 3) continue;
+      // wrong options are a different kind of word, so only one answer can fit the sentence
+      const prev = lo(s.t[at - 1] || '');
+      const DETS = ['a', 'an', 'the', 'my', 'your', 'his', 'her', 'our', 'their', 'this', 'that'];
+      // wrong options must make the sentence clearly wrong: a different kind of word, not already in the sentence
+      const otherPos = e.p === 'adj' ? ['v', 'n'] : e.p === 'n' ? (DETS.includes(prev) ? ['v', 'adj'] : ['v']) : ['n', 'adj'];
+      const inSent = new Set(s.t.map((t) => A.keyOf(t)).filter(Boolean));
+      const filter = (d) => otherPos.includes(d.p) && !d.base && !inSent.has(A.keyOf(d.w)) && !['be', 'have', 'do'].includes(lo(d.w)) && !(d.p === 'n' && d.forms) && !(d.p === 'v' && D[lo(d.w)] && D[lo(d.w)].p !== 'v') && !(e.p === 'adj' && d.p === 'n' && /^[A-Z]/.test(d.w)) && !(d.p !== 'v' && (d.v || d.forms || D[lo(d.w)] && D[lo(d.w)].forms)) && !(d.p !== e.p && / · /.test(d.th || ''));
+      const opts = wordOptions(key, A.lessonWordsUpTo(maxUnit || unitOf(key)), 3, filter, true);
+      if (!opts) continue;
+      return { sid, at, opts };
+    }
+    return null;
+  }
+
   // ------------------------------------------------------------------ exercises
-  function wordQuiz(key, pool, kind) {
+  // word exercises are English-first: fit the word in a sentence, hear it, or name the picture.
+  function wordQuiz(key, pool, kind, maxUnit) {
     const e = D[key];
     if (!e) return null;
-    const types = ['w2th', 'th2w'];
-    if (e.e && !/^\d/.test(e.e)) types.push('pic');
+    const types = [];
+    const fit = fitFor(key, maxUnit);
+    if (fit) types.push('wfit');
     if (A.speech.ok) types.push('listenw');
+    if (e.e && !/^\d/.test(e.e) && e.p === 'n') types.push('pic');
+    if (!types.length) return null;
     const type = kind && types.includes(kind) ? kind : A.pick(types);
-    return { type, key, item: 'w:' + key, opts: wordOptions(key, pool, type === 'w2th' ? 4 : 3) };
+    if (type === 'wfit') return { type, key, item: 'w:' + key, fit, sk: 'vocab' };
+    const opts = wordOptions(key, pool, 3);
+    return opts ? { type, key, item: 'w:' + key, opts, sk: type === 'listenw' ? 'listen' : 'vocab' } : null;
   }
 
   function otherSentences(sid, pool, n) {
@@ -229,6 +263,48 @@
     cand.sort((a, b) => Math.abs(A.words(A.S(a).t).length - len) - Math.abs(A.words(A.S(b).t).length - len));
     return cand.slice(0, n);
   }
+
+  // ------------------------------------------------------------------ skills (what a question tests)
+  // used for her stats, the dashboard insights and extra practice on weak areas
+  const TAG_SKILL = { 'drop-be': 'be', 'swap-be': 'be', 'add-be': 'be', 'drop-s': 's3', 'add-s': 's3', past: 'past', will: 'will', ing: 'ing', order: 'question', context: 'talk' };
+  A.tagSkill = (tag, text) => {
+    if (tag === 'swap') {
+      const t = lo(text || '');
+      if (/\b(do|does|don't|doesn't)\b/.test(t)) return 'do';
+      if (/\b(have|has)\b/.test(t)) return 'have';
+      return 'art';
+    }
+    if ((tag === 'drop-be' || tag === 'swap-be') && /\b(was|were|wasn't|weren't)\b/.test(lo(text || ''))) return 'bep';
+    return TAG_SKILL[tag] || tag || 'other';
+  };
+  // grammar points a sentence uses, most specific first
+  A.sentSkills = (sid) => {
+    const s = A.S(sid); if (!s) return [];
+    const toks = expandBe(s.t), L = toks.map(lo), out = [];
+    const forms = toks.map((t) => formOf(t));
+    const q = /\?$/.test(s.en);
+    if (L.includes('will') || L.includes("won't") || L.some((t) => /'ll$/.test(t))) out.push('will');
+    if (L.includes('going') && L.includes('to')) out.push('going');
+    if (L.includes('if')) out.push('if');
+    if (forms.includes('past') || L.includes('did') || L.includes("didn't")) out.push('past');
+    if (L.some((t) => BEP.includes(t) || t === "wasn't" || t === "weren't")) out.push('bep');
+    if (forms.includes('ing') && L.some((t) => BE.includes(t))) out.push('ing');
+    if (forms.includes('3s')) out.push('s3');
+    if (L.some((t) => ['do', 'does', "don't", "doesn't"].includes(t))) out.push('do');
+    if (L.includes('can') || L.includes("can't")) out.push('can');
+    if (q) out.push('question');
+    if (L.some((t) => BE.includes(t))) out.push('be');
+    if (L.some((t) => ['have', 'has'].includes(t))) out.push('have');
+    if (!out.length) out.push('order');
+    return out;
+  };
+  const GAP_SKILL = { be: 'be', bep: 'bep', do: 'do', neg: 'do', have: 'have', will: 'will', prep: 'prep', art: 'art' };
+  A.gapSkill = (g) => {
+    if (g.why !== 'verb') return GAP_SKILL[g.why] || 'other';
+    const f = formOf(g.answer);
+    return f === '3s' ? 's3' : f === 'past' ? 'past' : f === 'ing' ? 'ing' : 's3';
+  };
+  A.formOf = formOf; A.formsOf = formsOf;
 
   function sentQuiz(sid, pool, prefer) {
     const s = A.S(sid);
@@ -240,21 +316,39 @@
     if (n >= 2 && n <= 10) avail.push('build');
     const wrong = wrongVersions(s.t, 2);
     if (wrong.length >= 2) avail.push('pick');
-    if (otherSentences(sid, pool, 2).length >= 2) avail.push('meaning');
     if (A.speech.ok && otherSentences(sid, pool, 2).length >= 2) avail.push('listen');
-    if (s.ctx) avail.push('reply');
-    let type = (prefer || []).find((t) => avail.includes(t)) || A.pick(avail.length ? avail : ['meaning']);
+    if (s.ctx && wrong.length >= 1 && otherSentences(sid, pool, 1).length) avail.push('reply');
     if (!avail.length) return null;
+    const type = (prefer || []).find((t) => avail.includes(t)) || A.pick(avail);
     const base = { type, sid, item: 's:' + sid };
-    if (type === 'gap') return { ...base, gap };
-    if (type === 'build') return { ...base, tiles: buildTiles(s.t) };
-    if (type === 'pick') return { ...base, opts: A.shuffle([{ s: s.en, ok: 1 }, ...wrong]) };
-    if (type === 'meaning') return { ...base, opts: A.shuffle([sid, ...otherSentences(sid, pool, 2)]) };
-    if (type === 'listen') return { ...base, opts: A.shuffle([sid, ...otherSentences(sid, pool, 2)]) };
-    if (type === 'reply') return { ...base, opts: A.shuffle([{ s: s.en, ok: 1 }, ...wrong.slice(0, 1), ...otherSentences(sid, pool, 1).map((x) => ({ s: A.S(x).en, tag: 'context' }))]) };
+    if (type === 'gap') return { ...base, gap, sk: A.gapSkill(gap) };
+    if (type === 'build') return { ...base, tiles: buildTiles(s.t), sk: A.sentSkills(sid)[0] };
+    if (type === 'pick') return { ...base, opts: A.shuffle([{ s: s.en, ok: 1 }, ...wrong]), sk: A.tagSkill(wrong[0].tag, s.en) };
+    if (type === 'listen') return { ...base, opts: A.shuffle([sid, ...otherSentences(sid, pool, 2)]), sk: 'listen' };
+    if (type === 'reply') return { ...base, opts: A.shuffle([{ s: s.en, ok: 1 }, ...wrong.slice(0, 1), ...otherSentences(sid, pool, 1).map((x) => ({ s: A.S(x).en, tag: 'context' }))]), sk: 'talk' };
     return null;
   }
   A.sentQuiz = sentQuiz;
+
+  // extra practice for her weakest grammar point (the app adapts to her mistakes)
+  const FOCUS_TYPE = { vocab: null, listen: 'listen', talk: 'reply' };
+  function focusSteps(st, maxUnit, n, skip) {
+    const weak = A.weakSkills(st).filter((w) => !['vocab', 'other'].includes(w.id));
+    if (!weak.length) return [];
+    const sk = weak[0].id;
+    const spool = A.sentsUpTo(maxUnit);
+    const cands = A.shuffle(spool.filter((sid) => !skip.has(sid) && A.sentSkills(sid).includes(sk)));
+    const out = [];
+    for (const sid of cands) {
+      if (out.length >= n) break;
+      const pref = FOCUS_TYPE[sk] ? [FOCUS_TYPE[sk]] : ['gap', 'pick', 'build'];
+      const q = sentQuiz(sid, spool, pref);
+      if (!q) continue;
+      if (q.type === 'gap' && A.gapSkill(q.gap) !== sk && sk !== 'question') continue;
+      out.push({ ...q, focus: sk });
+    }
+    return out;
+  }
 
   function buildTiles(toks) {
     const words = A.words(toks);
@@ -286,8 +380,9 @@
   }
   function quizForItem(id, st, pool, spool) {
     const box = (st.srs[id] && st.srs[id].b) || 0;
-    if (id.startsWith('w:')) return wordQuiz(id.slice(2), pool, box <= 1 ? 'w2th' : A.pick(['th2w', 'listenw', 'pic', 'w2th']));
-    const prefer = box <= 1 ? ['pick', 'meaning', 'gap'] : box <= 3 ? A.shuffle(['gap', 'build', 'listen', 'reply']) : A.shuffle(['build', 'listen', 'reply', 'gap']);
+    const maxUnit = A.reachedUnit(st);
+    if (id.startsWith('w:')) return wordQuiz(id.slice(2), pool, box <= 1 ? 'wfit' : A.pick(['wfit', 'listenw', 'pic']), maxUnit);
+    const prefer = box <= 1 ? ['pick', 'gap', 'build'] : box <= 3 ? A.shuffle(['gap', 'build', 'listen', 'reply']) : A.shuffle(['build', 'listen', 'reply', 'gap']);
     return sentQuiz(id.slice(2), spool, prefer);
   }
 
@@ -312,24 +407,24 @@
     for (let i = 0; i < words.length; i += 2) {
       const chunk = words.slice(i, i + 2);
       chunk.forEach((k) => steps.push({ type: 'wintro', key: k, item: 'w:' + k }));
-      chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'th2w' : 'w2th'); if (q) steps.push(q); });
+      chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'listenw' : 'wfit', L.u); if (q) steps.push(q); });
     }
-    const mw = words.filter((k, i, a) => a.findIndex((x) => D[x].th === D[k].th) === i);
-    if (mw.length >= 3) steps.push({ type: 'match', keys: A.shuffle(mw).slice(0, 5) });
     const review = reviewPicks(st, 2, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
     const sentSteps = [];
     const practise = L.sents.length > 6 ? [...L.sents.slice(0, 2), ...A.shuffle(L.sents.slice(2)).slice(0, 4)] : L.sents;
     practise.forEach((sid, i) => {
       if (i < 2) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
-      const q = sentQuiz(sid, spool, i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'meaning', 'listen']));
+      const q = sentQuiz(sid, spool, i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'listen']));
       if (q) sentSteps.push(q);
       if (i % 3 === 2 && review.length) { const r = quizForItem(review.shift(), st, pool, spool); if (r) sentSteps.push({ ...r, review: 1 }); }
     });
     steps.push(...sentSteps);
     review.forEach((id) => { const r = quizForItem(id, st, pool, spool); if (r) steps.push({ ...r, review: 1 }); });
-    // finish with a second look at two new sentences and two new words
-    A.shuffle(L.sents.slice(0, 4)).slice(0, 1).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'meaning', 'gap', 'pick'])); if (q) steps.push(q); });
-    A.shuffle(words).slice(0, 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'th2w'])); if (q) steps.push(q); });
+    // the app adapts: extra practice on her weakest grammar point
+    steps.push(...focusSteps(st, L.u, 2, new Set(L.sents)));
+    // finish with a second look at a new sentence and a new word
+    A.shuffle(L.sents.slice(0, 4)).slice(0, 1).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'gap', 'pick'])); if (q) steps.push(q); });
+    A.shuffle(words).slice(0, 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'wfit']), L.u); if (q) steps.push(q); });
     return noRepeatTypes(steps);
   }
 
@@ -355,9 +450,9 @@
     const spool = A.uniq([...sents, ...A.sentsUpTo(node.u)]);
     const nS = monthTest ? 11 : 8, nW = monthTest ? 4 : 4, nT = monthTest ? 3 : 2;
     const steps = [];
-    const types = A.shuffle(['gap', 'pick', 'build', 'gap', 'meaning', 'listen', 'pick', 'build', 'gap', 'pick', 'build']);
+    const types = A.shuffle(['gap', 'pick', 'build', 'gap', 'listen', 'listen', 'pick', 'build', 'gap', 'pick', 'build']);
     sents.slice(0, nS).forEach((sid, i) => { const q = sentQuiz(sid, spool, [types[i % types.length], 'gap', 'pick']); if (q) steps.push(q); });
-    words.slice(0, nW).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['w2th', 'th2w', 'listenw'])); if (q) steps.push(q); });
+    words.slice(0, nW).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['wfit', 'listenw', 'pic']), node.u); if (q) steps.push(q); });
     talkLines.slice(0, nT).forEach((sid) => { const q = sentQuiz(sid, spool, ['reply']); if (q) steps.push(q); });
     return noRepeatTypes(A.shuffle(steps));
   }
@@ -369,7 +464,9 @@
     let ids;
     if (mistakesOnly) ids = Object.keys(st.srs).filter((id) => okItem(id) && st.srs[id].w > 0).sort((a, b) => st.srs[b].w - st.srs[a].w || st.srs[a].b - st.srs[b].b).slice(0, 12);
     else ids = reviewPicks(st, 12, new Set(), null);
-    return noRepeatTypes(A.shuffle(ids).map((id) => quizForItem(id, st, pool, spool)).filter(Boolean));
+    const steps = A.shuffle(ids).map((id) => quizForItem(id, st, pool, spool)).filter(Boolean);
+    steps.push(...focusSteps(st, maxUnit, mistakesOnly ? 4 : 2, new Set(ids.filter((x) => x.startsWith('s:')).map((x) => x.slice(2)))));
+    return noRepeatTypes(steps);
   }
 
   // one more try for an item answered wrong (different exercise if possible)
@@ -378,8 +475,8 @@
     const maxUnit = A.reachedUnit(st);
     const pool = A.lessonWordsUpTo(maxUnit);
     const spool = A.uniq([step.sid, ...A.sentsUpTo(maxUnit)].filter(Boolean));
-    if (step.item.startsWith('w:')) return wordQuiz(step.key, pool, step.type === 'w2th' ? 'th2w' : 'w2th');
-    const order = ['pick', 'gap', 'meaning', 'build'].filter((t) => t !== step.type);
+    if (step.item.startsWith('w:')) return wordQuiz(step.key, pool, A.pick(['wfit', 'listenw', 'pic'].filter((t) => t !== step.type)), maxUnit);
+    const order = ['pick', 'gap', 'build', 'listen'].filter((t) => t !== step.type);
     return sentQuiz(step.sid, spool, order);
   };
 
@@ -392,6 +489,7 @@
       else steps = checkSteps(node, st);
     } else if (kind === 'review') steps = reviewSteps(st, false);
     else if (kind === 'mistakes') steps = reviewSteps(st, true);
+    else if (kind === 'focus') steps = noRepeatTypes(focusSteps(st, A.reachedUnit(st), 8, new Set()));
     else if (kind === 'talk') steps = talkSteps(arg, st);
     steps = steps.filter(Boolean);
     return {

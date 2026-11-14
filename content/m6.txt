@@ -97,6 +97,17 @@ B: Six months ago. I study every day. = หกเดือนที่แล้�
 x: Six months ago. I studies every day.
 x: Six month ago. I study every day.
 
+@lesson 21.5 | Questions for a guest | คำถามสำหรับแขก
+new:
+How long will you stay? = คุณจะพักกี่วันคะ
+Where are you from? = คุณมาจากไหนคะ
+What time will you check out? = คุณจะเช็คเอาท์กี่โมงคะ
+How many people are in your room? = ห้องของคุณมีกี่คนคะ
+Why are you in Thailand? = คุณมาประเทศไทยทำไมคะ
+When did you arrive? = คุณมาถึงเมื่อไหร่คะ
+Who is your friend? = เพื่อนของคุณคือใครคะ
+What would you like to eat? = คุณอยากทานอะไรคะ
+
 # ------------------------------------------------------------------ UNIT 22
 @unit 22 | My story | เล่าเรื่องของฉัน | 🎈 | เล่าเรื่องเมื่อวาน วันนี้ และพรุ่งนี้ได้ในบทสนทนาเดียว
 
@@ -181,6 +192,31 @@ A: Great. When can you start? = เยี่ยม คุณเริ่มง�
 B: I can start next month. = ฉันเริ่มได้เดือนหน้าค่ะ
 x: I can starting next month.
 x: I can to start next month.
+
+@lesson 22.5 | Yesterday and tomorrow | เมื่อวานและพรุ่งนี้
+new:
+Yesterday I was at work. = เมื่อวานฉันอยู่ที่ทำงาน
+Today I am at home. = วันนี้ฉันอยู่บ้าน
+Tomorrow I will go to the market. = พรุ่งนี้ฉันจะไปตลาด
+Last week I met a nice guest. = อาทิตย์ที่แล้วฉันเจอแขกที่นิสัยดีคนหนึ่ง
+Now I speak more English. = ตอนนี้ฉันพูดภาษาอังกฤษได้มากขึ้น
+Next month I am going to visit my family. = เดือนหน้าฉันจะไปเยี่ยมครอบครัว
+I was nervous, but now I am happy. = ฉันเคยประหม่า แต่ตอนนี้ฉันมีความสุข
+I didn't know this word yesterday. = เมื่อวานฉันยังไม่รู้คำนี้
+
+@talk lastweekend | What did you do last weekend? | สุดสัปดาห์ที่แล้วทำอะไร | friends | Ploy | 👩
+A: Hi Alvee! What did you do last weekend? = สวัสดีอัลวี! สุดสัปดาห์ที่แล้วทำอะไรบ้าง
+B: I went to the beach with my family. = ฉันไปทะเลกับครอบครัว
+x: I go to the beach with my family.
+x: I goed to the beach with my family.
+A: Wow! Was it fun? = ว้าว! สนุกไหม
+B: Yes, it was. We ate fish and took photos. = สนุกมาก พวกเรากินปลาและถ่ายรูป
+x: Yes, it were. We ate fish and took photos.
+x: Yes, it was. We eat fish and take photos.
+A: What are you going to do next weekend? = สุดสัปดาห์หน้าจะทำอะไร
+B: I'm going to study English and rest. = ฉันจะเรียนภาษาอังกฤษและพักผ่อน
+x: I going to study English and rest.
+x: I'm going to studying English and rest.
 
 # ------------------------------------------------------------------ UNIT 23
 @unit 23 | Hotel pro | มือโปรงานโรงแรม | 🎆 | รับมือแขกได้ทุกสถานการณ์
@@ -272,6 +308,17 @@ x: Yes, it is. I visiting my boyfriend.
 x: Yes, it are. I'm visiting my boyfriend.
 A: Have a nice trip! = เดินทางให้สนุกนะครับ!
 
+@lesson 23.5 | A problem at the hotel | ปัญหาที่โรงแรม
+new:
+The air conditioner doesn't work. = แอร์เสีย
+I'm very sorry about that. = ต้องขอโทษด้วยจริง ๆ ค่ะ
+I will send someone right now. = ฉันจะส่งพนักงานไปเดี๋ยวนี้เลยค่ะ
+Would you like a new room? = ต้องการเปลี่ยนห้องไหมคะ
+We can give you a free breakfast. = เราขอมอบอาหารเช้าฟรีให้ค่ะ
+Is everything OK now? = ตอนนี้ทุกอย่างเรียบร้อยดีไหมคะ
+Thank you for telling us. = ขอบคุณที่แจ้งให้เราทราบค่ะ
+Please call me if you need anything. = ถ้าต้องการอะไร โทรหาฉันได้เลยนะคะ
+
 # ------------------------------------------------------------------ UNIT 24
 @unit 24 | Graduation | จบหลักสูตร | 👑 | คุยเรื่องทั่วไปได้อย่างมั่นใจ
 
@@ -358,3 +405,29 @@ A: Wonderful! Thank you so much. = วิเศษมาก! ขอบคุณ�
 B: You're welcome. If you need anything, just call me. = ยินดีค่ะ ถ้าต้องการอะไร โทรหาฉันได้เลยนะคะ
 x: You're welcome. If you will need anything, just call me.
 x: You're welcome. If you need anything, just calls me.
+
+@lesson 24.5 | I can speak English! | ฉันพูดภาษาอังกฤษได้!
+new:
+I can speak English now. = ตอนนี้ฉันพูดภาษาอังกฤษได้แล้ว
+Six months ago I was a new learner. = เมื่อหกเดือนที่แล้วฉันยังเป็นมือใหม่
+I studied a little every day. = ฉันเรียนวันละนิดทุกวัน
+I made mistakes, but I learned. = ฉันทำผิดบ้าง แต่ฉันก็ได้เรียนรู้
+I am proud of myself. = ฉันภูมิใจในตัวเอง
+I will keep learning. = ฉันจะเรียนต่อไปเรื่อย ๆ
+Thank you for helping me. = ขอบคุณที่ช่วยฉันนะ
+I love you. See you soon! = รักนะ แล้วเจอกันเร็ว ๆ นี้!
+
+@talk sixmonths | Six months of English | หกเดือนกับภาษาอังกฤษ | love | {bf} | 💙
+A: How do you feel about your English now? = ตอนนี้รู้สึกยังไงกับภาษาอังกฤษของตัวเอง
+B: I feel good. I can talk to guests now. = รู้สึกดีค่ะ ตอนนี้ฉันคุยกับแขกได้แล้ว
+x: I feel good. I can talks to guests now.
+x: I am feel good. I can talk to guests now.
+A: What was hard for you? = อะไรที่ยากสำหรับเธอ
+B: The past was hard, but I practiced every day. = เรื่องอดีต (past) ยาก แต่ฉันฝึกทุกวัน
+x: The past were hard, but I practiced every day.
+x: The past was hard, but I practice every day yesterday.
+A: I'm so proud of you. = ผมภูมิใจในตัวเธอมาก
+B: Thank you. I will keep learning with you. = ขอบคุณค่ะ ฉันจะเรียนต่อไปกับคุณนะ
+x: Thank you. I will keeping learning with you.
+x: Thank you. I keep will learning with you.
+

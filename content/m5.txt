@@ -85,6 +85,17 @@ B: I won't forget. I promise! = ไม่ลืมค่ะ สัญญา!
 x: I won't forgot. I promise!
 x: I not will forget. I promise!
 
+@lesson 17.5 | I will help you | ฉันจะช่วยคุณ
+new:
+I will help you with your bags. = ฉันจะช่วยถือกระเป๋าให้นะคะ
+Your room will be ready at 2. = ห้องของคุณจะพร้อมตอนบ่ายสองโมงค่ะ
+I will call you when it is ready. = ฉันจะโทรหาคุณเมื่อห้องพร้อมค่ะ
+The bus will come in five minutes. = อีกห้านาทีรถบัสจะมา
+I won't be late tomorrow. = พรุ่งนี้ฉันจะไม่มาสาย
+Will you eat with me tonight? = คืนนี้คุณจะกินข้าวกับฉันไหม
+I think you will like it. = ฉันคิดว่าคุณจะชอบ
+We will see. = เดี๋ยวก็รู้
+
 # ------------------------------------------------------------------ UNIT 18
 @unit 18 | going to | วางแผน (going to) | ✈️ | พูดถึงแผนการ: I'm going to…
 
@@ -169,6 +180,17 @@ B: Great! I'm going to show you my city. = เยี่ยมเลย! ฉั�
 x: Great! I'm going to shows you my city.
 x: Great! I'm going show you my city.
 
+@lesson 18.5 | Next year | ปีหน้า
+new:
+I am going to study every day. = ฉันจะเรียนทุกวัน
+She is going to visit me next week. = อาทิตย์หน้าเธอจะมาหาฉัน
+We are going to travel next year. = ปีหน้าพวกเราจะไปเที่ยว
+I'm going to save money. = ฉันจะเก็บเงิน
+Are you going to work tomorrow? = พรุ่งนี้คุณจะไปทำงานไหม
+I'm not going to eat sugar. = ฉันจะไม่กินน้ำตาล
+What are you going to cook? = คุณจะทำอาหารอะไร
+It is going to rain. = ฝนกำลังจะตก
+
 # ------------------------------------------------------------------ UNIT 19
 @unit 19 | If …, I will … | ถ้า… จะ… | ☂️ | ใช้ if พูดถึงเงื่อนไขในชีวิตจริง
 
@@ -249,6 +271,31 @@ A: Perfect. Thank you! = เยี่ยมเลย ขอบคุณครั
 B: You're welcome. If you need anything, I'm here. = ยินดีค่ะ ถ้าต้องการอะไร ฉันอยู่ตรงนี้นะคะ
 x: You're welcome. If you need anything, I here.
 x: You're welcome. If you needs anything, I'm here.
+
+@lesson 19.5 | If you are tired… | ถ้าคุณเหนื่อย…
+new:
+If you are tired, go to bed. = ถ้าคุณเหนื่อย ก็ไปนอนเถอะ
+If I have time, I will call you. = ถ้าฉันมีเวลา ฉันจะโทรหาคุณ
+If it is sunny, we will go to the beach. = ถ้าแดดออก พวกเราจะไปทะเล
+If you are hungry, I will cook. = ถ้าคุณหิว ฉันจะทำอาหารให้
+If the guest is angry, I will say sorry. = ถ้าแขกโกรธ ฉันจะขอโทษ
+If you need help, call me. = ถ้าต้องการความช่วยเหลือ โทรหาฉันนะ
+I will be happy if you come. = ฉันจะดีใจถ้าคุณมา
+If it rains, I will stay home. = ถ้าฝนตก ฉันจะอยู่บ้าน
+
+@talk ifbusy | If the hotel is busy… | ถ้าโรงแรมยุ่ง… | work | Manager | 👩‍💼
+A: Alvee, the hotel will be very busy tomorrow. = อัลวี พรุ่งนี้โรงแรมจะยุ่งมากนะ
+B: OK. If you need me, I will come early. = ได้ค่ะ ถ้าต้องการให้ช่วย ฉันจะมาเช้าค่ะ
+x: OK. If you need me, I come will early.
+x: OK. If you needs me, I will come early.
+A: Thank you! Can you work until 10? = ขอบคุณนะ ทำงานถึงสี่ทุ่มได้ไหม
+B: Yes, I can. If I am tired, I will drink coffee. = ได้ค่ะ ถ้าเหนื่อย ฉันจะดื่มกาแฟค่ะ
+x: Yes, I can. If I tired, I will drink coffee.
+x: Yes, I am can. If I am tired, I will drink coffee.
+A: You work very hard. Thank you. = เธอทำงานหนักมาก ขอบคุณนะ
+B: Thank you. I will do my best. = ขอบคุณค่ะ ฉันจะทำให้ดีที่สุดค่ะ
+x: Thank you. I will doing my best.
+x: Thank you. I will does my best.
 
 # ------------------------------------------------------------------ UNIT 20
 @unit 20 | Polite English | ภาษาสุภาพ | 🦩 | Could you / Would you like / May I และการขอโทษ
@@ -341,3 +388,29 @@ A: Thank you. You are very kind. = ขอบคุณครับ คุณใ�
 B: Thank you for your patience. = ขอบคุณที่รอนะคะ
 x: Thank you for you patience.
 x: Thanks you for your patience.
+
+@lesson 20.5 | May I help you? | ให้ช่วยอะไรไหมคะ
+new:
+May I help you? = ให้ฉันช่วยอะไรไหมคะ
+Could you spell your name, please? = ช่วยสะกดชื่อของคุณหน่อยได้ไหมคะ
+Would you like some water? = รับน้ำเปล่าไหมคะ
+Could you sign here, please? = ช่วยเซ็นชื่อตรงนี้หน่อยค่ะ
+Would you like a taxi? = ต้องการแท็กซี่ไหมคะ
+I'm sorry, I don't understand. = ขอโทษค่ะ ฉันไม่เข้าใจ
+Could you say that again, please? = ช่วยพูดอีกครั้งได้ไหมคะ
+Thank you for waiting. = ขอบคุณที่รอค่ะ
+
+@talk spellname | Can you spell that? | ช่วยสะกดหน่อยได้ไหม | hotel | Guest | 🧳
+A: Hello. I have a room for tonight. = สวัสดีครับ ผมจองห้องไว้สำหรับคืนนี้
+B: Welcome! May I have your name, please? = ยินดีต้อนรับค่ะ ขอทราบชื่อหน่อยได้ไหมคะ
+x: Welcome! May I has your name, please?
+x: Welcome! I may have your name, please?
+A: My name is David Lee. = ผมชื่อเดวิด ลี
+B: Could you spell your last name, please? = ช่วยสะกดนามสกุลหน่อยได้ไหมคะ
+x: Could you spelling your last name, please?
+x: You could spell your last name, please?
+A: Yes. It's Lee. Like the name Lee. = ได้ครับ ลี เหมือนชื่อ ลี ครับ
+B: Thank you, Mr Lee. Could you sign here, please? = ขอบคุณค่ะ คุณลี ช่วยเซ็นชื่อตรงนี้หน่อยค่ะ
+x: Thank you, Mr Lee. Could you signs here, please?
+x: Thank you, Mr Lee. Could you are sign here, please?
+

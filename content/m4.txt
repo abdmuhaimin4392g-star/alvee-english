@@ -87,6 +87,17 @@ B: Today it is open from 7 o'clock. Enjoy! = วันนี้เปิดต�
 x: Today it was open from 7 o'clock. Enjoy!
 x: Today it open from 7 o'clock. Enjoy!
 
+@lesson 13.5 | Where were you? | คุณอยู่ที่ไหนมา
+new:
+Where were you last night? = เมื่อคืนคุณอยู่ที่ไหน
+I was at work until 11. = ฉันอยู่ที่ทำงานจนถึงห้าทุ่ม
+Were you tired after work? = เลิกงานแล้วคุณเหนื่อยไหม
+Yes, I was very tired. = ใช่ ฉันเหนื่อยมาก
+The guests were very kind. = แขกใจดีมาก
+It wasn't busy last night. = เมื่อคืนงานไม่ยุ่ง
+My friends were at the beach. = เพื่อน ๆ ของฉันอยู่ที่ทะเล
+Was the food good? = อาหารอร่อยไหม
+
 # ------------------------------------------------------------------ UNIT 14
 @unit 14 | I worked · I called | อดีตเติม -ed | 🐠 | เล่าเรื่องที่ทำไปแล้วด้วย -ed
 
@@ -184,6 +195,17 @@ x: Yes! I studyed for 30 minutes.
 x: Yes! I study for 30 minutes.
 A: Wow, I'm proud of you! = ว้าว ภูมิใจในตัวเธอนะ!
 
+@lesson 14.5 | My busy day | วันที่ยุ่งของฉัน
+new:
+I worked all day yesterday. = เมื่อวานฉันทำงานทั้งวัน
+I cleaned my room in the morning. = ตอนเช้าฉันทำความสะอาดห้อง
+I called my mother after lunch. = ฉันโทรหาแม่หลังกินข้าวเที่ยง
+We watched a movie at night. = ตอนกลางคืนพวกเราดูหนัง
+I studied English for an hour. = ฉันเรียนภาษาอังกฤษหนึ่งชั่วโมง
+She helped me at work. = เธอช่วยฉันที่ทำงาน
+The guests checked in at 3. = แขกเช็คอินตอนบ่ายสามโมง
+I wanted to sleep early. = ฉันอยากนอนเร็ว
+
 # ------------------------------------------------------------------ UNIT 15
 @unit 15 | I went · I ate | อดีตแบบพิเศษ | 🥥 | ใช้ went, ate, had, saw ได้ถูกต้อง
 
@@ -275,6 +297,17 @@ A: Thank you so much! = ขอบคุณมาก ๆ ครับ!
 B: You're welcome. I can call the restaurant for you. = ยินดีค่ะ ฉันโทรถามห้องอาหารให้ได้นะคะ
 x: You're welcome. I can calls the restaurant for you.
 x: You're welcome. I can to call the restaurant for you.
+
+@lesson 15.5 | My weekend | วันหยุดของฉัน
+new:
+I went to the market on Saturday. = วันเสาร์ฉันไปตลาด
+I bought some fruit and fish. = ฉันซื้อผลไม้กับปลา
+We ate dinner with my family. = พวกเราทานข้าวเย็นกับครอบครัว
+I saw my friend at the café. = ฉันเจอเพื่อนที่ร้านกาแฟ
+We had a good time. = พวกเราสนุกมาก
+I took a lot of photos. = ฉันถ่ายรูปเยอะมาก
+I came home at 9. = ฉันกลับถึงบ้านตอนสามทุ่ม
+I slept very well. = ฉันนอนหลับสบายมาก
 
 # ------------------------------------------------------------------ UNIT 16
 @unit 16 | Did you…? | ถามเรื่องที่ผ่านมา | 🚤 | ถาม-ตอบเรื่องที่ผ่านมา และช่วยแก้ปัญหาให้แขก
@@ -370,3 +403,15 @@ A: OK. It isn't broken. Please rest for two days. = โอเค กระดู
 B: Thank you, doctor. = ขอบคุณค่ะคุณหมอ
 x: Thank you, doctors.
 x: Thanks you, doctor.
+
+@lesson 16.5 | Did you sleep well? | นอนหลับสบายไหม
+new:
+Did you sleep well last night? = เมื่อคืนคุณนอนหลับสบายไหม
+Did you have breakfast? = คุณทานอาหารเช้าหรือยัง
+Did you find your room? = คุณหาห้องเจอไหม
+I didn't see your bag. = ฉันไม่เห็นกระเป๋าของคุณ
+Did you call the front desk? = คุณโทรหาแผนกต้อนรับไหม
+Yes, I did. = ใช่ ฉันโทรแล้ว
+No, I didn't. = ไม่ ฉันไม่ได้โทร
+What did you do yesterday? = เมื่อวานคุณทำอะไร
+
