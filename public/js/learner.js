@@ -275,6 +275,7 @@
     if (openSheet) { openSheet.close(); openSheet = null; }
     A.view = view;
     try { if (view === 'journey') A.music.start(); else if (view !== 'result') A.music.stop(); } catch (e) { /* no sound */ }
+    if (view !== 'player') document.querySelectorAll('.fb').forEach((x) => x.remove());
     const root = A.clear(app());
     window.scrollTo(0, 0);
     const V = VIEWS[view];
@@ -359,23 +360,14 @@
     const next = A.nextNode(st);
     const due = A.dueItems(st).length;
     const lessonsToday = (st.days[tk] && st.days[tk].les) || 0;
-    const capped = cfg.newLimit > 0 && lessonsToday >= cfg.newLimit;
+    const capped = (cfg.newLimit > 0 && lessonsToday >= cfg.newLimit) || (next && A.voyage.lockWhy(st, next) === 'today');
+    const gated = next && A.voyage.lockWhy(st, next) === 'gate';
     const root = h('div', { class: 'screen' });
 
     root.append(A.topStrip());
-    root.append(h('div', { class: 'hello-hero' },
-      mascot('wave', 76),
-      h('div', { class: 'hello' }, h('h1', null, gEn + ', ' + A.user.name + '!'), h('p', { class: 'muted' }, 'Ready for today’s voyage?')),
-      h('div', { class: 'stats-col' },
-        h('span', { class: 'stat fire', title: 'Streak' }, icon('flame', 18), sk),
-        h('span', { class: 'stat lvl', title: 'Level' }, icon('star', 18), lvl))));
+    root.append(A.voyage.homeHero(st, { greet: gEn, streak: sk, lvl }));
 
-    const unread = (A.msgs || []).filter((m) => !m.readAt && A.msgUnlocked(m, st));
-    if (unread.length) {
-      root.append(h('button', { class: 'card msg-card', style: { textAlign: 'left' }, onclick: () => openMsg(unread[0]) },
-        h('span', { class: 'env' }, '💌'),
-        h('div', null, h('b', null, 'New message from ' + A.bf.name), h('div', { class: 'small' }, 'Tap to read it'))));
-    }
+    // messages from you are switched off on her side for now (they come back in a later update)
 
     const pct = Math.min(1, xpToday / goal);
     const ring = h('div', { class: 'ring', html: `<svg viewBox="0 0 36 36" width="58" height="58"><circle cx="18" cy="18" r="15.5" fill="none" style="stroke:var(--sea-tint)" stroke-width="4"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="${pct >= 1 ? '#17955A' : '#FFB21E'}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(pct * 97.4).toFixed(1)} 97.4"/></svg>` }, h('span', null, pct >= 1 ? '✓' : Math.round(pct * 100) + '%'));
@@ -385,9 +377,10 @@
       const u = A.unit(next.u);
       const isl = A.voyage.route().main[A.voyage.curIndex(st)];
       today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' },
-        h('div', { class: 'k' }, (pct >= 1 ? 'Goal done! ' : 'Next island · ') + isl.name + ' · ' + t.k),
-        h('h2', null, t.en), h('div', { class: 'th muted small' }, t.th + ' · ' + u.th))));
-      if (capped) today.append(h('div', { class: 'note' }, 'You finished today’s new lessons. Great job! A quick review helps you remember.'));
+        h('div', { class: 'k' }, (pct >= 1 ? 'Goal done! ' : 'Next · ') + isl.name + ' · ' + t.k),
+        h('h2', null, t.en))));
+      if (gated) { const g = A.voyage.gate(st, A.voyage.chapOf(next)); today.append(h('div', { class: 'note' }, '⭐ Sea gate: collect ' + g.need + ' stars in the ' + g.sea.en + ' to sail on (you have ' + g.have + '). Replay lessons for 3 stars!'), h('button', { class: 'btn mango block', onclick: () => A.go('journey') }, '🗺️ Open the map')); }
+      else if (capped) today.append(h('div', { class: 'note' }, 'You finished today’s new lessons. Great job! Come back tomorrow for more. Now: replay for stars, review, or sail and collect.'));
       else today.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', next.id) }, t.icon + ' Start'));
     } else {
       today.append(h('div', { class: 'next' }, ring, h('div', { class: 't' }, h('h2', null, 'All lessons done for now!'), h('div', { class: 'muted small' }, 'New lessons are coming. Review in the meantime!'))));
@@ -399,6 +392,7 @@
       h('div', { class: 'row between small' }, h('span', { class: 'th' }, 'Daily goal'), h('b', { class: 'num' }, xpToday + ' / ' + goal + ' XP')),
       h('div', { class: 'goal-bar' }, h('i', { style: { width: pct * 100 + '%' } }))));
     root.append(today);
+    { const qc = A.voyage.questCard(st); if (qc) root.append(qc); }
     // the app learns: show her weakest point and a quick practice button
     const weak = A.weakSkills(st).filter((w) => w.id !== 'other')[0];
     if (weak) {
@@ -408,7 +402,6 @@
           h('b', null, nm[0]), h('div', { class: 'small' }, 'This one is still tricky. Let’s practise it! (' + Math.round(weak.acc * 100) + '% right)')),
         h('button', { class: 'btn mango', style: { minHeight: '44px', padding: '8px 14px' }, onclick: () => A.play('focus') }, '💪 Practice')));
     }
-    root.append(A.voyage.homeCard(st));
 
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
     root.append(h('div', { class: 'tiles' },
@@ -689,7 +682,7 @@
     wfit: ['🧩', 'Which word fits?', 'คำไหนเข้ากับประโยค'], pic: ['🖼️', 'What is it in English?', 'รูปนี้ภาษาอังกฤษคือคำไหน'],
     listenw: ['👂', 'Listen and choose', 'ฟังแล้วเลือกคำที่ได้ยิน'], gap: ['✏️', 'Fill the gap', 'เติมคำในช่องว่าง'],
     build: ['🧱', 'Build the sentence', 'ฟังแล้วเรียงคำให้เป็นประโยค'], pick: ['✅', 'Which one is correct?', 'ประโยคไหนถูกต้อง'],
-    listen: ['👂', 'What do you hear?', 'ฟังแล้วเลือกประโยค'], reply: ['💬', 'Choose your reply', 'ตอบว่าอะไรดี'],
+    listen: ['👂', 'What do you hear?', 'ฟังแล้วเลือกประโยค'], typegap: ['⌨️', 'Type the missing word', 'พิมพ์คำที่หายไป'], dict: ['⌨️', 'Listen and type the sentence', 'ฟังแล้วพิมพ์ประโยค'], reply: ['💬', 'Choose your reply', 'ตอบว่าอะไรดี'],
   };
   const kindLabel = (t) => { const k = KIND[t]; return k ? h('div', { class: 'q-kind' }, k[0] + ' ' + k[1]) : null; };
   const focusLabel = (sk) => h('div', { class: 'focus-tag' }, '💪 Extra practice: ' + (A.SKILLS[sk] || [sk])[0]);
@@ -725,7 +718,7 @@
       if (ses.timed) {
         const left = ses.limit - (Date.now() - ses.started);
         timer.innerHTML = '';
-        timer.append(h('span', { class: 'tm-ic' }, '⏳'), h('b', { class: 'num' }, fmt(left)), h('span', { class: 'tm-bar' }, h('i', { style: { width: Math.max(0, (left / ses.limit) * 100) + '%' } })), h('span', { class: 'small' }, 'test · สอบจับเวลา'));
+        timer.append(h('span', { class: 'tm-ic' }, '⏳'), h('b', { class: 'num' }, fmt(left)), h('span', { class: 'tm-bar' }, h('i', { style: { width: Math.max(0, (left / ses.limit) * 100) + '%' } })), h('span', { class: 'small' }, 'timed test'));
         timer.classList.toggle('hurry', left < 20000);
         if (left <= 0 && !ses.timeUp) { ses.timeUp = true; clearInterval(tick); timeUp(); }
       } else {
@@ -1076,6 +1069,58 @@
       }, 'grid'));
   };
 
+  // ---- typing (harder tests): she writes the word or the whole sentence herself
+  const CONTR = { "i'm": 'i am', "you're": 'you are', "he's": 'he is', "she's": 'she is', "it's": 'it is', "we're": 'we are', "they're": 'they are', "isn't": 'is not', "aren't": 'are not', "don't": 'do not', "doesn't": 'does not', "didn't": 'did not', "can't": 'can not', 'cannot': 'can not', "won't": 'will not', "i'll": 'i will', "you'll": 'you will', "we'll": 'we will', "wasn't": 'was not', "weren't": 'were not', "that's": 'that is', "what's": 'what is', "there's": 'there is' };
+  const normWords = (s) => String(s || '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/[^a-z0-9' ]+/g, ' ').trim().split(/\s+/).filter(Boolean).flatMap((w) => (CONTR[w] || w).split(' '));
+  const lev = (a, b) => { if (Math.abs(a.length - b.length) > 1) return 2; const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; };
+  // a word is right if it is the same, or one letter off in a long word (shown as a spelling slip)
+  const wordMatch = (want, got) => want === got ? 2 : (want.length >= 5 && lev(want, got) === 1 ? 1 : 0);
+  function typeBox(placeholder, onCheck, multi) {
+    const inp = h(multi ? 'textarea' : 'input', { class: 'input type-in' + (multi ? ' multi' : ''), placeholder, autocomplete: 'off', autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false', enterkeyhint: 'done', rows: multi ? 2 : null, 'aria-label': placeholder });
+    const btn = h('button', { class: 'btn block', disabled: true }, 'Check');
+    let done = false;
+    const go = () => { if (done || !inp.value.trim()) return; done = true; inp.disabled = true; btn.disabled = true; onCheck(inp.value, inp); };
+    inp.addEventListener('input', () => { btn.disabled = !inp.value.trim(); });
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+    btn.onclick = go;
+    setTimeout(() => { try { inp.focus({ preventScroll: true }); } catch (e) { /* phones decide */ } }, 350);
+    return [inp, btn];
+  }
+  RENDER.typegap = (step, ctl) => {
+    const s = A.S(step.sid), g = step.gap;
+    const toks = g.toks.slice(); toks[g.at] = '___';
+    const line = A.rich(toks, { en: s.en });
+    const [thT, thB] = thaiReveal(s.th);
+    const hint = g.answer.charAt(0) + ' ' + '_ '.repeat(Math.max(0, g.answer.length - 1)).trim();
+    const [inp, btn] = typeBox('Type the word', (val, el) => {
+      const want = normWords(g.answer), got = normWords(val);
+      const m = want.length === got.length ? Math.min(...want.map((w, i) => wordMatch(w, got[i]))) : 0;
+      const ok = m > 0;
+      const slot = line.querySelector('[data-gap]'); slot.textContent = val.trim(); slot.classList.add(ok ? 'filled-ok' : 'filled-bad');
+      el.classList.add(ok ? 'ok' : 'bad');
+      const full = A.capFirst(A.join(g.toks));
+      const exp = ok ? null : A.explainGap(g, val.trim());
+      ctl.answer(step, ok, { q: A.join(toks), a: val.trim(), c: g.answer, show: full, showTh: s.th, say: full, exp, note: m === 1 ? '✏️ Small spelling slip: it is “' + g.answer + '”.' : s.note, tag: exp && exp.key });
+    });
+    return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('typegap'),
+      h('div', { class: 'prompt' }, mascot('think', 64), h('div', { class: 'bubble' }, line, thT)), thB,
+      h('div', { class: 'type-hint' }, '💡 It starts with: ', h('b', null, hint)), inp, btn);
+  };
+  RENDER.dict = (step, ctl) => {
+    const s = A.S(step.sid);
+    setTimeout(() => A.speech.say(s.en), 250);
+    const [inp, btn] = typeBox('Type what you hear', (val, el) => {
+      const want = normWords(s.en), got = normWords(val);
+      let ok = want.length === got.length, slip = false;
+      if (ok) for (let i = 0; i < want.length; i++) { const m = wordMatch(want[i], got[i]); if (!m) { ok = false; break; } if (m === 1) slip = true; }
+      el.classList.add(ok ? 'ok' : 'bad');
+      const exp = ok ? null : A.explainBuild(want, got);
+      ctl.answer(step, ok, { q: '🔊 ' + s.en, a: val.trim(), c: s.en, show: s.en, showTh: s.th, say: s.en, exp, note: slip ? '✏️ Almost perfect: check the spelling.' : s.note, tag: exp && exp.key });
+    }, true);
+    return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('dict'), bigListen(s.en),
+      h('div', { class: 'type-hint' }, '💡 ' + A.words(s.t).length + ' words. Tap 🐢 to hear it slowly.'), inp, btn);
+  };
+
   RENDER.build = (step, ctl) => {
     const s = A.S(step.sid);
     const ans = step.tiles.answer;
@@ -1127,7 +1172,7 @@
     const s = A.S(step.sid);
     const [thT, thB] = thaiReveal(s.th);
     return h('div', { class: 'stack', style: { gap: '16px' } }, kindLabel('pick'),
-      h('div', { class: 'row', style: { gap: '12px' } }, mascot('think', 56), h('div', { class: 'small muted th', style: { flex: 1 } }, 'มีประโยคเดียวที่ถูกต้อง ดูให้ดีนะ · Only one is right!', thT)), thB,
+      h('div', { class: 'row', style: { gap: '12px' } }, mascot('think', 56), h('div', { class: 'small muted', style: { flex: 1 } }, 'Only one is right!', thT)), thB,
       optionList(step.opts, (o) => h('span', null, o.s), (o, b, box) => {
         const ok = !!o.ok;
         markOpts(box, step.opts.findIndex((x) => x.ok), b, ok);
@@ -1268,7 +1313,7 @@
     applySettings();
     const fz = A.applyFreezes(A.state);
     if (fz) { A.saveSoon(); A.track('rest_day_used', { days: fz }); setTimeout(() => A.toast('🧊 You used ' + fz + ' rest day' + (fz > 1 ? 's' : '') + '. Your 🔥 is still alight!', 3200), 600); }
-    try { A.msgs = await A.api.inbox(); } catch (e) { A.msgs = []; }
+    A.msgs = [];
     A.track('app_open', { ua: navigator.userAgent.slice(0, 120) });
     A.go('home');
     setTimeout(() => { try { A.dailyNotes(); } catch (e) { /* extras */ } }, 1800);

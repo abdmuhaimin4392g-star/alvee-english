@@ -455,7 +455,22 @@
     sents.slice(0, nS).forEach((sid, i) => { const q = sentQuiz(sid, spool, [types[i % types.length], 'gap', 'pick']); if (q) steps.push(q); });
     words.slice(0, nW).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['wfit', 'listenw', 'pic']), node.u); if (q) steps.push(q); });
     talkLines.slice(0, nT).forEach((sid) => { const q = sentQuiz(sid, spool, ['reply']); if (q) steps.push(q); });
+    // harder tests: she types. From month 3 a missing word, from month 5 whole short sentences she hears.
+    if (A.typingOn(node)) {
+      const used = new Set(steps.map((x) => x.sid).filter(Boolean));
+      const left = sents.filter((sid) => !used.has(sid));
+      let nG = monthTest ? 3 : 2, nD = node.u >= 17 ? (monthTest ? 2 : 1) : 0;
+      for (const sid of left) { if (nG <= 0) break; const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); used.add(sid); nG--; } }
+      for (const sid of left) { if (nD <= 0) break; if (used.has(sid)) continue; const q = typeQuiz(sid, spool, 'dict'); if (q) { steps.push(q); used.add(sid); nD--; } }
+    }
     return noRepeatTypes(A.shuffle(steps));
+  }
+  A.typingOn = (node) => !!(node && node.kind === 'check' && node.u >= 9 && !(A.ctl || {}).typingOff);
+  function typeQuiz(sid, spool, mode) {
+    const s = A.S(sid); if (!s) return null;
+    if (mode === 'dict') { const n = A.words(s.t).length; if (n < 3 || n > 7 || /\d/.test(s.en)) return null; return { type: 'dict', sid, item: 's:' + sid, sk: A.sentSkills(sid)[0] || 'listen' }; }
+    const g = gapFor(sid); if (!g || !/^[a-z']+$/i.test(g.answer)) return null;
+    return { type: 'typegap', sid, item: 's:' + sid, gap: g, sk: A.gapSkill(g) };
   }
 
   function reviewSteps(st, mistakesOnly) {
@@ -538,7 +553,7 @@
     const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
-      test, lookups: 0, timed, limit: timed ? graded * (test ? +ctl.testSec || 30 : 15) * 1000 : 0,
+      test, lookups: 0, timed, limit: timed ? (graded * (test ? +ctl.testSec || 30 : 15) + steps.filter((x) => x.type === 'typegap').length * 15 + steps.filter((x) => x.type === 'dict').length * 35) * 1000 : 0,
       wasDone: !!(node && st.done[node.id]),
     };
   };

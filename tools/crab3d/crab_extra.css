@@ -1,5 +1,5 @@
 /* ===== Alvee's voyage on the Operation Crab map ===== */
-.oc,#trv,.trv{--paper:#e8f4f1;--gold:#ffbf47;--coral:#ff5f7e;--lagoon:#1fe0cf;--line:rgba(120,230,220,.18);--mute:#8fb2b3;--f-display:'Lexend',system-ui,sans-serif;--f-body:'Lexend',system-ui,sans-serif;--f-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+:root,.oc,#trv,.trv{--paper:#e8f4f1;--gold:#ffbf47;--coral:#ff5f7e;--lagoon:#1fe0cf;--line:rgba(120,230,220,.18);--mute:#8fb2b3;--f-display:'Lexend',system-ui,sans-serif;--f-body:'Lexend',system-ui,sans-serif;--f-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
 .screen.voyage3{padding-top:calc(8px + var(--safe-t,0px));padding-bottom:0;gap:8px;pointer-events:none;position:relative;z-index:2;min-height:0}
 .screen.voyage3>*{pointer-events:auto}
 .voyage3 .oc{position:fixed;left:0;right:0;top:0;bottom:64px;margin:0 auto;width:100%;max-width:560px;aspect-ratio:auto;border-radius:0;border:0;z-index:-1;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:none;color:var(--paper)}

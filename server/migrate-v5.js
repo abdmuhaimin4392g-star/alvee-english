@@ -47,6 +47,10 @@ function main() {
   const db = readJSON(path.join(DATA, 'db.json'), null);
   if (!db || !Array.isArray(db.users)) { console.log('• No data yet: nothing to migrate.'); return; }
   fs.mkdirSync(path.join(DATA, 'archive'), { recursive: true });
+  // a long voyage: three new lessons a day unless you already chose a limit on the dashboard
+  let dbChanged = false;
+  for (const u of db.users.filter((x) => x.role === 'learner')) { u.cfg = u.cfg || { goal: 30, newLimit: 0, unlockAll: false, start: new Date().toISOString().slice(0, 10) }; if (!u.cfg.newLimit && !u.cfg.v5limit) { u.cfg.newLimit = 3; u.cfg.v5limit = 1; dbChanged = true; console.log('• ' + (u.name || u.username) + ': new lessons per day set to 3 (change it on your dashboard → Settings).'); } }
+  if (dbChanged) atomicWrite(path.join(DATA, 'db.json'), JSON.stringify(db));
   for (const u of db.users.filter((x) => x.role === 'learner')) {
     const file = path.join(DATA, 'state', safeId(u.id) + '.json');
     const st = readJSON(file, null);

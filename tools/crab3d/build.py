@@ -34,7 +34,7 @@ world = rep(world, "new T.PlaneGeometry(1600,1600)", "new T.PlaneGeometry(4200,6
 world = rep(world, "sea.rotation.x=-Math.PI/2;", "sea.rotation.x=-Math.PI/2;sea.position.z=2400;")
 world = cut(world, "  /* -- the harbor pier", "  mesh(S.done(T));")
 world = cut(world, "  /* ===== the nine mission islets", "  /* ===== clouds and their shadows", "  m3AlIslands({T,halo,addIsl,sandW,sandD,grassC,mWorld,sc});\n")
-world = rep(world, "for(let i=0;i<18;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=26+rn()*40,", "for(let i=0,NC=Math.min(84,Math.round(18*(M3.ymax||100)/70));i<NC;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=22+rn()*((M3.ymax||100)-14),")
+world = rep(world, "for(let i=0;i<18;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=26+rn()*40,", "for(let i=0,NC=Math.min(PERF.lite?22:34,Math.round(18*(M3.ymax||100)/70));i<NC;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=22+rn()*((M3.ymax||100)-14),")
 world = rep(world, "th=Math.floor(i/2)/9;", "th=((i%18)>>1)/9;")
 world = rep(world, "const ribbon=(col,freq,alpha)=>{const N=26,", "const ribbon=(col,freq,alpha,NN)=>{const N=NN||26,")
 world = rep(world, "M3.rib={maya:ribbon('#1fe0cf',.9,.8),mari:ribbon('#ff5f7e',.9,.8),gap:ribbon('#ffbf47',1.3,.85)};",
@@ -63,6 +63,10 @@ sky = cut(sky, "function m3Orbit", "function m3Loop")
 sky = cut(sky, "function m3Fail", "function m3Mount")
 wmart = rep(wmart, "ACT.goctry=el=>{try{closeSheet()}catch(e){}sfx('tap');go(el.dataset.v)};", "")
 
+sky = rep(sky, "gap=calm?900:(PERF.lite?38:26)", "gap=calm?900:(PERF.lite?48:33)")
+sky = rep(sky, "M3.dprCap||(PERF.lite?1.15:(w<500?2:1.5))", "M3.dprCap||(PERF.lite?1:(w<500?1.6:1.3))")
+sky = rep(sky, "if(q.sum/q.n>62){M3.dprCap=1;", "if(q.sum/q.n>55){M3.dprCap=1;PERF.lite=true;PERF.pk=.6;")
+
 # ---- sailing: the drift and the 3D wake only
 i = sail.find('/* where the two boats'); j = sail.find('/* ---- the 3D map: V wake')
 sail = sail[:i] + sail[j:]
@@ -72,7 +76,7 @@ sail = sail.replace("VIEW_NOW==='hub'", "m3Here()")
 w2 = cut(w2, "  /* -- the Hydra's reef", "\n}", "")
 
 # ---- one boat
-glue = ''.join(open(os.path.join(HERE, f)).read() for f in ['glue_main.js', 'trsvg.js', 'glue_view.js', 'glue_trv.js'])
+glue = ''.join(open(os.path.join(HERE, f)).read() for f in ['glue_main.js', 'trsvg.js', 'krart.js', 'glue_view.js', 'glue_trv.js', 'glue_kraken.js'])
 parts = [open(os.path.join(HERE, 'pre.js')).read(), eng, beam, world, sky, sail, wmart, w2, skins, fleet, live, glue, '\n})();\n']
 out = '\n'.join(parts)
 out = out.replace("['maya','mari']", "['al']")
@@ -82,5 +86,5 @@ open(OUT, 'w').write(out)
 print('wrote', OUT, len(out))
 
 CSS = os.path.join(HERE, '..', '..', 'public', 'crab.css')
-open(CSS, 'w').write(open(os.path.join(HERE, 'crab_base.css')).read() + open(os.path.join(HERE, 'crab_extra.css')).read())
+open(CSS, 'w').write(''.join(open(os.path.join(HERE, f)).read() + '\n' for f in ['crab_base.css', 'crab_extra.css', 'kraken.css', 'kraken_extra.css']))
 print('wrote', CSS)

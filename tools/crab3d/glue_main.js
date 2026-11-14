@@ -7,8 +7,8 @@ const ECO_OY_SVG=`<svg viewBox="0 0 44 40" width="42" height="38" aria-hidden="t
    below Thailand and sails south, island by island, until the Maldives: the last two seas are atolls, and the end is Addu.
    Distances are measured in the frame's own pixels (400 x 960). */
 const RT={ok:false};
-const PXX=4,PXY=9.6,SUB=8,YSTEP=6.6,Y0=44;
-const ZX=[70,27,66,31,72,25,64,34,69,29,73,32];
+const PXX=4,PXY=9.6,SUB=10,YSTEP=9.4,Y0=45;
+const ZX=[68,26,70,30,72,25,64,33,69,28,73,31];
 function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.length;
   const main=R.main.map((isl,i)=>({isl,gi:i,x:i===N-1?50:ZX[i%ZX.length],y:Y0+i*YSTEP}));
   const side=[];R.all.forEach(isl=>{if(isl.kind!=='side')return;const a=main[isl.anchor.gi],b=main[Math.min(N-1,isl.anchor.gi+1)];side.push({isl,x:a.x>50?13:87,y:(a.y+b.y)/2,anchor:a.gi})});
@@ -23,7 +23,7 @@ function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.len
   Object.assign(RT,{ok:true,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
 /* p = progress in islands: -1 is the dock, 0 the first island, N-1 the last */
 const rtP=p=>{const d=RT.dense,f=Math.max(0,Math.min(d.length-1,(p+1)*SUB)),i=Math.floor(f),k=f-i,a=d[i],b=d[Math.min(d.length-1,i+1)];return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k]};
-const rtBoatP=cur=>{const st=AE.state,n=RT.main[cur];return n&&!st.done[n.isl.node.id]?cur-.3:cur};
+const rtBoatP=()=>AE.voyage.boatP(AE.state);
 
 /* ---- the islands themselves: built only when they are needed, so a long route stays light ---- */
 function m3AlIslands(E){const T=E.T;M3.alE=E;M3.isl={};
@@ -31,7 +31,7 @@ function m3AlIslands(E){const T=E.T;M3.alE=E;M3.isl={};
     const hl=E.halo(g.x,g.z,r*2.6,{a:.8,c0:'#8ff7e8',c1:'#23b9c3',r0:.42,zs:1.75});
     const ring=E.halo(g.x,g.z,r*2.5,{ring:1,r0:.72,w:.1,a:.95,c0:'#ffb62e',c1:'#ffb62e',tn:0,pulse:.3,y:.14,zs:1.7,ro:-3});ring.visible=false;
     M3.isl[key]={g,u,r,seed,kind,hl,ring,m:{}}};
-  RT.main.forEach(m=>put('m'+m.gi,m.x,m.y,m.isl.node.kind==='check'?1.12:1,m.gi*2.1+.4,m.isl.node.kind));
+  RT.main.forEach(m=>put('m'+m.gi,m.x,m.y,m.isl.u%3===0?1.22:1.08,m.gi*2.1+.4,m.isl.u%3===0?'fort':'chap'));
   RT.side.forEach((s,i)=>put('s'+i,s.x,s.y,.82,i*3.7+1.9,'side'));
   m3AlAtolls(E)}
 /* the last two seas are the Maldives: atolls along both edges, and Addu's lagoon around the very last island */
@@ -52,20 +52,19 @@ function m3IslMesh(o,done){const k=done?'d':'u';if(o.m[k])return o.m[k];const E=
   islandGeo(b,g.x,g.z,r,seed,done?[{k:1,y0:-.7,y1:.5,top:sandW,wall:sandD},{k:.76,y0:.5,y1:1.1,top:rgb('#58c97c'),ctop:grassC,wall:rgb('#2f9459')}]:[{k:1,y0:-.7,y1:.5,top:sandW,wall:sandD},{k:.66,y0:.5,y1:.75,top:rgb('#fbf0cf'),wall:sandW}],1.05,.95);
   palmGeo(b,g.x-r*.28,done?1:.7,g.z+r*.05,(done?7.4:5.4)*u,i%2?.45:-.45,80+i);
   if(done)palmGeo(b,g.x+r*.38,1,g.z-r*.1,5.6*u,.35,90+i);else b.box(g.x+r*.3,.7,g.z+r*.15,.9*u,.55*u,.9*u,rgb('#b98d57'),{});
-  if(o.kind==='check'){const q=u*.7;b.box(g.x+r*.05,.9,g.z-r*.25,2.2*q,2.6*q,2.2*q,rgb('#d9c7a0'),{top:rgb('#b9a77f')});b.cyl(g.x+r*.05,.9+2.6*q,g.z-r*.25,1.3*q,0,1.6*q,6,rgb('#c9402f'),{});b.box(g.x+r*.05,.9+4.2*q,g.z-r*.25,.12*q,1.4*q,.12*q,rgb('#3a2210'),{})}
+  if(o.kind==='fort'){const q=u*.7;b.box(g.x+r*.05,.9,g.z-r*.25,2.2*q,2.6*q,2.2*q,rgb('#d9c7a0'),{top:rgb('#b9a77f')});b.cyl(g.x+r*.05,.9+2.6*q,g.z-r*.25,1.3*q,0,1.6*q,6,rgb('#c9402f'),{});b.box(g.x+r*.05,.9+4.2*q,g.z-r*.25,.12*q,1.4*q,.12*q,rgb('#3a2210'),{})}
   const m=new T.Mesh(b.done(T),E.mWorld);m.visible=false;E.sc.add(m);return o.m[k]=m}
 
 /* ---- what the app knows: which islands are finished, which one is next, which boat she sails ---- */
 function m3SyncState(){if(!M3_OK()||!M3.U||!RT.ok)return;const st=AE.state,V=AE.voyage,s=V.st(st),cur=V.curIndex(st);
-  RT.main.forEach(m=>{const o=M3.isl['m'+m.gi];if(!o)return;const dn=!!st.done[m.isl.node.id],near=Math.abs(m.gi-cur)<26||Math.abs(m.y-(M3.cy||0))<70;
-    if(!near&&!o.m.d&&!o.m.u)return;const mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false;o.ring.visible=(m.gi===cur&&!dn)});
+  RT.main.forEach(m=>{const o=M3.isl['m'+m.gi];if(!o)return;const dn=V.chap(st,m.isl).all,mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false;o.ring.visible=(m.gi===cur&&!dn)});
   RT.side.forEach((sd,i)=>{const o=M3.isl['s'+i];if(!o)return;const dn=!!s.side[sd.isl.id],mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false});
   const b=M3.boats.al;if(b){b.ghost=false;b.tilt=0;try{sk3Apply('al',b)}catch(e){}}
-  M3.goal=rtBoatP(cur);if(M3.bp==null){const from=s.at==null||s.at<0?cur:Math.max(0,Math.min(s.at,cur));M3.bp=rtBoatP(from);M3.cy=rtP(M3.bp)[1]}
+  M3.goal=rtBoatP();if(M3.bp==null){M3.bp=typeof s.bp==='number'&&s.bp<=M3.goal&&s.bp>=-1?s.bp:M3.goal;M3.cy=rtP(M3.bp)[1]}
   if(M3.focusY!=null){M3.cy=M3.focusY;M3.follow=false;M3.focusY=null;m3CtrBtn()}
   M3.cur=cur;M3.ribKey=''}
 /* while she scrolls the map, islands far from where she started are built as they come into view */
-function m3LazyIsl(){if(!RT.ok||!M3.isl)return;const st=AE.state,s=AE.voyage.st(st);let n=0;
+function m3LazyIsl(){return;if(!RT.ok||!M3.isl)return;const st=AE.state,s=AE.voyage.st(st);let n=0;
   if(!M3.todo)M3.todo=RT.main.map(m=>'m'+m.gi);if(!M3.todo.length)return;
   M3.todo.sort((a,b)=>Math.abs(RT.main[+a.slice(1)].y-M3.cy)-Math.abs(RT.main[+b.slice(1)].y-M3.cy));
   while(M3.todo.length&&n<3){const k=M3.todo[0],m=RT.main[+k.slice(1)],o=M3.isl[k];if(n&&Math.abs(m.y-M3.cy)>70)break;M3.todo.shift();if(!o||o.m.d||o.m.u)continue;m3IslMesh(o,!!st.done[m.isl.node.id]).visible=true;n++}}
@@ -80,7 +79,7 @@ function m3AlBoat(dt){const b=M3.boats.al;if(!b||M3.bp==null)return;const g=M3.g
   const a=rtP(M3.bp-.08),c=rtP(M3.bp+.08),ga=m3G(a[0],a[1],M3.t2),gx=ga.x,gz=ga.z,gc=m3G(c[0],c[1],M3.t2),dir=Math.sign(d)||1;
   let hd=Math.atan2(-(gc.x-gx)*dir,-(gc.z-gz)*dir);const cur=b.hd==null?hd:b.hd;let df=hd-cur;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;b.hd=cur+df*Math.min(1,dt*2.2);
   if(M3.follow&&!M3.drag)M3.cyT=p[1]+4}
-function m3Landed(){try{const s=AE.voyage.st();const cur=AE.voyage.curIndex(AE.state);if(s.at!==cur){s.at=cur;AE.saveSoon()}sfx('done');const n=RT.main[cur];if(n&&!AE.state.done[n.isl.node.id]){const el=document.querySelector('.isl[data-k="m'+cur+'"]');if(el){el.classList.add('land');setTimeout(()=>el.classList.remove('land'),2400)}}}catch(e){}}
+function m3Landed(){try{const s=AE.voyage.st();const cur=AE.voyage.curIndex(AE.state);if(s.bp!==M3.bp){s.bp=M3.bp;AE.saveSoon()}sfx('done');const n=RT.main[cur];if(n&&Math.abs(M3.bp-cur)<.05){const el=document.querySelector('.isl[data-k="m'+cur+'"]');if(el){el.classList.add('land');setTimeout(()=>el.classList.remove('land'),2400)}}}catch(e){}}
 
 /* ---- the route ribbons: teal behind her, gold to the next island, pink for the sea still ahead ---- */
 const _rb=[];function m3RibPts(m,pts,wPct){const N=m.userData.N,pos=m.geometry.attributes.position,au=m.geometry.attributes.aU,T=M3.T,n=Math.min(N+1,pts.length);if(n<2){m.visible=false;return}m.visible=true;
@@ -95,7 +94,7 @@ function m3AlRoutes(){if(!RT.ok||M3.bp==null)return;const key=M3.bp.toFixed(3)+'
   const ah=d.slice(Math.max(ce,nx));if(ah.length>1)m3RibPts(M3.rib.ahead,ah,.6);else M3.rib.ahead.visible=false}
 
 /* ---- the camera: drag the sea up and down to look along the route; it follows the boat until she drags ---- */
-function m3Pan(dt){if(M3.cy==null)M3.cy=50;const lo=22,hi=RT.ok?RT.yEnd+6:80;
+function m3Pan(dt){if(M3.cy==null)M3.cy=50;const lo=24,hi=RT.ok?RT.yEnd+4:80;
   if(!M3.drag){if(M3.follow&&M3.cyT!=null){M3.cy+=(M3.cyT-M3.cy)*(1-Math.exp(-dt*2.4));M3.vy=0}else if(Math.abs(M3.vy||0)>.5){M3.cy+=M3.vy*dt;M3.vy*=Math.exp(-dt*2.8)}}
   M3.cy=Math.max(lo,Math.min(hi,M3.cy));if(M3.w50==null)M3.w50=m3W(50,50);
   M3.ctg=m3G(50,M3.cy,M3.ctg||new M3.T.Vector3());M3.ck=m3W(50,M3.cy)/M3.w50;m3LazyIsl()}

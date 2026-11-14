@@ -45,7 +45,7 @@ try:
         ok('wrong password refused', 'Wrong username or password' in her.inner_text('body'))
         her.fill('#lg-pass', 'love123'); her.click('button[type=submit]')
         her.wait_for_selector('.today', timeout=8000)
-        ok('welcome message waiting for her', 'New message from Muhaimin' in her.inner_text('body'))
+        ok('no message card on her side (switched off for now)', 'New message from' not in her.inner_text('body'))
         her.locator('.today button.btn.mango').click(); her.wait_for_selector('.player')
         # answer a few steps, then check his dashboard while she is mid-lesson
         for _ in range(6):
@@ -80,7 +80,7 @@ try:
         him.locator('.tabs .chip', has_text='Messages').click(); him.wait_for_timeout(400)
         him.fill('#msg-text', 'Great job today, Alvee! 💛'); him.click('text=Send 💌'); him.wait_for_timeout(800)
         her.reload(); her.wait_for_selector('.today'); her.wait_for_timeout(500)
-        ok('his new message shows on her home screen', 'New message from Muhaimin' in her.inner_text('body'))
+        ok('his message stays hidden on her side for now', 'New message from' not in her.inner_text('body'))
         # she must never see his presence; the server must never store it
         db = json.load(open(f'{DATA}/db.json'))
         admin_id = [u['id'] for u in db['users'] if u['role'] == 'admin'][0]

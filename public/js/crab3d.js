@@ -368,7 +368,7 @@ function m3Build(){
       [[60,80,34],[100,64,42],[152,58,46],[198,72,36],[130,86,40],[84,90,30],[178,90,30]].forEach(([px,py,r])=>{const g=x.createRadialGradient(px,py-r*.25,r*.1,px,py,r);g.addColorStop(0,'rgba(255,255,255,.98)');g.addColorStop(.62,'rgba(244,248,252,.88)');g.addColorStop(1,'rgba(228,238,248,0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,6.283);x.fill()});
       const g2=x.createLinearGradient(0,62,0,120);g2.addColorStop(0,'rgba(110,130,165,0)');g2.addColorStop(1,'rgba(110,130,165,.6)');x.globalCompositeOperation='source-atop';x.fillStyle=g2;x.fillRect(0,0,256,128);return new T.CanvasTexture(c)})();
     const rn=m3Rnd(9);
-    for(let i=0,NC=Math.min(84,Math.round(18*(M3.ymax||100)/70));i<NC;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=22+rn()*((M3.ymax||100)-14),size=(20+rn()*20),alt=10+rn()*7,th=((i%18)>>1)/9;
+    for(let i=0,NC=Math.min(PERF.lite?22:34,Math.round(18*(M3.ymax||100)/70));i<NC;i++){const left=i%2===0,X=(left?4:52)+rn()*44,Y=22+rn()*((M3.ymax||100)-14),size=(20+rn()*20),alt=10+rn()*7,th=((i%18)>>1)/9;
       const sp=new T.Sprite(new T.SpriteMaterial({map:tex,transparent:true,depthWrite:false,opacity:0,color:0xffffff}));sp.renderOrder=5;sc.add(sp);
       const sh=halo(0,0,1,{a:0,c0:'#000000',c1:'#000000',tn:0,r0:.1,ro:-3,zs:1.4});
       M3.cl.push({sp,sh,X,Y,size,alt,th,spd:.35+rn()*.5,ph:rn()*6.28})}}
@@ -514,10 +514,10 @@ function m3Sync(){const cam=M3.cam,W=M3.cw,H=M3.ch,v=M3.t3,fw=M3.t4,bt=[];cam.ge
   if(bt.length===2){const a=bt[0],b=bt[1],gap=Math.abs(a.px-b.px),need=70;if(gap<need&&Math.abs(a.py-b.py)<34){const d=(need-gap)/2,sg=a.px<=b.px?1:-1;a.px-=d*sg;b.px+=d*sg}}
   for(const o of M3.ov){if(o.px==null||!o.el.isConnected)continue;if(o.behind||o.px<-140||o.px>W+140||o.py<-140||o.py>H+140){if(!o.hid){o.hid=1;o.el.style.visibility='hidden'}continue}o.hid=0;o.el.style.visibility='';o.el.style.translate=o.px.toFixed(1)+'px '+o.py.toFixed(1)+'px';o.el.style.scale=o.s.toFixed(3)}}
 function m3Resize(o){if(!M3.R)return;const r=o.getBoundingClientRect(),w=Math.max(50,Math.round(o.clientWidth||r.width)),h=Math.max(100,Math.round(o.clientHeight||r.height));M3.cw=w;M3.ch=h;{const a=w/h,hf=Math.tan(19*Math.PI/180)*(400/960);M3.cam.aspect=a;M3.cam.fov=Math.min(70,2*Math.atan(hf/a)*180/Math.PI);M3.cam.updateProjectionMatrix()}
-  M3.R.setPixelRatio(Math.min(window.devicePixelRatio||1,M3.dprCap||(PERF.lite?1.15:(w<500?2:1.5))));M3.R.setSize(w,h,false);M3.U.uRes.value.set(M3.R.domElement.width,M3.R.domElement.height);M3.U.uDpr.value=M3.R.getPixelRatio()}
+  M3.R.setPixelRatio(Math.min(window.devicePixelRatio||1,M3.dprCap||(PERF.lite?1:(w<500?1.6:1.3))));M3.R.setSize(w,h,false);M3.U.uRes.value.set(M3.R.domElement.width,M3.R.domElement.height);M3.U.uDpr.value=M3.R.getPixelRatio()}
 function m3Loop(ts){if(!M3.run)return;requestAnimationFrame(m3Loop);const oc=$('#oc');if(!oc||!oc.contains(M3.cv)||!m3Here()){M3.run=false;return}
-  if(document.hidden||!M3.vis)return;const calm=m3Calm(),gap=calm?900:(PERF.lite?38:26);if(ts-M3.last<gap)return;const raw=ts-M3.last,dt=Math.min(.1,raw/1000);M3.last=ts;
-  if(!calm&&!M3.q){const q=M3.q0||(M3.q0={n:0,sum:0});if(raw<400){q.n++;q.sum+=raw}if(q.n>=100){M3.q={avg:q.sum/q.n};if(q.sum/q.n>62){M3.dprCap=1;const o=$('#oc');if(o)m3Resize(o)}}}
+  if(document.hidden||!M3.vis)return;const calm=m3Calm(),gap=calm?900:(PERF.lite?48:33);if(ts-M3.last<gap)return;const raw=ts-M3.last,dt=Math.min(.1,raw/1000);M3.last=ts;
+  if(!calm&&!M3.q){const q=M3.q0||(M3.q0={n:0,sum:0});if(raw<400){q.n++;q.sum+=raw}if(q.n>=100){M3.q={avg:q.sum/q.n};if(q.sum/q.n>55){M3.dprCap=1;PERF.lite=true;PERF.pk=.6;const o=$('#oc');if(o)m3Resize(o)}}}
   try{m3Frame(calm?.016:dt)}catch(e){M3.run=false;try{console.warn('3D frame failed',e)}catch(_){}m3Fail()}}
 function m3Mount(){const oc0=$('#oc');if(!oc0||oc0.dataset.m3)return;
   m3Load().then(ok=>{const oc=$('#oc');if(!ok){if(oc&&m3Here())m3NoGl();return}if(!oc||oc.dataset.m3||!m3Here())return;
@@ -1036,8 +1036,8 @@ const ECO_OY_SVG=`<svg viewBox="0 0 44 40" width="42" height="38" aria-hidden="t
    below Thailand and sails south, island by island, until the Maldives: the last two seas are atolls, and the end is Addu.
    Distances are measured in the frame's own pixels (400 x 960). */
 const RT={ok:false};
-const PXX=4,PXY=9.6,SUB=8,YSTEP=6.6,Y0=44;
-const ZX=[70,27,66,31,72,25,64,34,69,29,73,32];
+const PXX=4,PXY=9.6,SUB=10,YSTEP=9.4,Y0=45;
+const ZX=[68,26,70,30,72,25,64,33,69,28,73,31];
 function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.length;
   const main=R.main.map((isl,i)=>({isl,gi:i,x:i===N-1?50:ZX[i%ZX.length],y:Y0+i*YSTEP}));
   const side=[];R.all.forEach(isl=>{if(isl.kind!=='side')return;const a=main[isl.anchor.gi],b=main[Math.min(N-1,isl.anchor.gi+1)];side.push({isl,x:a.x>50?13:87,y:(a.y+b.y)/2,anchor:a.gi})});
@@ -1052,7 +1052,7 @@ function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.len
   Object.assign(RT,{ok:true,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
 /* p = progress in islands: -1 is the dock, 0 the first island, N-1 the last */
 const rtP=p=>{const d=RT.dense,f=Math.max(0,Math.min(d.length-1,(p+1)*SUB)),i=Math.floor(f),k=f-i,a=d[i],b=d[Math.min(d.length-1,i+1)];return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k]};
-const rtBoatP=cur=>{const st=AE.state,n=RT.main[cur];return n&&!st.done[n.isl.node.id]?cur-.3:cur};
+const rtBoatP=()=>AE.voyage.boatP(AE.state);
 
 /* ---- the islands themselves: built only when they are needed, so a long route stays light ---- */
 function m3AlIslands(E){const T=E.T;M3.alE=E;M3.isl={};
@@ -1060,7 +1060,7 @@ function m3AlIslands(E){const T=E.T;M3.alE=E;M3.isl={};
     const hl=E.halo(g.x,g.z,r*2.6,{a:.8,c0:'#8ff7e8',c1:'#23b9c3',r0:.42,zs:1.75});
     const ring=E.halo(g.x,g.z,r*2.5,{ring:1,r0:.72,w:.1,a:.95,c0:'#ffb62e',c1:'#ffb62e',tn:0,pulse:.3,y:.14,zs:1.7,ro:-3});ring.visible=false;
     M3.isl[key]={g,u,r,seed,kind,hl,ring,m:{}}};
-  RT.main.forEach(m=>put('m'+m.gi,m.x,m.y,m.isl.node.kind==='check'?1.12:1,m.gi*2.1+.4,m.isl.node.kind));
+  RT.main.forEach(m=>put('m'+m.gi,m.x,m.y,m.isl.u%3===0?1.22:1.08,m.gi*2.1+.4,m.isl.u%3===0?'fort':'chap'));
   RT.side.forEach((s,i)=>put('s'+i,s.x,s.y,.82,i*3.7+1.9,'side'));
   m3AlAtolls(E)}
 /* the last two seas are the Maldives: atolls along both edges, and Addu's lagoon around the very last island */
@@ -1081,20 +1081,19 @@ function m3IslMesh(o,done){const k=done?'d':'u';if(o.m[k])return o.m[k];const E=
   islandGeo(b,g.x,g.z,r,seed,done?[{k:1,y0:-.7,y1:.5,top:sandW,wall:sandD},{k:.76,y0:.5,y1:1.1,top:rgb('#58c97c'),ctop:grassC,wall:rgb('#2f9459')}]:[{k:1,y0:-.7,y1:.5,top:sandW,wall:sandD},{k:.66,y0:.5,y1:.75,top:rgb('#fbf0cf'),wall:sandW}],1.05,.95);
   palmGeo(b,g.x-r*.28,done?1:.7,g.z+r*.05,(done?7.4:5.4)*u,i%2?.45:-.45,80+i);
   if(done)palmGeo(b,g.x+r*.38,1,g.z-r*.1,5.6*u,.35,90+i);else b.box(g.x+r*.3,.7,g.z+r*.15,.9*u,.55*u,.9*u,rgb('#b98d57'),{});
-  if(o.kind==='check'){const q=u*.7;b.box(g.x+r*.05,.9,g.z-r*.25,2.2*q,2.6*q,2.2*q,rgb('#d9c7a0'),{top:rgb('#b9a77f')});b.cyl(g.x+r*.05,.9+2.6*q,g.z-r*.25,1.3*q,0,1.6*q,6,rgb('#c9402f'),{});b.box(g.x+r*.05,.9+4.2*q,g.z-r*.25,.12*q,1.4*q,.12*q,rgb('#3a2210'),{})}
+  if(o.kind==='fort'){const q=u*.7;b.box(g.x+r*.05,.9,g.z-r*.25,2.2*q,2.6*q,2.2*q,rgb('#d9c7a0'),{top:rgb('#b9a77f')});b.cyl(g.x+r*.05,.9+2.6*q,g.z-r*.25,1.3*q,0,1.6*q,6,rgb('#c9402f'),{});b.box(g.x+r*.05,.9+4.2*q,g.z-r*.25,.12*q,1.4*q,.12*q,rgb('#3a2210'),{})}
   const m=new T.Mesh(b.done(T),E.mWorld);m.visible=false;E.sc.add(m);return o.m[k]=m}
 
 /* ---- what the app knows: which islands are finished, which one is next, which boat she sails ---- */
 function m3SyncState(){if(!M3_OK()||!M3.U||!RT.ok)return;const st=AE.state,V=AE.voyage,s=V.st(st),cur=V.curIndex(st);
-  RT.main.forEach(m=>{const o=M3.isl['m'+m.gi];if(!o)return;const dn=!!st.done[m.isl.node.id],near=Math.abs(m.gi-cur)<26||Math.abs(m.y-(M3.cy||0))<70;
-    if(!near&&!o.m.d&&!o.m.u)return;const mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false;o.ring.visible=(m.gi===cur&&!dn)});
+  RT.main.forEach(m=>{const o=M3.isl['m'+m.gi];if(!o)return;const dn=V.chap(st,m.isl).all,mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false;o.ring.visible=(m.gi===cur&&!dn)});
   RT.side.forEach((sd,i)=>{const o=M3.isl['s'+i];if(!o)return;const dn=!!s.side[sd.isl.id],mesh=m3IslMesh(o,dn),other=o.m[dn?'u':'d'];mesh.visible=true;if(other)other.visible=false});
   const b=M3.boats.al;if(b){b.ghost=false;b.tilt=0;try{sk3Apply('al',b)}catch(e){}}
-  M3.goal=rtBoatP(cur);if(M3.bp==null){const from=s.at==null||s.at<0?cur:Math.max(0,Math.min(s.at,cur));M3.bp=rtBoatP(from);M3.cy=rtP(M3.bp)[1]}
+  M3.goal=rtBoatP();if(M3.bp==null){M3.bp=typeof s.bp==='number'&&s.bp<=M3.goal&&s.bp>=-1?s.bp:M3.goal;M3.cy=rtP(M3.bp)[1]}
   if(M3.focusY!=null){M3.cy=M3.focusY;M3.follow=false;M3.focusY=null;m3CtrBtn()}
   M3.cur=cur;M3.ribKey=''}
 /* while she scrolls the map, islands far from where she started are built as they come into view */
-function m3LazyIsl(){if(!RT.ok||!M3.isl)return;const st=AE.state,s=AE.voyage.st(st);let n=0;
+function m3LazyIsl(){return;if(!RT.ok||!M3.isl)return;const st=AE.state,s=AE.voyage.st(st);let n=0;
   if(!M3.todo)M3.todo=RT.main.map(m=>'m'+m.gi);if(!M3.todo.length)return;
   M3.todo.sort((a,b)=>Math.abs(RT.main[+a.slice(1)].y-M3.cy)-Math.abs(RT.main[+b.slice(1)].y-M3.cy));
   while(M3.todo.length&&n<3){const k=M3.todo[0],m=RT.main[+k.slice(1)],o=M3.isl[k];if(n&&Math.abs(m.y-M3.cy)>70)break;M3.todo.shift();if(!o||o.m.d||o.m.u)continue;m3IslMesh(o,!!st.done[m.isl.node.id]).visible=true;n++}}
@@ -1109,7 +1108,7 @@ function m3AlBoat(dt){const b=M3.boats.al;if(!b||M3.bp==null)return;const g=M3.g
   const a=rtP(M3.bp-.08),c=rtP(M3.bp+.08),ga=m3G(a[0],a[1],M3.t2),gx=ga.x,gz=ga.z,gc=m3G(c[0],c[1],M3.t2),dir=Math.sign(d)||1;
   let hd=Math.atan2(-(gc.x-gx)*dir,-(gc.z-gz)*dir);const cur=b.hd==null?hd:b.hd;let df=hd-cur;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;b.hd=cur+df*Math.min(1,dt*2.2);
   if(M3.follow&&!M3.drag)M3.cyT=p[1]+4}
-function m3Landed(){try{const s=AE.voyage.st();const cur=AE.voyage.curIndex(AE.state);if(s.at!==cur){s.at=cur;AE.saveSoon()}sfx('done');const n=RT.main[cur];if(n&&!AE.state.done[n.isl.node.id]){const el=document.querySelector('.isl[data-k="m'+cur+'"]');if(el){el.classList.add('land');setTimeout(()=>el.classList.remove('land'),2400)}}}catch(e){}}
+function m3Landed(){try{const s=AE.voyage.st();const cur=AE.voyage.curIndex(AE.state);if(s.bp!==M3.bp){s.bp=M3.bp;AE.saveSoon()}sfx('done');const n=RT.main[cur];if(n&&Math.abs(M3.bp-cur)<.05){const el=document.querySelector('.isl[data-k="m'+cur+'"]');if(el){el.classList.add('land');setTimeout(()=>el.classList.remove('land'),2400)}}}catch(e){}}
 
 /* ---- the route ribbons: teal behind her, gold to the next island, pink for the sea still ahead ---- */
 const _rb=[];function m3RibPts(m,pts,wPct){const N=m.userData.N,pos=m.geometry.attributes.position,au=m.geometry.attributes.aU,T=M3.T,n=Math.min(N+1,pts.length);if(n<2){m.visible=false;return}m.visible=true;
@@ -1124,7 +1123,7 @@ function m3AlRoutes(){if(!RT.ok||M3.bp==null)return;const key=M3.bp.toFixed(3)+'
   const ah=d.slice(Math.max(ce,nx));if(ah.length>1)m3RibPts(M3.rib.ahead,ah,.6);else M3.rib.ahead.visible=false}
 
 /* ---- the camera: drag the sea up and down to look along the route; it follows the boat until she drags ---- */
-function m3Pan(dt){if(M3.cy==null)M3.cy=50;const lo=22,hi=RT.ok?RT.yEnd+6:80;
+function m3Pan(dt){if(M3.cy==null)M3.cy=50;const lo=24,hi=RT.ok?RT.yEnd+4:80;
   if(!M3.drag){if(M3.follow&&M3.cyT!=null){M3.cy+=(M3.cyT-M3.cy)*(1-Math.exp(-dt*2.4));M3.vy=0}else if(Math.abs(M3.vy||0)>.5){M3.cy+=M3.vy*dt;M3.vy*=Math.exp(-dt*2.8)}}
   M3.cy=Math.max(lo,Math.min(hi,M3.cy));if(M3.w50==null)M3.w50=m3W(50,50);
   M3.ctg=m3G(50,M3.cy,M3.ctg||new M3.T.Vector3());M3.ck=m3W(50,M3.cy)/M3.w50;m3LazyIsl()}
@@ -1174,7 +1173,31 @@ const TR_SVG=`<svg class="tcs" viewBox="0 0 80 72" aria-hidden="true"><ellipse c
 function trDefsOnce(){if(document.getElementById('trdefs'))return;const d=document.createElement('div');d.id='trdefs';d.setAttribute('aria-hidden','true');d.style.cssText='position:absolute;width:0;height:0;overflow:hidden';
   d.innerHTML=`<svg width="0" height="0"><defs><linearGradient id="trg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".45" stop-color="#ffbf47"/><stop offset="1" stop-color="#b96e12"/></linearGradient><linearGradient id="trw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9772f"/><stop offset="1" stop-color="#6a3b12"/></linearGradient><linearGradient id="trh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs></svg>`;document.body.appendChild(d)}
 
+/* ---- the octopus, drawn once and reused. 200 x 180 units, the boat sits at about (100,138) ---- */
+function krBez(p,t){const u=1-t;return [u*u*u*p[0][0]+3*u*u*t*p[1][0]+3*u*t*t*p[2][0]+t*t*t*p[3][0],u*u*u*p[0][1]+3*u*u*t*p[1][1]+3*u*t*t*p[2][1]+t*t*t*p[3][1]]}
+function krTent(p,w0,w1,cls){const n=18,L=[],R=[],C=[];
+  for(let i=0;i<=n;i++){const t=i/n,a=krBez(p,Math.max(0,t-.01)),b=krBez(p,Math.min(1,t+.01)),c=krBez(p,t);let dx=b[0]-a[0],dy=b[1]-a[1];const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;
+    const w=(w0+(w1-w0)*Math.pow(t,.8))/2*(1+.1*Math.sin(t*9)),tip=t>.94?Math.max(.2,(1-t)/.06):1,ww=w*tip;L.push([c[0]-dy*ww,c[1]+dx*ww]);R.push([c[0]+dy*ww,c[1]-dx*ww]);C.push([c[0],c[1],w,dx,dy])}
+  const pts=L.concat(R.reverse()),d='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join('L')+'Z';
+  let su='';for(let i=3;i<n-1;i+=2){const c=C[i];su+=`<circle cx="${(c[0]+c[4]*c[2]*.32).toFixed(1)}" cy="${(c[1]-c[3]*c[2]*.32).toFixed(1)}" r="${Math.max(.9,c[2]*.26).toFixed(1)}"/>`}
+  return `<g class="ten ${cls}" style="transform-origin:${p[0][0]}px ${p[0][1]}px"><path d="${d}" fill="url(#krg)" stroke="#2a0508" stroke-width="1.2" stroke-linejoin="round"/><g fill="#ffc9b8" fill-opacity=".82">${su}</g></g>`}
+const KRART=(()=>{
+  const back=[krTent([[62,80],[22,84],[6,128],[32,168]],18,4,'t1'),krTent([[138,80],[178,84],[194,128],[168,168]],18,4,'t2'),krTent([[78,86],[38,112],[40,148],[68,174]],15,4,'t3'),krTent([[122,86],[162,112],[160,148],[132,174]],15,4,'t4')].join('');
+  const front=[krTent([[70,90],[28,126],[72,178],[130,138]],19,3.5,'t5'),krTent([[130,90],[172,126],[128,178],[70,142]],19,3.5,'t1'),krTent([[86,92],[68,118],[98,114],[116,138]],14,3,'t3')].join('');
+  const head=`<g class="hd"><path d="M50 72C42 30 68 4 100 4S158 30 150 72C142 92 58 92 50 72Z" fill="url(#krh)" stroke="#2a0508" stroke-width="1.6"/>
+    <path d="M66 26C76 14 96 10 112 12" stroke="#fff" stroke-opacity=".28" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <g fill="#3d0509" fill-opacity=".55"><circle cx="70" cy="40" r="4"/><circle cx="84" cy="24" r="3"/><circle cx="118" cy="22" r="4.2"/><circle cx="132" cy="40" r="3.4"/><circle cx="100" cy="30" r="2.6"/><circle cx="58" cy="58" r="2.8"/><circle cx="142" cy="58" r="2.8"/></g>
+    <g class="eye"><ellipse cx="78" cy="64" rx="13" ry="12" fill="#fff3b0" stroke="#2a0508" stroke-width="2"/><ellipse cx="78" cy="65" rx="8.5" ry="9.5" fill="#ffae1a"/><ellipse cx="79" cy="65" rx="3.4" ry="9" fill="#120102"/><circle cx="74" cy="60" r="2.2" fill="#fff"/></g>
+    <g class="eye"><ellipse cx="122" cy="64" rx="13" ry="12" fill="#fff3b0" stroke="#2a0508" stroke-width="2"/><ellipse cx="122" cy="65" rx="8.5" ry="9.5" fill="#ffae1a"/><ellipse cx="121" cy="65" rx="3.4" ry="9" fill="#120102"/><circle cx="118" cy="60" r="2.2" fill="#fff"/></g>
+    <path d="M62 50L92 62" stroke="#2a0508" stroke-width="6" stroke-linecap="round"/><path d="M138 50L108 62" stroke="#2a0508" stroke-width="6" stroke-linecap="round"/>
+    <path d="M90 84Q100 94 110 84Q100 88 90 84Z" fill="#120102"/></g>`;
+  const defs=`<defs><linearGradient id="krg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8222e"/><stop offset="1" stop-color="#6a0e17"/></linearGradient><radialGradient id="krh" cx=".4" cy=".25" r=".85"><stop offset="0" stop-color="#e0505a"/><stop offset=".55" stop-color="#90161f"/><stop offset="1" stop-color="#45060e"/></radialGradient></defs>`;
+  return {back:`<div class="ks"><svg viewBox="0 0 200 180" aria-hidden="true">${defs}${back}${head}</svg></div>`,front:`<div class="ks"><svg viewBox="0 0 200 180" aria-hidden="true">${front}</svg></div>`}})();
+
 /* ================================================================ THE VOYAGE SCREEN (3D) ================================================================ */
+/* two clear clocks: Thailand and the Maldives, with day or night and the weather */
+function m3ClockHtml(){let W=null;try{W=world()}catch(e){}const one=(k,name)=>{const r=W&&W[k],sk=r&&r.sk,night=sk&&sk.nightF>.5;return '<span class="ck '+k+(night?' night':'')+'">'+AE.voyage.flag(k)+'<span class="ckt"><b>'+(r?r.clock:'--:--')+'</b><span class="ckn">'+name+' '+(r?(night?'🌙':'☀️')+' '+Math.round(r.wx.t)+'°':'')+'</span></span></span>'};return one('th','Thailand')+one('mv','Maldives')}
+setInterval(()=>{const c=document.getElementById('v3ck');if(c&&!document.hidden)c.innerHTML=m3ClockHtml()},15000);
 const escH=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 function m3Gl(){if(M3.st==='fail'&&Date.now()<M3.failAt)return false;if(m3Gl.v!=null)return m3Gl.v;try{const c=document.createElement('canvas');m3Gl.v=!!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))&&!!(window.CSS&&CSS.supports&&CSS.supports('translate','1px 1px'))}catch(e){m3Gl.v=false}return m3Gl.v}
 /* a point beside the sailing line: d > 0 inside the U, d < 0 outside (in frame pixels) */
@@ -1183,6 +1206,7 @@ const chestHtml=(cls,label,cd)=>{trDefsOnce();return `<span class="tch-rays"></s
 function spawnHtml(sp,x,y,reach,id){const k=sp.kind,g=sp.gift,gk=g&&g.kind;const pos=`data-x="${x.toFixed(2)}" data-y="${y.toFixed(2)}" data-sp="${id}" style="left:${x}%;top:${y}%"`,far=reach?'':' far';
   if(k==='sealed'||gk==='sealed')return `<button class="tchest sealed${far}" ${pos} aria-label="A sealed chest. It needs a key.">${chestHtml('','','🔒 key')}</button>`;
   if(k==='chest'||k==='golden'||gk==='golden'||(g&&gk!=='pearls'&&gk!=='shells'))return `<button class="tchest${k==='golden'||gk==='golden'?' lk':''}${g?' wel':''}${far}" ${pos} aria-label="${g?'A gift chest':'A treasure chest'}">${chestHtml('',g?'gift':'',g?'a gift':'')}</button>`;
+  if(k==='log'||gk==='logs')return `<button class="shell eco lg" ${pos} aria-label="Collect a wood log">${AE.voyage.logSVG()}</button>`;
   if(k==='pearl'||k==='pearls'||gk==='pearls')return `<button class="shell eco oy${far}" ${pos} aria-label="Open an oyster">${ECO_OY_SVG}</button>`;
   if(k==='bottle')return `<button class="shell bottle${far}" ${pos} aria-label="A message in a bottle">${AE.voyage.bottleSVG()}</button>`;
   return `<button class="shell${far}" ${pos} aria-label="Collect a shell">🐚</button>`}
@@ -1190,32 +1214,32 @@ function crabView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cu
   const root=h('div',{class:'screen voyage3'});root.append(V.hud(st));
   const ci=RT.main[cur],sea=V.SEAS[ci.isl.sea];
   const mus=h('button',{class:'v3-ib'+(AE.music&&AE.music.allowed()?' on':''),'aria-label':'Music',onclick:()=>{const on=AE.music.toggle();mus.classList.toggle('on',on);mus.textContent=on?'🎵':'🔇'}},AE.music&&AE.music.allowed()?'🎵':'🔇');
-  root.append(h('div',{class:'v3-row'},h('button',{class:'v3-chip',onclick:()=>V.islandSheet(ci.isl)},h('span',{class:'flagc sm',html:V.flag(sea.flag)}),h('b',null,ci.isl.name),h('span',{class:'num'},'Island '+(cur+1)+' of '+N+' · '+sea.en)),AE.bellBtn?AE.bellBtn('v3-ib'):null,mus));
+  root.append(h('div',{class:'v3-row'},h('button',{class:'v3-chip',onclick:()=>V.islandSheet(ci.isl)},h('span',{class:'flagc sm',html:V.flag(sea.flag)}),h('b',null,ci.isl.name),h('span',{class:'num'},'Chapter '+(cur+1)+' of '+N+' · '+sea.en)),AE.bellBtn?AE.bellBtn('v3-ib'):null,mus));
+  root.append(h('div',{class:'v3-clocks',id:'v3ck',html:m3ClockHtml()}));
   const oc=document.createElement('div');oc.className='oc';oc.id='oc';oc.setAttribute('role','group');oc.setAttribute('aria-label','Voyage map from Thailand to the Maldives. Drag up and down to look along the route.');
   const SP={};let html=geoLabels()+
-    `<span class="plab pb" data-k="mv" data-x="14" data-y="31.4" style="left:14%;top:31.4%"></span><span class="plab pb" data-k="th" data-x="86.5" data-y="26.6" style="left:86.5%;top:26.6%"></span>`+
     `<span class="plab hw" data-x="46.5" data-y="37.6" style="left:46.5%;top:37.6%">Lighthouse</span>`+`<span class="plab hw dest" data-x="50" data-y="${(RT.yEnd+8).toFixed(2)}" style="left:50%;top:0">❤️ Addu Atoll · Maldives</span>`+
     RT.seas.map(o=>`<span class="plab gl sea v3sea" data-x="${o.x.toFixed(2)}" data-y="${o.y.toFixed(2)}" style="left:${o.x}%;top:${o.y}%">${escH(o.n)}</span>`).join('');
   const flagOf=si=>`<span class="flags"><span class="pf">${V.flag(V.SEAS[si].flag).replace('<svg ','<svg class="fl" ')}</span></span>`;
-  RT.main.forEach(m=>{const n=m.isl.node,d=st.done[n.id],open=V.islandOpen(st,m.isl),nx=m.gi===cur&&!d,ic=m.gi===N-1?'🏝️':n.boost?'💪':n.kind==='lesson'?'📖':n.kind==='talk'?'💬':'🏰';
-    html+=`<button class="isl${d?' done':''}${nx?' next':''}${open?'':' lk'}${n.kind==='check'?' test':''}" data-k="m${m.gi}" data-x="${m.x.toFixed(2)}" data-y="${m.y.toFixed(2)}" style="left:${m.x}%;top:${m.y}%" aria-label="${escH(m.isl.name)}${d?', finished':open?'':', locked'}"><span class="ib"><span class="sand"></span><i class="ig">${ic}</i>${d?flagOf(m.isl.sea):''}</span><span class="il">${escH(m.isl.name)}</span></button>`});
+  RT.main.forEach(m=>{const c=V.chap(st,m.isl),d=c.all,open=V.islandOpen(st,m.isl),nx=m.gi===cur&&!d,ic=m.gi===N-1?'❤️':m.isl.u%3===0?'🏰':'📖',pr=c.done&&!d?' <i class="ip">'+c.done+'/'+c.total+'</i>':'';
+    html+=`<button class="isl${d?' done':''}${nx?' next':''}${open?'':' lk'}${m.isl.u%3===0?' test':''}" data-k="m${m.gi}" data-x="${m.x.toFixed(2)}" data-y="${m.y.toFixed(2)}" style="left:${m.x}%;top:${m.y}%" aria-label="${escH(m.isl.name)}, chapter ${m.gi+1}${d?', finished':open?'':', locked'}"><span class="ib"><span class="sand"></span><i class="ig">${ic}</i>${d?flagOf(m.isl.sea):''}</span><span class="il">${escH(m.isl.name)}${pr}</span></button>`});
   RT.side.forEach((o,i)=>{const d=s.side[o.isl.id],open=V.islandOpen(st,o.isl);
     html+=`<button class="isl side${d?' done':''}${open?'':' lk'}" data-k="s${i}" data-x="${o.x.toFixed(2)}" data-y="${o.y.toFixed(2)}" style="left:${o.x}%;top:${o.y}%" aria-label="${escH(o.isl.name)}, side mission"><span class="ib"><span class="sand"></span><i class="ig">🧭</i></span><span class="il">${escH(o.isl.name)}</span></button>`});
   /* things on the water: between islands, plus today's tide and any gifts near the boat */
-  RT.main.forEach(m=>{if(m.gi>=N-1)return;V.spawnsFor(m.gi).forEach(sp=>{if(s.got[sp.id])return;const j=+sp.id.split('.')[1]||0,q=rtBeside(m.gi+(j?.66:.36)+(sp.fy-.5)*.1,(j?-1:1)*(30+sp.fx*14));SP[sp.id]=sp;html+=spawnHtml(sp,q[0],q[1],m.gi<cur,sp.id)})});
-  V.dailySpawns().concat(V.gifts()).forEach((sp,j)=>{if(s.got[sp.id])return;const q=rtBeside(Math.min(N-1.2,Math.max(-.6,cur+.22+j*.2)),(j%2?34:-34));SP[sp.id]=sp;html+=spawnHtml(sp,q[0],q[1],true,sp.id)});
-  html+=`<button class="boat me skn" id="bt-al" style="--c:#1fe0cf" aria-label="${escH(AE.user.name)}’s boat"><span class="nm">🐢 ${escH(AE.user.name)}<i class="kn"></i></span></button><div class="gaplab" id="gaplab"></div>`+
+  for(let gi=-1;gi<N-1;gi++){const L2=V.spawnsFor(gi),n2=L2.length;L2.forEach((sp,j)=>{if(s.got[sp.id])return;const q=rtBeside(gi+(j+1)/(n2+1),(j%2?-1:1)*(34+sp.fx*26));SP[sp.id]=sp;html+=spawnHtml(sp,q[0],q[1],true,sp.id)})}
+  {const bp=V.boatP(st);V.dailySpawns().concat(V.gifts()).forEach((sp,j)=>{if(s.got[sp.id])return;const q=rtBeside(Math.min(N-1.15,Math.max(-.85,bp+.12+j*.09)),(j%2?38:-38));SP[sp.id]=sp;html+=spawnHtml(sp,q[0],q[1],true,sp.id)})}
+  html+=`<button class="boat me skn" id="bt-al" style="--c:#1fe0cf" aria-label="${escH(AE.user.name)}’s boat"><span class="nm">🐢 ${escH(AE.user.name)}<i class="kn"></i><i class="hpb${s.hull<35?' l':s.hull<70?' m':''}"><b style="width:${s.hull}%"></b></i></span></button><div class="gaplab" id="gaplab"></div>`+
     `<button class="v3-ctr" id="v3ctr" type="button">⛵ Back to my boat</button>`;
   oc.innerHTML=html;root.append(oc);
   oc.addEventListener('click',e=>{const t=e.target.closest('button');if(!t||!oc.contains(t))return;
     if(t.id==='v3ctr'){m3Follow();return}
-    if(t.id==='bt-al'){AE.go('treasure','fleet');return}
-    if(t.dataset.sp){const sp=SP[t.dataset.sp];if(sp)V.collect(sp,t,!t.classList.contains('far'));return}
+    if(t.id==='bt-al'){V.boatSheet();return}
+    if(t.dataset.sp){const sp=SP[t.dataset.sp];if(sp)V.collect(sp,t,true);return}
     const k=t.dataset.k;if(!k||!t.classList.contains('isl'))return;if(k[0]==='m')V.islandSheet(RT.main[+k.slice(1)].isl);else V.islandSheet(RT.side[+k.slice(1)].isl)});
   M3.follow=true;M3.bp=null;M3.cyT=null;M3.focusY=null;
   if(arg&&(arg.sp||arg.gi!=null)){const el=arg.sp?oc.querySelector('[data-sp="'+arg.sp+'"]'):oc.querySelector('[data-k="m'+arg.gi+'"]');if(el){M3.focusY=+el.dataset.y;el.classList.add('ping');setTimeout(()=>el.classList.remove('ping'),5000)}}
-  requestAnimationFrame(()=>{const nav=document.querySelector('.nav');oc.style.bottom=(nav?nav.offsetHeight:64)+'px';m3Mount();mapCreature();hubSky()});
-  AE.presence={screen:'voyage',title:'Island '+(cur+1)};
+  requestAnimationFrame(()=>{const nav=document.querySelector('.nav');oc.style.bottom=(nav?nav.offsetHeight:64)+'px';m3Mount();mapCreature();hubSky();krArm()});
+  AE.presence={screen:'voyage',title:'Chapter '+(cur+1)};
   return root}
 AE.crab={ok:()=>m3Gl(),view:crabView,M3,RT,look:m3LookAt,follow:m3Follow};
 
@@ -1265,6 +1289,85 @@ function trReveal(roll,opt){opt=opt||{};if(!roll||!roll.item)return;trCloseNow()
   o.addEventListener('click',e=>{const b=e.target.closest('[data-tr]');if(b){if(b.dataset.tr==='book'){close();AE.go('treasure','book:'+it[0])}else close();return}
     if(+o.dataset.st>=4)return;TRV.tm.forEach(clearTimeout);TRV.tm=[];st(3);trAudioOpen(Math.min(ri,2));TRV.tm.push(setTimeout(()=>st(4),380))})}
 AE.crab.reveal=trReveal;
+
+/* ================================================================ THE KRAKEN (art from Operation Crab) ================================================================
+   Now and then, while she is on the map (never during a lesson), the Kraken rises under her boat.
+   She fires the cannons by tapping the big button. Every few seconds it bites the hull.
+   Win: gold, pearls, sometimes a key. Lose: the hull is torn. If the hull breaks, the boat sinks and
+   the Kraken takes some gold, pearls and one treasure; fishermen tow the boat back. Wood logs repair the hull. */
+const KR={on:false,phase:'',hp:0,max:0,t0:0,dur:20000,cool:0,bite:0,armT:0,tick:0,sink0:0,art:null,ui:null,fire:null,ov:null};
+const krCtl=()=>(AE.voyage&&AE.voyage.ctl())||{};
+function krCan(){const st=AE.state,s=AE.voyage.st(st);if(!m3Here()||AE.session||document.hidden||!M3_OK()||!M3.boats.al)return false;
+  if(document.querySelector('.sheet,#trv,.pop-note'))return false;if(krCtl().krakenOff)return false;
+  if(Object.keys(st.done||{}).length<2)return false;const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}
+  if(s.kr.n>=3)return false;if(Date.now()-(s.kr.last||0)<75*60e3)return false;return true}
+function krArm(){clearTimeout(KR.armT);if(KR.on)return;const s=AE.voyage.st(),c=krCtl(),forced=!!(c.kraken&&c.kraken>(s.kr.seen||0));
+  KR.armT=setTimeout(()=>{if(!m3Here()||KR.on)return;
+    if(forced){if(AE.session||document.querySelector('.sheet,#trv')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
+    if(krCan()&&Math.random()<.5)krStart();else krArm()},forced?5000:40000+Math.random()*110000)}
+function krBoom(hit){const a=trAC();if(!a)return;try{const t=a.currentTime,n=a.createBufferSource(),len=Math.floor(a.sampleRate*.45),b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);
+  n.buffer=b;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=hit?900:1500;const g=a.createGain();g.gain.value=.55;n.connect(lp);lp.connect(g);g.connect(a.destination);n.start(t);trTone(75,0,.32,'sine',.3,38)}catch(e){}}
+function krRoar(){trTone(110,0,1.3,'sawtooth',.05,52);trTone(82,.1,1.4,'square',.03,41);trTone(55,0,1.6,'sine',.12,30)}
+function krBoatXY(){const o=M3.ov.find(x=>x.boat);return o&&o.px!=null?[o.px,o.py]:[M3.cw/2,M3.ch/2]}
+function krPop(txt,cls,dx,dy){const oc=$('#oc');if(!oc)return;const p=krBoatXY(),e=document.createElement('div');e.className='kr-pop '+(cls||'');e.textContent=txt;e.style.left=(p[0]+(dx||0))+'px';e.style.top=(p[1]+(dy||-40))+'px';oc.appendChild(e);setTimeout(()=>e.remove(),1300)}
+function krHull(){const s=AE.voyage.st(),b=document.querySelector('#bt-al .hpb b');if(b){b.style.width=s.hull+'%';b.parentNode.className='hpb'+(s.hull<35?' l':s.hull<70?' m':'')}}
+function krStart(){const oc=$('#oc');if(!oc||!M3_OK()||KR.on)return;const st=AE.state,s=AE.voyage.st(st),cur=AE.voyage.curIndex(st);
+  KR.on=true;KR.phase='fight';{const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}}s.kr.n=(s.kr.n||0)+1;s.kr.last=Date.now();AE.saveSoon();AE.track('kraken',{r:'start'});
+  KR.max=KR.hp=12+Math.min(18,cur);KR.dur=20000;KR.t0=performance.now();KR.bite=KR.t0+3500;KR.cool=0;
+  m3Follow();oc.classList.add('kr-on');
+  const art=document.createElement('div');art.className='krl on';art.innerHTML=KRART.back+KRART.front;oc.appendChild(art);KR.art=art;
+  m3Reg(art,0,0,{noscale:1,dx:-65,dy:-92,fn:()=>{const b=M3.boats.al;return b&&b.w3}});
+  const ui=document.createElement('div');ui.className='kru';ui.innerHTML='<div class="krt hot">🐙 The Kraken attacks! <b id="krtm">20</b></div><div class="krbar"><i id="krhp" style="width:100%"></i></div><div class="krs" id="krsay">Tap FIRE as fast as you can!</div>';oc.appendChild(ui);KR.ui=ui;
+  m3Reg(ui,0,0,{noscale:1,dx:-90,dy:-178,fn:()=>{const b=M3.boats.al;return b&&b.w3}});
+  const f=document.createElement('button');f.type='button';f.className='kr-fire';f.innerHTML='<span>🔥</span><b>FIRE!</b>';f.addEventListener('pointerdown',krFire);oc.appendChild(f);KR.fire=f;
+  krRoar();buzz([60,40,60,40,120]);
+  clearInterval(KR.tick);KR.tick=setInterval(krStep,120)}
+function krFire(e){if(e){e.preventDefault();e.stopPropagation()}const now=performance.now();if(!KR.on||KR.phase!=='fight'||now<KR.cool)return;KR.cool=now+230;
+  const oc=$('#oc'),p=krBoatXY(),fl=document.createElement('div');fl.className='kr-flash';fl.style.left=p[0]+'px';fl.style.top=(p[1]-10)+'px';oc.appendChild(fl);setTimeout(()=>fl.remove(),400);
+  const hit=Math.random()<.8;krBoom(hit);buzz(hit?22:8);
+  if(hit){KR.hp--;KR.art.classList.add('hit');setTimeout(()=>KR.art&&KR.art.classList.remove('hit'),130);krPop('-1','hit',(Math.random()-.5)*50,-70-Math.random()*30)}else krPop('splash!','miss',(Math.random()-.5)*70,-50);
+  const hp=document.getElementById('krhp');if(hp)hp.style.width=Math.max(0,KR.hp/KR.max*100)+'%';
+  if(KR.hp<=0)krEnd('win')}
+function krStep(){if(!KR.on)return;if(!m3Here()){krEnd('away');return}const now=performance.now(),left=Math.max(0,KR.dur-(now-KR.t0));
+  const tm=document.getElementById('krtm');if(tm)tm.textContent=Math.ceil(left/1000);
+  if(KR.phase!=='fight')return;
+  if(now>=KR.bite){KR.bite=now+3200;const s=AE.voyage.st();s.hull=Math.max(0,s.hull-6);krHull();KR.art.classList.add('atk');setTimeout(()=>KR.art&&KR.art.classList.remove('atk'),900);krPop('-6% hull','bite',0,-20);buzz([80,30,80]);trTone(140,0,.25,'sawtooth',.05,70);
+    if(s.hull<=0){krEnd('sink');return}}
+  if(left<=0)krEnd('time')}
+function krClean(delay){clearInterval(KR.tick);const a=KR.art,u=KR.ui,f=KR.fire,oc=$('#oc');if(f)f.remove();setTimeout(()=>{if(a)a.remove();if(u)u.remove();if(oc)oc.classList.remove('kr-on')},delay||0);KR.art=KR.ui=KR.fire=null}
+function krEnd(why){if(!KR.on)return;const st=AE.state,V=AE.voyage,s=V.st(st),cur=V.curIndex(st),say=document.getElementById('krsay'),tl=document.querySelector('.kru .krt');
+  KR.phase=why;
+  if(why==='win'){
+    s.kr.won=(s.kr.won||0)+1;const gold=30+cur*4+Math.floor(Math.random()*25),pearls=2+Math.floor(Math.random()*3);V.addGold(gold);V.addPearls(pearls);
+    let extra='';if(Math.random()<.3){s.rp.p+=1;extra+=', a pink pearl'}if(Math.random()<.12){s.keys+=1;extra+=' and a 🔑 key'}
+    if(KR.art)KR.art.classList.add('flee');if(tl){tl.className='krt good';tl.innerHTML='🎉 You drove it away!'}if(say)say.textContent='+'+gold+' gold, +'+pearls+' pearls'+extra;
+    trAudioOpen(3);trBurst(2,'#46e39a');AE.track('kraken',{r:'won',gold,pearls});AE.saveSoon();V.refreshHud&&V.refreshHud();
+    setTimeout(()=>AE.notify({ic:'🐙',t:'You beat the Kraken!',s:'+'+gold+' gold and +'+pearls+' pearls'+extra+'.',go:['treasure','shop']}),1600);
+    krClean(2300);setTimeout(()=>{KR.on=false;KR.phase='';krArm()},2400);return}
+  if(why==='away'){s.hull=Math.max(1,s.hull-10);AE.saveSoon();krClean(0);KR.on=false;KR.phase='';AE.notify({quiet:1,ic:'🐙',t:'The Kraken bit your boat while you were away',s:'Hull −10%. Wood logs can fix it.',go:['boat']});return}
+  if(why==='time')s.hull=Math.max(0,s.hull-20);
+  if(s.hull>0){s.kr.lost=(s.kr.lost||0)+1;if(KR.art)KR.art.classList.add('flee');if(tl){tl.className='krt bad';tl.innerHTML='😣 The Kraken tore the hull'}if(say)say.textContent='Hull '+s.hull+'%. Collect wood logs to repair it.';krHull();
+    AE.track('kraken',{r:'lost',hull:s.hull});AE.saveSoon();setTimeout(()=>AE.notify({ic:'🪵',t:'Your hull is at '+s.hull+'%',s:'Pick up wood logs on the sea and repair your boat.',go:['boat']}),1500);krClean(2300);setTimeout(()=>{KR.on=false;KR.phase='';krArm()},2400);return}
+  /* the boat sinks */
+  KR.phase='sink';KR.sink0=performance.now();s.kr.sunk=(s.kr.sunk||0)+1;
+  if(KR.art)KR.art.classList.add('sink');if(tl){tl.className='krt bad';tl.innerHTML='🌊 Your boat is sinking!'}if(say)say.textContent='The Kraken pulls it under…';
+  const lost=[];const g=Math.floor(s.gold*.2);if(g>0){s.gold-=g;lost.push(g+' gold')}const p=Math.floor(s.p*.25);if(p>0){s.p-=p;lost.push(p+' white pearls')}
+  if(s.rp.p>0&&Math.random()<.5){s.rp.p-=1;lost.push('1 pink pearl')}
+  const own=Object.keys(s.tre).filter(id=>{const it=AE.treasure.byId[id];return it&&['c','u','r'].includes(it[3])});
+  if(own.length){const id=own[Math.floor(Math.random()*own.length)],it=AE.treasure.byId[id],o=s.tre[id];if(o.n>1)o.n-=1;else delete s.tre[id];lost.push(it[1]+' '+it[2])}
+  s.hull=40;AE.track('kraken',{r:'sunk',lost:lost.join(', ')});AE.saveSoon();
+  trTone(220,0,2.2,'sine',.08,55);buzz([200,100,300]);
+  setTimeout(()=>{krClean(0);KR.on=false;KR.phase='';krHull();V.refreshHud&&V.refreshHud();
+    const h=AE.h;AE.sheet(h('div',{class:'stack',style:{alignItems:'center',textAlign:'center',gap:'10px'}},h('div',{style:{fontSize:'3.4rem'}},'🌊🐙'),h('h2',null,'Your boat sank!'),
+      h('p',null,'The Kraken pulled it under and took:'),h('div',{class:'kr-lost'},lost.length?lost.map(x=>h('span',null,x)):h('span',null,'nothing this time')),
+      h('p',{class:'small muted'},'Friendly fishermen towed your boat back (hull 40%). Keep the hull strong with wood logs, and fire faster next time!'),
+      h('button',{class:'btn mango block',onclick:()=>{document.querySelectorAll('.sheet,.veil').forEach(x=>x.remove());V.boatSheet()}},'🔨 Repair my boat')));krArm()},3600)}
+/* the 3D boat shakes while it fights, and goes under when it sinks */
+function krFx(w){if(!KR.on||w!=='al')return null;const t=performance.now();
+  if(KR.phase==='sink'){const k=Math.min(1,(t-KR.sink0)/3200);return{rz:.5*k,rx:.2*k,dy:-3.2*k*k}}
+  if(KR.phase==='fight'){const bit=t-(KR.bite-3200)<500?1:0;return{rz:Math.sin(t/45)*.05*(1+bit*2),rx:Math.sin(t/70)*.03,dy:-.05-bit*.2}}
+  return null}
+AE.kraken={start:()=>{if(m3Here())krStart()},fire:krFire,state:KR};
 
 
 })();

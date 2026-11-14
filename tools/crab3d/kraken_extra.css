@@ -1,0 +1,35 @@
+/* ===== the Kraken fight ===== */
+.oc .krl{width:130px;height:117px;left:0;top:0}
+.oc .krl .ks{position:absolute;inset:0}
+.oc .kru{left:0;top:0;width:180px;align-items:center}
+.oc .kru .krt{font-family:var(--f-body)}
+.oc.kr-on:before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;box-shadow:inset 0 0 110px 10px rgba(190,20,40,.55);animation:krvig 1.1s ease-in-out infinite alternate}
+@keyframes krvig{from{opacity:.55}to{opacity:1}}
+.kr-fire{position:absolute;left:50%;bottom:26px;z-index:14;width:116px;height:116px;margin-left:-58px;border-radius:50%;border:4px solid #ffe08a;background:radial-gradient(circle at 35% 30%,#ffc46b,#ff5a2e 55%,#a3160b);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;box-shadow:0 0 0 7px rgba(255,90,46,.28),0 12px 30px rgba(0,0,0,.55),0 0 46px rgba(255,120,40,.75);animation:krfirep .7s ease-in-out infinite alternate;touch-action:manipulation;user-select:none;-webkit-user-select:none;cursor:pointer;padding:0}
+.kr-fire span{font-size:2.1rem;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.kr-fire b{font:900 1.05rem var(--f-display);letter-spacing:.06em;text-shadow:0 2px 4px rgba(0,0,0,.6)}
+.kr-fire:active{transform:scale(.9)}
+@keyframes krfirep{from{transform:scale(1)}to{transform:scale(1.07)}}
+.kr-flash{position:absolute;z-index:9;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0,#ffe08a 25%,rgba(255,120,40,.65) 50%,transparent 70%);animation:krflash .38s ease-out forwards}
+@keyframes krflash{from{transform:scale(.3);opacity:1}to{transform:scale(1.9);opacity:0}}
+.kr-pop{position:absolute;z-index:11;transform:translate(-50%,-50%);pointer-events:none;font:900 1.1rem var(--f-display);color:#ffe08a;text-shadow:0 2px 6px #000,0 0 12px rgba(255,120,40,.9);animation:krpopa 1.2s ease-out forwards;white-space:nowrap}
+.kr-pop.miss{color:#bfe9ff;font-size:.8rem}
+.kr-pop.bite{color:#ff6f7f;font-size:.95rem}
+@keyframes krpopa{from{transform:translate(-50%,-50%) scale(.6);opacity:1}to{transform:translate(-50%,-160%) scale(1.15);opacity:0}}
+.kr-lost{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.kr-lost span{padding:5px 10px;border-radius:99px;background:rgba(229,71,108,.14);border:1px solid rgba(229,71,108,.45);font-weight:700;font-size:.85rem}
+/* the hull bar under her name */
+.boat .nm .hpb{display:block;width:34px;height:4px;border-radius:2px;background:rgba(0,0,0,.45);margin:2px auto 0;overflow:hidden;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
+.boat .nm .hpb b{display:block;height:100%;background:#35d07f;transition:width .6s}
+.boat .nm .hpb.m b{background:#ffbf47}
+.boat .nm .hpb.l b{background:#ff5f5f}
+/* clocks of the two countries */
+.v3-clocks{display:flex;gap:6px;justify-content:center}
+.v3-clocks .ck{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:14px;background:linear-gradient(135deg,rgba(255,214,120,.92),rgba(255,170,90,.85));color:#3a1d05;border:1px solid rgba(255,255,255,.55);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.v3-clocks .ck.night{background:linear-gradient(135deg,rgba(24,36,82,.92),rgba(10,20,52,.92));color:#e8eefc;border-color:rgba(160,180,255,.4)}
+.v3-clocks .ck svg{width:22px;height:15px;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.v3-clocks .ckt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.v3-clocks .ckn{font:800 .62rem/1.2 var(--f-body);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v3-clocks .ckw{font:600 .62rem/1.15 var(--f-body);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v3-clocks b{font:800 1.3rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.isl .il .ip{font-style:normal;margin-left:5px;padding:0 5px;border-radius:99px;background:#ffbf47;color:#3a2405;font-weight:800}

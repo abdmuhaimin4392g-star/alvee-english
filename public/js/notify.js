@@ -6,7 +6,7 @@
   'use strict';
   const A = window.AE, h = A.h;
   const inbox = () => { const st = A.state; if (!st) return []; if (!Array.isArray(st.inbox)) st.inbox = []; return st.inbox; };
-  const tabOf = (go) => { const v = go && go[0]; return v === 'treasure' || v === 'medals' ? 'treasure' : v === 'journey' || v === 'quests' ? 'journey' : v === 'talks' ? 'talks' : v === 'me' || v === 'words' || v === 'grammar' ? 'me' : 'home'; };
+  const tabOf = (go) => { const v = go && go[0]; return v === 'treasure' || v === 'medals' ? 'treasure' : v === 'journey' || v === 'quests' || v === 'boat' ? 'journey' : v === 'talks' ? 'talks' : v === 'me' || v === 'words' || v === 'grammar' ? 'me' : 'home'; };
   A.unread = (tab) => inbox().filter((n) => !n.read && (!tab || tabOf(n.go) === tab)).length;
 
   // open what a notification points at
@@ -15,6 +15,7 @@
     n.read = 1; A.saveSoon();
     document.querySelectorAll('.sheet,.veil').forEach((x) => x.remove());
     const go = n.go || ['home'];
+    if (go[0] === 'boat') { if (A.view !== 'journey') A.go('journey'); setTimeout(() => A.voyage.boatSheet(), 300); return; }
     if (go[0] === 'quests') { if (A.view !== 'journey') A.go('journey'); setTimeout(() => A.voyage.questSheet(), 300); return; }
     A.go(go[0], go[1]);
     paintBadges();
@@ -25,16 +26,20 @@
   A.notify = (o) => {
     if (!A.state || !A.user || A.user.role !== 'learner') return;
     const n = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), ic: o.ic || '✨', t: o.t, s: o.s || '', go: o.go || null, at: Date.now() };
-    if (o.key) { const L = inbox(); if (L.some((x) => x.key === o.key)) return; n.key = o.key; }
+    if (o.key) { const L = inbox(); if (L.some((x) => x.key === o.key)) return false; n.key = o.key; }
+    if (inbox().some((x) => x.t === n.t && Date.now() - x.at < 10000)) return false;
     const L = inbox(); L.unshift(n); if (L.length > 40) L.length = 40;
     A.saveSoon();
-    if (o.quiet) { paintBadges(); return; }
+    if (o.quiet) { paintBadges(); return true; }
+    if (q.length >= 3) q.shift();
     q.push(n); if (!showing) next();
     paintBadges();
+    return true;
   };
   function next() {
     const n = q.shift(); if (!n) { showing = null; return; }
-    if (A.view === 'player') { q.unshift(n); showing = null; setTimeout(next, 4000); return; }
+    // never over a lesson, a chest opening or an open sheet: wait until she is free
+    if (A.view === 'player' || document.querySelector('#trv,.sheet,.kr-fire')) { q.unshift(n); showing = 'wait'; setTimeout(() => { showing = null; next(); }, 1800); return; }
     const el = h('button', { class: 'pop-note', type: 'button', 'aria-live': 'polite' },
       h('span', { class: 'pn-ic' }, n.ic), h('span', { class: 'pn-tx' }, h('b', null, n.t), n.s ? h('span', null, n.s) : null),
       n.go ? h('span', { class: 'pn-go' }, 'Open ›') : null);
@@ -80,20 +85,24 @@
   // things the app notices by itself when she opens it
   A.dailyNotes = () => {
     const st = A.state, V = A.voyage; if (!st || !V) return;
+    // at most two pop up when she opens the app; the rest wait in the 🔔 list
+    let shown = 0; const real = A.notify; const note = (o) => { o.quiet = shown >= 2; if (real(o) && !o.quiet) shown++; };
     const s = V.st(st), day = A.dkey();
     const cur = V.curIndex(st);
     const tide = V.dailySpawns().filter((x) => !s.got[x.id]).length;
-    if (tide) A.notify({ key: 'tide' + day, ic: '🌊', t: 'The morning tide brought ' + tide + ' new thing' + (tide > 1 ? 's' : ''), s: 'They are floating right next to your boat.', go: ['journey', { near: 1 }] });
+    if (tide) note({ key: 'tide' + V.tideKey(0), ic: '🌊', t: 'The tide brought ' + tide + ' new thing' + (tide > 1 ? 's' : ''), s: 'They float next to your boat. A new tide comes every 4 hours.', go: ['journey', { near: 1 }] });
     // pearls selling high today
     const hi = V.PEARLS.filter(([k]) => k !== 'w' && V.pearlN(k) > 0 && V.price(k) > V.price(k, V.yesterday()) * 1.12);
-    if (hi.length) A.notify({ key: 'mk' + day, ic: '📈', t: hi[0][1] + 's are selling high today', s: 'Now is a good day to sell at the pearl market.', go: ['treasure', 'shop:pearls'] });
+    if (hi.length) note({ key: 'mk' + day, ic: '📈', t: hi[0][1] + 's are selling high today', s: 'Now is a good day to sell at the pearl market.', go: ['treasure', 'shop:pearls'] });
     // gifts from the admin
-    (V.gifts() || []).filter((g) => !s.got[g.id]).forEach((g) => A.notify({ key: 'gift' + g.id, ic: '🎁', t: 'A gift is floating near your boat!', s: g.gift && g.gift.note ? '“' + g.gift.note + '”' : 'Tap to sail over and pick it up.', go: ['journey', { sp: g.id }] }));
+    (V.gifts() || []).filter((g) => !s.got[g.id]).forEach((g) => note({ key: 'gift' + g.id, ic: '🎁', t: 'A gift is floating near your boat!', s: g.gift && g.gift.note ? '“' + g.gift.note + '”' : 'Tap to sail over and pick it up.', go: ['journey', { sp: g.id }] }));
     // a key in the pocket and a sealed chest on the sea
-    if (s.keys > 0) { const sp = V.route().main.slice(0, cur).map((m) => V.spawnsFor(m.gi).find((x) => x.kind === 'sealed' && !s.got[x.id])).find(Boolean); if (sp) A.notify({ key: 'seal' + day, ic: '🔑', t: 'You have a key, and a sealed chest is waiting', s: 'Sealed chests hold only rare treasure.', go: ['journey', { sp: sp.id }] }); }
+    if (s.keys > 0) { let sp = null; for (let gi = -1; gi < V.route().main.length - 1 && !sp; gi++) sp = V.spawnsFor(gi).find((x) => x.kind === 'sealed' && !s.got[x.id]) || null; if (sp) note({ key: 'seal' + day, ic: '🔑', t: 'You have a key, and a sealed chest is waiting', s: 'Sealed chests hold only rare treasure.', go: ['journey', { sp: sp.id }] }); }
     // quests ready to claim
-    if (!V.ctl().questOff) { const ready = V.quests().filter((x) => x.done && !x.claimed).length; if (ready) A.notify({ key: 'qr' + day + ready, ic: '📜', t: ready + ' quest' + (ready > 1 ? 's' : '') + ' ready to claim', s: 'Collect your pearls.', go: ['quests'] }); }
+    if (!V.ctl().questOff) { const ready = V.quests().filter((x) => x.done && !x.claimed).length; if (ready) note({ key: 'qr' + day + ready, ic: '📜', t: ready + ' quest' + (ready > 1 ? 's' : '') + ' ready to claim', s: 'Collect your pearls.', go: ['quests'] }); }
   };
+  // coming back to the app later: check again (each note only once)
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && A.user && A.user.role === 'learner' && A.state) setTimeout(() => { try { A.dailyNotes(); } catch (e) { /* extras */ } }, 1200); });
   // after an island: is there a new mystery boat in the boatyard?
   A.boatNotes = (before, after) => {
     const V = A.voyage; if (!V) return;

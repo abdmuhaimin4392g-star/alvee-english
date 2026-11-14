@@ -68,14 +68,14 @@
   // ---------------------------------------------------------------- boats (all the Op Crab boats, unlocked with pearls)
   V.BOATS = [
     { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', g: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
-    { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', g: 300, isl: 8, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
-    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', g: 700, isl: 20, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
-    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', g: 1400, isl: 35, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
-    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', g: 2400, isl: 55, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
-    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', g: 3600, isl: 75, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
-    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', g: 5200, isl: 95, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
-    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', g: 7000, isl: 118, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
-    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 9000, isl: 140, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
+    { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', g: 300, isl: 1, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
+    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', g: 700, isl: 3, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
+    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', g: 1400, isl: 5, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
+    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', g: 2400, isl: 8, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
+    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', g: 3600, isl: 11, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
+    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', g: 5200, isl: 14, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
+    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', g: 7000, isl: 17, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
+    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 9000, isl: 20, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
   ];
   V.boat = (id) => V.BOATS.find((b) => b.id === id) || V.BOATS[0];
   V.boatPic = (id, flip, cls) => {
@@ -89,7 +89,7 @@
     st = st || A.state;
     const s = st.sea || (st.sea = {});
     s.p = s.p || 0; s.pt = s.pt || 0; s.sh = s.sh || {}; s.tre = s.tre || {}; s.got = s.got || {};
-    s.boats = s.boats || ['sloop']; s.rp = s.rp || { p: 0, b: 0, g: 0 }; s.gold = s.gold || 0; s.goldT = s.goldT || 0; s.keys = s.keys || 0; s.boat = s.boat || 'sloop'; s.side = s.side || {}; s.q = s.q || {}; s.pc = s.pc || {};
+    s.boats = s.boats || ['sloop']; s.rp = s.rp || { p: 0, b: 0, g: 0 }; s.gold = s.gold || 0; s.goldT = s.goldT || 0; s.keys = s.keys || 0; if (s.hull == null) s.hull = 100; s.logs = s.logs || 0; s.kr = s.kr || { won: 0, lost: 0, sunk: 0, last: 0, day: '', n: 0 }; s.boat = s.boat || 'sloop'; s.side = s.side || {}; s.q = s.q || {}; s.pc = s.pc || {};
     if (s.at == null) s.at = -1;
     return s;
   };
@@ -119,9 +119,9 @@
 
   // daily quest counters
   const QDEF = [
-    ['les1', 'Finish 1 island', 'จบ 1 เกาะ', (d) => (d.les || 0) >= 1],
-    ['les2', 'Finish 2 islands', 'จบ 2 เกาะ', (d) => (d.les || 0) >= 2],
-    ['les3', 'Finish 3 islands', 'จบ 3 เกาะ', (d) => (d.les || 0) >= 3],
+    ['les1', 'Finish 1 lesson', 'จบ 1 เกาะ', (d) => (d.les || 0) >= 1],
+    ['les2', 'Finish 2 lessons', 'จบ 2 เกาะ', (d) => (d.les || 0) >= 2],
+    ['les3', 'Finish 3 lessons', 'จบ 3 เกาะ', (d) => (d.les || 0) >= 3],
     ['shell5', 'Pick up 5 shells', 'เก็บเปลือกหอย 5 ชิ้น', (d) => (d.shells || 0) >= 5],
     ['pearl3', 'Find 3 pearls on the sea', 'เก็บไข่มุกในทะเล 3 เม็ด', (d) => (d.pearls || 0) >= 3],
     ['chest1', 'Open a treasure chest', 'เปิดหีบสมบัติ 1 ใบ', (d) => (d.chest || 0) >= 1],
@@ -129,7 +129,7 @@
     ['ans50', 'Answer 50 questions', 'ตอบคำถาม 50 ข้อ', (d) => (d.ans || 0) >= 50],
     ['focus', 'Practise your weak spot', 'ฝึกจุดอ่อน 1 ครั้ง', (d) => (d.focus || 0) >= 1],
     ['talk', 'Finish a conversation', 'ฝึกบทสนทนาจบ 1 เรื่อง', (d) => (d.talk || 0) >= 1],
-    ['perfect', 'Get 100% on an island', 'ได้ 100% ใน 1 เกาะ', (d) => (d.perfect || 0) >= 1],
+    ['perfect', 'Get 100% in a lesson', 'ได้ 100% ใน 1 เกาะ', (d) => (d.perfect || 0) >= 1],
     ['review', 'Do one review', 'ทบทวน 1 ครั้ง', (d) => (d.review || 0) >= 1],
   ];
   const seeded = (seed) => { let a = seed * 7919 + 13; return () => ((a = (a * 16807) % 2147483647) / 2147483647); };
@@ -155,36 +155,61 @@
     return got;
   };
 
-  // ---------------------------------------------------------------- the route: one island per lesson / conversation / test, plus side islands
+  // ---------------------------------------------------------------- the route: one island per chapter (unit); each island holds its lessons,
+  // the conversation and the timed test. Plus a side island after every third chapter.
   let ROUTE = null;
   V.resetRoute = () => { ROUTE = null; };
   V.route = () => {
     if (ROUTE) return ROUTE;
     const main = [], all = [];
     V.SEAS.forEach((sea, si) => {
-      const nodes = A.nodes.filter((n) => n.u >= sea.from && n.u <= sea.to);
-      nodes.forEach((n, k) => {
-        const name = n.boost ? ['Booster Reef', 'Practice Point', 'Strong Wind Rock', 'Second Try Cove'][k % 4] : sea.names[k % sea.names.length] + (k >= sea.names.length ? ' ' + 'II III IV'.split(' ')[Math.floor(k / sea.names.length) - 1] : '');
-        const isl = { kind: 'node', node: n, sea: si, k, name, gi: main.length };
+      for (let u = sea.from; u <= sea.to; u++) {
+        const nodes = A.nodes.filter((n) => n.u === u);
+        if (!nodes.length) continue;
+        const k = u - sea.from, unit = A.unit(u);
+        const isl = { kind: 'chap', u, nodes, node: nodes[nodes.length - 1], sea: si, k, name: sea.names[(k * 7) % sea.names.length], title: unit ? unit.en : '', gi: main.length };
         main.push(isl); all.push(isl);
-        // a side island after every fifth island
-        if (k % 5 === 3) {
-          const sid = 'side:' + sea.id + ':' + Math.floor(k / 5);
+        if (main.length % 3 === 2) {
+          const sid = 'side:' + sea.id + ':' + k;
           const MISS = ['speed', 'listen', 'talk', 'words', 'build'];
-          all.push({ kind: 'side', id: sid, sea: si, k, anchor: isl, mission: MISS[(si * 3 + Math.floor(k / 5)) % MISS.length], name: ['Hidden Cove', 'Secret Lagoon', 'Pirate Rock', 'Mermaid Bay', 'Lost Lighthouse', 'Firefly Isle', 'Treasure Key', 'Coconut Cay'][(si * 2 + Math.floor(k / 5)) % 8] });
+          all.push({ kind: 'side', id: sid, sea: si, k, anchor: isl, mission: MISS[(main.length) % MISS.length], name: ['Hidden Cove', 'Secret Lagoon', 'Pirate Rock', 'Mermaid Bay', 'Lost Lighthouse', 'Firefly Isle', 'Treasure Key', 'Coconut Cay'][Math.floor(main.length / 3) % 8] });
         }
-      });
+      }
     });
     if (main.length) { const last = main[main.length - 1]; last.name = 'Home: Addu Atoll'; last.final = 1; }
     ROUTE = { main, all };
     return ROUTE;
   };
-  // where the boat is: the first island not finished yet
-  V.curIndex = (st) => { const r = V.route().main; const i = r.findIndex((x) => !(st || A.state).done[x.node.id]); return i < 0 ? r.length - 1 : i; };
+  // a chapter: how many of its lessons are done, and which one is next
+  V.chap = (st, isl) => { st = st || A.state; const done = isl.nodes.filter((n) => st.done[n.id]).length; return { done, total: isl.nodes.length, all: done === isl.nodes.length, next: isl.nodes.find((n) => !st.done[n.id]) || null }; };
+  // where the boat is heading: the first chapter not finished yet
+  V.curIndex = (st) => { st = st || A.state; const r = V.route().main; const i = r.findIndex((x) => !x.nodes.every((n) => st.done[n.id])); return i < 0 ? r.length - 1 : i; };
+  // the boat: between the last finished island and the next one, closer with every lesson
+  V.boatP = (st) => { st = st || A.state; const R = V.route().main, cur = V.curIndex(st), c = V.chap(st, R[cur]); return c.all ? cur : cur - 1 + (c.done / c.total) * 0.85; };
+  V.chapOf = (n) => V.route().main.find((x) => x.nodes.includes(n));
+  // a long voyage: a few new lessons a day (set on your dashboard), and stars to cross into each new sea
+  V.dayLimit = () => (A.user && A.user.cfg && +A.user.cfg.newLimit) || 0;
+  V.newToday = (st) => ((st || A.state).days[A.dkey()] || {}).les || 0;
+  V.capped = (st) => V.dayLimit() > 0 && V.newToday(st) >= V.dayLimit();
+  V.gate = (st, isl) => {
+    if (!isl || isl.kind !== 'chap' || isl.k !== 0 || isl.sea === 0) return null;
+    const ls = V.route().main.filter((x) => x.sea === isl.sea - 1).flatMap((x) => x.nodes.filter((n) => n.kind === 'lesson'));
+    const need = Math.ceil(ls.length * 2.5), have = ls.reduce((a, n) => a + (((st || A.state).done[n.id] || {}).s || 0), 0);
+    return { need, have, ok: have >= need || !!(A.user && A.user.cfg && A.user.cfg.unlockAll), sea: V.SEAS[isl.sea - 1] };
+  };
+  V.lockWhy = (st, n) => {
+    if (!A.isOpen(st, A.nodes.indexOf(n), A.user && A.user.cfg)) return 'order';
+    if (st.done[n.id]) return null;
+    const ch = V.chapOf(n);
+    if (ch && ch.nodes[0] === n) { const g = V.gate(st, ch); if (g && !g.ok) return 'gate'; }
+    if (n.kind === 'lesson' && !n.boost && V.capped(st)) return 'today';
+    return null;
+  };
+  V.nodeOpen = (st, n) => !V.lockWhy(st, n);
   V.islandOpen = (st, isl) => {
-    if (isl.kind === 'side') return !!st.done[isl.anchor.node.id] && !V.ctl().sideOff;
-    const idx = A.nodes.indexOf(isl.node);
-    return A.isOpen(st, idx, A.user && A.user.cfg);
+    if (isl.kind === 'side') return V.chap(st, isl.anchor).all && !V.ctl().sideOff;
+    const w = V.lockWhy(st, isl.nodes[0]);
+    return !w || w === 'today';
   };
   V.seasDone = (st) => V.SEAS.filter((s) => A.nodes.filter((n) => n.u >= s.from && n.u <= s.to).every((n) => st.done[n.id])).length;
 
@@ -194,7 +219,7 @@
     V.SEAS.forEach((sea, si) => {
       const nodes = A.nodes.filter((n) => n.u >= sea.from && n.u <= sea.to);
       const done = nodes.filter((n) => st.done[n.id]).length, frac = nodes.length ? done / nodes.length : 0;
-      const entered = si === 0 || V.route().main.some((x) => x.sea === si && st.done[x.node.id]) || (V.route().main[V.curIndex(st)] || {}).sea === si;
+      const entered = si === 0 || V.route().main.some((x) => x.sea === si && x.nodes.some((n) => st.done[n.id])) || (V.route().main[V.curIndex(st)] || {}).sea === si;
       sea.art.forEach((id, k) => {
         const need = k / Math.max(1, sea.art.length - 1);
         out.push({ id, sea: si, on: entered && (k === 0 || frac >= need), alt: SC.ALT[id] });
@@ -205,15 +230,16 @@
 
   // ---------------------------------------------------------------- things floating on the sea
   // between island i and i+1: a shell, a pearl, a chest or a bottle (the same for ever, so she can plan)
+  // between chapter gi and gi+1 (gi = -1: from the dock to the first island). Always the same, so she can plan.
   V.spawnsFor = (gi) => {
-    const r = seeded(gi * 13 + 7), out = [];
-    const n = 1 + (r() < 0.55 ? 1 : 0);
+    const r = seeded(gi * 13 + 40), out = [];
+    const n = 2 + (r() < 0.6 ? 1 : 0);
     for (let j = 0; j < n; j++) {
       const x = r();
-      const kind = x < 0.46 ? 'shell' : x < 0.72 ? 'pearl' : x < 0.88 ? 'chest' : 'bottle';
-      out.push({ id: `s${gi}.${j}`, kind, gi, fx: 0.25 + r() * 0.5, fy: 0.3 + r() * 0.4, shell: kind === 'shell' ? pickShell(r) : null });
+      const kind = x < 0.36 ? 'shell' : x < 0.62 ? 'pearl' : x < 0.76 ? 'chest' : x < 0.9 ? 'log' : 'bottle';
+      out.push({ id: `s${gi}.${j}`, kind, gi, fx: r(), fy: r(), shell: kind === 'shell' ? pickShell(r) : null });
     }
-    if (gi % 9 === 5) out.push({ id: `k${gi}`, kind: 'sealed', gi, fx: r(), fy: r() });
+    if ((gi + 3) % 3 === 1) out.push({ id: `k${gi}`, kind: 'sealed', gi, fx: r(), fy: r() });
     return out;
   };
   function pickShell(r) {
@@ -222,10 +248,13 @@
     return 'cowrie';
   }
   // three gifts from the tide each day, near the boat
-  V.dailySpawns = () => {
-    const k = A.dkey(), r = seeded(hashStr(k));
-    return [0, 1, 2].map((j) => { const x = r(); return { id: 'd' + k + '.' + j, kind: x < 0.6 ? 'shell' : x < 0.9 ? 'pearl' : 'chest', daily: 1, shell: pickShell(r), fx: r(), fy: r() }; });
-  };
+  // the tide brings new things every four hours; things from the tide before stay a little longer, then drift away
+  V.tideKey = (back) => { const d = new Date(Date.now() - (back || 0) * 4 * 36e5); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + 'w' + Math.floor(d.getHours() / 4); };
+  V.nextTide = () => { const d = new Date(); return 4 * 36e5 - ((d.getHours() % 4) * 36e5 + d.getMinutes() * 6e4 + d.getSeconds() * 1e3); };
+  V.dailySpawns = () => [1, 0].flatMap((back) => {
+    const k = V.tideKey(back), r = seeded(hashStr(k));
+    return [0, 1, 2].map((j) => { const x = r(); return { id: 't' + k + '.' + j, kind: j === 2 && x < 0.5 ? 'log' : x < 0.5 ? 'shell' : x < 0.86 ? 'pearl' : x < 0.95 ? 'chest' : 'log', daily: 1, shell: pickShell(r), fx: r(), fy: r() }; });
+  });
   V.gifts = () => (V.ctl().gifts || []).map((g) => ({ id: 'g' + g.id, kind: g.kind, gift: g }));
 
   // ---------------------------------------------------------------- treasure rolls
@@ -308,9 +337,9 @@
     const o = opts || {};
     const sea = V.SEAS[isl.sea];
     const r = seeded(hashStr(isl.kind === 'side' ? isl.id : isl.node.id));
-    const ter = isl.kind === 'side' ? 'jungle' : (isl.node.kind === 'check' && sea.ter === 'river' ? 'jungle' : sea.ter);
+    const ter = isl.kind === 'side' ? 'jungle' : sea.ter;
     let body = (ISL[ter] || ISL.atoll)(r, { night: o.night });
-    if (isl.kind === 'node' && isl.node.kind === 'check') body += `<g transform="translate(60 30)"><path d="M-14 22V0h28v22Z" fill="#D9CBB0"/><path d="M-16 0v-6h6v4h4v-4h4v4h4v-4h4v4h4v-4h2v6Z" fill="#C2B190"/><rect x="-4" y="10" width="8" height="12" rx="4" fill="#6B4F35"/><path d="M0 -6V-20" stroke="#5B4130" stroke-width="1.6"/><path d="M0 -20h12l-3 4 3 4H0Z" fill="#FFB21E"/></g>`;
+    if (isl.kind === 'chap' && isl.u % 3 === 0) body += `<g transform="translate(60 30)"><path d="M-14 22V0h28v22Z" fill="#D9CBB0"/><path d="M-16 0v-6h6v4h4v-4h4v4h4v-4h4v4h4v-4h2v6Z" fill="#C2B190"/><rect x="-4" y="10" width="8" height="12" rx="4" fill="#6B4F35"/><path d="M0 -6V-20" stroke="#5B4130" stroke-width="1.6"/><path d="M0 -20h12l-3 4 3 4H0Z" fill="#FFB21E"/></g>`;
     if (isl.final) body += `<g transform="translate(60 20)"><path d="M0 10C-10 -2 -14 -10 -6 -14C-2 -16 0 -12 0 -10C0 -12 2 -16 6 -14C14 -10 10 -2 0 10Z" fill="#E5476C"/></g>`;
     return `<svg class="isl-svg" viewBox="0 0 120 90" aria-hidden="true">${body}</svg>`;
   };
