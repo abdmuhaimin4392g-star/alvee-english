@@ -271,6 +271,7 @@
   // ================================================================ router
   A.view = 'home';
   A.go = (view, arg) => {
+    if (A.updateWaiting && !A.session && view !== 'result') { A.updateWaiting = false; A.checkUpdate(true); }
     if (openSheet) { openSheet.close(); openSheet = null; }
     A.view = view;
     const root = A.clear(app());

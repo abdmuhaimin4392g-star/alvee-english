@@ -20,6 +20,25 @@
     for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid instanceof Node ? kid : String(kid));
     return el;
   };
+  // ------------------------------------------------------------- updates reach the phone even if the app stays open
+  A.VERSION = '3.1';
+  A.checkUpdate = async (force) => {
+    if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
+    try {
+      const r = await fetch('version.txt?' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return;
+      const v = (await r.text()).trim();
+      if (!v || v === A.VERSION) return;
+      const typing = document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+      if ((A.session || typing) && !force) { A.updateWaiting = true; return; } // never interrupt a lesson or a message
+      if (A.flush) try { A.flush(); } catch (e) { /* offline */ }
+      setTimeout(() => location.reload(), 300);
+    } catch (e) { /* offline */ }
+  };
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') A.checkUpdate(); });
+  setInterval(() => A.checkUpdate(), 5 * 60 * 1000);
+  setTimeout(() => A.checkUpdate(), 4000);
+
   // ------------------------------------------------------------- night mode (per phone: auto / dark / light)
   A.theme = {
     get() { try { return localStorage.getItem('ae.theme') || 'auto'; } catch (e) { return 'auto'; } },
@@ -337,10 +356,19 @@
     }
     async init() { /* nothing */ }
     async setupNeeded() { return (await this.call('setup')).needed; }
-    async setup(d) { const j = await this.call('setup', d); this.token = j.token; A.store.set('ae.token', j.token); return j.user; }
-    async login(username, password) { const j = await this.call('login', { username, password }); this.token = j.token; A.store.set('ae.token', j.token); return j.user; }
-    async me() { if (!this.token) return null; try { return (await this.call('me')).user; } catch (e) { return null; } }
-    async logout() { try { await this.call('logout', {}); } catch (e) { /* offline */ } this.token = null; A.store.del('ae.token'); }
+    async setup(d) { const j = await this.call('setup', d); this.token = j.token; A.store.set('ae.token', j.token); A.store.set('ae.user', j.user); return j.user; }
+    async login(username, password) { const j = await this.call('login', { username, password }); this.token = j.token; A.store.set('ae.token', j.token); A.store.set('ae.user', j.user); return j.user; }
+    // stay signed in: only a real "not signed in" answer from the server logs out.
+    // No signal, or the server restarting for an update, keeps her in the app with the last known login.
+    async me() {
+      if (!this.token) return null;
+      try { const u = (await this.call('me')).user; if (u) A.store.set('ae.user', u); return u; }
+      catch (e) {
+        if (e && e.status === 401) { this.token = null; A.store.del('ae.token'); A.store.del('ae.user'); return null; }
+        return A.store.get('ae.user', null);
+      }
+    }
+    async logout() { try { await this.call('logout', {}); } catch (e) { /* offline */ } this.token = null; A.store.del('ae.token'); A.store.del('ae.user'); }
     async loadState() { return (await this.call('state')).state; }
     async saveState(st) { await this.call('state', { state: st }, 'PUT'); }
     async log(evs) { await this.call('events', { events: evs }); }

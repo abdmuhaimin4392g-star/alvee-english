@@ -23,7 +23,11 @@
     try {
       ADM.learners = await A.api.learners();
       const evs = await A.api.events(ADM.uid, ADM.since);
-      if (evs.length) { ADM.events = ADM.events.concat(evs); ADM.since = evs[evs.length - 1].t; }
+      if (evs.length) {
+        ADM.since = evs[evs.length - 1].t;
+        // answers to the old translation questions don't count any more
+        ADM.events = ADM.events.concat(evs.filter((e) => !(e.type === 'answer' && ['w2th', 'th2w', 'match', 'meaning'].includes(e.ex))));
+      }
       if (full || evs.length || !ADM.data) ADM.data = await A.api.learner(ADM.uid);
     } catch (e) { /* keep last data */ }
     if (full) ADM.render(); else ADM.update();

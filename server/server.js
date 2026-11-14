@@ -69,12 +69,16 @@ const newUser = (role, name, username, password) => {
   return { id: (role === 'admin' ? 'a_' : 'u_') + crypto.randomBytes(6).toString('hex'), role, name, username, salt, pass: hashPw(password, salt), cfg: DEF_CFG(), created: Date.now() };
 };
 const newSession = (uid) => { const token = crypto.randomBytes(24).toString('hex'); db.sessions[token] = { uid, t: Date.now() }; saveDB(); return token; };
-const SESSION_DAYS = 365;
+// stay signed in: a login lasts until "Log out" or a password change. It only ends if the app
+// is not opened at all for 5 years (the clock restarts every time the app is used).
+const SESSION_DAYS = 5 * 365;
+let sessSave = 0;
 function authUser(req) {
   const m = /^Bearer\s+([a-f0-9]{48})$/.exec(req.headers.authorization || '');
   if (!m) return null;
   const s = db.sessions[m[1]];
   if (!s || Date.now() - s.t > SESSION_DAYS * 864e5) return null;
+  if (Date.now() - s.t > 864e5) { s.t = Date.now(); if (Date.now() - sessSave > 60e3) { sessSave = Date.now(); saveDB(); } }
   return db.users.find((u) => u.id === s.uid) || null;
 }
 const fails = new Map();
@@ -289,6 +293,66 @@ async function api(req, res, route, query) {
   }
   return send(res, 404, { error: 'Not found' });
 }
+
+// ---------------------------------------------------------------- fix marks lost to the old translation questions
+// The first version asked "what does this word mean in Thai?" and marked right answers wrong when two
+// English words share a Thai meaning (am / is / are = เป็น). Those questions no longer count:
+// lesson scores and stars are recalculated without them, the XP comes back, and they leave her mistake list.
+const OLD_TYPES = ['w2th', 'th2w', 'match', 'meaning'];
+const dayIn = (t, tz) => new Intl.DateTimeFormat('en-CA', { timeZone: tz }).format(new Date(t));
+const dayOf = (st, t) => { for (const tz of ['Asia/Bangkok', 'Indian/Maldives', 'UTC']) { const k = dayIn(t, tz); if (st.days && st.days[k]) return st.days[k]; } return null; };
+function fixTranslationMarks(uid) {
+  const st = readJSON(stateFile(uid), null);
+  if (!st) return { changed: 0 };
+  const since = st.fixT || 0;
+  const evs = loadEvents(uid).slice().sort((x, y) => x.t - y.t);
+  let changed = 0, buf = [], last = since;
+  const srsFix = {};
+  for (const e of evs) {
+    if (e.t <= since) { if (e.type === 'lesson_start') buf = []; continue; }
+    last = Math.max(last, e.t);
+    if (e.type === 'lesson_start') { buf = []; continue; }
+    if (e.type === 'answer') {
+      buf.push(e);
+      if (OLD_TYPES.includes(e.ex) && !e.ok && e.item) srsFix[e.item] = (srsFix[e.item] || 0) + 1;
+      continue;
+    }
+    if (e.type !== 'lesson_end') continue;
+    const old = buf.filter((a) => !a.retry && OLD_TYPES.includes(a.ex));
+    buf = [];
+    if (!old.length || typeof e.graded !== 'number') continue;
+    const oldWrong = old.filter((a) => !a.ok).length;
+    const graded = e.graded - old.length, firstOk = e.graded - (e.wrong || 0) - (old.length - oldWrong);
+    const acc = graded > 0 ? Math.round((firstOk / graded) * 100) : 100;
+    const stars = acc >= 90 ? 3 : acc >= 70 ? 2 : 1;
+    const key = e.node;
+    if (key) {
+      const isCheck = /^check:/.test(key) || /check/i.test(e.title || '');
+      const d = st.done && st.done[key];
+      if (d && acc > (d.a || 0)) { d.a = acc; d.s = Math.max(d.s || 0, stars); changed++; }
+      else if (!d && !e.passed && isCheck && acc >= 70) { st.done = st.done || {}; st.done[key] = { s: stars, a: acc, t: e.t, n: 1 }; changed++; const day = dayOf(st, e.t); if (day) day.xp = (day.xp || 0) + 20; }
+    }
+    if (oldWrong) {
+      const day = dayOf(st, e.t);
+      if (day) { day.xp = (day.xp || 0) + oldWrong; day.ok = (day.ok || 0) + oldWrong; changed++; }
+    }
+  }
+  for (const [id, n] of Object.entries(srsFix)) {
+    const r = st.srs && st.srs[id];
+    if (!r) continue;
+    r.w = Math.max(0, (r.w || 0) - n);
+    if (r.c > 0 && r.b < 2) { r.b = 2; r.d = Math.min(r.d || 0, Math.floor(Date.now() / 864e5) + 2); }
+    changed++;
+  }
+  st.fixT = last;
+  if (changed) { st.rev = (st.rev || 0) + 1000; st.resetAt = Date.now(); }
+  if (changed || last !== since) atomicWrite(stateFile(uid), JSON.stringify(st));
+  if (changed) appendEvents(uid, [{ t: Date.now(), type: 'admin_reset', what: 'marks from old translation questions (fixed)', n: changed }]);
+  return { changed };
+}
+const fixAll = () => { for (const u of db.users.filter((x) => x.role === 'learner')) { try { const r = fixTranslationMarks(u.id); if (r.changed) console.log('fixed translation marks for', u.username, r.changed); } catch (e) { console.error('fix marks', e.message); } } };
+setTimeout(fixAll, 1500);
+setInterval(fixAll, 10 * 60 * 1000);
 
 function appendEvents(uid, list) {
   if (!list.length) return;
