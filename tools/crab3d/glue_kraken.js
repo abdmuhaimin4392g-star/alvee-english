@@ -25,9 +25,8 @@ function krStart(){const oc=$('#oc');if(!oc||!M3_OK()||KR.on)return;const st=AE.
   KR.max=KR.hp=12+Math.min(18,cur);KR.dur=20000;KR.t0=performance.now();KR.bite=KR.t0+3500;KR.cool=0;
   m3Follow();oc.classList.add('kr-on');
   const art=document.createElement('div');art.className='krl on';art.innerHTML=KRART.back+KRART.front;oc.appendChild(art);KR.art=art;
-  m3Reg(art,0,0,{noscale:1,dx:-65,dy:-92,fn:()=>{const b=M3.boats.al;return b&&b.w3}});
-  const ui=document.createElement('div');ui.className='kru';ui.innerHTML='<div class="krt hot">🐙 The Kraken attacks! <b id="krtm">20</b></div><div class="krbar"><i id="krhp" style="width:100%"></i></div><div class="krs" id="krsay">Tap FIRE as fast as you can!</div>';oc.appendChild(ui);KR.ui=ui;
-  m3Reg(ui,0,0,{noscale:1,dx:-90,dy:-178,fn:()=>{const b=M3.boats.al;return b&&b.w3}});
+  m3Reg(art,0,0,{noscale:1,dx:-95,dy:-140,fn:()=>{const b=M3.boats.al;return b&&b.w3}});
+  const ui=document.createElement('div');ui.className='kru fixed';ui.innerHTML='<div class="krt hot">🐙 The Kraken attacks! <b id="krtm">20</b></div><div class="krbar"><i id="krhp" style="width:100%"></i></div><div class="krs" id="krsay">Tap FIRE as fast as you can!</div>';oc.appendChild(ui);KR.ui=ui;
   const f=document.createElement('button');f.type='button';f.className='kr-fire';f.innerHTML='<span>🔥</span><b>FIRE!</b>';f.addEventListener('pointerdown',krFire);oc.appendChild(f);KR.fire=f;
   krRoar();buzz([60,40,60,40,120]);
   clearInterval(KR.tick);KR.tick=setInterval(krStep,120)}

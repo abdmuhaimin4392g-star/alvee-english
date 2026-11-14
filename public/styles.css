@@ -862,7 +862,7 @@ button.pill { border: 0; cursor: pointer; }
 .pc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .pc { position: relative; border: 0; padding: 6px 6px 22px; background: #fff; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.18); rotate: -1.5deg; line-height: 0; }
 .pc:nth-child(2n) { rotate: 1.5deg; }
-.pc:not(.on) .pc-art { filter: blur(4px) grayscale(.8); }
+.pc:not(.on) .pc-art:not(.pc-mys) { filter: blur(4px) grayscale(.8); }
 .pc-cap { position: absolute; left: 0; right: 0; bottom: 4px; font-size: .68rem; line-height: 1.2; color: #3a3a3a; font-family: var(--font-display); }
 .pc-big { border-radius: 12px; overflow: hidden; line-height: 0; }
 .fleet { display: flex; flex-direction: column; gap: 10px; }
@@ -1079,3 +1079,20 @@ body { background-color: var(--bg); background-image:
 /* pop-ups: never under the top bar, never two at once */
 .pop-note { top: calc(8px + var(--safe-t, 0px)); }
 @media (prefers-reduced-motion: reduce) { .hh-sea i, .hh-boat, .hh-isl, .pn-ic { animation: none; } }
+/* v5.2: Tao back beside the greeting */
+.hh-hi-row { display: flex; align-items: center; gap: 6px; }
+.hh-tao { flex: none; width: 54px; height: 54px; animation: taobob 2.6s ease-in-out infinite alternate; filter: drop-shadow(0 3px 4px rgba(0,30,50,.35)); }
+.hh-tao svg { width: 100%; height: 100%; display: block; }
+@keyframes taobob { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-4px) rotate(3deg); } }
+.hh-hi { font-size: 1.12rem; }
+.home-hero { height: 244px; }
+/* treasure not found yet: only a glowing question mark in the colour of its rarity */
+.te.mys { display: grid; place-items: center; width: 46px; height: 46px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), color-mix(in srgb, var(--rc, #8fb2b3) 55%, #0b2230) 60%, #071822 100%); box-shadow: 0 0 0 2px color-mix(in srgb, var(--rc, #8fb2b3) 70%, transparent), 0 0 16px -2px var(--rc, #8fb2b3); filter: none; }
+.te.mys i { font: 800 1.35rem/1 var(--font-display); font-style: normal; color: #fff; text-shadow: 0 0 8px var(--rc, #fff); animation: mysq 2.4s ease-in-out infinite; }
+.te.mys.sm { width: 54px; height: 54px; }
+@keyframes mysq { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
+.bc-pic.mys-boat { display: grid; place-items: center; height: 70px; border-radius: 16px; background: radial-gradient(circle at 50% 40%, rgba(120,200,255,.35), rgba(7,24,34,.9) 70%); box-shadow: inset 0 0 0 1.5px rgba(120,200,255,.35); }
+.bc-pic.mys-boat i { font: 800 2rem/1 var(--font-display); font-style: normal; color: #cfeaff; text-shadow: 0 0 12px #7cc8ff; animation: mysq 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .hh-tao, .te.mys i, .bc-pic.mys-boat i { animation: none; } }
+.pc-art.pc-mys { display: grid; place-items: center; aspect-ratio: 16 / 9; border-radius: 6px; background: radial-gradient(circle at 50% 40%, rgba(255,214,120,.35), rgba(7,24,34,.92) 72%); }
+.pc-art.pc-mys i { font: 800 2.2rem/1 var(--font-display); font-style: normal; color: #ffe9b0; text-shadow: 0 0 14px #ffbf47; animation: mysq 2.4s ease-in-out infinite; }

@@ -1,7 +1,7 @@
 
 /* ================================================================ THE VOYAGE SCREEN (3D) ================================================================ */
 /* two clear clocks: Thailand and the Maldives, with day or night and the weather */
-function m3ClockHtml(){let W=null;try{W=world()}catch(e){}const one=(k,name)=>{const r=W&&W[k],sk=r&&r.sk,night=sk&&sk.nightF>.5;return '<span class="ck '+k+(night?' night':'')+'">'+AE.voyage.flag(k)+'<span class="ckt"><b>'+(r?r.clock:'--:--')+'</b><span class="ckn">'+name+' '+(r?(night?'🌙':'☀️')+' '+Math.round(r.wx.t)+'°':'')+'</span></span></span>'};return one('th','Thailand')+one('mv','Maldives')}
+function m3ClockHtml(){let W=null;try{W=world()}catch(e){}const one=(k,name)=>{const r=W&&W[k],sk=r&&r.sk,night=sk&&sk.nightF>.5;return '<span class="ck '+k+(night?' night':'')+'">'+AE.voyage.flag(k)+'<span class="ckt"><b>'+(r?r.clock:'--:--')+'</b><span class="ckn">'+name+' '+(r?(night?'🌙':'☀️')+' '+Math.round(r.wx.t)+'°':'')+'</span></span></span>'};return one('mv','Maldives')+one('th','Thailand')}
 setInterval(()=>{const c=document.getElementById('v3ck');if(c&&!document.hidden)c.innerHTML=m3ClockHtml()},15000);
 const escH=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 function m3Gl(){if(M3.st==='fail'&&Date.now()<M3.failAt)return false;if(m3Gl.v!=null)return m3Gl.v;try{const c=document.createElement('canvas');m3Gl.v=!!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))&&!!(window.CSS&&CSS.supports&&CSS.supports('translate','1px 1px'))}catch(e){m3Gl.v=false}return m3Gl.v}

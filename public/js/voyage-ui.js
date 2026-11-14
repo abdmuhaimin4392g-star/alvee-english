@@ -231,7 +231,7 @@
       h('div', { class: 'hh-isl', html: V.islandSVG(chap, {}) }),
       h('div', { class: 'hh-boat' }, h('span', { html: V.boatPic(s.boat, false) }), h('span', { class: 'boat-tao', html: A.art.mascot('happy', 26) })),
       h('div', { class: 'hh-tx' },
-        h('div', { class: 'hh-hi' }, o.greet + ', ' + A.user.name + '!'),
+        h('div', { class: 'hh-hi-row' }, h('span', { class: 'hh-tao' }, mascot('wave', 54)), h('div', { class: 'hh-hi' }, o.greet + ',', h('br'), A.user.name + '!')),
         h('div', { class: 'hh-chap' }, h('span', { class: 'flagc sm', html: flag(sea.flag) }), ' Chapter ' + (cur + 1) + ' of ' + R.main.length),
         h('b', { class: 'hh-name' }, chap.name), dots),
       h('div', { class: 'hh-stats' }, h('span', null, '🔥 ' + o.streak), h('span', null, '⭐ ' + o.lvl), h('span', null, V.pearlEl(), ' ' + V.pearlTotal(st)), h('span', null, V.coinEl(), ' ' + V.fmtN(s.gold)), h('span', null, '🔑 ' + s.keys)),
@@ -305,16 +305,16 @@
     root.append(h('div', { class: 'tabs scroll' }, tabs.map(([k, t]) => h('button', { class: k === tab ? 'on' : '', onclick: () => (k === 'medals' ? A.go('medals') : A.go('treasure', k)) }, t))));
     if (tab === 'book') {
       const got = Object.keys(s.tre).length;
-      root.append(h('div', { class: 'card chest' }, h('div', { html: V.chestSVG(true, true), class: 'chest-mini' }), h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + T.ITEMS.length), h('div', { class: 'small muted' }, 'Open chests on the sea to fill the book. The dark shapes are still waiting for you.'), h('div', { class: 'goal-bar', style: { marginTop: '6px' } }, h('i', { style: { width: (got / T.ITEMS.length) * 100 + '%' } })))));
+      root.append(h('div', { class: 'card chest' }, h('div', { html: V.chestSVG(true, true), class: 'chest-mini' }), h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + T.ITEMS.length), h('div', { class: 'small muted' }, 'Open chests on the sea to fill the book. Every ? is a treasure still waiting for you.'), h('div', { class: 'goal-bar', style: { marginTop: '6px' } }, h('i', { style: { width: (got / T.ITEMS.length) * 100 + '%' } })))));
       Object.entries(T.SETS).forEach(([k, set]) => {
         const items = T.ITEMS.filter((x) => x[4] === k).sort((a, b) => T.ORDER.indexOf(a[3]) - T.ORDER.indexOf(b[3]));
         const n = items.filter((x) => s.tre[x[0]]).length;
         root.append(h('div', { class: 'set-head' }, h('span', { class: 'set-ic' }, set.ic), h('div', { style: { flex: 1 } }, h('b', null, set.n), h('div', { class: 'small muted' }, n === items.length ? '👑 ' + set.gt : n >= items.length / 2 ? '🎖️ ' + set.title : 'Collect half for the title “' + set.title + '”')), h('span', { class: 'pill' + (n === items.length ? ' good' : '') }, n + '/' + items.length)));
         root.append(h('div', { class: 'tre-grid' }, items.map((it) => {
           const own = s.tre[it[0]];
-          const where = it[3] === 'l' ? 'Only in golden or sealed chests' : it[3] === 'e' ? 'Best found in golden or sealed chests' : it[3] === 'r' ? 'Rare: sealed chests always hold rare or better' : 'Any chest on the sea';
+          const where = it[3] === 'l' ? 'Only in golden or sealed chests' : it[3] === 'e' ? 'Best found in golden or sealed chests' : it[3] === 'r' ? 'Sealed chests always hold rare or better' : 'Any chest on the sea';
           return h('button', { class: 'tre-cell r-' + it[3] + (own ? ' own' : '') + (focus === it[0] ? ' focus' : ''), 'data-id': it[0], style: { '--rc': RAR[it[3]].col }, onclick: () => own ? A.sheet(h('div', { class: 'stack', style: { alignItems: 'center' } }, treasureCard(it, false, true), h('div', { class: 'small muted' }, '× ' + own.n + ' · found ' + new Date(own.t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })))) : A.toast('🔍 ' + RAR[it[3]].n + ' · ' + where, 3200) },
-            own ? h('span', { class: 'te' }, it[1]) : sil(it[1]), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
+            own ? h('span', { class: 'te' }, it[1]) : h('span', { class: 'te mys', 'aria-label': 'Not found yet' }, h('i', null, '?')), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
         })));
       });
     } else if (tab === 'shells') {
@@ -322,13 +322,13 @@
       root.append(h('div', { class: 'card chest' }, h('div', { html: V.shellSVG('conch', 64) }), h('div', null, h('div', { class: 'chest-n' }, h('b', null, kinds), ' / ' + V.SHELLS.length + ' kinds'), h('div', { class: 'small muted' }, V.shellCount(st) + ' shells in all. Pick them up on the sea.'))));
       root.append(h('div', { class: 'shell-grid' }, V.SHELLS.map((x) => {
         const n = s.sh[x[0]] || 0;
-        return h('div', { class: 'shell-cell' + (n ? ' own' : '') + (focus === x[0] ? ' focus' : ''), style: { '--rc': RAR[x[3]].col } }, h('span', { class: n ? '' : 'sil', html: V.shellSVG(x[0], 54) }), h('b', null, n ? x[1] : '???'), h('span', { class: 'small muted' }, RAR[x[3]].n), n ? h('span', { class: 'tx' }, '×' + n) : null);
+        return h('div', { class: 'shell-cell' + (n ? ' own' : '') + (focus === x[0] ? ' focus' : ''), style: { '--rc': RAR[x[3]].col } }, (n ? h('span', { html: V.shellSVG(x[0], 54) }) : h('span', { class: 'te mys sm' }, h('i', null, '?'))), h('b', null, n ? x[1] : '???'), h('span', { class: 'small muted' }, RAR[x[3]].n), n ? h('span', { class: 'tx' }, '×' + n) : null);
       })));
     } else if (tab === 'cards') {
       const pcs = V.postcards(st);
       root.append(h('div', { class: 'small muted' }, 'A painted postcard from each sea, collected as you sail · ' + pcs.filter((p) => p.on).length + ' / ' + pcs.length));
       root.append(h('div', { class: 'pc-grid' }, pcs.map((p) => h('button', { class: 'pc' + (p.on ? ' on' : ''), onclick: () => p.on ? A.sheet(h('div', { class: 'stack' }, h('div', { class: 'pc-big', html: SC.svg(p.id, 'art') }), h('b', null, p.alt), h('div', { class: 'small muted' }, V.SEAS[p.sea].en))) : A.toast('🔒 Sail further to get this postcard') },
-        h('div', { class: 'pc-art', html: SC.svg(p.id, 'art') }), h('span', { class: 'pc-cap' }, p.on ? V.SEAS[p.sea].en : '🔒')))));
+        p.on ? h('div', { class: 'pc-art', html: SC.svg(p.id, 'art') }) : h('div', { class: 'pc-art pc-mys' }, h('i', null, '?')), h('span', { class: 'pc-cap' }, p.on ? V.SEAS[p.sea].en : '🔒 ' + V.SEAS[p.sea].en)))));
     } else if (tab === 'shop') root.append(shopView(st, focus));
     if (focus) setTimeout(() => { const el = root.querySelector('.focus'); if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.classList.add('flash'); } }, 120);
     return root;
@@ -354,7 +354,7 @@
     box.append(h('div', { class: 'row between' }, h('h2', null, '⛵ Boatyard'), h('span', { class: 'small muted' }, s.boats.length + ' of ' + V.BOATS.length + ' boats')));
     box.append(h('div', { class: 'fleet' }, V.BOATS.map((b) => {
       const own = s.boats.includes(b.id), on = s.boat === b.id, seen = own || cur >= b.isl, can = !own && seen && s.gold >= b.g;
-      if (!seen) return h('div', { class: 'boat-card mystery' }, h('div', { class: 'bc-pic sil', html: V.boatPic(b.id) }), h('div', { class: 'bc-tx' }, h('b', null, '??? Mystery boat'), h('div', { class: 'small muted' }, 'Reach chapter ' + (b.isl + 1) + ' to see it. (' + (b.isl - cur) + ' more chapter' + (b.isl - cur > 1 ? 's' : '') + ')')), h('span', { class: 'pill' }, '🔒'));
+      if (!seen) return h('div', { class: 'boat-card mystery' }, h('div', { class: 'bc-pic mys-boat' }, h('i', null, '?')), h('div', { class: 'bc-tx' }, h('b', null, '??? Mystery boat'), h('div', { class: 'small muted' }, 'Reach chapter ' + (b.isl + 1) + ' to see it. (' + (b.isl - cur) + ' more chapter' + (b.isl - cur > 1 ? 's' : '') + ')')), h('span', { class: 'pill' }, '🔒'));
       return h('div', { class: 'boat-card' + (on ? ' on' : '') + (own ? ' own' : '') + (focus === b.id ? ' focus' : '') },
         h('div', { class: 'bc-pic', html: V.boatPic(b.id) }),
         h('div', { class: 'bc-tx' }, h('b', null, b.n), h('div', { class: 'small muted' }, b.d),
