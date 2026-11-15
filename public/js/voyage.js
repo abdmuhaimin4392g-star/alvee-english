@@ -63,7 +63,9 @@
     abalone: (a, b) => `<defs><linearGradient id="abg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".5" stop-color="#F5D0F0"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><path d="M8 30Q8 8 34 8Q54 10 52 32Q50 52 26 52Q8 50 8 30Z" fill="url(#abg)"/><g fill="#fff" opacity=".7"><circle cx="18" cy="20" r="2.2"/><circle cx="25" cy="15" r="2.2"/><circle cx="33" cy="13" r="2.2"/><circle cx="41" cy="14" r="2.2"/></g>`,
     nautilus: (a, b) => `<circle cx="30" cy="30" r="24" fill="${a}"/><path d="M30 6Q54 8 54 30M30 54Q8 52 8 30M14 14Q22 24 22 34M44 46Q38 38 34 28M42 10Q40 20 36 26" stroke="${b}" stroke-width="3" fill="none"/><path d="M30 30m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" fill="${b}" opacity=".5"/>`,
   };
-  V.shellSVG = (id, size) => { const s = V.shell(id) || V.SHELLS[0]; return `<svg class="shell-svg" viewBox="0 0 60 60" width="${size || 40}" height="${size || 40}" aria-hidden="true">${SHAPE[s[4]](s[5], s[6])}<ellipse cx="22" cy="18" rx="6" ry="3" fill="#fff" opacity=".35"/></svg>`; };
+  // realistic shell pictures (img/shells, drawn and shaded for the app)
+  V.shellSVG = (id, size) => { const s0 = V.shell(id) || V.SHELLS[0]; return '<img class="shell-img" src="img/shells/' + s0[0] + '.webp" width="' + (size || 40) + '" height="' + (size || 40) + '" alt="' + s0[1] + '" draggable="false" decoding="async">'; };
+  V.shellSVGold = (id, size) => { const s = V.shell(id) || V.SHELLS[0]; return `<svg class="shell-svg" viewBox="0 0 60 60" width="${size || 40}" height="${size || 40}" aria-hidden="true">${SHAPE[s[4]](s[5], s[6])}<ellipse cx="22" cy="18" rx="6" ry="3" fill="#fff" opacity=".35"/></svg>`; };
 
   // ---------------------------------------------------------------- boats (bought with gold in the shop)
   V.BOATS = [

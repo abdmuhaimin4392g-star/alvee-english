@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.20';
+  A.VERSION = '5.21';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -141,6 +141,10 @@
   };
   A.capFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   A.words = (toks) => toks.filter((t) => !A.isPunct(t));
+  // realistic 3D pictures for emoji (img/emo, from emo.js); plain emoji when there is no picture
+  A.emoCode = (e) => (window.EMO && e ? window.EMO[e] || window.EMO[String(e).replace(/\uFE0F/g, '')] : null);
+  A.emoHTML = (e, cls) => { const c = A.emoCode(e); return c ? '<img class="emo-img' + (cls ? ' ' + cls : '') + '" src="img/emo/' + c + '.webp" alt="' + e + '" draggable="false" loading="lazy" decoding="async">' : e; };
+  A.emoEl = (e, cls) => { const c = A.emoCode(e); if (!c) return document.createTextNode(e || ''); const i = document.createElement('img'); i.className = 'emo-img' + (cls ? ' ' + cls : ''); i.src = 'img/emo/' + c + '.webp'; i.alt = e; i.draggable = false; i.loading = 'lazy'; i.decoding = 'async'; return i; };
   A.bf = { name: 'Boyfriend' };
   A.fill = (s) => String(s || '').replace(/\{bf\}/g, A.bf.name || 'Boyfriend');
 

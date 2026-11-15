@@ -249,7 +249,7 @@
   function treasureCard(it, isNew, big) {
     const r = RAR[it[3]], set = T.SETS[it[4]];
     return h('div', { class: 'tre-card r-' + it[3] + (big ? ' big' : ''), style: { '--rc': r.col } },
-      h('div', { class: 'tre-e' }, it[1]),
+      h('div', { class: 'tre-e' }, A.emoEl(it[1])),
       h('div', { class: 'tre-n' }, it[2]),
       h('div', { class: 'tre-m' }, h('span', { class: 'rar-chip', style: { '--rc': r.col } }, r.n), ' ' + set.ic + ' ' + set.n, isNew ? h('span', { class: 'new-chip' }, 'NEW') : null),
       big ? h('p', { class: 'tre-story' }, it[5]) : null);
@@ -316,7 +316,7 @@
           const own = s.tre[it[0]];
           const where = it[3] === 'l' ? 'Only in golden or sealed chests' : it[3] === 'e' ? 'Best found in golden or sealed chests' : it[3] === 'r' ? 'Sealed chests always hold rare or better' : 'Any chest on the sea';
           return h('button', { class: 'tre-cell r-' + it[3] + (own ? ' own' : '') + (focus === it[0] ? ' focus' : ''), 'data-id': it[0], style: { '--rc': RAR[it[3]].col }, onclick: () => own ? A.sheet(h('div', { class: 'stack', style: { alignItems: 'center' } }, treasureCard(it, false, true), h('div', { class: 'small muted' }, '× ' + own.n + ' · found ' + new Date(own.t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })))) : A.toast('🔍 ' + RAR[it[3]].n + ' · ' + where, 3200) },
-            own ? h('span', { class: 'te' }, it[1]) : h('span', { class: 'te mys', 'aria-label': 'Not found yet' }, h('i', null, '?')), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
+            own ? h('span', { class: 'te' }, A.emoEl(it[1])) : h('span', { class: 'te mys', 'aria-label': 'Not found yet' }, h('i', null, '?')), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
         })));
       });
     } else if (tab === 'shells') {
