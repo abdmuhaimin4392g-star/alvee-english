@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.8';
+  A.VERSION = '5.9';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -148,13 +148,25 @@
   const Speech = (A.speech = {
     ok: typeof window.speechSynthesis !== 'undefined' && typeof window.SpeechSynthesisUtterance !== 'undefined',
     voice: null,
-    rate: 0.85,
+    rate: 0.92,
+    // the clearest English voice on this phone: natural / premium / enhanced voices first, never the joke voices
+    score(v) {
+      if (!/^en/i.test(v.lang)) return -1;
+      const n = v.name;
+      if (/Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Wobble|Whisper|Zarvox|Trinoids|Organ|Jester|Superstar|Good News|Hysterical|Deranged|Pipe|Ralph|Fred|Junior|Kathy|Grandma|Grandpa|Rocko|Shelley|Flo|Eddy|Reed|Sandy/i.test(n)) return 0;
+      let x = 1;
+      if (/Premium|Enhanced|Natural|Neural|Online/i.test(n)) x += 20;
+      if (/Ava|Samantha|Allison|Zoe|Evan|Nathan|Susan|Aria|Jenny|Guy|Libby|Sonia|Ryan|Serena|Daniel|Karen|Moira|Google US English|Google UK English Female/i.test(n)) x += 8;
+      if (/^en[-_](US|GB)/i.test(v.lang)) x += 3;
+      if (v.localService) x += 1;
+      return x;
+    },
+    list() { try { return (window.speechSynthesis.getVoices() || []).filter((v) => this.score(v) > 0).sort((a, b) => this.score(b) - this.score(a)); } catch (e) { return []; } },
     pick() {
       try {
-        const vs = window.speechSynthesis.getVoices() || [];
-        const pref = ['Samantha', 'Google US English', 'Ava', 'Allison', 'Karen', 'Microsoft Aria', 'Microsoft Jenny', 'Daniel'];
-        this.voice = vs.find((v) => /^en/i.test(v.lang) && pref.some((p) => v.name.includes(p)))
-          || vs.find((v) => /^en[-_]US/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
+        const L = this.list();
+        const want = A.state && A.state.set && A.state.set.voice;
+        this.voice = (want && L.find((v) => v.name === want)) || L[0] || null;
       } catch (e) { this.voice = null; }
     },
     say(text, slow) {
@@ -164,7 +176,9 @@
         const u = new window.SpeechSynthesisUtterance(String(text).replace(/\{bf\}/g, ''));
         u.lang = (this.voice && this.voice.lang) || 'en-US';
         if (this.voice) u.voice = this.voice;
-        u.rate = slow ? 0.55 : this.rate;
+        if (!this.voice) this.pick();
+        u.rate = slow ? 0.6 : this.rate;
+        u.pitch = 1;
         window.speechSynthesis.speak(u);
         if (A.track) A.track('audio', { text: String(text).slice(0, 90), slow: slow ? 1 : 0 });
         return true;

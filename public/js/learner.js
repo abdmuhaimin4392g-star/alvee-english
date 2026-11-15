@@ -647,6 +647,8 @@
     const sw = (label, on, fn) => h('div', { class: 'switch' }, h('span', { class: 'th' }, label), h('button', { class: 'toggle' + (on ? ' on' : ''), role: 'switch', 'aria-checked': on ? 'true' : 'false', 'aria-label': label, onclick: fn }));
     root.append(h('div', { class: 'card', style: { padding: '4px 16px' } },
       sw('🐢 Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
+      A.speech.ok && A.speech.list().length > 1 ? h('div', { class: 'switch' }, h('span', null, '🗣️ English voice'), h('select', { class: 'input voice-pick', 'aria-label': 'English voice', onchange: (e) => { set.voice = e.target.value; A.speech.pick(); A.saveSoon(); A.speech.say('Hello! This is my English voice. Is it clear?'); } },
+        A.speech.list().slice(0, 12).map((v) => h('option', { value: v.name, selected: A.speech.voice && A.speech.voice.name === v.name ? true : null }, v.name.replace(/\s*\(.*\)$/, '') + ' · ' + v.lang)))) : null,
       sw('🔔 Sound effects', set.sfx, () => { set.sfx = !set.sfx; applySettings(); A.saveSoon(); A.go('me'); }),
       sw('🔠 Bigger text', set.big, () => { set.big = !set.big; applySettings(); A.saveSoon(); A.go('me'); }),
       sw('🇹🇭 Always show Thai', set.thai, () => { set.thai = !set.thai; A.saveSoon(); A.go('me'); }),
@@ -660,7 +662,7 @@
     const s = A.state.set;
     document.documentElement.classList.toggle('big', !!s.big);
     A.sfx.on = s.sfx !== false;
-    A.speech.rate = s.slow ? 0.68 : 0.85;
+    A.speech.rate = s.slow ? 0.72 : 0.92; A.speech.pick();
   }
   A.applySettings = applySettings;
 

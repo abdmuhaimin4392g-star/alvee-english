@@ -247,7 +247,7 @@
     const types = [];
     const fit = fitFor(key, maxUnit);
     if (fit) types.push('wfit');
-    if (A.speech.ok) types.push('listenw');
+    // no hear-a-single-word questions: too easy for her
     if (e.e && !/^\d/.test(e.e) && e.p === 'n') types.push('pic');
     if (!types.length) return null;
     const type = kind && types.includes(kind) ? kind : A.pick(types);
@@ -335,17 +335,20 @@
   function focusSteps(st, maxUnit, n, skip, only) {
     const weak = only ? [{ id: only }] : A.weakSkills(st).filter((w) => !['vocab', 'other'].includes(w.id));
     if (!weak.length) return [];
-    const sk = weak[0].id;
     const spool = A.sentsUpTo(maxUnit);
-    const cands = A.shuffle(spool.filter((sid) => !skip.has(sid) && A.sentSkills(sid).includes(sk)));
     const out = [];
+    // her two weakest points share the practice (the weakest gets more)
+    const plan = weak.slice(0, 2).map((w, i) => [w.id, i === 0 ? Math.ceil(n * (weak.length > 1 ? 0.6 : 1)) : n]);
+    for (const [sk, cap] of plan) {
+    const cands = A.shuffle(spool.filter((sid) => !skip.has(sid) && !out.some((o) => o.sid === sid) && A.sentSkills(sid).includes(sk)));
     for (const sid of cands) {
-      if (out.length >= n) break;
+      if (out.length >= n || out.filter((o) => o.focus === sk).length >= cap) break;
       const pref = FOCUS_TYPE[sk] ? [FOCUS_TYPE[sk]] : ['gap', 'pick', 'build'];
       const q = sentQuiz(sid, spool, pref);
       if (!q) continue;
       if (q.type === 'gap' && A.gapSkill(q.gap) !== sk && sk !== 'question') continue;
       out.push({ ...q, focus: sk });
+    }
     }
     return out;
   }
@@ -381,8 +384,8 @@
   function quizForItem(id, st, pool, spool) {
     const box = (st.srs[id] && st.srs[id].b) || 0;
     const maxUnit = A.reachedUnit(st);
-    if (id.startsWith('w:')) return wordQuiz(id.slice(2), pool, box <= 1 ? 'wfit' : A.pick(['wfit', 'listenw', 'pic']), maxUnit);
-    const prefer = box <= 1 ? ['pick', 'gap', 'build'] : box <= 3 ? A.shuffle(['gap', 'build', 'listen', 'reply']) : A.shuffle(['build', 'listen', 'reply', 'gap']);
+    if (id.startsWith('w:')) return wordQuiz(id.slice(2), pool, box <= 1 ? 'wfit' : A.pick(['wfit', 'pic']), maxUnit);
+    const prefer = box <= 1 ? ['pick', 'gap', 'build'] : box <= 3 ? A.shuffle(['gap', 'build', 'pick', 'reply']) : A.shuffle(['build', 'reply', 'gap', 'pick']);
     return sentQuiz(id.slice(2), spool, prefer);
   }
 
@@ -404,10 +407,11 @@
     const words = L.words.filter((k) => D[k]);
     const pool = A.wordsThrough(L.id);
     const spool = A.uniq([...L.sents, ...A.sentsUpTo(L.u)]);
-    for (let i = 0; i < words.length; i += 2) {
-      const chunk = words.slice(i, i + 2);
+    const teach = L.u > 8 ? words : [];
+    for (let i = 0; i < teach.length; i += 2) {
+      const chunk = teach.slice(i, i + 2);
       chunk.forEach((k) => steps.push({ type: 'wintro', key: k, item: 'w:' + k }));
-      chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'listenw' : 'wfit', L.u); if (q) steps.push(q); });
+      chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'pic' : 'wfit', L.u); if (q) steps.push(q); });
     }
     const review = reviewPicks(st, 4, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
     const sentSteps = [];
@@ -415,17 +419,17 @@
     const practise = L.sents.slice(0, 9);
     practise.forEach((sid, i) => {
       if (i < 2) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
-      const q = sentQuiz(sid, spool, L.boost ? A.shuffle(['gap', 'gap', 'pick', 'build']) : i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(['gap', 'build', 'pick', 'listen']));
+      const q = sentQuiz(sid, spool, L.boost ? A.shuffle(['gap', 'gap', 'pick', 'build']) : i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(i === 5 ? ['listen', 'gap'] : ['gap', 'build', 'pick', 'gap']));
       if (q) sentSteps.push(q);
       if (i % 3 === 2 && review.length) { const r = quizForItem(review.shift(), st, pool, spool); if (r) sentSteps.push({ ...r, review: 1 }); }
     });
     steps.push(...sentSteps);
     review.forEach((id) => { const r = quizForItem(id, st, pool, spool); if (r) steps.push({ ...r, review: 1 }); });
     // the app adapts: extra practice on her weakest grammar point
-    steps.push(...focusSteps(st, L.u, L.boost ? 4 : 2, new Set(L.sents), L.boost));
-    // finish with a second look at a new sentence and a new word
-    A.shuffle(L.sents.slice(0, 6)).slice(0, 2).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['listen', 'gap', 'pick', 'build'])); if (q) steps.push(q); });
-    A.shuffle(words).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['listenw', 'pic', 'wfit']), L.u); if (q) steps.push(q); });
+    steps.push(...focusSteps(st, L.u, L.boost ? 6 : 4, new Set(L.sents), L.boost));
+    // finish with a second look at a new sentence (and a new word in the later chapters)
+    A.shuffle(L.sents.slice(0, 6)).slice(0, 2).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['gap', 'pick', 'build'])); if (q) steps.push(q); });
+    A.shuffle(teach).slice(0, 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['pic', 'wfit']), L.u); if (q) steps.push(q); });
     return noRepeatTypes(steps);
   }
 
@@ -451,9 +455,9 @@
     const spool = A.uniq([...sents, ...A.sentsUpTo(node.u)]);
     const nS = monthTest ? 11 : 8, nW = monthTest ? 4 : 4, nT = monthTest ? 3 : 2;
     const steps = [];
-    const types = A.shuffle(['gap', 'pick', 'build', 'gap', 'listen', 'listen', 'pick', 'build', 'gap', 'pick', 'build']);
+    const types = A.shuffle(['gap', 'pick', 'build', 'gap', 'listen', 'gap', 'pick', 'build', 'gap', 'pick', 'build']);
     sents.slice(0, nS).forEach((sid, i) => { const q = sentQuiz(sid, spool, [types[i % types.length], 'gap', 'pick']); if (q) steps.push(q); });
-    words.slice(0, nW).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['wfit', 'listenw', 'pic']), node.u); if (q) steps.push(q); });
+    words.slice(0, node.u > 8 ? nW : 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['wfit', 'pic']), node.u); if (q) steps.push(q); });
     talkLines.slice(0, nT).forEach((sid) => { const q = sentQuiz(sid, spool, ['reply']); if (q) steps.push(q); });
     // harder tests: she types. From month 3 a missing word, from month 5 whole short sentences she hears.
     if (A.typingOn(node)) {
@@ -491,7 +495,7 @@
     const maxUnit = A.reachedUnit(st);
     const pool = A.lessonWordsUpTo(maxUnit);
     const spool = A.uniq([step.sid, ...A.sentsUpTo(maxUnit)].filter(Boolean));
-    if (step.item.startsWith('w:')) return wordQuiz(step.key, pool, A.pick(['wfit', 'listenw', 'pic'].filter((t) => t !== step.type)), maxUnit);
+    if (step.item.startsWith('w:')) return wordQuiz(step.key, pool, A.pick(['wfit', 'pic'].filter((t) => t !== step.type)), maxUnit);
     const order = ['pick', 'gap', 'build', 'listen'].filter((t) => t !== step.type);
     return sentQuiz(step.sid, spool, order);
   };
@@ -507,7 +511,7 @@
     while (out.length < n && guard++ < n * 8) {
       if (words || (prefer.includes('wfit') && Math.random() < 0.5)) {
         const k = learnedW[guard % Math.max(1, learnedW.length)];
-        const q = k && wordQuiz(k, pool, A.pick(['wfit', 'listenw', 'pic'].filter((t) => prefer.includes(t) || words)), mu);
+        const q = k && wordQuiz(k, pool, A.pick(['wfit', 'pic'].filter((t) => prefer.includes(t) || words)), mu);
         if (q && !out.some((x) => x.item === q.item)) { out.push(q); continue; }
         if (words) continue;
       }
@@ -525,8 +529,8 @@
       const id = talks.length ? talks[(isl.k + isl.sea * 7) % talks.length] : Object.keys(C.talks)[0];
       return talkSteps(id, st);
     }
-    if (m === 'listen') return miniSteps(st, 8, ['listen', 'listenw', 'listen', 'build']);
-    if (m === 'words') return miniSteps(st, 10, ['wfit', 'pic', 'listenw'], true);
+    if (m === 'listen') return miniSteps(st, 8, ['listen', 'gap', 'listen', 'build']);
+    if (m === 'words') return miniSteps(st, 10, ['wfit', 'pic'], true);
     if (m === 'build') return miniSteps(st, 8, ['build']);
     return miniSteps(st, 10, ['gap', 'pick', 'wfit', 'build', 'listen']);
   }
@@ -542,8 +546,8 @@
     else if (kind === 'mistakes') steps = reviewSteps(st, true);
     else if (kind === 'focus') steps = noRepeatTypes(focusSteps(st, A.reachedUnit(st), 8, new Set()));
     else if (kind === 'talk') steps = talkSteps(arg, st);
-    else if (kind === 'chest') steps = miniSteps(st, 3, ['gap', 'pick', 'wfit', 'listenw']);
-    else if (kind === 'bottle') steps = miniSteps(st, 5, ['listen', 'build', 'listen', 'gap']);
+    else if (kind === 'chest') steps = miniSteps(st, 3, ['gap', 'pick', 'wfit', 'build']);
+    else if (kind === 'bottle') steps = miniSteps(st, 5, ['gap', 'build', 'listen', 'pick']);
     else if (kind === 'side') steps = sideSteps(arg, st);
     steps = steps.filter(Boolean);
     const test = !!(node && node.kind === 'check');

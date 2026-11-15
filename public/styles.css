@@ -1420,3 +1420,4 @@ body.tyd-on #app { background: radial-gradient(120% 60% at 80% 0%, rgba(182,156,
 .tyd-r .l b .th { text-transform: none; letter-spacing: 0; color: var(--mute); font-weight: 500; }
 .tyd-r .s { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; }
 .tyd-r .s .tyd-pic { border-width: 1.5px; box-shadow: none; }
+.voice-pick { max-width: 58%; min-height: 40px; padding: 6px 10px; font-size: .85rem; }
