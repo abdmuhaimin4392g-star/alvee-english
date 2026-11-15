@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.7.1';
+  A.VERSION = '5.7.2';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -31,6 +31,10 @@
       if (!v || v === A.VERSION) return;
       const typing = document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName);
       if ((A.session || typing) && !force) { A.updateWaiting = true; return; } // never interrupt a lesson or a message
+      // reload once for a new version; if the phone still has the old files after that, wait instead of reloading again and again
+      let last = null; try { last = JSON.parse(sessionStorage.getItem('ae.upd') || 'null'); } catch (e) { /* private mode */ }
+      if (last && last.v === v && Date.now() - last.t < 10 * 60 * 1000) return;
+      try { sessionStorage.setItem('ae.upd', JSON.stringify({ v, t: Date.now() })); } catch (e) { /* private mode */ }
       if (A.flush) try { A.flush(); } catch (e) { /* offline */ }
       setTimeout(() => location.reload(), 300);
     } catch (e) { /* offline */ }

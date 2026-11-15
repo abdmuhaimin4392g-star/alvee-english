@@ -431,7 +431,8 @@ function serveStatic(req, res, urlPath) {
   const ext = path.extname(file);
   const headers = {
     'Content-Type': MIME[ext] || 'application/octet-stream',
-    'Cache-Control': ext === '.html' || file.endsWith('sw.js') ? 'no-cache' : 'public, max-age=300',
+    // code and styles are always checked with the server (a cheap 304 when unchanged), so an update never mixes old and new files
+    'Cache-Control': /\.(html|js|css|txt|webmanifest)$/.test(ext) ? 'no-cache' : 'public, max-age=300',
     ETag: item.etag,
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'same-origin',
