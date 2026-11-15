@@ -15,8 +15,9 @@
   A.sheet = (content, opts) => {
     const veil = h('div', { class: 'veil' });
     const sh = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true' }, h('div', { class: 'grab' }), h('div', { class: 'in' }, content));
-    const close = () => { veil.remove(); sh.remove(); if (opts && opts.onClose) opts.onClose(); };
+    const close = () => { if (!sh.isConnected) return; veil.remove(); sh.remove(); if (opts && opts.onClose) opts.onClose(); };
     veil.addEventListener('click', close);
+    if (!(opts && opts.noX)) sh.prepend(h('button', { class: 'sheet-x', 'aria-label': 'Close', onclick: close }, '✕'));
     document.body.append(veil, sh);
     sh.close = close;
     sh.setContent = (c) => { const inn = sh.querySelector('.in'); A.clear(inn).append(c); sh.scrollTop = 0; };
@@ -287,6 +288,39 @@
       A.setPresence({ screen: view });
     }
   };
+  // ---------------------------------------------------------------- the phone's back button
+  // Every screen change is a step in the browser history, so the phone's back button goes to the screen before.
+  // Back closes an open sheet first; in a lesson it asks before leaving.
+  let fromPop = false, histN = 0;
+  const keepArg = (a) => (a == null || typeof a === 'string' || typeof a === 'number' ? a : a && typeof a === 'object' && JSON.stringify(a).length < 300 && !a.ses ? a : undefined);
+  const goRaw = A.go;
+  A.go = (view, arg) => {
+    const prev = A.view;
+    goRaw(view, arg);
+    if (fromPop || !A.user || A.user.role === 'admin' || !history.pushState) return;
+    const st = { ae: 1, v: view, a: keepArg(arg), n: histN };
+    try {
+      if (view === 'result' || view === prev || !history.state || !history.state.ae) history.replaceState(st, '');
+      else { st.n = ++histN; history.pushState(st, ''); }
+    } catch (e) { /* history not available */ }
+  };
+  A.back = (fallback) => { if (history.state && history.state.ae && history.state.n > 0) history.back(); else A.go(fallback || 'home'); };
+  addEventListener('popstate', (e) => {
+    if (!A.user || A.user.role === 'admin') return;
+    const here = { ae: 1, v: A.view, n: histN };
+    const sheets = document.querySelectorAll('.sheet');
+    if (sheets.length) { const top = sheets[sheets.length - 1]; if (top.close) top.close(); else { top.remove(); document.querySelectorAll('.veil').forEach((v) => v.remove()); } try { history.pushState(here, ''); } catch (x) { /* ignore */ } return; }
+    if (A.session && A.view === 'player') { try { history.pushState(here, ''); } catch (x) { /* ignore */ } if (A.quitLesson) A.quitLesson(); return; }
+    const s = e.state;
+    if (!s || !s.ae) return;
+    histN = s.n || 0;
+    let v = s.v, a = s.a;
+    if (v === 'player' || v === 'result' || !VIEWS[v]) { v = 'home'; a = undefined; }
+    fromPop = true; try { A.go(v, a); } finally { fromPop = false; }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const sh = document.querySelectorAll('.sheet'); if (sh.length && sh[sh.length - 1].close) sh[sh.length - 1].close(); } });
+  document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('app-hidden', document.hidden));
+
   function nav(cur) {
     const items = [['home', '🏝️', 'Home'], ['journey', '🧭', 'Voyage'], ['talks', '💬', 'Talk'], ['treasure', '💰', 'Treasure'], ['me', '🐢', 'Me']];
     const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words' || cur === 'types' || cur === 'type' || cur === 'typevs') && v === 'me');
@@ -561,7 +595,7 @@
   VIEWS.grammar = () => {
     const reach = A.reachedUnit(A.state, A.user.cfg);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'muted' }, 'Every grammar tip you have met'))));
+    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'muted' }, 'Every grammar tip you have met'))));
     Object.values(C.tips).forEach((t) => {
       const open = (t.u || 1) <= reach;
       root.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.sheet(tipView(t.id)) : A.toast('🔒 Opens at Unit ' + t.u)) },
@@ -594,7 +628,7 @@
     const st = A.state;
     const root = h('div', { class: 'screen' });
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('me') }, '‹'),
+    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'),
       h('div', { style: { flex: 1 } }, h('h1', null, 'Treasure chest'), h('p', { class: 'muted' }, A.user.name + '’s medals'))));
     const tiers = ['bronze', 'silver', 'gold', 'pearl'].map((t) => [t, A.MEDALS.filter((m) => m.tier === t && st.badges[m.id]).length, A.MEDALS.filter((m) => m.tier === t).length]);
     root.append(h('div', { class: 'card chest' }, mascot(got ? 'party' : 'wave', 70),
@@ -808,6 +842,7 @@
       finish();
     }
 
+    A.quitLesson = () => quit();
     function quit() {
       const sh = A.sheet(h('div', { class: 'stack', style: { gap: '12px', textAlign: 'center' } },
         h('div', { style: { fontSize: '2.6rem' } }, '🥺'), h('h2', null, 'Leave the lesson?'), h('p', { class: 'muted' }, 'If you leave now, this lesson will not be saved.'),

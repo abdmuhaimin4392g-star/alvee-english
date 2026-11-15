@@ -50,7 +50,7 @@
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
     s.append(h('button', { class: 'card talk-item sbx-open', onclick: () => ADM.tab('demo') }, h('div', { class: 'av' }, '🎮'), h('div', { style: { flex: 1 } }, h('b', null, 'Play her app (demo copy)'), h('div', { class: 'small muted' }, 'Her screens with a copy of her progress. Nothing you do reaches her account or this dashboard.')), h('span', { class: 'muted' }, '›')));
-    const tabs = [['demo', '🎮 Demo'], ['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['voice', '🎙️ Voice'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    const tabs = [['demo', '📱 Demo'], ['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['voice', '🎙️ Voice'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);

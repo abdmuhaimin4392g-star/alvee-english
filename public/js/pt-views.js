@@ -35,7 +35,7 @@
   // these pages are dark, like a night sky
   const go0 = A.go;
   A.go = (view, arg) => { go0(view, arg); document.body.classList.toggle('tyd-on', ['types', 'type', 'typevs'].includes(view)); };
-  const head = (to, kick, title) => h('div', { class: 'tyd-head' }, h('button', { class: 'tyd-back', 'aria-label': 'Back', onclick: () => A.go(to) }, '‹'), h('div', null, h('div', { class: 'tyd-kick' }, kick), h('h1', null, title)));
+  const head = (to, kick, title) => h('div', { class: 'tyd-head' }, h('button', { class: 'tyd-back', 'aria-label': 'Back', onclick: () => A.back(to) }, '‹'), h('div', null, h('div', { class: 'tyd-kick' }, kick), h('h1', null, title)));
 
   // ---------------------------------------------------------------- all 16 types
   VIEWS.types = () => {

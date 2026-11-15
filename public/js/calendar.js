@@ -248,7 +248,7 @@
     if (CV.y == null) { CV.y = Y(t).y; CV.m = Y(t).m; }
     const root = h('div', { class: 'screen cal-screen' });
     const body = h('div', { class: 'stack', style: { gap: '14px' } });
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.go('home') }, '‹'),
+    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('home') }, '‹'),
       h('div', null, h('h1', null, 'Calendar'), h('p', { class: 'muted th' }, 'ปฏิทินไทย · Thai and Maldives special days'))));
     root.append(body);
     const move = (n) => { let m = CV.m + n, y = CV.y; while (m < 0) { m += 12; y--; } while (m > 11) { m -= 12; y++; } CV.m = m; CV.y = y; draw(); };
