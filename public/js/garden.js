@@ -1,15 +1,29 @@
-/* garden.js — the Word Garden: every word she meets is a plant. Words grow when she remembers them
-   (🌱 → 🌿 → ☘️ → 🌷 → 🌸 → 🌳) and get thirsty (🥀) when it is time to see them again, so no word is forgotten.
+/* garden.js — the Word Reef: every word she meets is a coral. Corals grow into new kinds when she remembers them
+   (polyp → sea fan → brain coral → staghorn → tube coral → rainbow reef) and fade white (bleach) when it is time
+   to see them again, so no word is forgotten.
    Spaced repetition made for a slow, gentle pace: short gaps at first, longer ones as the word gets strong.
    Also: the Word Chest bonus lessons (8 new words per chapter) and a memory-match game. */
 (function () {
   'use strict';
   const A = window.AE, h = A && A.h, VOC = window.VOCAB || {};
   if (!A || !A.RENDER || !A.VIEWS) return;
-  const C = A.C, D = C.dict, DAY = 864e5;
-  const STAGE = ['🌱', '🌿', '☘️', '🌷', '🌸', '🌳'];
-  const STAGE_N = ['Seed', 'Sprout', 'Leafy', 'Bud', 'Bloom', 'Tree'];
-  const STAGE_TH = ['เมล็ด', 'ต้นอ่อน', 'แตกใบ', 'ตูม', 'บาน', 'ต้นไม้ใหญ่'];
+  const C = A.C, D = C.dict, DAY = 864e5, DEFS = window.DEFS || {}, WOTD = window.WOTD || [];
+  const STAGE_N = ['Polyp', 'Sea fan', 'Brain coral', 'Staghorn', 'Tube coral', 'Rainbow reef'];
+  const STAGE_TH = ['ตัวอ่อนปะการัง', 'กัลปังหา', 'ปะการังสมอง', 'ปะการังเขากวาง', 'ปะการังท่อ', 'แนวปะการังสีรุ้ง'];
+  // a small hand-drawn coral for each stage (SVG). Faded words show the same coral bleached white.
+  function coral(stage, size, faded) {
+    const s = size || 34, k = Math.max(0, Math.min(5, stage | 0));
+    const P = [
+      '<ellipse cx="20" cy="33" rx="9" ry="3" fill="#e8b98a"/><path d="M13 32c0-8 3-13 7-13s7 5 7 13z" fill="#ff8fab"/>' + [14, 17, 20, 23, 26].map((x, i) => '<circle cx="' + x + '" cy="' + (19 - (i % 2) * 2) + '" r="1.6" fill="#ffd1dc"/>').join(''),
+      '<ellipse cx="20" cy="35" rx="10" ry="2.5" fill="#e8b98a"/><path d="M20 35 L20 26" stroke="#9b59d0" stroke-width="2"/>' + [-60, -35, -12, 12, 35, 60].map((a) => { const r = a * Math.PI / 180; return '<path d="M20 27 Q' + (20 + Math.sin(r) * 8) + ' ' + (22 - Math.cos(r) * 6) + ' ' + (20 + Math.sin(r) * 14) + ' ' + (27 - Math.cos(r) * 16) + '" stroke="#b77ee8" stroke-width="2.2" fill="none" stroke-linecap="round"/>'; }).join('') + '<circle cx="20" cy="12" r="1.5" fill="#e3c6ff"/>',
+      '<ellipse cx="20" cy="35" rx="13" ry="2.5" fill="#e8b98a"/><path d="M6 34c0-10 6-17 14-17s14 7 14 17z" fill="#7fcf8f"/><path d="M9 31c3-3 5 1 8-2s5 1 8-2 4 1 6-1M8 26c3-2 5 1 8-1s5 1 8-1 4 1 7-1M12 21c3-2 4 1 7-1s4 1 7-1" stroke="#3f9a5a" stroke-width="1.4" fill="none" stroke-linecap="round"/>',
+      '<ellipse cx="20" cy="36" rx="12" ry="2.5" fill="#e8b98a"/><path d="M20 36V22M20 28l-8-8M12 20l-2-7M12 20l-6-2M20 24l8-9M28 15l1-7M28 15l6-1M20 22l1-12" stroke="#ff9a4d" stroke-width="3.2" stroke-linecap="round" fill="none"/>' + [[10, 13], [6, 18], [29, 8], [34, 14], [21, 10]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="1.8" fill="#ffd2a8"/>').join(''),
+      '<ellipse cx="20" cy="36" rx="14" ry="2.5" fill="#e8b98a"/>' + [[9, 22, '#3cc6c0'], [15, 14, '#2fb5d6'], [21, 10, '#4bd1b0'], [27, 16, '#2fb5d6'], [32, 24, '#3cc6c0']].map(([x, y, c]) => '<rect x="' + (x - 2.6) + '" y="' + y + '" width="5.2" height="' + (36 - y) + '" rx="2.6" fill="' + c + '"/><ellipse cx="' + x + '" cy="' + y + '" rx="2.6" ry="1.3" fill="#0f6f7a"/>').join(''),
+      '<ellipse cx="20" cy="37" rx="16" ry="2.5" fill="#e8b98a"/><path d="M5 36c0-7 4-11 8-11s6 4 6 11z" fill="#ff8fab"/><path d="M15 36V25M15 30l-5-6M15 28l5-7" stroke="#ff9a4d" stroke-width="2.6" stroke-linecap="round"/><path d="M21 36c0-9 4-14 8-14s8 5 8 14z" fill="#7fcf8f"/>' + [[24, 22, '#3cc6c0'], [29, 18, '#2fb5d6'], [34, 23, '#4bd1b0']].map(([x, y, c]) => '<rect x="' + (x - 2) + '" y="' + y + '" width="4" height="' + (34 - y) + '" rx="2" fill="' + c + '"/>').join('') + '<path d="M8 12q4-4 8 0q-4 4-8 0z" fill="#ffc93c"/><path d="M8 12l-3-2v4z" fill="#ffc93c"/><circle cx="14" cy="11.5" r=".9" fill="#333"/><path d="M27 7q3-3 6 0q-3 3-6 0z" fill="#6cc6ff"/><path d="M27 7l-2-1.6v3.2z" fill="#6cc6ff"/>',
+    ];
+    return '<svg viewBox="0 0 40 40" width="' + s + '" height="' + s + '" class="coral' + (faded ? ' faded' : '') + '" aria-hidden="true">' + P[k] + '</svg>';
+  }
+  const coralEl = (stage, size, faded) => h('span', { class: 'coral-w', html: coral(stage, size, faded) });
   // days until she sees the word again, by level (short at first: she forgets easily)
   const GAP = [0.02, 1, 2, 4, 7, 15, 30, 60];
   const KEEP = ['v', 'n', 'adj', 'adv', 'phr', 'n0', 'int'];
@@ -18,7 +32,13 @@
   const vocWord = {}; // 'v:word' -> entry
   Object.entries(VOC).forEach(([u, L]) => L.forEach((v) => { vocWord['v:' + v[0].toLowerCase()] = { u: +u, v }; }));
   const idOfVocab = (v) => (D[v[0].toLowerCase()] ? 'd:' + v[0].toLowerCase() : 'v:' + v[0].toLowerCase());
+  const wotdBy = {}; WOTD.forEach((x) => { wotdBy['o:' + x[0]] = x; });
+  const defOf = (w) => DEFS[w] || DEFS[w.toLowerCase()] || (WOTD.find((x) => x[0] === w.toLowerCase()) || [])[4] || '';
   function item(id) {
+    if (id.startsWith('o:')) { const x = wotdBy[id]; return x ? { id, w: x[0], th: x[1], pr: x[2], e: x[3], def: x[4], ex: x[5], exth: x[6], adv: 1 } : null; }
+    const it = item0(id); if (it) it.def = defOf(it.w); return it;
+  }
+  function item0(id) {
     if (id.startsWith('d:')) {
       const e = D[id.slice(2)]; if (!e) return null;
       const ex = (e.ex && e.ex[0]) || null;
@@ -93,15 +113,16 @@
   A.RENDER.gcard = (step, ctl) => {
     const it = item(step.gid);
     setTimeout(() => A.speech.say(it.w), 250);
-    return h('div', { class: 'stack', style: { gap: '14px' } }, head('🌱', 'New word', 'คำศัพท์ใหม่'),
+    return h('div', { class: 'stack', style: { gap: '14px' } }, head('🪸', 'New word', 'คำศัพท์ใหม่'),
       h('div', { class: 'g-card' },
         h('div', { class: 'g-emo' }, it.e),
         h('div', { class: 'row', style: { gap: '8px', justifyContent: 'center', alignItems: 'center' } }, h('h2', { class: 'g-w' }, it.w), say(it.w, true)),
         it.pr ? h('div', { class: 'g-pr th' }, '🗣️ ' + it.pr) : null,
         h('div', { class: 'g-th th' }, it.th),
+        it.def ? h('div', { class: 'g-def' }, '📘 ' + it.def) : null,
         it.ex ? h('div', { class: 'g-ex' }, h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } }, h('span', { style: { flex: 1 } }, it.ex), say(it.ex)), h('div', { class: 'th small muted' }, it.exth)) : null,
         h('div', { class: 'small muted' }, '💡 Say it out loud 3 times. Picture ' + it.e + ' in your mind. · พูดออกเสียง 3 ครั้ง')),
-      h('button', { class: 'btn primary block', onclick: () => ctl.next() }, 'I’ve got it 🌱'));
+      h('button', { class: 'btn primary block', onclick: () => ctl.next() }, 'I’ve got it 🪸'));
   };
   A.RENDER.gmean = (step, ctl) => {
     const it = item(step.gid);
@@ -145,33 +166,47 @@
     return !prev;
   };
 
-  // ------------------------------------------------------------- memory match (a little game in the garden)
+  // ------------------------------------------------------------- Shell Match: find the word that goes with each English meaning
+  // Clams open to show a word or its meaning (an easy English explanation). Two clams that belong together become a pearl.
   function matchGame(st) {
-    let pool = met(st).filter((id) => vg(st)[id]).sort((a, b) => lv(st, a) - lv(st, b));
-    if (pool.length < 6) pool = pool.concat(met(st).filter((id) => !vg(st)[id]));
-    const ids = A.shuffle(pool.slice(0, 14)).slice(0, 6);
+    const withDef = (id) => { const it = item(id); return it && it.def && it.def.length < 64; };
+    const reach = A.reachedUnit(st, A.user && A.user.cfg);
+    let pool = met(st).filter((id) => vg(st)[id] && withDef(id)).sort((a, b) => lv(st, a) - lv(st, b)).slice(0, 12);
+    if (pool.length < 5) pool = pool.concat(A.shuffle(Object.entries(VOC).filter(([u]) => +u <= Math.max(reach, 1) + 1).flatMap(([, L]) => L.map(idOfVocab)).filter((id) => withDef(id) && !pool.includes(id))));
+    const ids = A.uniq(A.shuffle(pool.slice(0, 12))).slice(0, 5);
     if (ids.length < 3) { A.toast('Learn a few more words first! · เรียนคำศัพท์เพิ่มอีกหน่อยนะ'); return; }
-    const cards = A.shuffle(ids.flatMap((id) => { const it = item(id); return [{ id, f: 'en', t: it.w, e: it.e }, { id, f: 'th', t: it.th, e: it.e }]; }));
+    const cards = A.shuffle(ids.flatMap((id) => { const it = item(id); return [{ id, f: 'w', it }, { id, f: 'd', it }]; }));
     let open = [], found = 0, tries = 0; const t0 = Date.now();
-    const grid = h('div', { class: 'mm-grid' });
-    const info = h('div', { class: 'small muted', style: { textAlign: 'center' } }, 'Find the pairs: English ↔ Thai · จับคู่คำ');
+    const pearls = h('div', { class: 'sm-pearls' }, ...ids.map(() => h('i')));
+    const info = h('div', { class: 'small muted', style: { textAlign: 'center' } }, 'Open two clams: a word and its meaning. · เปิดหอยสองตัว: คำศัพท์และความหมายของมัน');
+    const grid = h('div', { class: 'sm-grid' });
     cards.forEach((c) => {
-      const el = h('button', { class: 'mm-card', 'aria-label': 'card' }, h('span', { class: 'mm-back' }, '🍃'), h('span', { class: 'mm-front' + (c.f === 'th' ? ' th' : '') }, c.f === 'en' ? h('i', null, c.e) : null, h('b', null, c.t)));
+      const face = c.f === 'w' ? h('span', { class: 'sm-face w' }, h('i', null, c.it.e), h('b', null, c.it.w)) : h('span', { class: 'sm-face d' }, h('span', null, c.it.def));
+      const el = h('button', { class: 'sm-card', 'aria-label': 'clam' }, h('span', { class: 'sm-shell', html: '<svg viewBox="0 0 60 40" aria-hidden="true"><defs><linearGradient id="smg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9e2"/><stop offset="1" stop-color="#f49ab3"/></linearGradient></defs><path d="M30 4C14 4 4 16 4 30h52C56 16 46 4 30 4z" fill="url(#smg)" stroke="#e07a98" stroke-width="1.5"/>' + [12, 20, 30, 40, 48].map((x) => '<path d="M30 30L' + x + ' 8" stroke="#e07a98" stroke-width="1" opacity=".6"/>').join('') + '<rect x="4" y="30" width="52" height="6" rx="3" fill="#e9a3b8"/></svg>' }), face);
       el.onclick = () => {
         if (el.classList.contains('up') || open.length >= 2) return;
-        el.classList.add('up'); if (c.f === 'en') A.speech.say(c.t); open.push([c, el]);
+        el.classList.add('up'); if (c.f === 'w') A.speech.say(c.it.w); open.push([c, el]);
         if (open.length === 2) {
           tries++;
           const [[a, ea], [b, eb]] = open;
-          if (a.id === b.id && a.f !== b.f) { setTimeout(() => { ea.classList.add('done'); eb.classList.add('done'); open = []; found++; A.sfx && A.sfx.play && A.sfx.play('good');
-            if (found === ids.length) { const sec = Math.round((Date.now() - t0) / 1000); const p = A.voyage && A.voyage.addPearls ? A.voyage.addPearls(2, st) : 0; A.track('garden_match', { pairs: found, tries, sec }); A.saveSoon();
-              info.replaceChildren('🎉 All pairs in ' + tries + ' tries · ' + sec + 's' + (p ? ' · +' + p + ' pearls' : '')); A.confetti && A.confetti(); } }, 350); }
-          else setTimeout(() => { ea.classList.remove('up'); eb.classList.remove('up'); open = []; }, 900);
+          if (a.id === b.id && a.f !== b.f) {
+            setTimeout(() => {
+              ea.classList.add('done'); eb.classList.add('done'); open = []; pearls.children[found].classList.add('on'); found++;
+              A.sfx && A.sfx.play && A.sfx.play('good');
+              if (found === ids.length) {
+                const sec = Math.round((Date.now() - t0) / 1000);
+                const p = A.voyage && A.voyage.addPearls ? A.voyage.addPearls(2, st) : 0;
+                A.track('reef_match', { pairs: found, tries, sec }); A.saveSoon();
+                info.replaceChildren('🎉 All ' + found + ' pairs in ' + tries + ' tries · ' + sec + 's' + (p ? ' · +' + p + ' pearls' : ''));
+                A.confetti && A.confetti();
+              }
+            }, 450);
+          } else setTimeout(() => { ea.classList.remove('up'); eb.classList.remove('up'); open = []; }, 1400);
         }
       };
       grid.append(el);
     });
-    A.sheet(h('div', { class: 'stack', style: { gap: '10px' } }, h('h2', null, '🃏 Memory match'), info, grid));
+    A.sheet(h('div', { class: 'stack sm-wrap', style: { gap: '10px' } }, h('h2', null, '🐚 Shell match'), info, pearls, grid));
   }
 
   // ------------------------------------------------------------- the garden page (replaces the old word list)
@@ -181,17 +216,17 @@
     const root = h('div', { class: 'screen garden' });
     const water = pickWater(st, 12);
     const hero = h('div', { class: 'g-hero' },
-      h('div', { class: 'g-sky', 'aria-hidden': 'true' }, h('i', { class: 'sun' }), ...Array.from({ length: 6 }, (_, i) => h('i', { class: 'cl', style: { left: (i * 17 + 4) + '%', animationDelay: (i * 1.3) + 's' } }))),
-      h('div', { class: 'g-title' }, h('h1', null, 'My Word Garden'), h('p', { class: 'th' }, 'สวนคำศัพท์ของฉัน · ' + c.all + ' words')),
-      h('div', { class: 'g-bed' }, ...STAGE.map((e, i) => h('div', { class: 'g-plant' }, h('span', { class: 'g-pe', style: { fontSize: (1.2 + i * 0.18) + 'rem' } }, e), h('b', null, i === 0 ? c.st[0] + c.seeds : c.st[i]), h('small', null, STAGE_N[i])))),
+      h('div', { class: 'g-sky', 'aria-hidden': 'true' }, h('i', { class: 'ray' }), ...Array.from({ length: 10 }, (_, i) => h('i', { class: 'bub', style: { left: (i * 10 + 3) + '%', animationDelay: (i * 0.9) + 's', width: (4 + (i % 3) * 3) + 'px', height: (4 + (i % 3) * 3) + 'px' } })), h('i', { class: 'fish f1' }, '🐠'), h('i', { class: 'fish f2' }, '🐟')),
+      h('div', { class: 'g-title' }, h('h1', null, 'My Word Reef'), h('p', { class: 'th' }, 'แนวปะการังคำศัพท์ของฉัน · ' + c.all + ' words')),
+      h('div', { class: 'g-bed' }, ...STAGE_N.map((n, i) => h('div', { class: 'g-plant' }, h('span', { class: 'g-pe' }, coralEl(i, 26 + i * 3)), h('b', null, i === 0 ? c.st[0] + c.seeds : c.st[i]), h('small', null, n)))),
       h('div', { class: 'g-cta' },
-        h('button', { class: 'btn mango block', disabled: water.length ? null : true, onclick: () => A.play('garden') }, c.thirsty ? '💧 Water ' + Math.min(12, c.thirsty) + ' thirsty word' + (c.thirsty > 1 ? 's' : '') : water.length ? '🌱 Plant ' + water.length + ' new words' : '✨ All watered! Come back later'),
-        h('button', { class: 'btn ghost block', onclick: () => matchGame(st) }, '🃏 Memory match')),
-      c.thirsty ? h('div', { class: 'g-note th' }, '🥀 ' + c.thirsty + ' words miss you. Water them before they wilt! · มีคำศัพท์รอให้รดน้ำ') : h('div', { class: 'g-note th' }, '💚 Words grow when you remember them. Thirsty words come back at the right time. · คำจะกลับมาให้ทบทวนในเวลาที่เหมาะสม'));
+        h('button', { class: 'btn mango block', disabled: water.length ? null : true, onclick: () => A.play('garden') }, c.thirsty ? '✨ Bring back ' + Math.min(12, c.thirsty) + ' fading coral' + (c.thirsty > 1 ? 's' : '') : water.length ? '🪸 Grow ' + water.length + ' new corals' : '💙 Your reef is healthy! Come back later'),
+        h('button', { class: 'btn ghost block', onclick: () => matchGame(st) }, '🐚 Shell match')),
+      c.thirsty ? h('div', { class: 'g-note th' }, '🤍 ' + c.thirsty + ' words are fading white. Review them to bring their colour back! · มีคำศัพท์ที่กำลังซีดจาง ทบทวนเพื่อให้กลับมามีสีสัน') : h('div', { class: 'g-note th' }, '💙 Each word you remember grows into a new coral. Fading words come back at the right time. · คำที่จำได้จะเติบโตเป็นปะการังชนิดใหม่'));
     root.append(hero);
     const input = h('input', { class: 'input', placeholder: 'Search English or Thai · ค้นหา', value: gQ, oninput: (e) => { gQ = e.target.value; render(); } });
     root.append(h('div', { class: 'search' }, input));
-    root.append(h('div', { class: 'row', style: { gap: '6px', flexWrap: 'wrap' } }, [['thirsty', '🥀 Thirsty'], ['grow', '🌿 Growing'], ['tree', '🌳 Strong'], ['seed', '🌱 New'], ['all', '📖 All']].map(([k, t]) => h('button', { class: 'chip' + (gTab === k ? ' on' : ''), onclick: () => { gTab = k; render(); [...root.querySelectorAll('.chip')].forEach((x) => x.classList.toggle('on', x.textContent === t)); } }, t))));
+    root.append(h('div', { class: 'row', style: { gap: '6px', flexWrap: 'wrap' } }, [['thirsty', '🤍 Fading'], ['grow', '🪸 Growing'], ['tree', '🌈 Strong'], ['seed', '🥚 New'], ['all', '📖 All']].map(([k, t]) => h('button', { class: 'chip' + (gTab === k ? ' on' : ''), onclick: () => { gTab = k; render(); [...root.querySelectorAll('.chip')].forEach((x) => x.classList.toggle('on', x.textContent === t)); } }, t))));
     const list = h('div', { class: 'g-list' });
     root.append(list);
     function render() {
@@ -207,12 +242,12 @@
       else if (gTab === 'tree') ids = ids.filter((id) => vg(st)[id] && stageOf(st, id) >= 4);
       else if (gTab === 'seed') ids = ids.filter((id) => !vg(st)[id]);
       ids.sort((a, b) => (lv(st, a) - lv(st, b)) || item(a).w.localeCompare(item(b).w));
-      if (!ids.length) list.append(h('p', { class: 'th muted', style: { padding: '14px 4px' } }, gTab === 'thirsty' && !q ? '💚 No thirsty words right now. Well done! · ไม่มีคำที่ต้องรดน้ำตอนนี้' : 'Nothing here yet · ยังไม่มีคำ'));
+      if (!ids.length) list.append(h('p', { class: 'th muted', style: { padding: '14px 4px' } }, gTab === 'thirsty' && !q ? '💙 No fading corals right now. Well done! · ตอนนี้ไม่มีคำที่ซีดจาง' : 'Nothing here yet · ยังไม่มีคำ'));
       ids.slice(0, 400).forEach((id) => {
         const it = item(id), g = vg(st)[id], s = g ? stageOf(st, id) : 0, th = thirsty(st, id);
         list.append(h('button', { class: 'g-chip' + (th ? ' thirsty' : '') + (g ? '' : ' seed'), onclick: () => cardSheet(st, id) },
           h('span', { class: 'g-ce' }, it.e), h('span', { class: 'g-ct' }, h('b', null, it.w), h('small', { class: 'th' }, it.th)),
-          h('span', { class: 'g-cs', title: STAGE_N[s] }, th ? '🥀' : g ? STAGE[s] : '🫘')));
+          h('span', { class: 'g-cs', title: g ? STAGE_N[s] : 'not grown yet' }, g ? coralEl(s, 30, th) : h('span', { class: 'g-egg' }, '🥚'))));
       });
     }
     render();
@@ -227,8 +262,9 @@
       it.pr ? h('div', { class: 'th muted' }, '🗣️ ' + it.pr) : null,
       h('div', { class: 'th', style: { fontSize: '1.15rem' } }, it.th),
       it.ex ? h('div', { class: 'g-ex', style: { textAlign: 'left' } }, h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } }, h('span', { style: { flex: 1 } }, it.ex), say(it.ex)), h('div', { class: 'th small muted' }, it.exth)) : null,
-      h('div', { class: 'g-grow' }, ...STAGE.map((e, i) => h('span', { class: i <= s ? 'on' : '' }, e))),
-      h('div', { class: 'small muted' }, g ? (STAGE_N[s] + ' · ' + STAGE_TH[s] + ' · ' + (thirsty(st, id) ? '🥀 thirsty now' : 'next water: ' + new Date(g.due).toLocaleDateString())) : '🫘 Not planted yet. Water your garden to plant it.'),
+      it.def ? h('div', { class: 'g-def' }, '📘 ' + it.def) : null,
+      h('div', { class: 'g-grow' }, ...STAGE_N.map((n, i) => h('span', { class: i <= s ? 'on' : '', title: n }, coralEl(i, 30, false)))),
+      h('div', { class: 'small muted' }, g ? (STAGE_N[s] + ' · ' + STAGE_TH[s] + ' · ' + (thirsty(st, id) ? '🤍 fading, review it now' : 'next review: ' + new Date(g.due).toLocaleDateString())) : '🥚 Not grown yet. Tap "Grow new corals" to start it.'),
       it.dict ? h('button', { class: 'btn ghost block', onclick: () => { sh.close(); A.wordPopup(it.dict); } }, 'More: grammar and examples') : null));
   }
 
@@ -236,14 +272,24 @@
   A.garden = {
     item, met, counts, grade, pickWater, vg, idOfVocab, matchGame, vocabFinish,
     homeCard(st) {
-      const all = met(st); if (!all.length) return null;
       const c = counts(st);
-      const pick = all[(parseInt(A.dkey().replace(/-/g, ''), 10) * 7919) % all.length], it = item(pick);
+      // an advanced word every day: Word of the day words first, then the harder Word Chest words; strong ones are skipped
+      const n = Math.floor(Date.now() / DAY);
+      const strong = (id) => vg(st)[id] && vg(st)[id].lv >= 4;
+      const pool = WOTD.map((x) => 'o:' + x[0]).concat(Object.entries(VOC).filter(([u]) => +u >= 13).flatMap(([, L]) => L.map(idOfVocab))).filter((id) => item(id) && !strong(id));
+      const pick = pool.length ? pool[(n * 7) % pool.length] : null;
+      if (!pick) return null;
+      const it = item(pick), have = !!vg(st)[pick];
       return h('div', { class: 'card g-home' },
         h('div', { class: 'g-wod', onclick: () => cardSheet(st, pick) },
           h('span', { class: 'g-wode' }, it.e),
-          h('div', { style: { flex: 1, minWidth: 0 } }, h('small', { class: 'muted' }, '✨ Word of the day · คำศัพท์ประจำวัน'), h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } }, h('b', { class: 'g-wodw' }, it.w), say(it.w)), h('div', { class: 'th small' }, it.th))),
-        h('button', { class: 'btn ' + (c.thirsty ? 'mango' : 'ghost') + ' block', onclick: () => (c.thirsty || pickWater(st, 12).length ? A.play('garden') : A.go('words')) }, c.thirsty ? '💧 ' + c.thirsty + ' thirsty word' + (c.thirsty > 1 ? 's' : '') + ' · water them' : '🌱 My Word Garden'));
+          h('div', { style: { flex: 1, minWidth: 0 } }, h('small', { class: 'muted' }, '✨ Word of the day · คำศัพท์ประจำวัน'),
+            h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } }, h('b', { class: 'g-wodw' }, it.w), say(it.w)),
+            it.def ? h('div', { class: 'small' }, it.def) : null,
+            h('div', { class: 'th small muted' }, it.th + (it.pr ? ' · ' + it.pr : '')))),
+        h('div', { class: 'row', style: { gap: '8px' } },
+          have ? null : h('button', { class: 'btn ghost', style: { flex: 1 }, onclick: (e) => { const G = vg(st); G[pick] = { lv: 0, due: Date.now() + GAP[0] * DAY, ok: 0, no: 0, t: Date.now() }; A.saveSoon(); A.track('wotd_add', { w: it.w }); e.currentTarget.replaceWith(h('span', { class: 'small', style: { flex: 1, alignSelf: 'center' } }, '🪸 Added to your reef')); } }, '🪸 Add to my reef'),
+          h('button', { class: 'btn ' + (c.thirsty ? 'mango' : 'ghost'), style: { flex: 1 }, onclick: () => (c.thirsty || pickWater(st, 12).length ? A.play('garden') : A.go('words')) }, c.thirsty ? '✨ ' + c.thirsty + ' fading' : '🪸 My Word Reef')));
     },
   };
 })();

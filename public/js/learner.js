@@ -763,7 +763,7 @@
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'Nothing to review yet. Learn a new lesson first!' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'vocab' ? '💎 Word Chest' : kind === 'garden' ? '🌱 Word Garden' : kind === 'focus' ? 'Extra practice'
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'vocab' ? '💎 Word Chest' : kind === 'garden' ? '🪸 Word Reef' : kind === 'focus' ? 'Extra practice'
       : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
     ses.title = title;
     ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind === 'side' ? arg.id : kind === 'chest' || kind === 'bottle' ? kind + ':' + arg.id : kind;
@@ -980,7 +980,7 @@
       btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea'));
     } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first'));
     else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island'));
-    else if (ses.kind === 'garden') btns.append(h('button', { class: 'btn mango block', onclick: () => A.go('words') }, '🌱 Back to my garden'));
+    else if (ses.kind === 'garden') btns.append(h('button', { class: 'btn mango block', onclick: () => A.go('words') }, '🪸 Back to my reef'));
     else if (ses.kind === 'bonus' || ses.kind === 'vocab') btns.append(r.passed ? h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Back to the voyage') : h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again'));
     btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home'));
     root.append(btns);
