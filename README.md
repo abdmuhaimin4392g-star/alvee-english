@@ -70,6 +70,8 @@ It rebuilds the app data and lists any English word that is missing a Thai entry
 
 When version 5 is installed, `server/migrate-v5.js` runs once. It reads her answers on the server, works out her weakest grammar points (printed in the install output), keeps a full copy of her progress in `/var/lib/alvee-english/archive/`, adds booster islands for those points, and starts the voyage again from island 1. Her treasure, shells, pearls, boats, medals, streak days and mistake statistics stay. Running the install again does not reset her a second time.
 
+Version 5.3 then makes every number count only from that fresh start (the map update): XP, study days, time, streak, rest days and medals are rebuilt from her answers after it, and the pearls, shells, treasure, postcards and boats from before it are taken away. Medals can be won again. A copy is saved in the archive first, and it also runs only once.
+
 ## The 3D map
 
 `public/js/crab3d.js` is built from the Operation Crab map code by `tools/crab3d/build.py` (the Operation Crab blocks are in `tools/crab3d/src/`, Alvee's route and screens are in `glue_*.js`). Run `python3 tools/crab3d/build.py` after changing them. The styles are `public/crab.css`.

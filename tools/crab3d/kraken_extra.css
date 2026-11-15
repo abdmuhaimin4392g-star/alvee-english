@@ -1,5 +1,5 @@
 /* ===== the Kraken fight ===== */
-.oc .krl{width:190px;height:171px;left:0;top:0}
+.oc .krl{width:130px;height:117px;left:0;top:0}
 .oc .krl .ks{position:absolute;inset:0}
 .oc .kru{left:0;top:0;width:180px;align-items:center}
 .oc .kru .krt{font-family:var(--f-body)}
@@ -34,8 +34,8 @@
 .v3-clocks b{font:800 1.3rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
 .isl .il .ip{font-style:normal;margin-left:5px;padding:0 5px;border-radius:99px;background:#ffbf47;color:#3a2405;font-weight:800}
 
-/* her name tag: small, under the bigger boat */
-.oc.m3 .boat .nm{font:700 .46rem/1.15 var(--f-body);padding:1px 5px;border-radius:7px;margin-top:0;top:26px;opacity:.92}
+/* her name tag: small, under the boat */
+.oc.m3 .boat .nm{font:700 .46rem/1.15 var(--f-body);padding:1px 5px;border-radius:7px;margin-top:0;top:13px;opacity:.92}
 .oc.m3 .boat .nm .kn{font-size:.42rem}
 .oc.m3 .boat .nm .hpb{width:26px;height:3px}
 

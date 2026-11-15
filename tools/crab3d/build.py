@@ -45,7 +45,7 @@ world = rep(world, "cw=768,chh=Math.max(256,Math.min(2048,Math.round(cw*Hh/W)))"
 sky = rep(sky, "m3Aim(M3.cam,M3.yaw+(calm?0:Math.sin(M3.t*.33)*.011),calm?0:Math.sin(M3.t*.27)*.006);",
   "m3Pan(dt);m3Aim(M3.cam,M3.yaw+(calm?0:Math.sin(M3.t*.33)*.011),calm?0:Math.sin(M3.t*.27)*.006,M3.ctg,M3.ck);")
 sky = rep(sky, "  sailStep();\n", "  sailStep();m3AlBoat(dt);\n")
-sky = rep(sky, "u=m3W(b.px,b.py),sc=u*1.4,", "u=m3W(b.px,b.py),sc=u*2.8,")
+sky = rep(sky, "u=m3W(b.px,b.py),sc=u*1.4,", "u=m3W(b.px,b.py),sc=u*1.4,")
 sky = rep(sky, "b.px=Math.max(6,Math.min(94,b.cx+sl.ox));b.py=Math.max(8,Math.min(98.5,b.cy+sl.oy));", "b.px=b.cx+sl.ox*.45;b.py=b.cy+sl.oy*.45;")
 sky = rep(sky, "(w==='maya'?-.62:.62)+Math.max(-.3,Math.min(.3,dx*.03))-sl.yaw", "(b.hd||0)-sl.yaw*.6")
 sky = cut(sky, "  /* routes */", "  /* clouds drift", "  m3AlRoutes();\n")
