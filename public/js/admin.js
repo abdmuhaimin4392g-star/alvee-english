@@ -207,9 +207,16 @@
         h('button', { class: 'chip', disabled: d.hasKey ? null : true, onclick: async (e) => { e.preventDefault(); const b = e.currentTarget; b.textContent = '…'; try { const r = await call('admin/voice/sample', { voice: id }); const a = new Audio(r.audio); a.play().catch((x) => err(x)); b.textContent = '▶ Play'; } catch (x) { b.textContent = '▶ Play'; err(x); } } }, '▶ Play'))));
       const j = d.job || {};
       const bar = h('div', { class: 'vc-bar' }, h('i', { style: { width: pct + '%' } }));
+      const usingPack = d.pack && !d.voice && !d.off;
       box.replaceChildren(
+        d.pack ? h('div', { class: 'card stack', style: { gap: '8px', borderLeft: '5px solid #0e8a8a' } },
+          h('b', null, usingPack ? '✅ She hears the free built-in voice: ' + d.pack.v : '🎙️ Free built-in voice: ' + d.pack.v),
+          h('div', { class: 'small muted' }, d.pack.n + ' lines recorded with an open American voice (Kokoro). No key, no billing, nothing to set up.' + (d.off ? ' · The real voice is OFF for her now.' : '')),
+          !usingPack ? h('button', { class: 'btn block', onclick: async () => { await call('admin/voice/pack', {}); if (d.off) await call('admin/voice/off', { off: false }); draw(); } }, '✅ Use the built-in voice') : null,
+          h('button', { class: 'btn ghost block', onclick: async () => { await call('admin/voice/off', { off: !d.off }); draw(); } }, d.off ? '▶ Turn the real voice ON for her' : '⏸ Turn the real voice OFF for her')) : null,
+        h('div', { class: 'small muted', style: { padding: '0 4px' } }, 'Optional: Google voices (needs a Google Cloud account with billing).'),
         h('div', { class: 'card stack', style: { gap: '8px' } },
-          h('b', null, '🎙️ Real American voice'),
+          h('b', null, '🎙️ Google voice (optional)'),
           h('div', { class: 'small muted' }, 'Records every English line of the course once (' + d.total + ' lines, about ' + Math.round(d.chars / 1000) + 'k characters) with a Google Chirp 3 HD voice and keeps the files on your server. Google gives 1 million characters free each month, so this should cost nothing. Lines without a recording keep the phone voice.'),
           h('div', { class: 'row', style: { gap: '8px', alignItems: 'center' } }, h('div', { class: 'vc-bar-wrap', style: { flex: 1 } }, bar), h('b', null, pct + '%')),
           h('div', { class: 'small' }, d.have + ' of ' + d.total + ' lines recorded' + (d.voice ? ' · voice: ' + d.voice.split('-').pop() : '') + (d.off ? ' · turned OFF for her' : '')),
@@ -223,7 +230,7 @@
           h('b', null, '3 · Record'),
           j.on ? h('button', { class: 'btn block', onclick: async () => { await call('admin/voice/stop', {}); draw(); } }, '⏹ Stop') :
             h('button', { class: 'btn mango block', disabled: d.hasKey ? null : true, onclick: async () => { try { await call('admin/voice/start', { voice: pick }); msg.textContent = 'Started'; setTimeout(draw, 800); } catch (e) { err(e); } } }, d.voice && pick === d.voice && d.have ? '⏺ Record the missing ' + (d.total - d.have) + ' lines' : '⏺ Record all ' + d.total + ' lines with this voice'),
-          d.have ? h('button', { class: 'btn ghost block', onclick: async () => { await call('admin/voice/off', { off: !d.off }); draw(); } }, d.off ? '▶ Turn the real voice ON for her' : '⏸ Turn the real voice OFF for her') : null,
+          d.have && !d.pack ? h('button', { class: 'btn ghost block', onclick: async () => { await call('admin/voice/off', { off: !d.off }); draw(); } }, d.off ? '▶ Turn the real voice ON for her' : '⏸ Turn the real voice OFF for her') : null,
           h('div', { class: 'small muted' }, 'She can also switch it on or off on her Me page. Changing the voice records everything again in the new voice.')),
         msg);
       if (j.on && !timer) timer = setInterval(() => { if (!document.body.contains(box)) { clearInterval(timer); timer = null; return; } draw(); }, 2500);

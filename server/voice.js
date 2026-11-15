@@ -88,15 +88,23 @@ module.exports = function voice({ DATA, PUB, readJSON, atomicWrite }) {
     };
     try { await Promise.all([worker(), worker(), worker()]); } finally { JOB.on = false; MAN = null; }
   }
-  let MAN = null;
+  let MAN = null, PACK = null, PACK_AT = 0;
+  // the free voice pack that comes with the app (recorded with the open Kokoro voice, no key needed)
+  const pack = () => {
+    const f = path.join(PUB, 'voice', 'pack.json');
+    try { const at = fs.statSync(f).mtimeMs; if (!PACK || at !== PACK_AT) { PACK = JSON.parse(fs.readFileSync(f, 'utf8')); PACK_AT = at; } } catch (e) { PACK = null; }
+    return PACK;
+  };
   const manifest = () => {
     const c = cfg();
-    if (!c.voice || c.off) return { v: '', ids: [] };
+    if (c.off) return { v: '', ids: [] };
+    if (!c.voice) { const p = pack(); return p ? { v: p.v, ids: p.ids } : { v: '', ids: [] }; }
     if (!MAN || MAN.v !== c.voice || Date.now() - MAN.t > 15000) MAN = { v: c.voice, t: Date.now(), ids: [...have(c.voice)] };
     return { v: short(c.voice), ids: MAN.ids };
   };
 
   return {
+    texts,
     // GET /voice/manifest.json and /voice/<Voice>/<id>.mp3 (no login needed: it is only the course audio)
     serve(req, res, p) {
       if (p === '/voice/manifest.json') {
@@ -105,7 +113,8 @@ module.exports = function voice({ DATA, PUB, readJSON, atomicWrite }) {
       }
       const m = /^\/voice\/([A-Za-z0-9]+)\/([a-z0-9]+)\.mp3$/.exec(p);
       if (!m) { res.writeHead(404); return res.end(); }
-      const f = path.join(DIR, m[1], m[2] + '.mp3');
+      let f = path.join(DIR, m[1], m[2] + '.mp3');
+      if (!fs.existsSync(f)) f = path.join(PUB, 'voice', m[1], m[2] + '.mp3');
       if (!fs.existsSync(f)) { res.writeHead(404); return res.end(); }
       const st = fs.statSync(f), range = /bytes=(\d*)-(\d*)/.exec(req.headers.range || '');
       const H = { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=31536000, immutable', 'Accept-Ranges': 'bytes' };
@@ -122,7 +131,8 @@ module.exports = function voice({ DATA, PUB, readJSON, atomicWrite }) {
       const c = cfg();
       if (route === 'admin/voice' && method === 'GET') {
         const all = texts(), got = c.voice ? have(c.voice) : new Set();
-        return send(res, 200, { hasKey: !!c.key, keyEnd: c.key ? c.key.slice(-4) : '', voice: c.voice || '', off: !!c.off, voices: VOICES, total: all.size, have: [...all.keys()].filter((id) => got.has(id)).length, job: { ...JOB }, chars: [...all.values()].reduce((a, t) => a + t.length, 0) });
+        const p = pack();
+        return send(res, 200, { pack: p ? { v: p.v, n: p.ids.length } : null, hasKey: !!c.key, keyEnd: c.key ? c.key.slice(-4) : '', voice: c.voice || '', off: !!c.off, voices: VOICES, total: all.size, have: [...all.keys()].filter((id) => got.has(id)).length, job: { ...JOB }, chars: [...all.values()].reduce((a, t) => a + t.length, 0) });
       }
       if (route === 'admin/voice/key' && method === 'POST') {
         const k = String(body.key || '').trim();
@@ -146,6 +156,7 @@ module.exports = function voice({ DATA, PUB, readJSON, atomicWrite }) {
         return send(res, 200, { ok: 1 });
       }
       if (route === 'admin/voice/stop' && method === 'POST') { JOB.stop = true; return send(res, 200, { ok: 1 }); }
+      if (route === 'admin/voice/pack' && method === 'POST') { saveCfg({ ...cfg(), voice: '', off: false }); MAN = null; return send(res, 200, { ok: 1 }); }
       if (route === 'admin/voice/off' && method === 'POST') { saveCfg({ ...cfg(), off: !!body.off }); MAN = null; return send(res, 200, { ok: 1 }); }
       return null;
     },
