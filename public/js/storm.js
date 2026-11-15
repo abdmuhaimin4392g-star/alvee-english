@@ -10,7 +10,11 @@
   const CLOUD_N = ['', 'Little cloud', 'Rain cloud', 'Thunderstorm'];
   const CLOUD_TH = ['', 'เมฆก้อนเล็ก', 'เมฆฝน', 'พายุฝนฟ้าคะนอง'];
 
-  const box = (st) => { const S = st.storm || (st.storm = { list: [], calm: 0, log: [] }); S.list = S.list || []; S.log = S.log || []; S.calm = S.calm || 0; return S; };
+  // the first time, her earlier mistakes (kept in her word memory) become the first clouds
+  const seed = (st) => Object.keys(st.srs || {}).filter((id) => st.srs[id].w > 0 && (id.startsWith('s:') ? A.S(id.slice(2)) : A.C.dict[id.slice(2)]))
+    .sort((a, b) => st.srs[b].w - st.srs[a].w).slice(0, 24)
+    .map((id) => ({ i: id, t: id.startsWith('w:') ? 'wfit' : 'gap', sid: id.startsWith('s:') ? id.slice(2) : undefined, key: id.startsWith('w:') ? id.slice(2) : undefined, lv: Math.min(3, st.srs[id].w), at: Date.now() }));
+  const box = (st) => { const S = st.storm || (st.storm = { list: seed(st), calm: 0, log: [] }); S.list = S.list || []; S.log = S.log || []; S.calm = S.calm || 0; return S; };
   const S_ = {
     box,
     add(st, step) {
