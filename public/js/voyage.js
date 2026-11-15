@@ -69,13 +69,13 @@
   V.BOATS = [
     { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', g: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
     { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', g: 300, isl: 1, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
-    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', g: 700, isl: 3, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
-    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', g: 1400, isl: 5, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
-    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', g: 2400, isl: 8, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
-    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', g: 3600, isl: 11, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
-    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', g: 5200, isl: 14, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
-    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', g: 7000, isl: 17, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
-    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 9000, isl: 20, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
+    { id: 'toy', n: 'Toy Corsair', th: 'เรือโจรสลัดของเล่น', g: 2500, isl: 5, w: 58, d: 'A cheerful toy pirate ship with a striped sail and a very yellow bowsprit.' },
+    { id: 'gal', n: 'Striped-Sail Galleon', th: 'เรือใบลายทาง', g: 5000, isl: 8, w: 56, d: 'A proper wooden galleon with candy-striped sails and a carved figurehead.' },
+    { id: 'ym', n: 'Modern Motor Yacht', th: 'เรือยอชต์', g: 9000, isl: 11, w: 70, d: 'Sleek white hull, tinted glass and a flybridge.' },
+    { id: 'sy', n: 'Grand Superyacht', th: 'ซูเปอร์ยอชต์', g: 14000, isl: 14, w: 84, d: 'Four decks, a sundeck with a pool and a swim platform.' },
+    { id: 'nv', n: 'Expedition Voyager', th: 'เรือสำรวจ', g: 20000, isl: 17, w: 88, d: 'A navy-blue expedition yacht with a helipad on the bow. It goes where the charts end.' },
+    { id: 'sap', n: 'Sapphire Terrace', th: 'เรือแซฟไฟร์', g: 28000, isl: 20, w: 94, d: 'A towering sapphire megayacht with five white terraces and a stern pool.' },
+    { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 38000, isl: 23, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
   ];
   V.boat = (id) => V.BOATS.find((b) => b.id === id) || V.BOATS[0];
   V.boatPic = (id, flip, cls) => {
@@ -113,7 +113,7 @@
   };
   V.addGold = (n) => { const s = V.st(); s.gold += n; s.goldT += n; return n; };
   // an oyster: what is inside?
-  V.oyster = () => { const x = Math.random(); const k = x < 0.62 ? 'w' : x < 0.87 ? 'p' : x < 0.97 ? 'b' : 'g'; const s = V.st(); if (k === 'w') V.addPearls(1); else s.rp[k] += 1; return k; };
+  V.oyster = () => { const x = Math.random(); const k = x < 0.8 ? 'w' : x < 0.94 ? 'p' : x < 0.992 ? 'b' : 'g'; const s = V.st(); if (k === 'w') V.addPearls(1); else s.rp[k] += 1; return k; };
   V.shellCount = (st) => Object.values(V.st(st).sh).reduce((a, b) => a + b, 0);
   V.treCount = (st) => Object.keys(V.st(st).tre).filter((k) => T.byId[k]).length;
 
@@ -216,6 +216,7 @@
     const ch = V.chapOf(n);
     if (ch && ch.nodes[0] === n) { const g = V.gate(st, ch); if (g && !g.ok) return 'gate'; }
     if (n.kind === 'lesson' && !n.boost && V.capped(st)) return 'today';
+    if (A.bonus && A.bonus.needed(st, n)) return 'bonus';
     return null;
   };
   V.nodeOpen = (st, n) => !V.lockWhy(st, n);
@@ -273,13 +274,13 @@
   // ---------------------------------------------------------------- treasure rolls
   V.rollTreasure = (golden) => {
     // ordinary chests never hold legendary things; golden chests rarely; sealed chests (opened with a key) hold only rare and better
-    const W = golden === 'sealed' ? { c: 0, u: 0, r: 62, e: 32, l: 6 } : golden ? { c: 34, u: 36, r: 22, e: 7, l: 1 } : { c: 62, u: 27, r: 9.2, e: 1.8, l: 0 };
+    const W = golden === 'sealed' ? { c: 0, u: 0, r: 72, e: 24.5, l: 3.5 } : golden ? { c: 44, u: 36, r: 15, e: 4.4, l: 0.6 } : { c: 70, u: 24, r: 5.2, e: 0.8, l: 0 };
     let t = Math.random() * Object.values(W).reduce((a, b) => a + b, 0), rar = 'c';
     for (const k of T.ORDER) { t -= W[k]; if (t <= 0) { rar = k; break; } }
     const s = V.st();
     const L = T.ITEMS.filter((x) => x[3] === rar);
     const fresh = L.filter((x) => !s.tre[x[0]]);
-    const it = (fresh.length && Math.random() < (rar === 'e' || rar === 'l' ? 0.5 : 0.7) ? A.pick(fresh) : A.pick(L));
+    const it = (fresh.length && Math.random() < (rar === 'e' || rar === 'l' ? 0.3 : 0.45) ? A.pick(fresh) : A.pick(L));
     const cur = s.tre[it[0]];
     s.tre[it[0]] = { n: ((cur && cur.n) || 0) + 1, t: (cur && cur.t) || Date.now() };
     return { item: it, isNew: !cur };
@@ -301,6 +302,9 @@
     }
     if (ses.kind === 'talk') V.count('talk');
     if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
+    if (ses.kind === 'bonus' && ses.bonusFirst != null) {
+      if (ses.bonusFirst) { add(4, 'Idiom Cove'); if (Math.random() < 0.35) out.chest = V.rollTreasure(false); } else add(1, 'Idiom Cove');
+    }
     if (ses.kind === 'chest') {
       const sp = ses.arg;
       if (ses.firstOk >= Math.ceil(ses.graded * 0.6)) {

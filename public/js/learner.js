@@ -625,9 +625,9 @@
   function activityCard(st) {
     const N = 14, now = Date.now();
     const keys = []; for (let i = N - 1; i >= 0; i--) keys.push(A.dkey(now - i * 864e5));
-    const get = { time: (d) => Math.round((d.sec || 0) / 60), nw: (d) => d.nw || 0, look: (d) => d.look || 0 };
-    const TABS = [['time', '⏱️', 'Time', 'เวลา', ['#ffb36b', '#ff6f91']], ['nw', '🌱', 'New words', 'คำใหม่', ['#7be0b0', '#2bb3a3']], ['look', '🔎', 'Looked up', 'คำที่เปิดดู', ['#9fb8ff', '#7a6cff']]];
-    const fmt = (t, v) => t === 'time' ? (v >= 60 ? Math.floor(v / 60) + 'h ' + (v % 60 ? (v % 60) + 'm' : '') : v + 'm') : String(v);
+    const get = { time: (d) => Math.round(A.studySec(d) / 60), app: (d) => Math.round(A.appSec(d) / 60), nw: (d) => d.nw || 0, look: (d) => d.look || 0 };
+    const TABS = [['time', '📖', 'Study', 'เวลาเรียน', ['#ffb36b', '#ff6f91']], ['app', '📱', 'On app', 'เวลาในแอป', ['#ffd36b', '#2bb3a3']], ['nw', '🌱', 'New words', 'คำใหม่', ['#7be0b0', '#2bb3a3']], ['look', '🔎', 'Looked up', 'คำที่เปิดดู', ['#9fb8ff', '#7a6cff']]];
+    const fmt = (t, v) => t === 'time' || t === 'app' ? (v >= 60 ? Math.floor(v / 60) + 'h ' + (v % 60 ? (v % 60) + 'm' : '') : v + 'm') : String(v);
     const card = h('div', { class: 'card act-card' });
     const draw = () => {
       const tab = TABS.find((t) => t[0] === actTab) || TABS[0], g = get[tab[0]];
@@ -659,7 +659,7 @@
           h('div', null, h('b', null, fmt(tab[0], vals[N - 1])), h('span', null, 'Today')),
           h('div', null, h('b', null, fmt(tab[0], total)), h('span', null, '14 days')),
           h('div', null, h('b', null, fmt(tab[0], avg)), h('span', null, 'Per active day'))),
-        tab[0] !== 'time' && !total ? h('div', { class: 'tiny muted th' }, 'Counting starts from today. · เริ่มนับตั้งแต่วันนี้') : null].filter(Boolean));
+        !['time'].includes(tab[0]) && !total ? h('div', { class: 'tiny muted th' }, 'Counting starts from today. · เริ่มนับตั้งแต่วันนี้') : null].filter(Boolean));
     };
     draw();
     return card;
@@ -692,7 +692,8 @@
       h('div', { class: 'kpi' }, h('b', null, Object.values(st.days).reduce((a, d) => a + (d.les || 0), 0)), h('span', null, 'Lessons')),
       h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Learning days')),
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
-      h('div', { class: 'kpi' }, h('b', null, (() => { const m = Math.round(Object.values(st.days).reduce((a, d) => a + (d.sec || 0), 0) / 60); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; })()), h('span', null, 'Total time'))));
+      h('div', { class: 'kpi' }, h('b', null, A.fmtMin(Object.values(st.days).reduce((a, d) => a + A.studySec(d), 0))), h('span', null, 'Study time')),
+      h('div', { class: 'kpi' }, h('b', null, A.fmtMin(Object.values(st.days).reduce((a, d) => a + A.appSec(d), 0))), h('span', null, 'Time on app'))));
     root.append(activityCard(st));
     if (A.storm) root.append(A.storm.jar(st));
     root.append(h('div', { class: 'small th muted' }, '🔥 Every day you learn adds to your fire. Rest whenever you like — it never goes out. · พักได้ทุกเมื่อ ไฟไม่มีวันดับ'));
@@ -752,7 +753,7 @@
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'Nothing to review yet. Learn a new lesson first!' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'focus' ? 'Extra practice'
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'focus' ? 'Extra practice'
       : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
     ses.title = title;
     ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind === 'side' ? arg.id : kind === 'chest' || kind === 'bottle' ? kind + ':' + arg.id : kind;
@@ -872,12 +873,13 @@
       const secs = Math.min(2400, Math.round((now - ses.started) / 1000));
       const acc = ses.graded ? Math.round((ses.firstOk / ses.graded) * 100) : 100;
       const node = ses.node;
-      const passed = !ses.test || acc >= 70;
+      const passed = ses.kind === 'bonus' ? acc >= 70 : !ses.test || acc >= A.passMark(node);
       let xp = ses.firstOk;
       if (node && node.kind !== 'check') xp += 10 + (acc === 100 ? 5 : 0);
       if (ses.test && passed) xp += 20 + (acc === 100 ? 5 : 0);
       if (ses.kind === 'review' || ses.kind === 'mistakes' || ses.kind === 'focus') { xp += 5; st.reviews = (st.reviews || 0) + 1; }
       if (ses.kind === 'talk') xp += 6;
+      if (ses.kind === 'bonus' && passed) xp += 12;
       const day = A.day(st);
       day.xp += xp; day.sec += secs; day.n += ses.graded; day.ok += ses.firstOk;
       const before = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
@@ -893,6 +895,7 @@
       st.tod = st.tod || {};
       if (hr < 8) st.tod.early = st.tod.early || now;
       if (hr >= 22) st.tod.night = st.tod.night || now;
+      if (A.bonus) ses.bonusFirst = A.bonus.finish(st, ses, acc);
       const rw = A.voyage.reward(ses, acc, passed);
       let storm = null; try { storm = A.storm ? A.storm.settle(st, ses) : null; } catch (e) { /* storms are extras */ }
       const newBadges = A.checkBadges(st);
@@ -965,6 +968,7 @@
       btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea'));
     } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first'));
     else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island'));
+    else if (ses.kind === 'bonus') btns.append(r.passed ? h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Back to the voyage') : h('button', { class: 'btn mango block', onclick: () => A.play('bonus', ses.arg) }, 'Try again'));
     btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home'));
     root.append(btns);
     return root;
@@ -1376,6 +1380,18 @@
     try { A.applyBoost(A.state); } catch (e) { /* boosters are extras */ }
     applySettings();
     if (A.markSeen) A.markSeen(A.state);
+    if (!A._clock) {
+      let lastIn = Date.now();
+      ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach((ev) => addEventListener(ev, () => { lastIn = Date.now(); }, { passive: true, capture: true }));
+      const STUDY = ['player', 'result', 'words', 'grammar', 'talks'];
+      A._clock = setInterval(() => {
+        const st = A.state;
+        if (!st || document.hidden || !A.user || A.user.role === 'admin' || Date.now() - lastIn > 180000) return;
+        const d = A.day(st); d.app = (d.app || 0) + 10;
+        if (A.session || STUDY.includes(A.view)) d.st = (d.st || 0) + 10;
+        if (d.app % 60 === 0) A.saveSoon();
+      }, 10000);
+    }
     A.msgs = [];
     A.track('app_open', { ua: navigator.userAgent.slice(0, 120) });
     A.go('home');

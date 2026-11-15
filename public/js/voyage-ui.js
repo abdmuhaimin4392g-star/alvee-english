@@ -172,10 +172,11 @@
       if (V.capped(st) && !c.all) content.append(h('div', { class: 'note' }, '⏳ You learned ' + V.newToday(st) + ' new lesson' + (V.newToday(st) > 1 ? 's' : '') + ' today. New ones open again tomorrow. Meanwhile: replay for stars, review, collect on the sea, or fight the Kraken!'));
       const list = h('div', { class: 'les-list' });
       isl.nodes.forEach((n, i) => {
+        if (n.kind === 'check' && A.bonus) { const br = A.bonus.row(st, n.u, () => sh.close()); if (br) list.append(br); }
         const d = st.done[n.id], op = V.nodeOpen(st, n), t = A.nodeTitle(n), isNext = c.next === n;
-        list.append(h('button', { class: 'les-row' + (d ? ' done' : '') + (isNext && op ? ' next' : '') + (op ? '' : ' lk') + (n.kind === 'check' ? ' test' : ''), onclick: () => { if (!op) { const w = V.lockWhy(st, n); A.toast(w === 'today' ? '⏳ That was enough new lessons for today. Come back tomorrow! Replay a lesson for more stars.' : w === 'gate' ? '⭐ Collect more stars in the sea behind you first.' : '🔒 Finish the one before it first.', 3400); return; } sh.close(); A.play('node', n.id); } },
+        list.append(h('button', { class: 'les-row' + (d ? ' done' : '') + (isNext && op ? ' next' : '') + (op ? '' : ' lk') + (n.kind === 'check' ? ' test' : ''), onclick: () => { if (!op) { const w = V.lockWhy(st, n); A.toast(w === 'today' ? '⏳ That was enough new lessons for today. Come back tomorrow! Replay a lesson for more stars.' : w === 'gate' ? '⭐ Collect more stars in the sea behind you first.' : w === 'bonus' ? '🏝️ Finish the Idiom Cove first. It opens the test!' : '🔒 Finish the one before it first.', 3400); return; } sh.close(); A.play('node', n.id); } },
           h('span', { class: 'lr-ic' }, d ? '✅' : op ? NODE_IC(n) : V.lockWhy(st, n) === 'today' ? '⏳' : '🔒'),
-          h('div', { class: 'lr-tx' }, h('b', null, t.en), h('span', { class: 'small muted' }, n.kind === 'check' ? '⏱️ Timed test · pass with 70%' + (A.typingOn && A.typingOn(n) ? ' · ⌨️ typing' : '') : n.boost ? 'Booster · extra practice for a tricky point' : n.kind === 'talk' ? 'Conversation' : 'Lesson ' + n.id)),
+          h('div', { class: 'lr-tx' }, h('b', null, t.en), h('span', { class: 'small muted' }, n.kind === 'check' ? '⏱️ Timed test · pass with ' + A.passMark(n) + '%' + (A.typingOn && A.typingOn(n) ? ' · ⌨️ typing' : '') : n.boost ? 'Booster · extra practice for a tricky point' : n.kind === 'talk' ? 'Conversation' : 'Lesson ' + n.id)),
           h('span', { class: 'lr-st' }, d ? '★'.repeat(d.s) : isNext && op ? '▶' : '')));
       });
       content.append(list);

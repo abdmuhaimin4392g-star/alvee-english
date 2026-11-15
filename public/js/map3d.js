@@ -1300,14 +1300,19 @@ AE.map3d.reveal=trReveal;
    the Kraken takes some gold, pearls and one treasure; fishermen tow the boat back. Wood logs repair the hull. */
 const KR={on:false,phase:'',hp:0,max:0,t0:0,dur:20000,cool:0,bite:0,armT:0,tick:0,sink0:0,art:null,ui:null,fire:null,ov:null};
 const krCtl=()=>(AE.voyage&&AE.voyage.ctl())||{};
+/* Daily attacks are earned by time on the map: 2 a day, a 3rd on very busy days (20+ minutes on the map).
+   Each one comes at a random moment while she is on the map: 30 s to 4 min of map time after the last one. */
+function krDay(s){const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0;s.kr.mt=0;s.kr.at=30+Math.floor(Math.random()*150)}if(s.kr.mt==null)s.kr.mt=0;if(s.kr.at==null)s.kr.at=30+Math.floor(Math.random()*150);return s.kr}
+function krQuota(k){return 2+(k.mt>=1200?1:0)}
 function krCan(){const st=AE.state,s=AE.voyage.st(st);if(!m3Here()||AE.session||document.hidden||!M3_OK()||!M3.boats.al)return false;
-  if(document.querySelector('.sheet,#trv,.pop-note,.pt-ov'))return false;if(krCtl().krakenOff)return false;
-  if(Object.keys(st.done||{}).length<2)return false;const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}
-  if(s.kr.n>=3)return false;if(Date.now()-(s.kr.last||0)<75*60e3)return false;return true}
+  if(document.querySelector('.sheet,#trv,.pt-ov'))return false;if(krCtl().krakenOff)return false;
+  if(Object.keys(st.done||{}).length<2)return false;const k=krDay(s);
+  if(k.n>=krQuota(k))return false;if(k.mt<k.at)return false;if(Date.now()-(k.last||0)<4*60e3)return false;return true}
 function krArm(){clearTimeout(KR.armT);if(KR.on)return;const s=AE.voyage.st(),c=krCtl(),forced=!!(c.kraken&&c.kraken>(s.kr.seen||0));
   KR.armT=setTimeout(()=>{if(!m3Here()||KR.on)return;
-    if(forced){if(AE.session||document.querySelector('.sheet,#trv,.pt-ov')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
-    if(krCan()&&Math.random()<.5)krStart();else krArm()},forced?5000:40000+Math.random()*110000)}
+    if(forced){if(AE.session||document.querySelector('.sheet,#trv,.pt-ov')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;document.querySelectorAll('.pop-note').forEach(x=>x.remove());krStart();return}
+    if(!document.hidden&&!AE.session){const k=krDay(s);k.mt+=5;if(k.mt%60===0)AE.saveSoon()}
+    if(krCan()){const k=krDay(s);k.at=k.mt+60+Math.floor(Math.random()*180);document.querySelectorAll('.pop-note').forEach(x=>x.remove());krStart()}else krArm()},5000)}
 function krBoom(hit){const a=trAC();if(!a)return;try{const t=a.currentTime,n=a.createBufferSource(),len=Math.floor(a.sampleRate*.45),b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);
   n.buffer=b;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=hit?900:1500;const g=a.createGain();g.gain.value=.55;n.connect(lp);lp.connect(g);g.connect(a.destination);n.start(t);trTone(75,0,.32,'sine',.3,38)}catch(e){}}
 function krRoar(){trTone(110,0,1.3,'sawtooth',.05,52);trTone(82,.1,1.4,'square',.03,41);trTone(55,0,1.6,'sine',.12,30)}
@@ -1315,7 +1320,7 @@ function krBoatXY(){const o=M3.ov.find(x=>x.boat);return o&&o.px!=null?[o.px,o.p
 function krPop(txt,cls,dx,dy){const oc=$('#oc');if(!oc)return;const p=krBoatXY(),e=document.createElement('div');e.className='kr-pop '+(cls||'');e.textContent=txt;e.style.left=(p[0]+(dx||0))+'px';e.style.top=(p[1]+(dy||-40))+'px';oc.appendChild(e);setTimeout(()=>e.remove(),1300)}
 function krHull(){const s=AE.voyage.st(),b=document.querySelector('#bt-al .hpb b');if(b){b.style.width=s.hull+'%';b.parentNode.className='hpb'+(s.hull<35?' l':s.hull<70?' m':'')}}
 function krStart(){const oc=$('#oc');if(!oc||!M3_OK()||KR.on)return;const st=AE.state,s=AE.voyage.st(st),cur=AE.voyage.curIndex(st);
-  KR.on=true;KR.phase='fight';{const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}}s.kr.n=(s.kr.n||0)+1;s.kr.last=Date.now();AE.saveSoon();AE.track('kraken',{r:'start'});
+  KR.on=true;KR.phase='fight';krDay(s);s.kr.n=(s.kr.n||0)+1;s.kr.last=Date.now();AE.saveSoon();AE.track('kraken',{r:'start'});
   KR.max=KR.hp=12+Math.min(18,cur);KR.dur=20000;KR.t0=performance.now();KR.bite=KR.t0+3500;KR.cool=0;
   m3Follow();oc.classList.add('kr-on');
   const art=document.createElement('div');art.className='krl on';art.innerHTML=KRART.back+KRART.front;oc.appendChild(art);KR.art=art;

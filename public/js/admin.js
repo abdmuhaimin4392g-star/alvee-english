@@ -91,13 +91,13 @@
     const start = new Date(); start.setHours(0, 0, 0, 0);
     const evs = ADM.events.filter((e) => e.t >= start.getTime());
     const ans = evs.filter((e) => e.type === 'answer' && !e.retry);
-    return { min: Math.round((d.sec || 0) / 60), xp: d.xp || 0, les: evs.filter((e) => e.type === 'lesson_end').length, ans: ans.length, wrong: ans.filter((e) => !e.ok).length, looks: evs.filter((e) => e.type === 'lookup').length };
+    return { min: Math.round(A.studySec(d) / 60), app: Math.round(A.appSec(d) / 60), xp: d.xp || 0, les: evs.filter((e) => e.type === 'lesson_end').length, ans: ans.length, wrong: ans.filter((e) => !e.ok).length, looks: evs.filter((e) => e.type === 'lookup').length };
   }
   function live() {
     const t = todayStats();
     const box = h('div', { class: 'stack', style: { gap: '14px' } });
     box.append(h('div', { class: 'kpis' },
-      kpi(t.min + 'm', 'Time today'), kpi(t.xp, 'XP today'), kpi(t.les, 'Lessons done'),
+      kpi(t.min + 'm', 'Study today'), kpi(t.app + 'm', 'On app today'), kpi(t.xp, 'XP today'), kpi(t.les, 'Lessons done'),
       kpi(t.ans ? Math.round(((t.ans - t.wrong) / t.ans) * 100) + '%' : '–', 'Correct today'), kpi(t.wrong, 'Mistakes today'), kpi(t.looks, 'Words looked up')));
     const filters = [['all', 'All steps'], ['answers', 'Answers'], ['mistakes', 'Mistakes'], ['lookups', 'Looked up'], ['lessons', 'Lessons']];
     box.append(h('div', { class: 'row wrap' }, filters.map(([k, t2]) => h('button', { class: 'chip' + (ADM.filter === k ? ' on' : ''), onclick: () => { ADM.filter = k; ADM.update(); } }, t2)),
@@ -270,19 +270,19 @@
       h('div', { class: 'row between' }, h('b', null, 'Chapter ' + (cur + 1) + ' of ' + R.main.length + ' · ' + isl.name), h('span', { class: 'pill sea' }, V.SEAS[isl.sea].en)),
       h('div', { class: 'progress' }, h('i', { style: { width: Math.round((doneNodes / totalNodes) * 100) + '%' } })),
       h('div', { class: 'small muted' }, `No fixed timeline: she sails at her own pace. She has finished ${doneNodes} of ${totalNodes} islands (lessons, conversations and timed tests) and ${Object.keys(V.st(st).side).length} side missions.`)));
-    const secs = days.reduce((a, [, d]) => a + (d.sec || 0), 0);
+    const secs = days.reduce((a, [, d]) => a + A.studySec(d), 0), appSecs = days.reduce((a, [, d]) => a + A.appSec(d), 0);
     const n = days.reduce((a, [, d]) => a + (d.n || 0), 0), ok = days.reduce((a, [, d]) => a + (d.ok || 0), 0);
     box.append(h('div', { class: 'kpis' },
       kpi(xp, 'Total XP'), kpi(lvl, 'Level · ' + A.title(lvl)[1]), kpi(A.streak(st) + '🔥', 'Learning days'),
-      kpi(A.wordCount(st), 'Words learned'), kpi(days.filter(([, d]) => d.xp > 0).length, 'Days studied'), kpi(Math.round(secs / 60) + 'm', 'Total time'),
+      kpi(A.wordCount(st), 'Words learned'), kpi(days.filter(([, d]) => d.xp > 0).length, 'Days studied'), kpi(A.fmtMin(secs), 'Study time'), kpi(A.fmtMin(appSecs), 'Time on app'),
       kpi(n ? Math.round(ok / n * 100) + '%' : '–', 'First-try correct'), kpi(A.dueItems(st).length, 'Due for review')));
     // 21-day chart
     const bars = h('div', { class: 'bars', role: 'img', 'aria-label': 'Minutes studied per day, last 21 days' });
     const vals = [];
-    for (let i = 20; i >= 0; i--) { const k = A.dkey(Date.now() - i * 864e5); vals.push([k, Math.round(((st.days[k] && st.days[k].sec) || 0) / 60)]); }
-    const max = Math.max(5, ...vals.map((v) => v[1]));
-    vals.forEach(([k, v], i) => bars.append(h('div', { class: 'b' + (i === 20 ? ' today' : '') }, h('i', { style: { height: Math.round((v / max) * 100) + '%' }, title: k + ': ' + v + ' min' }), h('span', null, i % 3 === 2 || i === 20 ? (i === 20 ? 'today' : k.slice(8)) : ''))));
-    box.append(h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Minutes per day'), h('span', { class: 'small muted' }, 'last 3 weeks · max ' + max + 'm')), bars));
+    for (let i = 20; i >= 0; i--) { const k = A.dkey(Date.now() - i * 864e5); vals.push([k, Math.round(A.studySec(st.days[k]) / 60), Math.round(A.appSec(st.days[k]) / 60)]); }
+    const max = Math.max(5, ...vals.map((v) => v[2]));
+    vals.forEach(([k, v, ap], i) => bars.append(h('div', { class: 'b two' + (i === 20 ? ' today' : '') }, h('i', { class: 'app', style: { height: Math.round((ap / max) * 100) + '%' }, title: k + ': ' + ap + ' min on the app' }), h('i', { style: { height: Math.round((v / max) * 100) + '%' }, title: k + ': ' + v + ' min studying' }), h('span', null, i % 3 === 2 || i === 20 ? (i === 20 ? 'today' : k.slice(8)) : ''))));
+    box.append(h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Minutes per day'), h('span', { class: 'small muted' }, 'last 3 weeks · max ' + max + 'm')), bars, h('div', { class: 'small muted' }, '▮ study (lessons, words, grammar, talks) · ▯ total time on the app')));
     // journey grid with reset: tap a lesson to reset it, or reset a whole unit / month
     const grid = h('div', { class: 'card stack' }, h('div', { class: 'row between' }, h('b', null, 'Lessons'), h('span', { class: 'small muted' }, 'Tap ↺ to reset')),
       h('div', { class: 'small muted' }, 'Reset makes her do it again. Other lessons, her streak, medals and history stay.'));

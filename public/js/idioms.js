@@ -1,0 +1,148 @@
+/* idioms.js — the Idiom Cove bonus lessons: four English idioms for every unit.
+   Each: [idiom, meaning in simple English, meaning in Thai, example, example in Thai, how to use it, the key word to fill in] */
+window.IDIOMS = {
+  1: [
+    ['over the moon', 'very, very happy', 'ดีใจสุด ๆ', 'I am over the moon about my new job!', 'ฉันดีใจสุด ๆ กับงานใหม่!', 'Use it for big happy news.', 'moon'],
+    ['under the weather', 'a little sick', 'ไม่ค่อยสบาย', 'I am a bit under the weather today.', 'วันนี้ฉันรู้สึกไม่ค่อยสบายนิดหน่อย', 'A soft, polite way to say you feel ill.', 'weather'],
+    ['on cloud nine', 'extremely happy', 'มีความสุขมาก เหมือนลอยอยู่บนฟ้า', 'She is on cloud nine after the holiday.', 'เธอมีความสุขมากหลังวันหยุด', 'Like "over the moon". Very happy.', 'cloud'],
+    ['all ears', 'ready to listen carefully', 'ตั้งใจฟังเต็มที่', 'Tell me your story. I am all ears!', 'เล่าเรื่องของคุณมาเลย ฉันตั้งใจฟังอยู่!', 'Say it when a friend wants to tell you something.', 'ears'],
+  ],
+  2: [
+    ['a piece of cake', 'very easy', 'ง่ายมาก ๆ (ง่ายเหมือนปอกกล้วย)', 'The check-in is a piece of cake.', 'การเช็กอินง่ายมาก ๆ', 'Use it for any task that is easy.', 'cake'],
+    ['a night owl', 'a person who likes to stay up late', 'คนนอนดึก', 'My brother is a night owl. He sleeps at 2 a.m.', 'พี่ชายฉันเป็นคนนอนดึก เขานอนตีสอง', 'The opposite is "an early bird".', 'owl'],
+    ['an early bird', 'a person who gets up early', 'คนตื่นเช้า', 'She is an early bird. She runs at 6 a.m.', 'เธอเป็นคนตื่นเช้า เธอวิ่งตอนหกโมงเช้า', 'Also: "The early bird catches the worm."', 'bird'],
+    ['the apple of my eye', 'a person you love very much', 'คนที่รักและหวงแหนที่สุด', 'My little niece is the apple of my eye.', 'หลานสาวตัวน้อยคือคนที่ฉันรักที่สุด', 'Use it for family you love very much.', 'apple'],
+  ],
+  3: [
+    ['in the same boat', 'in the same difficult situation', 'ตกที่นั่งเดียวกัน', 'We are all in the same boat this week: so much work!', 'สัปดาห์นี้เราตกที่นั่งเดียวกันหมด งานเยอะมาก!', 'Say it to show you understand a friend’s problem.', 'boat'],
+    ['two peas in a pod', 'two people who are very similar', 'เหมือนกันมาก (เหมือนแกะ)', 'My sister and I are two peas in a pod.', 'ฉันกับน้องสาวเหมือนกันมาก', 'For friends or family who look or act the same.', 'peas'],
+    ['on the same page', 'agreeing and understanding the same thing', 'เข้าใจตรงกัน', 'Good, we are on the same page.', 'ดีเลย เราเข้าใจตรงกัน', 'Very common at work and in meetings.', 'page'],
+    ['birds of a feather', 'people who are alike spend time together', 'คนที่เหมือนกันมักอยู่ด้วยกัน', 'They love the beach. Birds of a feather!', 'พวกเขาชอบทะเลเหมือนกัน คนประเภทเดียวกันมักอยู่ด้วยกัน!', 'The full saying: "Birds of a feather flock together."', 'feather'],
+  ],
+  4: [
+    ['break the ice', 'start a friendly conversation with someone new', 'ทำลายความเงียบ เริ่มทักทายให้บรรยากาศสบาย ๆ', 'I asked about the weather to break the ice.', 'ฉันถามเรื่องอากาศเพื่อเริ่มบทสนทนา', 'Perfect for meeting new guests at the hotel.', 'ice'],
+    ['long time no see', 'I have not seen you for a long time', 'ไม่ได้เจอกันนานเลย', 'Long time no see! How are you?', 'ไม่ได้เจอกันนานเลย! สบายดีไหม?', 'A friendly hello for old friends. Not for formal guests.', 'see'],
+    ['what’s up?', 'how are you? / what is happening?', 'เป็นไงบ้าง?', 'Hey, what’s up?', 'เฮ้ เป็นไงบ้าง?', 'Very casual. Answer: "Not much!"', 'up'],
+    ['no way!', 'I can’t believe it! / absolutely not', 'ไม่จริงน่า! / ไม่มีทาง!', 'You saw a whale? No way!', 'คุณเห็นปลาวาฬเหรอ? ไม่จริงน่า!', 'Use your voice: happy surprise or a strong no.', 'way'],
+  ],
+  5: [
+    ['my cup of tea', 'something I like', 'สิ่งที่ฉันชอบ ตรงสเปก', 'Horror films are not my cup of tea.', 'หนังสยองขวัญไม่ใช่แนวที่ฉันชอบ', 'Usually used with "not": not my cup of tea.', 'tea'],
+    ['have a sweet tooth', 'love sweet food', 'ชอบกินของหวาน', 'I have a sweet tooth. I love mango sticky rice!', 'ฉันชอบกินของหวาน ฉันรักข้าวเหนียวมะม่วง!', 'You can say "She has a sweet tooth" too.', 'tooth'],
+    ['set my heart on', 'want something very much', 'ตั้งใจอยากได้มาก', 'She has set her heart on a trip to Japan.', 'เธอตั้งใจอยากไปเที่ยวญี่ปุ่นมาก', 'For a big wish or dream.', 'heart'],
+    ['dying for', 'want something very much right now', 'อยากได้มาก ๆ (แทบตาย)', 'I am dying for a cold drink.', 'ฉันอยากได้เครื่องดื่มเย็น ๆ มากเลย', 'Casual. Often about food, drinks or sleep.', 'dying'],
+  ],
+  6: [
+    ['work like a dog', 'work very hard', 'ทำงานหนักมาก', 'He works like a dog every weekend.', 'เขาทำงานหนักมากทุกสุดสัปดาห์', 'Not rude in English. It just means very hard work.', 'dog'],
+    ['a couch potato', 'a person who watches TV all day', 'คนที่ชอบนอนดูทีวีทั้งวัน', 'On Sundays my dad is a couch potato.', 'วันอาทิตย์พ่อของฉันนอนดูทีวีทั้งวัน', 'Light and funny, for lazy days.', 'potato'],
+    ['hit the books', 'study hard', 'ตั้งใจอ่านหนังสือ', 'I have a test tomorrow. I need to hit the books.', 'พรุ่งนี้ฉันมีสอบ ต้องตั้งใจอ่านหนังสือแล้ว', 'Perfect for you and your English!', 'books'],
+    ['hit the sack', 'go to bed', 'เข้านอน', 'I am tired. I am going to hit the sack.', 'ฉันเหนื่อยแล้ว จะไปนอนแล้วนะ', 'Casual. Also: "hit the hay".', 'sack'],
+  ],
+  7: [
+    ['beats me', 'I don’t know', 'ไม่รู้เหมือนกัน', 'Where is the key? Beats me!', 'กุญแจอยู่ไหน? ไม่รู้เหมือนกัน!', 'Casual. Not for guests at work.', 'beats'],
+    ['I don’t buy it', 'I don’t believe it', 'ฉันไม่เชื่อหรอก', 'He says he is never late? I don’t buy it.', 'เขาบอกว่าไม่เคยมาสายเหรอ? ฉันไม่เชื่อหรอก', '"Buy" here means "believe".', 'buy'],
+    ['my lips are sealed', 'I will keep the secret', 'ฉันจะไม่บอกใคร', 'Don’t worry, my lips are sealed.', 'ไม่ต้องห่วง ฉันจะไม่บอกใคร', 'Say it when a friend tells you a secret.', 'sealed'],
+    ['it’s up to you', 'you decide', 'แล้วแต่คุณ', 'Pizza or pad thai? It’s up to you.', 'พิซซ่าหรือผัดไทย? แล้วแต่คุณ', 'Polite and useful with guests too.', 'up'],
+  ],
+  8: [
+    ['around the clock', 'all day and all night', 'ตลอด 24 ชั่วโมง', 'Our reception is open around the clock.', 'แผนกต้อนรับของเราเปิดตลอด 24 ชั่วโมง', 'Great for hotel English!', 'clock'],
+    ['in the nick of time', 'just before it was too late', 'ทันเวลาพอดี', 'We got to the airport in the nick of time.', 'เราไปถึงสนามบินทันเวลาพอดี', 'For a close, lucky moment.', 'nick'],
+    ['call it a day', 'stop working for today', 'พอแค่นี้ก่อนสำหรับวันนี้', 'It’s 6 p.m. Let’s call it a day.', 'หกโมงเย็นแล้ว พอแค่นี้ก่อนเถอะ', 'Said at the end of a long work day.', 'day'],
+    ['once in a blue moon', 'very rarely', 'นาน ๆ ครั้ง', 'I eat fast food once in a blue moon.', 'ฉันกินฟาสต์ฟู้ดนาน ๆ ครั้ง', 'A "blue moon" is a rare second full moon in a month.', 'blue'],
+  ],
+  9: [
+    ['on the go', 'very busy, moving all the time', 'ยุ่งตลอด ไม่ได้หยุด', 'I am always on the go at work.', 'ที่ทำงานฉันยุ่งตลอดเวลา', 'Describes a busy person or life.', 'go'],
+    ['up to my ears', 'very, very busy', 'งานท่วมหัว', 'I am up to my ears in emails.', 'ฉันมีอีเมลท่วมหัวเลย', 'Also: "up to my eyes".', 'ears'],
+    ['keep an eye on', 'watch carefully', 'คอยดูแล คอยจับตา', 'Can you keep an eye on my bag?', 'ช่วยดูกระเป๋าให้หน่อยได้ไหม?', 'Very useful in daily life and at the hotel.', 'eye'],
+    ['hang in there', 'don’t give up', 'อดทนไว้นะ สู้ ๆ', 'The exam is hard, but hang in there!', 'ข้อสอบยาก แต่สู้ ๆ นะ!', 'Kind words for a friend who is having a hard time.', 'hang'],
+  ],
+  10: [
+    ['there’s no place like home', 'home is the best place', 'ไม่มีที่ไหนสุขใจเท่าบ้านเรา', 'After the trip I said, "There’s no place like home."', 'หลังการเดินทาง ฉันพูดว่า "ไม่มีที่ไหนสุขใจเท่าบ้านเรา"', 'A famous line from an old film.', 'home'],
+    ['there’s more than meets the eye', 'there is more to it than you can see', 'มีอะไรมากกว่าที่เห็น', 'This quiet guest? There’s more than meets the eye.', 'แขกเงียบ ๆ คนนี้น่ะเหรอ? มีอะไรมากกว่าที่เห็นนะ', 'For people or things that are deeper than they look.', 'eye'],
+    ['a drop in the ocean', 'a very small amount compared to what is needed', 'น้อยนิดเหมือนหยดน้ำในมหาสมุทร', 'Ten baht is a drop in the ocean.', 'สิบบาทน้อยนิดมากเมื่อเทียบกับที่ต้องใช้', 'Used for money or help that is too small.', 'ocean'],
+    ['plenty of fish in the sea', 'many other chances or people', 'ยังมีตัวเลือกอีกเยอะ', 'Don’t be sad about that job. There are plenty of fish in the sea.', 'อย่าเสียใจเรื่องงานนั้นเลย ยังมีโอกาสอีกเยอะ', 'Often used to cheer someone up.', 'fish'],
+  ],
+  11: [
+    ['can’t make head or tail of it', 'can’t understand it at all', 'ไม่เข้าใจเลยสักนิด', 'This map! I can’t make head or tail of it.', 'แผนที่นี้! ฉันไม่เข้าใจเลยสักนิด', 'For confusing papers, maps or instructions.', 'tail'],
+    ['you can say that again', 'I agree completely', 'เห็นด้วยที่สุด', '"It’s so hot today!" "You can say that again!"', '"วันนี้ร้อนมาก!" "เห็นด้วยที่สุด!"', 'A friendly way to agree.', 'again'],
+    ['I can’t help it', 'I can’t stop myself', 'ห้ามตัวเองไม่ได้', 'I always laugh at his jokes. I can’t help it!', 'ฉันหัวเราะมุกเขาทุกครั้ง ห้ามตัวเองไม่ได้!', 'For habits and feelings you can’t control.', 'help'],
+    ['can’t wait', 'very excited for something', 'รอไม่ไหวแล้ว', 'I can’t wait to see the sea!', 'ฉันรอไม่ไหวแล้วที่จะได้เห็นทะเล!', 'For happy things that are coming soon.', 'wait'],
+  ],
+  12: [
+    ['just around the corner', 'very close (in place or time)', 'อยู่ใกล้แค่นี้เอง / ใกล้จะถึงแล้ว', 'The pharmacy is just around the corner.', 'ร้านขายยาอยู่ใกล้แค่นี้เอง', 'Also for time: "New Year is just around the corner."', 'corner'],
+    ['off the beaten track', 'a quiet place far from tourists', 'สถานที่ที่คนไม่ค่อยไป', 'We found a beach off the beaten track.', 'เราเจอชายหาดที่คนไม่ค่อยไป', 'Guests love hidden places. Great for tips!', 'track'],
+    ['go the extra mile', 'do more than you have to', 'ทำมากกว่าที่ต้องทำ ทุ่มเทเป็นพิเศษ', 'Our staff go the extra mile for guests.', 'พนักงานของเราทุ่มเทเป็นพิเศษเพื่อแขก', 'A beautiful phrase for great service.', 'mile'],
+    ['hit the road', 'leave, start a journey', 'ออกเดินทาง', 'It’s late. Let’s hit the road.', 'ดึกแล้ว ออกเดินทางกันเถอะ', 'Casual. For leaving a place.', 'road'],
+  ],
+  13: [
+    ['it was a blessing in disguise', 'a bad thing that turned out to be good', 'เรื่องร้ายที่กลายเป็นดี', 'Missing the bus was a blessing in disguise. I met an old friend.', 'การพลาดรถบัสกลายเป็นเรื่องดี ฉันได้เจอเพื่อนเก่า', 'For lucky surprises after bad luck.', 'disguise'],
+    ['it was the last straw', 'the final problem that made someone angry', 'ฟางเส้นสุดท้าย', 'He was late again. It was the last straw.', 'เขามาสายอีกแล้ว มันคือฟางเส้นสุดท้าย', 'Thai has the same idea: ฟางเส้นสุดท้าย.', 'straw'],
+    ['I was in hot water', 'I was in trouble', 'ฉันเดือดร้อน / โดนดุ', 'I forgot her birthday. I was in hot water!', 'ฉันลืมวันเกิดเธอ ฉันโดนดุใหญ่เลย!', 'For small trouble, often funny.', 'water'],
+    ['it was a close call', 'something bad almost happened', 'เกือบไปแล้ว', 'The car almost hit me. It was a close call!', 'รถเกือบชนฉัน เกือบไปแล้ว!', 'Said after a lucky escape.', 'call'],
+  ],
+  14: [
+    ['I dropped the ball', 'I made a mistake / forgot to do something', 'ฉันพลาดเอง', 'Sorry, I dropped the ball on that booking.', 'ขอโทษค่ะ ฉันพลาดเรื่องการจองนั้นเอง', 'An honest way to say sorry at work.', 'ball'],
+    ['I pulled it off', 'I succeeded at something hard', 'ฉันทำสำเร็จ', 'The party was hard to plan, but I pulled it off!', 'งานปาร์ตี้วางแผนยาก แต่ฉันทำสำเร็จ!', 'Be proud when you use it!', 'off'],
+    ['I worked my fingers to the bone', 'I worked extremely hard', 'ฉันทำงานหนักมาก ๆ', 'I worked my fingers to the bone last month.', 'เดือนที่แล้วฉันทำงานหนักมาก ๆ', 'Strong. For very long, hard work.', 'bone'],
+    ['I learned it by heart', 'I memorised it', 'ฉันจำขึ้นใจ', 'I learned the hotel rules by heart.', 'ฉันจำกฎของโรงแรมได้ขึ้นใจ', '"By heart" = from memory, perfectly.', 'heart'],
+  ],
+  15: [
+    ['we went Dutch', 'each person paid for themselves', 'เราต่างคนต่างจ่าย', 'We went Dutch at the restaurant.', 'เราต่างคนต่างจ่ายที่ร้านอาหาร', 'Common when friends eat together.', 'Dutch'],
+    ['I ate like a horse', 'I ate a lot', 'ฉันกินเยอะมาก', 'I was so hungry. I ate like a horse!', 'ฉันหิวมาก กินเยอะมากเลย!', 'Opposite: "eat like a bird" (eat very little).', 'horse'],
+    ['it cost an arm and a leg', 'it was very expensive', 'แพงหูฉี่', 'The dinner cost an arm and a leg.', 'อาหารเย็นมื้อนั้นแพงหูฉี่', 'For prices that are too high.', 'leg'],
+    ['I slept like a log', 'I slept very well and deeply', 'ฉันหลับสนิท', 'After the trip I slept like a log.', 'หลังการเดินทาง ฉันหลับสนิทเลย', 'Also: "slept like a baby".', 'log'],
+  ],
+  16: [
+    ['did you get cold feet?', 'did you feel too nervous to do it?', 'คุณเกิดกลัวขึ้นมาหรือเปล่า?', 'You didn’t sing. Did you get cold feet?', 'คุณไม่ได้ร้องเพลง เกิดกลัวขึ้นมาเหรอ?', 'For nerves before something big.', 'feet'],
+    ['did the penny drop?', 'did you finally understand?', 'เข้าใจแล้วใช่ไหม? (ปิ๊งแล้วใช่ไหม)', 'I explained it twice. Did the penny drop?', 'ฉันอธิบายไปสองรอบแล้ว ปิ๊งหรือยัง?', 'Friendly, a bit playful.', 'penny'],
+    ['did you sleep on it?', 'did you wait until tomorrow to decide?', 'คุณคิดทบทวนข้ามคืนหรือยัง?', 'Big decision! Did you sleep on it?', 'การตัดสินใจใหญ่นะ! คิดทบทวนข้ามคืนแล้วหรือยัง?', '"Let me sleep on it" = I will decide tomorrow.', 'sleep'],
+    ['did you catch that?', 'did you hear and understand?', 'คุณได้ยินและเข้าใจไหม?', 'The room is 405. Did you catch that?', 'ห้อง 405 นะคะ ได้ยินไหมคะ?', 'Very useful at reception.', 'catch'],
+  ],
+  17: [
+    ['I’ll keep my fingers crossed', 'I hope for good luck', 'ฉันจะขอให้โชคดี', 'Good luck with your test! I’ll keep my fingers crossed.', 'ขอให้สอบผ่านนะ! ฉันจะเอาใจช่วย', 'People really cross two fingers for luck.', 'fingers'],
+    ['I’ll play it by ear', 'I will decide as things happen, without a plan', 'ดูสถานการณ์ไปก่อน', 'I don’t have a plan for Sunday. I’ll play it by ear.', 'ฉันยังไม่มีแผนวันอาทิตย์ ดูสถานการณ์ไปก่อน', 'Relaxed and flexible.', 'ear'],
+    ['the ball is in your court', 'now it is your turn to decide or act', 'ตอนนี้ขึ้นอยู่กับคุณแล้ว', 'I sent the offer. The ball is in your court.', 'ฉันส่งข้อเสนอไปแล้ว ตอนนี้ขึ้นอยู่กับคุณ', 'From tennis.', 'court'],
+    ['I’ll cross that bridge when I come to it', 'I will deal with a problem when it happens', 'ค่อยว่ากันเมื่อถึงเวลา', 'Rain on our trip? I’ll cross that bridge when I come to it.', 'ถ้าฝนตกตอนเที่ยว? ค่อยว่ากันเมื่อถึงเวลา', 'Don’t worry too early!', 'bridge'],
+  ],
+  18: [
+    ['I’m going to turn over a new leaf', 'I am going to change and do better', 'ฉันจะเริ่มต้นใหม่ เปลี่ยนตัวเอง', 'This year I’m going to turn over a new leaf.', 'ปีนี้ฉันจะเริ่มต้นใหม่', 'Popular at New Year!', 'leaf'],
+    ['it’s going to be a long shot', 'it will probably not work, but we can try', 'โอกาสน้อย แต่ลองดู', 'Getting a room tonight is a long shot.', 'การได้ห้องคืนนี้มีโอกาสน้อยนะ', 'Honest but hopeful.', 'shot'],
+    ['we’re going to have a ball', 'we will have a great time', 'เราจะสนุกกันมาก', 'The beach party? We’re going to have a ball!', 'ปาร์ตี้ชายหาดเหรอ? เราจะสนุกกันมาก!', 'A "ball" was a big dance party.', 'ball'],
+    ['I’m going to get the hang of it', 'I am going to learn how to do it', 'เดี๋ยวก็คล่อง', 'English is hard, but I’m going to get the hang of it!', 'ภาษาอังกฤษยาก แต่เดี๋ยวฉันก็คล่อง!', 'This one is for you!', 'hang'],
+  ],
+  19: [
+    ['if you snooze, you lose', 'if you are slow, you miss the chance', 'ช้าหมดอด', 'Book the room now. If you snooze, you lose!', 'จองห้องตอนนี้เลย ช้าหมดอด!', 'Snooze = a short sleep.', 'snooze'],
+    ['if the shoe fits, wear it', 'if what is said is true for you, accept it', 'ถ้าใช่ก็ยอมรับซะ', 'You think I mean you? Well, if the shoe fits, wear it.', 'คิดว่าฉันหมายถึงคุณเหรอ? ถ้าใช่ก็ยอมรับซะ', 'A bit cheeky. Use with friends only.', 'shoe'],
+    ['if all else fails', 'if nothing else works', 'ถ้าทุกอย่างไม่ได้ผล', 'If all else fails, call the manager.', 'ถ้าทุกอย่างไม่ได้ผล ให้โทรหาผู้จัดการ', 'For a last plan.', 'fails'],
+    ['if I were in your shoes', 'if I were you', 'ถ้าฉันเป็นคุณ', 'If I were in your shoes, I would take the job.', 'ถ้าฉันเป็นคุณ ฉันจะรับงานนั้น', 'Use it to give kind advice.', 'shoes'],
+  ],
+  20: [
+    ['bear with me', 'please be patient for a moment', 'กรุณารอสักครู่', 'Bear with me, I’ll check your booking.', 'กรุณารอสักครู่ ฉันจะตรวจสอบการจองให้', 'Polite and perfect at the front desk.', 'bear'],
+    ['by all means', 'of course, please do', 'เชิญเลย ได้แน่นอน', '"May I sit here?" "By all means!"', '"ขอนั่งตรงนี้ได้ไหม?" "เชิญเลย!"', 'Elegant and polite.', 'means'],
+    ['my pleasure', 'I am happy to help', 'ยินดีค่ะ / ยินดีครับ', '"Thank you!" "My pleasure."', '"ขอบคุณ!" "ยินดีค่ะ"', 'Warmer than "you’re welcome".', 'pleasure'],
+    ['make yourself at home', 'relax and feel comfortable here', 'ตามสบายเลย ทำตัวเหมือนอยู่บ้าน', 'Welcome to your room. Make yourself at home!', 'ยินดีต้อนรับสู่ห้องพัก ตามสบายเลยนะคะ!', 'A lovely welcome for guests.', 'home'],
+  ],
+  21: [
+    ['what’s the catch?', 'what is the hidden problem?', 'มีอะไรแอบแฝงหรือเปล่า?', 'A free room upgrade? What’s the catch?', 'อัปเกรดห้องฟรีเหรอ? มีอะไรแอบแฝงไหม?', 'For offers that sound too good.', 'catch'],
+    ['when pigs fly', 'never', 'ชาติหน้าตอนบ่าย ๆ (ไม่มีทาง)', 'He will clean his room when pigs fly.', 'เขาจะทำความสะอาดห้องก็ต่อเมื่อชาติหน้าตอนบ่าย ๆ', 'Funny. Means it will never happen.', 'pigs'],
+    ['why the long face?', 'why do you look sad?', 'ทำไมหน้าเศร้าจัง?', 'Hey, why the long face?', 'เฮ้ ทำไมหน้าเศร้าจัง?', 'A caring question for a friend.', 'face'],
+    ['what goes around comes around', 'what you do to others will come back to you', 'ทำดีได้ดี ทำชั่วได้ชั่ว', 'Be kind. What goes around comes around.', 'ใจดีเข้าไว้ ทำอะไรไว้ก็ได้อย่างนั้น', 'Like karma.', 'around'],
+  ],
+  22: [
+    ['to make a long story short', 'to tell only the main point', 'สรุปสั้น ๆ ก็คือ', 'To make a long story short, we missed the flight.', 'สรุปสั้น ๆ ก็คือ เราตกเครื่อง', 'Great for telling stories.', 'story'],
+    ['out of the blue', 'suddenly, without warning', 'อยู่ดี ๆ ก็…', 'Out of the blue, my old friend called me.', 'อยู่ดี ๆ เพื่อนเก่าก็โทรมาหาฉัน', 'For surprises.', 'blue'],
+    ['the time of my life', 'a wonderful, unforgettable time', 'ช่วงเวลาที่ดีที่สุดในชีวิต', 'I had the time of my life in Bali.', 'ฉันมีช่วงเวลาที่ดีที่สุดที่บาหลี', 'For the very best memories.', 'life'],
+    ['once upon a time', 'long ago (how stories begin)', 'กาลครั้งหนึ่งนานมาแล้ว', 'Once upon a time, a girl wanted to speak English…', 'กาลครั้งหนึ่งนานมาแล้ว มีหญิงสาวคนหนึ่งอยากพูดภาษาอังกฤษ…', 'The classic start of a story.', 'once'],
+  ],
+  23: [
+    ['the customer is always right', 'always try to make the guest happy', 'ลูกค้าคือพระเจ้า', 'He is angry, but the customer is always right.', 'เขาโกรธ แต่ลูกค้าถูกเสมอ', 'A famous service rule.', 'customer'],
+    ['first-class service', 'excellent service', 'บริการระดับเฟิร์สคลาส', 'Thank you for the first-class service!', 'ขอบคุณสำหรับบริการระดับเยี่ยม!', 'A lovely compliment to receive.', 'service'],
+    ['under one roof', 'all in the same building', 'ครบในที่เดียว', 'Spa, pool and restaurant, all under one roof.', 'สปา สระว่ายน้ำ และร้านอาหาร ครบในที่เดียว', 'Useful to describe a resort.', 'roof'],
+    ['a home away from home', 'a place where you feel as comfortable as at home', 'บ้านหลังที่สอง', 'Our hotel is a home away from home.', 'โรงแรมของเราคือบ้านหลังที่สองของคุณ', 'The dream of every hotel.', 'home'],
+  ],
+  24: [
+    ['practice makes perfect', 'if you practise a lot, you get very good', 'ฝึกบ่อย ๆ แล้วจะเก่ง', 'Keep speaking English. Practice makes perfect!', 'พูดภาษาอังกฤษต่อไปนะ ฝึกบ่อย ๆ แล้วจะเก่ง!', 'The motto of this whole voyage.', 'perfect'],
+    ['the sky’s the limit', 'there is no limit to what you can do', 'ไม่มีอะไรเป็นไปไม่ได้', 'With your English now, the sky’s the limit!', 'ด้วยภาษาอังกฤษตอนนี้ ไม่มีอะไรเป็นไปไม่ได้!', 'For big dreams.', 'sky'],
+    ['with flying colours', 'with great success', 'อย่างยอดเยี่ยม', 'She passed the test with flying colours.', 'เธอสอบผ่านอย่างยอดเยี่ยม', 'Ships flew their flags after a victory.', 'colours'],
+    ['a dream come true', 'something you wished for that really happened', 'ความฝันที่เป็นจริง', 'Speaking English with guests is a dream come true.', 'การได้พูดภาษาอังกฤษกับแขกคือความฝันที่เป็นจริง', 'The last idiom of the voyage. You made it!', 'dream'],
+  ],
+};

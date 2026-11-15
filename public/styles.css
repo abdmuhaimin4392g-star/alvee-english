@@ -1599,3 +1599,25 @@ body.tyd-on #app { background: radial-gradient(120% 60% at 80% 0%, rgba(182,156,
 @media (prefers-reduced-motion: reduce) { .sg-sky, .storm-tag::after, .sg-ic { animation: none; display: none; } .sg-ic { display: block; } }
 .jar-chip.lv1, .jar-chip.lv2, .jar-chip.lv3 { background: linear-gradient(135deg, #48557a, #2b3150); color: #fff; }
 .jar-chip.lv3 { background: linear-gradient(135deg, #3a2f6b, #15142e); }
+.bars .b.two { position: relative; }
+.bars .b.two i.app { position: absolute; left: 0; right: 0; bottom: 18px; opacity: .28; }
+.bars .b.two i:not(.app) { position: relative; z-index: 1; }
+
+/* Idiom Cove */
+.les-row.bonus { background: linear-gradient(120deg, color-mix(in srgb, #ffd36b 22%, var(--surface)), color-mix(in srgb, #8f7bff 14%, var(--surface))); border: 1.5px dashed #e0a93b; }
+.id-card { position: relative; overflow: hidden; border-radius: 24px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; text-align: center; color: #fff;
+  background: radial-gradient(90% 60% at 100% 0%, rgba(255, 211, 107, .5), transparent 60%), linear-gradient(155deg, #10a3a0, #0b5f78 60%, #3d3a8f); box-shadow: 0 14px 30px rgba(11, 95, 120, .3); }
+.id-glow { position: absolute; width: 180px; height: 180px; border-radius: 50%; left: -60px; bottom: -80px; background: rgba(255, 255, 255, .12); }
+.id-title { color: #fff !important; font-size: 1.7rem; margin: 0; line-height: 1.2; }
+.id-mean { font-size: 1.05rem; position: relative; }
+.id-th { background: rgba(255, 255, 255, .16); border-radius: 12px; padding: 6px 10px; position: relative; }
+.id-ex { background: rgba(255, 255, 255, .95); color: #17324a; border-radius: 16px; padding: 10px 12px; text-align: left; position: relative; }
+.id-ex .en { font-weight: 700; flex: 1; }
+.id-ex .muted { color: #5b6b7a; }
+.id-tip { font-size: .88rem; opacity: .95; position: relative; }
+.id-say { flex: none; }
+.id-card .id-say { background: rgba(255, 255, 255, .2); color: #fff; }
+.id-q { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.45rem; font-weight: 800; text-align: center; padding: 18px 12px; border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+.id-situ { padding: 14px; border-radius: 18px; background: color-mix(in srgb, #ffd36b 20%, var(--surface)); border-left: 5px solid #e0a93b; display: flex; flex-direction: column; gap: 4px; }
+.id-situ b { font-size: 1.15rem; }
+.id-opts .opt { text-align: left; }

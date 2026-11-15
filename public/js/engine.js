@@ -429,10 +429,11 @@
     steps.push(...focusSteps(st, L.u, L.boost ? 7 : 5, new Set(L.sents), L.boost));
     // finish with a second look at a new sentence (and a new word in the later chapters)
     // round 2: every sentence again in a different kind of exercise (longer lessons, more to do)
-    const round2 = A.shuffle(L.sents.slice(0, 9)).slice(0, Math.max(4, Math.min(6, L.sents.length)));
+    const round2 = A.shuffle(L.sents.slice(0, 9)).slice(0, Math.min(L.sents.length, L.u >= 5 ? 8 : 6));
     round2.forEach((sid, i) => { const q = sentQuiz(sid, spool, i % 2 ? ['build', 'pick', 'gap'] : ['gap', 'build', 'pick']); if (q) steps.push({ ...q, round: 2 }); });
     // from the later chapters she also types one missing word
-    if (L.u >= 9) { for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); break; } } }
+    if (L.u >= 5) { let k = 0; for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); if (++k >= (L.u >= 9 ? 2 : 1)) break; } } }
+    if (L.u >= 13) { for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'dict'); if (q) { steps.push(q); break; } } }
     A.shuffle(teach).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['pic', 'wfit']), L.u); if (q) steps.push(q); });
     return noRepeatTypes(steps);
   }
@@ -575,12 +576,13 @@
     else if (kind === 'chest') steps = miniSteps(st, 3, ['gap', 'pick', 'wfit', 'build']);
     else if (kind === 'bottle') steps = miniSteps(st, 5, ['gap', 'build', 'listen', 'pick']);
     else if (kind === 'side') steps = sideSteps(arg, st);
+    else if (kind === 'bonus') steps = A.bonusSteps ? A.bonusSteps(arg, st) : [];
     steps = steps.filter(Boolean);
     const test = !!(node && node.kind === 'check');
     // tests and speed rounds run against the clock; everything else just shows a stopwatch
     const ctl = A.ctl || {};
     const timed = test || (kind === 'side' && arg && arg.mission === 'speed');
-    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate'].includes(x.type)).length;
+    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate', 'idcard'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
       test, lookups: 0, timed, limit: timed ? (graded * (test ? +ctl.testSec || 30 : 15) + steps.filter((x) => x.type === 'typegap').length * 15 + steps.filter((x) => x.type === 'dict').length * 35) * 1000 : 0,

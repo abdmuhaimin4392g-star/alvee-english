@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.12';
+  A.VERSION = '5.13';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -510,6 +510,8 @@
       : { en: 'Fortress test (timed)', th: 'สอบป้อมปราการ (จับเวลา)', icon: '⏱️', k: 'Test' };
   };
   // islands open one after another; the dashboard can open islands ahead (unlockTo) or keep her at one (holdAt)
+  // unit tests from chapter 5 on need 80%
+  A.passMark = (n) => (n && n.u >= 5 ? 80 : 70);
   A.isOpen = (st, idx, cfg) => {
     const c = A.ctl || {};
     if (c.holdAt != null && c.holdAt !== '' && idx > +c.holdAt && !st.done[A.nodes[idx].id]) return false;
@@ -594,6 +596,10 @@
   A.weakSkills = (st) => Object.entries(st.sk || {}).filter(([, r]) => r.h.length >= 5 && A.skillAcc(r, true) < 0.75)
     .map(([id, r]) => ({ id, acc: A.skillAcc(r, true), n: r.n })).sort((a, b) => a.acc - b.acc || b.n - a.n);
   A.dueItems = (st) => { const t = A.todayNum(); return Object.keys(st.srs).filter((id) => st.srs[id].d <= t); };
+  // two clocks: study time (lessons and study pages) and time on the app (anything, while the screen is on and she is using it)
+  A.studySec = (d) => Math.max((d && d.st) || 0, (d && d.sec) || 0);
+  A.appSec = (d) => Math.max((d && d.app) || 0, A.studySec(d));
+  A.fmtMin = (sec) => { const m = Math.round((sec || 0) / 60); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; };
   A.wordCount = (st) => { const s = new Set(Object.keys(st.wseen || {})); Object.keys(st.srs).forEach((k) => { if (k.startsWith('w:')) s.add(k.slice(2)); }); return s.size; };
 
   // medals — a collection with bronze / silver / gold / pearl tiers. ids of medals already earned never change.
@@ -603,7 +609,7 @@
   const lookups = (st) => Object.values(st.look).reduce((a, b) => a + b, 0);
   const hotelTalk = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel').length;
   const bestStreak = (st) => Math.max(A.streak(st), st.best || 0);
-  const MEDAL_HOW = {"first": "Finish your first lesson", "storm5": "Calm 5 storms in Storm Rounds", "storm20": "Calm 20 storms", "storm50": "Calm 50 storms", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn on 3 days", "streak7": "Learn on 7 days", "streak14": "Learn on 14 days", "streak30": "Learn on 30 days", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
+  const MEDAL_HOW = {"first": "Finish your first lesson", "storm5": "Calm 5 storms in Storm Rounds", "idiom1": "Finish an Idiom Cove", "idiom8": "Finish 8 Idiom Coves", "idiom24": "Finish all 24 Idiom Coves", "storm20": "Calm 20 storms", "storm50": "Calm 50 storms", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn on 3 days", "streak7": "Learn on 7 days", "streak14": "Learn on 14 days", "streak30": "Learn on 30 days", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
   // [id, icon, tier, category, English name, Thai name, how to get it (Thai), progress(st) -> [now, goal]]
   A.MEDALS = [
     ['first', 'book', 'bronze', 'learn', 'First Light', 'แสงแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
@@ -642,6 +648,9 @@
     ['storm5', 'bolt', 'silver', 'star', 'Storm Tamer', 'ผู้สยบพายุ', 'สยบพายุ 5 ลูกในรอบพายุ', (st) => [(st.storm && st.storm.calm) || 0, 5]],
     ['storm20', 'sun', 'gold', 'star', 'Rainbow Keeper', 'ผู้เก็บสายรุ้ง', 'สยบพายุ 20 ลูก', (st) => [(st.storm && st.storm.calm) || 0, 20]],
     ['storm50', 'gem', 'pearl', 'star', 'Eye of the Storm', 'ตาของพายุ', 'สยบพายุ 50 ลูก', (st) => [(st.storm && st.storm.calm) || 0, 50]],
+    ['idiom1', 'wave', 'bronze', 'star', 'Idiom Explorer', 'นักสำรวจสำนวน', 'ผ่าน Idiom Cove 1 แห่ง', (st) => [Object.keys(st.bonus || {}).length, 1]],
+    ['idiom8', 'gem', 'silver', 'star', 'Idiom Collector', 'นักสะสมสำนวน', 'ผ่าน Idiom Cove 8 แห่ง', (st) => [Object.keys(st.bonus || {}).length, 8]],
+    ['idiom24', 'crown', 'gold', 'star', 'Master of Idioms', 'ปรมาจารย์แห่งสำนวน', 'ผ่าน Idiom Cove ครบ 24 แห่ง', (st) => [Object.keys(st.bonus || {}).length, 24]],
     ['side5', 'search', 'gold', 'learn', 'Hidden Isles', 'เกาะลับแล', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
   ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how: MEDAL_HOW[id] || how, prog }));
   A.medal = (id) => A.MEDALS.find((m) => m.id === id);
