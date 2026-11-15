@@ -1,4 +1,4 @@
-/* ptest.js — "What kind of sailor are you?": the 16 personalities test (questions in ptest-data.js).
+/* ptest.js — the 16 personalities test (questions in ptest-data.js).
    It opens every time she opens the voyage map, until all 60 questions are answered.
    Every answer is saved the moment she taps it (on the phone and on the server), so after closing the app
    she goes on from the first question she has not answered. The order never changes. */
@@ -223,7 +223,7 @@
       }
       save();
       A.track('ptest_done', { code: sc.full, mins: Math.max(1, Math.round((p.done - (p.start || p.done)) / 60000)), explained: Object.keys(p.x).length });
-      try { A.notify({ quiet: 1, ic: P.types[sc.code].ic, t: 'You are ' + P.types[sc.code].n + ' (' + sc.full + ')', s: 'Tap to see your sailor spirit again.', go: ['ptest'] }); } catch (e) { /* no inbox */ }
+      try { A.notify({ quiet: 1, ic: P.types[sc.code].ic, t: 'You are ' + P.types[sc.code].n + ' (' + sc.full + ')', s: 'Tap to see your result again.', go: ['ptest'] }); } catch (e) { /* no inbox */ }
       return result(true);
     }
     return result(false);
@@ -231,6 +231,7 @@
 
   function result(fresh) {
     const p = PT.st(), res = p.res, T = P.types[res.code];
+    const desc = (window.PTPROF && window.PTPROF[res.code] && window.PTPROF[res.code].intro) || [T.en, T.thd];
     presence(0);
     try { A.setPresence({ screen: 'personality result', title: res.full }); } catch (e) { /* offline */ }
     const scales = P.dims.map((d) => {
@@ -259,13 +260,16 @@
         h('div', { class: 'pt-port big', 'aria-hidden': 'true' }, T.ic),
         h('div', { class: 'pt-code' }, res.code, h('small', null, '-' + res.id)),
         h('h2', { class: 'pt-title' }, T.n), h('div', { class: 'pt-title-th th' }, T.th)),
-      h('div', { class: 'pt-card' }, h('p', { class: 'en pt-desc' }, T.en), h('p', { class: 'th pt-desc' }, T.thd),
+      h('div', { class: 'pt-card' }, h('p', { class: 'en pt-desc' }, desc[0]), h('p', { class: 'th pt-desc' }, desc[1]),
         h('div', { class: 'pt-exh' }, '⭐ ' + UI.strengths[0] + ' · ', h('span', { class: 'th' }, UI.strengths[1])),
         h('div', { class: 'pt-chips' }, T.s.map(([en, th]) => h('span', { class: 'pt-chip' }, en, h('small', { class: 'th' }, th)))),
         h('div', { class: 'pt-ident' }, h('div', { class: 'en' }, P.ident[res.id][0]), h('div', { class: 'th' }, P.ident[res.id][1]))),
       prize,
       h('div', { class: 'pt-card' }, h('div', { class: 'pt-exh' }, '📊 ' + UI.scales[0] + ' · ', h('span', { class: 'th' }, UI.scales[1])), ...scales),
       h('div', { class: 'pt-card pt-note' }, bi(UI.noBest), bi(UI.grow)),
+      h('div', { class: 'pt-card pt-more' },
+        btnBi(['Compare with Muhay (INFJ)', 'เปรียบเทียบกับมูไฮ (INFJ)'], 'ghost wide', () => { PT.close(); A.go('typevs'); }),
+        btnBi(['Read about all 16 types', 'อ่านเกี่ยวกับบุคลิกภาพทั้ง 16 แบบ'], 'ghost wide', () => { PT.close(); A.go('types'); })),
       h('div', { class: 'pt-row' }, btnBi(UI.sail, 'go', () => { PT.close(); A.go('journey'); })));
     if (fresh) {
       try { A.sfx.play('done'); } catch (e) { /* quiet */ }
@@ -273,11 +277,21 @@
     }
   }
 
+  PT.fixNote = () => {
+    try {
+      const st = A.state, p = st && st.ptest, L = st && st.inbox;
+      if (!p || !p.res || !Array.isArray(L)) return;
+      const T = P.types[p.res.code], t = 'You are ' + T.n + ' (' + p.res.full + ')';
+      L.forEach((x) => { if (x && x.go && x.go[0] === 'ptest' && x.t !== t) { x.t = t; x.s = 'Tap to see your result again.'; } });
+    } catch (e) { /* inbox stays */ }
+  };
+
   // ---------------------------------------------------------------- where she meets it
   // 1. the voyage map: asks every time she opens it, until the test is finished
   const go0 = A.go;
   A.go = (view, arg) => {
     if (view === 'ptest') { PT.open('note'); return; }
+    if (view === 'home') PT.fixNote();
     go0(view, arg);
     if (view === 'journey' && PT.need()) {
       clearTimeout(PT.timer);
@@ -298,8 +312,8 @@
     try {
       const p = PT.st(), n = PT.count(p), T = p.done && p.res && P.types[p.res.code];
       const card = T
-        ? h('button', { class: 'card talk-item pt-me', onclick: () => PT.open('me') }, h('div', { class: 'av' }, T.ic), h('div', { style: { flex: 1 } }, h('b', null, 'My sailor spirit: ' + p.res.full), h('div', { class: 'small muted' }, T.n + ' · tap to see it again')), h('span', { class: 'muted' }, '›'))
-        : h('button', { class: 'card talk-item pt-me', onclick: () => PT.open('me') }, h('div', { class: 'av' }, '🧭'), h('div', { style: { flex: 1 } }, h('b', null, 'What kind of sailor are you?'), h('div', { class: 'small muted' }, n ? n + ' of ' + N + ' answered · tap to go on' : N + ' questions · win a golden chest')), h('span', { class: 'muted' }, '›'));
+        ? h('button', { class: 'card talk-item pt-me', onclick: () => A.go('types') }, h('div', { class: 'av' }, T.ic), h('div', { style: { flex: 1 } }, h('b', null, 'My personality: ' + p.res.full), h('div', { class: 'small muted' }, T.n + ' · all 16 types · you and Muhay')), h('span', { class: 'muted' }, '›'))
+        : h('button', { class: 'card talk-item pt-me', onclick: () => PT.open('me') }, h('div', { class: 'av' }, '🧭'), h('div', { style: { flex: 1 } }, h('b', null, 'What is your personality type?'), h('div', { class: 'small muted' }, n ? n + ' of ' + N + ' answered · tap to go on' : N + ' questions · win a golden chest')), h('span', { class: 'muted' }, '›'));
       const shelf = root.querySelector('.medal-shelf');
       if (shelf) shelf.after(card); else root.append(card);
     } catch (e) { /* the page still works */ }

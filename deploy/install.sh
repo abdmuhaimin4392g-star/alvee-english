@@ -28,11 +28,8 @@ for d in public tools content; do
   [ -d "$SRC/$d" ] || continue
   rm -rf "$APP_DIR/$d.new" && cp -r "$SRC/$d" "$APP_DIR/$d.new" && rm -rf "$APP_DIR/$d" && mv "$APP_DIR/$d.new" "$APP_DIR/$d"
 done
-# one-time data steps for this version (a full copy of her progress is kept in $DATA_DIR/archive first)
-if [ -f "$APP_DIR/server/migrate-v5.js" ]; then
-  systemctl stop alvee-english 2>/dev/null || true
-  DATA_DIR="$DATA_DIR" "$NODE_BIN" "$APP_DIR/server/migrate-v5.js" || true
-fi
+# no data steps in this version: her progress is left exactly as it is
+# (the one-time version 5 steps already ran; server/migrate-v5.js is kept only as a record)
 id alvee-english >/dev/null 2>&1 || useradd --system --home "$DATA_DIR" --shell /usr/sbin/nologin alvee-english
 chown -R alvee-english:alvee-english "$DATA_DIR"
 

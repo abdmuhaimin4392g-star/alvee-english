@@ -1227,3 +1227,68 @@ p.th.pt-desc { color: #bfe3df; }
 .sbx-bar span { overflow: hidden; text-overflow: ellipsis; }
 .sbx-bar button { border: 0; border-radius: 99px; background: #ffd36b; color: #3a2400; font: 700 .8rem var(--font-body); padding: 6px 12px; cursor: pointer; }
 .adm .sbx-open { margin: 0; }
+
+/* ================================================================ v5.7 — personality types: library, profiles, you and Muhay */
+.ty .ty-bi .en { line-height: 1.45; }
+.ty .ty-bi .th { font-family: var(--font-th); color: var(--muted); line-height: 1.55; margin-top: 2px; }
+.ty .ty-bi.small .en, .ty .ty-bi.small .th { font-size: .88rem; }
+.ty-note { text-align: center; padding: 4px 8px; }
+.ty-vs-card { display: flex; gap: 12px; align-items: center; text-align: left; border: 2px solid var(--sea); background: linear-gradient(135deg, var(--sea-tint), var(--surface)); }
+.ty-vs-two { display: flex; align-items: center; gap: 4px; }
+.ty-vs-two b { font: 700 .7rem var(--font-body); color: var(--sea-deep); }
+.ty-av { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 1.5rem; background: var(--surface); box-shadow: var(--shadow); }
+.ty-rar { display: inline-block; font: 700 .7rem var(--font-body); letter-spacing: .02em; padding: 3px 9px; border-radius: 99px; color: #fff; background: var(--rc); text-shadow: 0 1px 1px rgba(0,0,0,.25); }
+.ty-group { margin-top: 6px; }
+.ty-group h2 { font-size: 1.15rem; color: var(--sea-deep); }
+.ty-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.ty-cell { position: relative; border: 0; border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); padding: 14px 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; border-top: 4px solid var(--rc); }
+.ty-cell.you { outline: 3px solid var(--mango); }
+.ty-cell.mu { outline: 3px solid #5b8def; }
+.ty-ic { font-size: 1.8rem; }
+.ty-code { font: 500 1.25rem var(--font-display); letter-spacing: .05em; color: var(--ink); }
+.ty-name { font-size: .82rem; color: var(--muted); font-weight: 600; text-align: center; }
+.ty-pct { font: 700 .8rem var(--font-body); color: var(--ink); }
+.ty-tag { position: absolute; top: 8px; right: 8px; font: 700 .64rem var(--font-body); background: var(--mango); color: #3a2400; padding: 2px 7px; border-radius: 99px; }
+.ty-tag.mu { background: #5b8def; color: #fff; }
+.ty-hero { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; border-top: 6px solid var(--rc); }
+.ty-hero-ic { font-size: 2.6rem; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; background: var(--sea-tint); }
+.ty-hero-code { font: 500 2.2rem/1 var(--font-display); letter-spacing: .06em; color: var(--sea-deep); }
+.ty-hero-code small { font-size: 1.1rem; }
+.ty-hero-code.sm { font-size: 1.3rem; }
+.ty-hero-th { color: var(--muted); }
+.pill.ty-mu { background: #E3ECFF; color: #2D55B8; }
+.ty-tabs { margin-top: 2px; }
+.ty-items { display: flex; flex-direction: column; gap: 10px; }
+.ty-item { display: flex; gap: 12px; background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 12px 14px; }
+.ty-iic { font-size: 1.4rem; line-height: 1.3; }
+.ty-tt { color: var(--muted); font-size: .88rem; }
+.ty-let { display: flex; gap: 12px; align-items: flex-start; }
+.ty-let > b { font: 500 1.4rem var(--font-display); color: var(--sea-deep); width: 28px; text-align: center; }
+.ty-chip { display: inline-flex; flex-direction: column; padding: 6px 12px; border-radius: 12px; background: var(--mango-tint); font-weight: 600; font-size: .88rem; }
+.ty-chip small { font-weight: 500; color: var(--muted); font-family: var(--font-th); }
+.ty-muhay { border-left: 5px solid #5b8def; }
+.ty-people { display: flex; flex-direction: column; gap: 10px; }
+.ty-person { display: flex; gap: 12px; align-items: center; background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 10px 12px; }
+.ty-ini { flex: none; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font: 600 1.05rem var(--font-display); color: #fff; background: linear-gradient(135deg, hsl(var(--h) 55% 52%), hsl(calc(var(--h) + 40) 60% 40%)); }
+.ty-two { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; }
+.ty-side { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 6px; border-radius: 16px; }
+.ty-side small { color: var(--muted); font-size: .78rem; text-align: center; }
+.ty-vs { font: 700 .85rem var(--font-body); color: var(--muted); }
+.ty-lrow { border-top: 1px dashed var(--line); padding-top: 8px; }
+.ty-lhead { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; font-size: .82rem; }
+.ty-lhead span:last-child { text-align: right; }
+.ty-tagx { font: 700 .66rem var(--font-body); padding: 2px 8px; border-radius: 99px; white-space: nowrap; margin-left: 6px; }
+.ty-tagx.same { background: var(--good-bg); color: var(--good-deep); }
+.ty-tagx.diff { background: var(--mango-tint); color: var(--mango-deep); }
+.ty-crow { border-top: 1px dashed var(--line); padding-top: 8px; }
+.ty-clab { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; margin-bottom: 6px; }
+.ty-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ty-col { background: var(--mango-tint); border-radius: 12px; padding: 8px 10px; }
+.ty-col.mu { background: #EAF0FF; }
+:root.dark .ty-col.mu { background: #1E2C4D; }
+.ty-col em { display: block; font: 700 .72rem var(--font-body); font-style: normal; color: var(--muted); margin-bottom: 2px; text-transform: uppercase; letter-spacing: .03em; }
+.pt-more { display: flex; flex-direction: column; gap: 8px; }
+.pt-btn.wide { flex: none; width: 100%; }
+.ty-who { align-self: flex-start; border: 0; background: none; color: var(--muted); font: 600 .85rem var(--font-body); padding: 6px 2px; cursor: pointer; text-decoration: underline dotted; }
+.ty-who.on { color: var(--sea-deep); }
+.ty [hidden] { display: none !important; }

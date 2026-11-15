@@ -281,7 +281,7 @@
     const V = VIEWS[view];
     if (!V) return;
     root.append(V(arg));
-    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure'].includes(view)) {
+    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure', 'types', 'type', 'typevs'].includes(view)) {
       root.append(nav(view));
       if (A.paintBadges) A.paintBadges();
       A.setPresence({ screen: view });
@@ -289,7 +289,7 @@
   };
   function nav(cur) {
     const items = [['home', '🏝️', 'Home'], ['journey', '🧭', 'Voyage'], ['talks', '💬', 'Talk'], ['treasure', '💰', 'Treasure'], ['me', '🐢', 'Me']];
-    const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words') && v === 'me');
+    const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words' || cur === 'types' || cur === 'type' || cur === 'typevs') && v === 'me');
     return h('nav', { class: 'nav main-nav', 'aria-label': 'Main menu' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', 'data-v': v, 'aria-current': on(v) ? 'page' : null, onclick: () => { try { A.sfx.play('tap'); } catch (e) { /* quiet */ } A.go(v); } }, h('i', { class: 'e' }, ic), h('span', { class: 'lb' }, t)))));
   }
 

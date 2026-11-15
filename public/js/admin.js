@@ -219,7 +219,7 @@
         h('div', { class: 'small muted' }, p.done ? 'Her result' : 'So far she leans towards (not final yet)'),
         h('div', { class: 'row', style: { gap: '14px', alignItems: 'center' } }, h('div', { style: { fontSize: '2.6rem' } }, T.ic),
           h('div', { style: { flex: 1 } }, h('div', { class: 'pt-adm-code' }, res.full), h('b', null, T.n), h('div', { class: 'small muted' }, T.th))),
-        h('div', { class: 'small' }, T.en),
+        h('div', { class: 'small' }, ((window.PTPROF || {})[res.code] || {}).intro ? window.PTPROF[res.code].intro[0] : T.en),
         h('div', { class: 'small muted' }, P.ident[res.id][0]),
         ...P.dims.map((d) => {
           const letter = d.k === 'identity' ? res.id : res.code['mind energy nature tactics'.split(' ').indexOf(d.k)], pa = res.pct[d.k], lead = letter === d.a ? pa : 100 - pa;
