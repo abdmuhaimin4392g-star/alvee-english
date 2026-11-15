@@ -75,10 +75,12 @@ function m3LazyIsl(){return;if(!RT.ok||!M3.isl)return;const st=AE.state,s=AE.voy
 function skinOf(w){try{const id=AE.voyage.st().boat;return id&&id!=='sloop'&&SK3.mk[id]?{id}:null}catch(e){return null}}
 
 /* ---- the boat glides along the sailing line, island by island ---- */
+/* near an island the boat moors beside it (at the jetty side) instead of sailing onto it */
+function rtDock(bp){const k=Math.round(bp),f=Math.abs(bp-k);if(k<0||f>=.3)return rtP(bp);const w=Math.cos(f/.3*Math.PI/2);return rtBeside(bp,64*w)}
 function m3AlBoat(dt){const b=M3.boats.al;if(!b||M3.bp==null)return;const g=M3.goal==null?M3.bp:M3.goal,d=g-M3.bp;
   if(Math.abs(d)>.001){const sp=Math.min(1.5,.35+Math.abs(d)*.6);M3.bp+=Math.sign(d)*Math.min(Math.abs(d),sp*dt);M3.moving=true}
   else if(M3.moving){M3.moving=false;m3Landed()}
-  const p=rtP(M3.bp);b.cx=b.tx=p[0];b.cy=b.ty=p[1];
+  const p=rtDock(M3.bp);b.cx=b.tx=p[0];b.cy=b.ty=p[1];
   const a=rtP(M3.bp-.08),c=rtP(M3.bp+.08),ga=m3G(a[0],a[1],M3.t2),gx=ga.x,gz=ga.z,gc=m3G(c[0],c[1],M3.t2),dir=Math.sign(d)||1;
   let hd=Math.atan2(-(gc.x-gx)*dir,-(gc.z-gz)*dir);const cur=b.hd==null?hd:b.hd;let df=hd-cur;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;b.hd=cur+df*Math.min(1,dt*2.2);
   if(M3.follow&&!M3.drag)M3.cyT=p[1]+4}

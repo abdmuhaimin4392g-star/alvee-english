@@ -376,6 +376,7 @@
     root.append(A.topStrip());
     root.append(A.voyage.homeHero(st, { greet: gEn, streak: sk, lvl }));
     if (A.cal) { try { root.append(A.cal.homeStrip(st)); } catch (e) { /* calendar is an extra */ } }
+    if (A.garden) { try { const g = A.garden.homeCard(st); if (g) root.append(g); } catch (e) { /* garden is an extra */ } }
 
     // messages from you are switched off on her side for now (they come back in a later update)
 
@@ -762,7 +763,7 @@
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'Nothing to review yet. Learn a new lesson first!' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'focus' ? 'Extra practice'
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'vocab' ? '💎 Word Chest' : kind === 'garden' ? '🌱 Word Garden' : kind === 'focus' ? 'Extra practice'
       : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
     ses.title = title;
     ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind === 'side' ? arg.id : kind === 'chest' || kind === 'bottle' ? kind + ':' + arg.id : kind;
@@ -882,13 +883,14 @@
       const secs = Math.min(2400, Math.round((now - ses.started) / 1000));
       const acc = ses.graded ? Math.round((ses.firstOk / ses.graded) * 100) : 100;
       const node = ses.node;
-      const passed = ses.kind === 'bonus' ? acc >= 70 : !ses.test || acc >= A.passMark(node);
+      const passed = ses.kind === 'bonus' || ses.kind === 'vocab' ? acc >= 70 : !ses.test || acc >= A.passMark(node);
       let xp = ses.firstOk;
       if (node && node.kind !== 'check') xp += 10 + (acc === 100 ? 5 : 0);
       if (ses.test && passed) xp += 20 + (acc === 100 ? 5 : 0);
       if (ses.kind === 'review' || ses.kind === 'mistakes' || ses.kind === 'focus') { xp += 5; st.reviews = (st.reviews || 0) + 1; }
       if (ses.kind === 'talk') xp += 6;
-      if (ses.kind === 'bonus' && passed) xp += 12;
+      if ((ses.kind === 'bonus' || ses.kind === 'vocab') && passed) xp += 12;
+      if (ses.kind === 'garden') xp += 5;
       const day = A.day(st);
       day.xp += xp; day.sec += secs; day.n += ses.graded; day.ok += ses.firstOk;
       const before = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
@@ -904,7 +906,8 @@
       st.tod = st.tod || {};
       if (hr < 8) st.tod.early = st.tod.early || now;
       if (hr >= 22) st.tod.night = st.tod.night || now;
-      if (A.bonus) ses.bonusFirst = A.bonus.finish(st, ses, acc);
+      if (A.bonus && ses.kind === 'bonus') ses.bonusFirst = A.bonus.finish(st, ses, acc);
+      if (A.garden && ses.kind === 'vocab') ses.bonusFirst = A.garden.vocabFinish(st, ses, acc);
       const rw = A.voyage.reward(ses, acc, passed);
       let storm = null; try { storm = A.storm ? A.storm.settle(st, ses) : null; } catch (e) { /* storms are extras */ }
       const newBadges = A.checkBadges(st);
@@ -977,7 +980,8 @@
       btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea'));
     } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first'));
     else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island'));
-    else if (ses.kind === 'bonus') btns.append(r.passed ? h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Back to the voyage') : h('button', { class: 'btn mango block', onclick: () => A.play('bonus', ses.arg) }, 'Try again'));
+    else if (ses.kind === 'garden') btns.append(h('button', { class: 'btn mango block', onclick: () => A.go('words') }, '🌱 Back to my garden'));
+    else if (ses.kind === 'bonus' || ses.kind === 'vocab') btns.append(r.passed ? h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Back to the voyage') : h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again'));
     btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home'));
     root.append(btns);
     return root;

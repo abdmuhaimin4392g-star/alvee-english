@@ -302,8 +302,9 @@
     }
     if (ses.kind === 'talk') V.count('talk');
     if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
-    if (ses.kind === 'bonus' && ses.bonusFirst != null) {
-      if (ses.bonusFirst) { add(4, 'Idiom Cove'); if (Math.random() < 0.35) out.chest = V.rollTreasure(false); } else add(1, 'Idiom Cove');
+    if (ses.kind === 'garden') add(2, 'word garden');
+    if ((ses.kind === 'bonus' || ses.kind === 'vocab') && ses.bonusFirst != null) {
+      if (ses.bonusFirst) { add(4, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove'); if (Math.random() < 0.35) out.chest = V.rollTreasure(false); } else add(1, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove');
     }
     if (ses.kind === 'chest') {
       const sp = ses.arg;

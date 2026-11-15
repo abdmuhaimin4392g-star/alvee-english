@@ -1621,3 +1621,69 @@ body.tyd-on #app { background: radial-gradient(120% 60% at 80% 0%, rgba(182,156,
 .id-situ { padding: 14px; border-radius: 18px; background: color-mix(in srgb, #ffd36b 20%, var(--surface)); border-left: 5px solid #e0a93b; display: flex; flex-direction: column; gap: 4px; }
 .id-situ b { font-size: 1.15rem; }
 .id-opts .opt { text-align: left; }
+
+/* Demo tab: her app inside a phone frame */
+.demo-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.demo-head a.chip { text-decoration: none; color: inherit; }
+.demo-phone { position: relative; width: min(100%, 400px); margin: 0 auto; aspect-ratio: 9 / 18.5; max-height: 82vh; border-radius: 42px; padding: 12px; background: linear-gradient(160deg, #1b2a3a, #0b1520); box-shadow: 0 20px 50px rgba(0, 0, 0, .35), inset 0 0 0 2px rgba(255, 255, 255, .08); }
+.demo-notch { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 90px; height: 22px; border-radius: 14px; background: #05090f; z-index: 2; }
+.demo-frame { width: 100%; height: 100%; border: 0; border-radius: 32px; background: #e9f7f5; display: block; }
+html.sbx-frame .sbx-bar { top: auto; bottom: 74px; }
+
+/* Word Garden */
+.g-hero { position: relative; overflow: hidden; border-radius: 28px; padding: 18px 16px 16px; color: #17402e; display: flex; flex-direction: column; gap: 12px;
+  background: linear-gradient(180deg, #bfe9ff 0%, #e4f8ff 42%, #c8efb8 43%, #8fd38a 100%); box-shadow: 0 14px 30px rgba(40, 120, 80, .22); }
+html.dark .g-hero { background: linear-gradient(180deg, #1c2d55 0%, #2c3f6e 42%, #2f6b45 43%, #1f4a30 100%); color: #e8fff1; }
+.g-sky { position: absolute; inset: 0; pointer-events: none; }
+.g-sky .sun { position: absolute; right: 18px; top: 14px; width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle, #fff6b0, #ffc93c); box-shadow: 0 0 30px rgba(255, 201, 60, .7); }
+.g-sky .cl { position: absolute; top: 18px; width: 54px; height: 16px; border-radius: 20px; background: rgba(255, 255, 255, .45); animation: gcloud 22s linear infinite; }
+@keyframes gcloud { from { transform: translateX(-60px); } to { transform: translateX(120px); } }
+.g-title { position: relative; }
+.g-title h1 { margin: 0; color: inherit; }
+.g-title p { margin: 2px 0 0; opacity: .8; }
+.g-bed { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; align-items: end; margin-top: 26px; }
+.g-plant { display: flex; flex-direction: column; align-items: center; gap: 1px; background: rgba(255, 255, 255, .55); border-radius: 14px; padding: 6px 2px; }
+html.dark .g-plant { background: rgba(0, 0, 0, .25); }
+.g-pe { line-height: 1.1; animation: gsway 3s ease-in-out infinite; transform-origin: bottom; }
+@keyframes gsway { 50% { transform: rotate(4deg); } }
+.g-plant b { font-size: 1rem; }
+.g-plant small { font-size: .6rem; opacity: .75; }
+.g-cta { position: relative; display: grid; gap: 8px; }
+.g-note { position: relative; font-size: .82rem; opacity: .9; }
+.g-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.g-chip { display: flex; align-items: center; gap: 8px; text-align: left; padding: 10px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); font: inherit; color: inherit; cursor: pointer; min-width: 0; }
+.g-chip.thirsty { border-color: #e9a23b; background: color-mix(in srgb, #ffcf7a 18%, var(--surface)); }
+.g-chip.seed { opacity: .75; }
+.g-ce { font-size: 1.4rem; flex: none; }
+.g-ct { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.g-ct b, .g-ct small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.g-ct small { opacity: .7; font-size: .74rem; }
+.g-cs { flex: none; font-size: 1.1rem; }
+.g-card { border-radius: 24px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; gap: 8px; background: linear-gradient(170deg, color-mix(in srgb, #c8efb8 50%, var(--surface)), var(--surface)); box-shadow: var(--shadow); }
+.g-emo { font-size: 4rem; line-height: 1.1; }
+.g-w { margin: 0; font-size: 2rem; }
+.g-pr { opacity: .8; }
+.g-th { font-size: 1.25rem; font-weight: 700; }
+.g-ex { background: color-mix(in srgb, var(--line) 30%, transparent); border-radius: 14px; padding: 10px 12px; text-align: left; }
+.g-q { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px 12px; border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); font-size: 1.4rem; flex-wrap: wrap; text-align: center; }
+.g-qe { font-size: 2.4rem; }
+.g-fill { flex-direction: column; font-size: 1.15rem; }
+.g-grow { display: flex; justify-content: center; gap: 6px; font-size: 1.4rem; }
+.g-grow span { opacity: .25; filter: grayscale(1); }
+.g-grow span.on { opacity: 1; filter: none; }
+.g-home { display: flex; flex-direction: column; gap: 10px; }
+.g-wod { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+.g-wode { font-size: 2.6rem; flex: none; }
+.g-wodw { font-size: 1.3rem; }
+.les-row.bonus.vocab { border-color: #6cc6ff; background: linear-gradient(120deg, color-mix(in srgb, #9fe0ff 22%, var(--surface)), color-mix(in srgb, #c8efb8 18%, var(--surface))); }
+.mm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mm-card { position: relative; height: 84px; border: 0; border-radius: 16px; font: inherit; cursor: pointer; perspective: 600px; background: none; padding: 0; }
+.mm-card > span { position: absolute; inset: 0; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; transition: transform .35s; padding: 4px; text-align: center; }
+.mm-back { background: linear-gradient(150deg, #7bd38a, #2f9e6a); font-size: 1.8rem; color: #fff; }
+.mm-front { background: var(--surface); border: 2px solid var(--line); transform: rotateY(180deg); color: var(--ink, inherit); }
+.mm-front i { font-style: normal; font-size: 1.3rem; }
+.mm-front b { font-size: .85rem; line-height: 1.15; }
+.mm-card.up .mm-back { transform: rotateY(180deg); }
+.mm-card.up .mm-front { transform: rotateY(360deg); }
+.mm-card.done .mm-front { border-color: #3fbf7f; background: color-mix(in srgb, #3fbf7f 18%, var(--surface)); }
+@media (prefers-reduced-motion: reduce) { .g-sky .cl, .g-pe { animation: none; } }

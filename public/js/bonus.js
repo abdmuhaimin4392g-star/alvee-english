@@ -8,7 +8,9 @@
   const id = (u) => 'idioms:' + u;
   const has = (u) => !!(I[u] && I[u].length);
   const done = (st, u) => !!(st.bonus && st.bonus[id(u)]);
-  const needed = (st, n) => n.kind === 'check' && n.u >= NEED_FROM && has(n.u) && !st.done[n.id] && !done(st, n.u);
+  const VOC = window.VOCAB || {};
+  const vdone = (st, u) => !VOC[u] || !!(st.bonus && st.bonus['vocab:' + u]);
+  const needed = (st, n) => n.kind === 'check' && n.u >= NEED_FROM && !st.done[n.id] && ((has(n.u) && !done(st, n.u)) || !vdone(st, n.u));
 
   // ------------------------------------------------------------- steps
   const blank = (idiom, key) => idiom.replace(new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i'), '_____');
@@ -96,6 +98,18 @@
         h('span', { class: 'lr-ic' }, d ? '✅' : '🏝️'),
         h('div', { class: 'lr-tx' }, h('b', null, 'Idiom Cove · ' + I[u].length + ' idioms'), h('span', { class: 'small muted' }, 'Bonus · สำนวนภาษาอังกฤษ' + (must && !d ? ' · needed for the test' : ''))),
         h('span', { class: 'lr-st' }, d ? '★'.repeat(d.s || 1) : '✨'));
+    },
+    rows(st, u, close) {
+      const out = [];
+      if (VOC[u]) {
+        const d = st.bonus && st.bonus['vocab:' + u];
+        out.push(h('button', { class: 'les-row bonus vocab' + (d ? ' done' : ''), onclick: () => { close && close(); A.play('vocab', 'vocab:' + u); } },
+          h('span', { class: 'lr-ic' }, d ? '✅' : '💎'),
+          h('div', { class: 'lr-tx' }, h('b', null, 'Word Chest · ' + VOC[u].length + ' new words'), h('span', { class: 'small muted' }, 'Bonus · คำศัพท์ใหม่' + (u >= NEED_FROM && !d ? ' · needed for the test' : ''))),
+          h('span', { class: 'lr-st' }, d ? '★'.repeat(d.s || 1) : '✨')));
+      }
+      const r = this.row(st, u, close); if (r) out.push(r);
+      return out;
     },
     finish(st, ses, acc) {
       if (ses.kind !== 'bonus' || acc < 70) return null;

@@ -8,6 +8,9 @@
   const EXL = { wfit: 'Word fits sentence', focus: 'Extra practice', w2th: 'Word → Thai', th2w: 'Thai → word', pic: 'Picture → word', listenw: 'Listen → word', match: 'Match pairs', gap: 'Fill the gap', build: 'Build sentence', pick: 'Correct sentence', meaning: 'Meaning', listen: 'Listening', reply: 'Reply', talk: 'Role-play' };
 
   ADM.start = async () => {
+    // the demo page: /?sbx=<her id> opens her app with a copy of her progress (shown inside the Demo tab)
+    const sbx = new URLSearchParams(location.search).get('sbx');
+    if (sbx && A.sandbox && A.sandbox.auto) return A.sandbox.auto(sbx);
     A.view = 'admin';
     ADM.learners = await A.api.learners();
     ADM.uid = ADM.uid && ADM.learners.some((l) => l.id === ADM.uid) ? ADM.uid : (ADM.learners[0] && ADM.learners[0].id);
@@ -46,8 +49,8 @@
       h('button', { class: 'btn ghost', style: { minHeight: '40px', padding: '8px 12px' }, onclick: async () => { clearInterval(ADM.timer); await A.api.logout(); A.user = null; A.go('login'); } }, 'Log out')));
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
-    s.append(h('button', { class: 'card talk-item sbx-open', onclick: playSheet }, h('div', { class: 'av' }, '🎮'), h('div', { style: { flex: 1 } }, h('b', null, 'Play her app (demo copy)'), h('div', { class: 'small muted' }, 'Her screens with a copy of her progress. Nothing you do reaches her account or this dashboard.')), h('span', { class: 'muted' }, '›')));
-    const tabs = [['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    s.append(h('button', { class: 'card talk-item sbx-open', onclick: () => ADM.tab('demo') }, h('div', { class: 'av' }, '🎮'), h('div', { style: { flex: 1 } }, h('b', null, 'Play her app (demo copy)'), h('div', { class: 'small muted' }, 'Her screens with a copy of her progress. Nothing you do reaches her account or this dashboard.')), h('span', { class: 'muted' }, '›')));
+    const tabs = [['demo', '🎮 Demo'], ['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);
@@ -58,6 +61,7 @@
     if (ADM.cur === 'live') { const b = document.getElementById('adm-body'); if (b) { const y = window.scrollY; A.clear(b).append(body()); window.scrollTo(0, y); } }
   };
   function body() {
+    if (ADM.cur === 'demo') return demo();
     if (ADM.cur === 'live') return live();
     if (ADM.cur === 'progress') return progress();
     if (ADM.cur === 'ptest') return personality();
@@ -181,6 +185,21 @@
     if (!ua) return null;
     if (/iPhone/.test(ua)) return 'iPhone'; if (/iPad/.test(ua)) return 'iPad'; if (/Android/.test(ua)) return 'Android';
     if (/Mac/.test(ua)) return 'Mac'; if (/Windows/.test(ua)) return 'Windows'; return null;
+  }
+
+  // ---------------------------------------------------------------- the Demo tab: her app in a phone frame (an iframe of /?sbx=<id>)
+  function demo() {
+    const l = L(); if (!l) return h('div', { class: 'card' }, 'Loading…');
+    const url = (fresh) => location.pathname + '?sbx=' + encodeURIComponent(ADM.uid) + (fresh ? '&new=' + Date.now() : '&t=' + Date.now());
+    const frame = h('iframe', { class: 'demo-frame', title: 'Her app (demo copy)', src: url(false), allow: 'autoplay' });
+    const has = !!A.store.get('ae.sbx.' + ADM.uid, null);
+    return h('div', { class: 'stack demo-tab', style: { gap: '12px' } },
+      h('div', { class: 'demo-head' }, h('div', null, h('b', null, '🎮 ' + l.name + '’s app · demo copy'), h('div', { class: 'small muted' }, (has ? 'Your saved demo copy. ' : 'A new copy of her progress. ') + 'Nothing here reaches her account.')),
+        h('div', { class: 'row', style: { gap: '6px', flexWrap: 'wrap' } },
+          h('button', { class: 'chip', onclick: () => { frame.src = url(false); } }, '↻ Reload'),
+          h('button', { class: 'chip', onclick: () => { frame.src = url(true); } }, '📥 Fresh copy'),
+          h('a', { class: 'chip', href: url(false), target: '_blank', rel: 'noopener' }, '⛶ Full screen'))),
+      h('div', { class: 'demo-phone' }, h('div', { class: 'demo-notch' }), frame));
   }
 
   // ---------------------------------------------------------------- play a demo copy of her app (sandbox.js)

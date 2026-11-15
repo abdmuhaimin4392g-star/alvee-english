@@ -577,12 +577,14 @@
     else if (kind === 'bottle') steps = miniSteps(st, 5, ['gap', 'build', 'listen', 'pick']);
     else if (kind === 'side') steps = sideSteps(arg, st);
     else if (kind === 'bonus') steps = A.bonusSteps ? A.bonusSteps(arg, st) : [];
+    else if (kind === 'vocab') steps = A.vocabSteps ? A.vocabSteps(arg, st) : [];
+    else if (kind === 'garden') steps = A.gardenSteps && A.garden ? A.gardenSteps(st, A.garden.pickWater(st, 12)) : [];
     steps = steps.filter(Boolean);
     const test = !!(node && node.kind === 'check');
     // tests and speed rounds run against the clock; everything else just shows a stopwatch
     const ctl = A.ctl || {};
     const timed = test || (kind === 'side' && arg && arg.mission === 'speed');
-    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate', 'idcard'].includes(x.type)).length;
+    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate', 'idcard', 'gcard'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
       test, lookups: 0, timed, limit: timed ? (graded * (test ? +ctl.testSec || 30 : 15) + steps.filter((x) => x.type === 'typegap').length * 15 + steps.filter((x) => x.type === 'dict').length * 35) * 1000 : 0,

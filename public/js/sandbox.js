@@ -58,13 +58,32 @@
     A.api = real.api; A.user = real.user; A.state = real.state; A.ctl = real.ctl || {};
     if (real.ctlCache) A.store.set('ae.ctl', real.ctlCache); else A.store.del('ae.ctl');
     real = null;
+    if (/[?&]sbx=/.test(location.search)) { if (SB.frame) location.reload(); else location.href = location.pathname; return; }
     A.admin.start();
+  };
+
+  // the demo page (/?sbx=<id>): start straight away, and say what went wrong instead of doing nothing
+  SB.auto = async (uid) => {
+    const inFrame = window.self !== window.top;
+    const fresh = /[?&]new=/.test(location.search);
+    const app = document.getElementById('app') || document.body;
+    const say = (t, err) => { app.innerHTML = ''; app.append(h('div', { class: 'screen full', style: { display: 'grid', placeItems: 'center', minHeight: '80vh', textAlign: 'center' } }, h('div', { class: 'stack', style: { gap: '10px', maxWidth: '320px' } }, h('div', { style: { fontSize: '3rem' } }, err ? '⚠️' : '🐢'), h('b', null, t), err ? h('button', { class: 'btn block', onclick: () => location.reload() }, 'Try again') : null))); };
+    say('Opening her app…');
+    try {
+      const list = await A.api.learners();
+      const her = list.find((x) => x.id === uid) || list[0];
+      if (!her) throw new Error('No learner account found.');
+      const d = await A.api.learner(her.id);
+      SB.frame = inFrame;
+      await SB.start(her.id, her, d && d.state, fresh || !A.store.get(key(her.id), null));
+      if (fresh) history.replaceState(null, '', location.pathname + '?sbx=' + encodeURIComponent(her.id));
+    } catch (e) { say('The demo could not open: ' + ((e && e.message) || e), true); }
   };
 
   function banner() {
     const bar = h('div', { class: 'sbx-bar', role: 'status' },
       h('span', null, '🎮 Demo copy · not saved to her account'),
-      h('button', { onclick: () => SB.exit() }, 'Exit'));
+      h('button', { onclick: () => SB.exit() }, SB.frame ? '↻ Restart' : 'Exit'));
     document.body.append(bar);
   }
 })();
