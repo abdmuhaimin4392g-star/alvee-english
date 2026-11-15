@@ -413,12 +413,12 @@
       chunk.forEach((k) => steps.push({ type: 'wintro', key: k, item: 'w:' + k }));
       chunk.forEach((k, j) => { const q = wordQuiz(k, pool, (i + j) % 2 ? 'pic' : 'wfit', L.u); if (q) steps.push(q); });
     }
-    const review = reviewPicks(st, 4, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
+    const review = reviewPicks(st, 6, new Set([...words.map((k) => 'w:' + k), ...L.sents.map((s) => 's:' + s)]), L.u);
     const sentSteps = [];
     // longer islands: every sentence of the lesson is practised
     const practise = L.sents.slice(0, 9);
     practise.forEach((sid, i) => {
-      if (i < 2) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
+      if (i < 3) sentSteps.push({ type: 'sintro', sid, item: 's:' + sid });
       const q = sentQuiz(sid, spool, L.boost ? A.shuffle(['gap', 'gap', 'pick', 'build']) : i < 2 ? ['build', 'gap', 'pick'] : A.shuffle(i === 5 ? ['listen', 'gap'] : ['gap', 'build', 'pick', 'gap']));
       if (q) sentSteps.push(q);
       if (i % 3 === 2 && review.length) { const r = quizForItem(review.shift(), st, pool, spool); if (r) sentSteps.push({ ...r, review: 1 }); }
@@ -426,10 +426,14 @@
     steps.push(...sentSteps);
     review.forEach((id) => { const r = quizForItem(id, st, pool, spool); if (r) steps.push({ ...r, review: 1 }); });
     // the app adapts: extra practice on her weakest grammar point
-    steps.push(...focusSteps(st, L.u, L.boost ? 6 : 4, new Set(L.sents), L.boost));
+    steps.push(...focusSteps(st, L.u, L.boost ? 7 : 5, new Set(L.sents), L.boost));
     // finish with a second look at a new sentence (and a new word in the later chapters)
-    A.shuffle(L.sents.slice(0, 6)).slice(0, 2).forEach((sid) => { const q = sentQuiz(sid, spool, A.shuffle(['gap', 'pick', 'build'])); if (q) steps.push(q); });
-    A.shuffle(teach).slice(0, 1).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['pic', 'wfit']), L.u); if (q) steps.push(q); });
+    // round 2: every sentence again in a different kind of exercise (longer lessons, more to do)
+    const round2 = A.shuffle(L.sents.slice(0, 9)).slice(0, Math.max(4, Math.min(6, L.sents.length)));
+    round2.forEach((sid, i) => { const q = sentQuiz(sid, spool, i % 2 ? ['build', 'pick', 'gap'] : ['gap', 'build', 'pick']); if (q) steps.push({ ...q, round: 2 }); });
+    // from the later chapters she also types one missing word
+    if (L.u >= 9) { for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); break; } } }
+    A.shuffle(teach).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['pic', 'wfit']), L.u); if (q) steps.push(q); });
     return noRepeatTypes(steps);
   }
 
@@ -467,7 +471,29 @@
       for (const sid of left) { if (nG <= 0) break; const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); used.add(sid); nG--; } }
       for (const sid of left) { if (nD <= 0) break; if (used.has(sid)) continue; const q = typeQuiz(sid, spool, 'dict'); if (q) { steps.push(q); used.add(sid); nD--; } }
     }
-    return noRepeatTypes(A.shuffle(steps));
+    const main = noRepeatTypes(A.shuffle(steps));
+    // ⛈️ the Storm Round: up to 3 questions she got wrong before come back at the end of the test
+    const storm = stormSteps(node, st, pool, spool, new Set(main.map((x) => x.item).filter(Boolean)));
+    return storm.length ? [...main, { type: 'stormgate', n: storm.length }, ...storm] : main;
+  }
+  // the questions she missed are kept as "storm clouds" (st.storm.list). A test brings back three of them.
+  const itemUnit = (e) => (e.sid && A.S(e.sid) ? A.S(e.sid).u : e.key && D[e.key] ? D[e.key].u || 1 : 1);
+  function stormSteps(node, st, pool, spool, used) {
+    const S = st.storm; if (!S || !S.list || !S.list.length) return [];
+    const monthTest = node.u % 4 === 0;
+    const inTest = (u) => (monthTest ? A.unit(u) && A.unit(u).m === A.unit(node.u).m : u === node.u);
+    const cand = S.list.filter((e) => !used.has(e.i) && itemUnit(e) <= node.u && (e.sid ? A.S(e.sid) : D[e.key]))
+      .sort((a, b) => (inTest(itemUnit(b)) - inTest(itemUnit(a))) || (b.lv || 1) - (a.lv || 1) || a.at - b.at);
+    const out = [];
+    for (const e of cand) {
+      if (out.length >= 3) break;
+      let q = null;
+      if (e.key) q = wordQuiz(e.key, pool, ['wfit', 'pic'].includes(e.t) ? e.t : 'wfit', node.u);
+      else if (e.t === 'typegap' || e.t === 'dict') q = typeQuiz(e.sid, spool, e.t === 'dict' ? 'dict' : 'gap');
+      if (!q && e.sid) q = sentQuiz(e.sid, A.uniq([e.sid, ...spool]), [e.t, 'gap', 'pick', 'build'].filter((t) => ['gap', 'pick', 'build', 'listen', 'reply'].includes(t)));
+      if (q) out.push({ ...q, storm: e.lv || 1 });
+    }
+    return out;
   }
   A.typingOn = (node) => !!(node && node.kind === 'check' && node.u >= 9 && !(A.ctl || {}).typingOff);
   function typeQuiz(sid, spool, mode) {
@@ -554,7 +580,7 @@
     // tests and speed rounds run against the clock; everything else just shows a stopwatch
     const ctl = A.ctl || {};
     const timed = test || (kind === 'side' && arg && arg.mission === 'speed');
-    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type)).length;
+    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
       test, lookups: 0, timed, limit: timed ? (graded * (test ? +ctl.testSec || 30 : 15) + steps.filter((x) => x.type === 'typegap').length * 15 + steps.filter((x) => x.type === 'dict').length * 35) * 1000 : 0,

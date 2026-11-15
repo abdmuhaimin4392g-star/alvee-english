@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.11';
+  A.VERSION = '5.12';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -603,7 +603,7 @@
   const lookups = (st) => Object.values(st.look).reduce((a, b) => a + b, 0);
   const hotelTalk = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel').length;
   const bestStreak = (st) => Math.max(A.streak(st), st.best || 0);
-  const MEDAL_HOW = {"first": "Finish your first lesson", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn on 3 days", "streak7": "Learn on 7 days", "streak14": "Learn on 14 days", "streak30": "Learn on 30 days", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
+  const MEDAL_HOW = {"first": "Finish your first lesson", "storm5": "Calm 5 storms in Storm Rounds", "storm20": "Calm 20 storms", "storm50": "Calm 50 storms", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn on 3 days", "streak7": "Learn on 7 days", "streak14": "Learn on 14 days", "streak30": "Learn on 30 days", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
   // [id, icon, tier, category, English name, Thai name, how to get it (Thai), progress(st) -> [now, goal]]
   A.MEDALS = [
     ['first', 'book', 'bronze', 'learn', 'First Light', 'แสงแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
@@ -639,6 +639,9 @@
     ['tre50', 'gem', 'gold', 'star', 'Keeper of Treasures', 'ผู้พิทักษ์สมบัติ', 'พบสมบัติ 50 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 50]],
     ['shells8', 'shell', 'silver', 'words', 'Shell Collector', 'นักสะสมเปลือกหอย', 'เก็บเปลือกหอยครบ 8 ชนิด', (st) => [Object.keys((st.sea && st.sea.sh) || {}).length, 8]],
     ['boat3', 'wave', 'silver', 'time', 'Fleet Captain', 'กัปตันกองเรือ', 'มีเรือ 3 ลำ', (st) => [((st.sea && st.sea.boats) || ['sloop']).length, 3]],
+    ['storm5', 'bolt', 'silver', 'star', 'Storm Tamer', 'ผู้สยบพายุ', 'สยบพายุ 5 ลูกในรอบพายุ', (st) => [(st.storm && st.storm.calm) || 0, 5]],
+    ['storm20', 'sun', 'gold', 'star', 'Rainbow Keeper', 'ผู้เก็บสายรุ้ง', 'สยบพายุ 20 ลูก', (st) => [(st.storm && st.storm.calm) || 0, 20]],
+    ['storm50', 'gem', 'pearl', 'star', 'Eye of the Storm', 'ตาของพายุ', 'สยบพายุ 50 ลูก', (st) => [(st.storm && st.storm.calm) || 0, 50]],
     ['side5', 'search', 'gold', 'learn', 'Hidden Isles', 'เกาะลับแล', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
   ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how: MEDAL_HOW[id] || how, prog }));
   A.medal = (id) => A.MEDALS.find((m) => m.id === id);

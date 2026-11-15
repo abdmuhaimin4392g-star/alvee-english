@@ -305,6 +305,7 @@
     root.append(h('div', { class: 'tabs scroll' }, tabs.map(([k, t]) => h('button', { class: k === tab ? 'on' : '', onclick: () => (k === 'medals' ? A.go('medals') : A.go('treasure', k)) }, t))));
     if (tab === 'book') {
       const got = Object.keys(s.tre).length;
+      if (A.storm) root.append(A.storm.jar(st));
       root.append(h('div', { class: 'card chest' }, h('div', { html: V.chestSVG(true, true), class: 'chest-mini' }), h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + T.ITEMS.length), h('div', { class: 'small muted' }, 'Open chests on the sea to fill the book. Every ? is a treasure still waiting for you.'), h('div', { class: 'goal-bar', style: { marginTop: '6px' } }, h('i', { style: { width: (got / T.ITEMS.length) * 100 + '%' } })))));
       Object.entries(T.SETS).forEach(([k, set]) => {
         const items = T.ITEMS.filter((x) => x[4] === k).sort((a, b) => T.ORDER.indexOf(a[3]) - T.ORDER.indexOf(b[3]));

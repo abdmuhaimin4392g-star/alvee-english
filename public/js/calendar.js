@@ -77,6 +77,20 @@
     ['adh', 12, 10, 'Eid al-Adha', 'วันอีดิลอัฎฮา', '🐑'], ['iny', 1, 1, 'Islamic New Year', 'วันขึ้นปีใหม่อิสลาม', '🌙'], ['nat', 3, 1, 'National Day', 'วันชาติมัลดีฟส์', '🇲🇻'],
     ['mwl', 3, 12, 'The Prophet’s Birthday', 'วันเมาลิดนบี', '🕌'], ['emb', 4, 1, 'The Day Maldives Embraced Islam', 'วันที่มัลดีฟส์รับศาสนาอิสลาม', '🕌']];
 
+  // world days, each with its Thai name. [month, day, English, Thai, icon]
+  const WD_FIX = [[1, 1, 'New Year’s Day', 'วันขึ้นปีใหม่สากล', '🎆'], [1, 24, 'International Day of Education', 'วันการศึกษาสากล', '📚'], [2, 4, 'World Cancer Day', 'วันมะเร็งโลก', '🎗️'],
+    [2, 14, 'Valentine’s Day', 'วันวาเลนไทน์', '❤️'], [2, 21, 'International Mother Language Day', 'วันภาษาแม่สากล', '🗣️'], [3, 8, 'International Women’s Day', 'วันสตรีสากล', '👩'], [3, 14, 'Pi Day', 'วันพาย (π)', '🥧'],
+    [3, 20, 'International Day of Happiness', 'วันแห่งความสุขสากล', '😊'], [3, 21, 'World Poetry Day', 'วันกวีโลก', '📜'], [3, 22, 'World Water Day', 'วันน้ำโลก', '💧'], [4, 1, 'April Fools’ Day', 'วันเอพริลฟูลส์', '🃏'],
+    [4, 7, 'World Health Day', 'วันอนามัยโลก', '🩺'], [4, 22, 'Earth Day', 'วันคุ้มครองโลก', '🌍'], [4, 23, 'English Language Day · World Book Day', 'วันภาษาอังกฤษ · วันหนังสือโลก', '📖'],
+    [5, 1, 'International Workers’ Day', 'วันแรงงานสากล', '👷'], [5, 12, 'International Nurses Day', 'วันพยาบาลสากล', '🩺'], [5, 15, 'International Day of Families', 'วันครอบครัวสากล', '👨‍👩‍👧'],
+    [5, 23, 'World Turtle Day', 'วันเต่าโลก', '🐢'], [6, 5, 'World Environment Day', 'วันสิ่งแวดล้อมโลก', '🌱'], [6, 8, 'World Oceans Day', 'วันทะเลโลก', '🌊'], [6, 21, 'World Music Day', 'วันดนตรีโลก', '🎶'],
+    [7, 17, 'World Emoji Day', 'วันอีโมจิโลก', '😀'], [7, 30, 'International Day of Friendship', 'วันมิตรภาพสากล', '🤝'], [8, 12, 'International Youth Day', 'วันเยาวชนสากล', '🧑'],
+    [8, 19, 'World Photography Day', 'วันถ่ายภาพโลก', '📷'], [9, 8, 'International Literacy Day', 'วันรู้หนังสือสากล', '✍️'], [9, 21, 'International Day of Peace', 'วันสันติภาพสากล', '🕊️'],
+    [9, 27, 'World Tourism Day', 'วันท่องเที่ยวโลก', '🧳'], [10, 1, 'International Coffee Day', 'วันกาแฟสากล', '☕'], [10, 5, 'World Teachers’ Day', 'วันครูโลก', '👩‍🏫'], [10, 10, 'World Mental Health Day', 'วันสุขภาพจิตโลก', '💚'],
+    [10, 16, 'World Food Day', 'วันอาหารโลก', '🍽️'], [10, 24, 'United Nations Day', 'วันสหประชาชาติ', '🇺🇳'], [10, 31, 'Halloween', 'วันฮาโลวีน', '🎃'], [11, 13, 'World Kindness Day', 'วันแห่งความใจดีโลก', '💛'],
+    [11, 20, 'World Children’s Day', 'วันเด็กสากล', '🧒'], [11, 21, 'World Hello Day', 'วันทักทายโลก', '👋'], [12, 10, 'Human Rights Day', 'วันสิทธิมนุษยชนสากล', '✊'], [12, 24, 'Christmas Eve', 'คืนก่อนวันคริสต์มาส', '🎄'], [12, 25, 'Christmas Day', 'วันคริสต์มาส', '🎄']];
+  function easter(y) { const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), hh = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - hh - k) % 7, m = Math.floor((a + 11 * hh + 22 * l) / 451); return D(y, Math.floor((hh + l - 7 * m + 114) / 31) - 1, ((hh + l - 7 * m + 114) % 31) + 1); }
+
   const cache = {};
   function holidays(y) {
     if (cache[y]) return cache[y];
@@ -103,9 +117,18 @@
     const ov = MV_OVR[y] || {}, byKey = {};
     MV_HIJ.forEach((r) => { byKey[r[1] + '-' + r[2]] = r; const o = ov[r[0]]; if (o) add(F(o[0], o[1]), { en: r[3], th: r[4], ic: r[5], c: 'mv', off: true }); });
     for (let d = F(1, 1); d <= F(12, 31); d++) { const hj = hijri(d), r = byKey[hj.m + '-' + hj.d]; if (r && !ov[r[0]]) add(d, { en: r[3], th: r[4], ic: r[5], c: 'mv', off: true, ap: true }); }
+    // the world
+    WD_FIX.forEach(([m, d, en, th, ic]) => add(F(m, d), { en, th, ic, c: 'wd' }));
+    add(nth(y, 4, 0, 2), { en: 'Mother’s Day (worldwide)', th: 'วันแม่สากล', ic: '💐', c: 'wd' });
+    add(nth(y, 5, 0, 3), { en: 'Father’s Day (worldwide)', th: 'วันพ่อสากล', ic: '👔', c: 'wd' });
+    add(nth(y, 7, 0, 1), { en: 'Friendship Day', th: 'วันเพื่อน', ic: '🤝', c: 'wd' });
+    add(nth(y, 9, 5, 1), { en: 'World Smile Day', th: 'วันยิ้มโลก', ic: '😊', c: 'wd' });
+    add(easter(y), { en: 'Easter Sunday', th: 'วันอีสเตอร์', ic: '🐣', c: 'wd' });
     return (cache[y] = M);
   }
-  const holOn = (d) => holidays(Y(d).y)[d] || [];
+  const LAYERS = [['th', '🇹🇭 Thailand', '#ff5f7e'], ['mv', '🇲🇻 Maldives', '#14b8a6'], ['wd', '🌍 World', '#8f7bff']];
+  const layers = () => { const st = A.state || {}; const L = (st.set && st.set.cal) || {}; return { th: L.th !== false, mv: L.mv !== false, wd: L.wd !== false }; };
+  const holOn = (d) => { const L = layers(); return (holidays(Y(d).y)[d] || []).filter((o) => L[o.c]); };
 
   // ------------------------------------------------------------- birthdays
   const parseIso = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? { y: +m[1], m: +m[2] - 1, d: +m[3] } : null; };
@@ -177,7 +200,47 @@
   }
 
   // ------------------------------------------------------------- the full calendar page
-  const CV = { y: null, m: null, sel: null };
+  const CV = { y: null, m: null, sel: null, mode: 'days' };
+
+  // ------------------------------------------------------------- show-up: the days she came, the days she learned
+  const shown = (st, k) => !!(st.days[k] && (st.days[k].seen || st.days[k].xp > 0 || st.days[k].sec > 0));
+  A.markSeen = (st) => { try { const d = A.day(st); if (!d.seen) { d.seen = 1; A.saveSoon(); } } catch (e) { /* ignore */ } };
+  function runs(st) {
+    const ks = Object.keys(st.days).filter((k) => shown(st, k)).map((k) => A.dnum(k)).sort((a, b) => a - b);
+    let best = 0, cur = 0, prev = null;
+    ks.forEach((n) => { cur = prev != null && n === prev + 1 ? cur + 1 : 1; best = Math.max(best, cur); prev = n; });
+    const t = today(); let now = 0; const set = new Set(ks); let d = set.has(t) ? t : t - 1; while (set.has(d)) { now++; d--; }
+    return { total: ks.length, best, now };
+  }
+  function showUp(st, CV, move, draw) {
+    const y = CV.y, m = CV.m, first = D(y, m, 1), lead = Y(first).w, n = dim(y, m), t = today();
+    const grid = h('div', { class: 'cal-grid su-grid' }, WD_TH.map((w, i) => h('div', { class: 'cal-wd' + (i === 0 || i === 6 ? ' we' : '') }, h('b', null, w), h('small', null, WD[i].slice(0, 2)))));
+    for (let i = 0; i < lead; i++) grid.append(h('div', { class: 'cal-c empty' }));
+    let came = 0, learned = 0, mins = 0;
+    for (let i = 1; i <= n; i++) {
+      const d = D(y, m, i), k = keyOf(d), day = st.days[k], sh = shown(st, k), le = A.active(st, k);
+      if (sh) came++; if (le) learned++; if (day) mins += Math.round((day.sec || 0) / 60);
+      const cls = ['cal-c', 'su']; if (d > t) cls.push('future'); else if (le) cls.push('gold'); else if (sh) cls.push('came'); else cls.push('miss'); if (d === t) cls.push('today-ring');
+      grid.append(h('div', { class: cls.join(' '), title: longDate(d) }, h('span', { class: 'n' }, i), le ? h('span', { class: 'su-ic' }, '🔥') : sh ? h('span', { class: 'su-ic' }, '✨') : null));
+    }
+    const r = runs(st);
+    const card = h('div', { class: 'card cal-card su-card' },
+      h('div', { class: 'cal-head' },
+        h('button', { class: 'icon-btn', 'aria-label': 'Previous month', onclick: () => move(-1) }, '‹'),
+        h('div', { class: 'cal-title' }, h('b', { class: 'th' }, MN_TH[m] + ' ' + (y + 543)), h('small', null, MN[m] + ' ' + y)),
+        h('button', { class: 'icon-btn', 'aria-label': 'Next month', onclick: () => move(1) }, '›')),
+      grid,
+      h('div', { class: 'cal-leg' }, h('span', null, '🔥 Learned'), h('span', null, '✨ Came to say hi'), h('span', { class: 'muted' }, 'Rest days are fine 💛')));
+    const stat = (v, en, th) => h('div', null, h('b', null, v), h('span', null, en), h('small', { class: 'th' }, th));
+    return [
+      h('div', { class: 'su-hero' },
+        h('div', { class: 'su-big' }, h('b', null, r.total), h('span', null, r.total === 1 ? 'day you showed up' : 'days you showed up'), h('small', { class: 'th' }, 'วันที่คุณมาเรียน')),
+        h('div', { class: 'su-stats' }, stat(r.now, 'in a row now', 'ติดต่อกันตอนนี้'), stat(r.best, 'best run', 'สถิติดีที่สุด'), stat(A.streak(st) + '🔥', 'learning days', 'วันที่เรียน'))),
+      card,
+      h('div', { class: 'act-sum' }, stat(came, 'came this month', 'มาเดือนนี้'), stat(learned, 'learned', 'เรียน'), stat(mins >= 60 ? Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm' : mins + 'm', 'time', 'เวลา')),
+      h('div', { class: 'small muted th', style: { textAlign: 'center' } }, 'A day lights up when you open the app. It turns gold when you learn. · วันจะสว่างเมื่อคุณเปิดแอป และเป็นสีทองเมื่อคุณเรียน'),
+    ];
+  }
   VIEWS.calendar = (arg) => {
     const st = A.state, t = today();
     if (arg && arg.sel != null) { CV.sel = arg.sel; CV.y = Y(arg.sel).y; CV.m = Y(arg.sel).m; }
@@ -189,7 +252,10 @@
       h('div', null, h('h1', null, 'Calendar'), h('p', { class: 'muted th' }, 'ปฏิทินไทย · Thai and Maldives special days'))));
     root.append(body);
     const move = (n) => { let m = CV.m + n, y = CV.y; while (m < 0) { m += 12; y--; } while (m > 11) { m -= 12; y++; } CV.m = m; CV.y = y; draw(); };
+    const modeTabs = () => h('div', { class: 'cal-modes', role: 'tablist' },
+      [['days', '📅 Special days', 'วันสำคัญ'], ['show', '✨ My show-up', 'วันที่ฉันมา']].map(([k, en, th]) => h('button', { role: 'tab', 'aria-selected': CV.mode === k ? 'true' : 'false', class: 'cal-mode' + (CV.mode === k ? ' on' : ''), onclick: () => { CV.mode = k; draw(); } }, h('b', null, en), h('small', { class: 'th' }, th))));
     function draw() {
+      if (CV.mode === 'show') { body.replaceChildren(modeTabs(), ...showUp(st, CV, move, draw)); return; }
       const y = CV.y, m = CV.m, first = D(y, m, 1), lead = Y(first).w, n = dim(y, m);
       const bs = birthdays(st);
       const grid = h('div', { class: 'cal-grid' }, WD_TH.map((w, i) => h('div', { class: 'cal-wd' + (i === 0 || i === 6 ? ' we' : '') }, h('b', null, w), h('small', null, WD[i].slice(0, 2)))));
@@ -202,24 +268,26 @@
         grid.append(h('button', { class: cls.join(' '), 'aria-label': longDate(d), onclick: () => { CV.sel = d; draw(); } },
           h('span', { class: 'n' }, i),
           bd.length ? h('span', { class: 'cal-ic' }, '🎂') : hol.length ? h('span', { class: 'cal-ic' }, hol[0].ic) : null,
-          h('span', { class: 'dots' }, hol.some((o) => o.c === 'th') ? h('i', { class: 'th' }) : null, hol.some((o) => o.c === 'mv') ? h('i', { class: 'mv' }) : null, learned ? h('i', { class: 'fire' }) : null)));
+          h('span', { class: 'dots' }, ...['th', 'mv', 'wd'].map((c) => (hol.some((o) => o.c === c) ? h('i', { class: c }) : null)), learned ? h('i', { class: 'fire' }) : null)));
       }
       const sel = CV.sel, sh = holOn(sel), sb = bdayOn(st, sel);
       const items = [
         ...sb.map((x) => h('div', { class: 'cal-it bd' }, h('span', { class: 'cal-it-ic' }, '🎂'), h('div', null, h('b', null, x.name + '’s birthday'), h('small', { class: 'th' }, 'วันเกิดของ ' + x.name + ' · turns ' + (Y(sel).y - x.b.y))))),
-        ...sh.map((o) => h('div', { class: 'cal-it ' + o.c }, h('span', { class: 'cal-it-ic' }, o.ic), h('div', null, h('b', null, o.en), h('small', { class: 'th' }, o.th + ' · ' + (o.c === 'th' ? '🇹🇭 Thailand' : '🇲🇻 Maldives') + (o.off ? ' · holiday' : '') + (o.ap ? ' · date may move a day' : ''))))),
+        ...sh.map((o) => h('div', { class: 'cal-it ' + o.c }, h('span', { class: 'cal-it-ic' }, o.ic), h('div', null, h('b', null, o.en), h('small', { class: 'th' }, o.th + ' · ' + ({ th: '🇹🇭 Thailand', mv: '🇲🇻 Maldives', wd: '🌍 World day' })[o.c] + (o.off ? ' · holiday' : '') + (o.ap ? ' · date may move a day' : ''))))),
       ];
       if (A.active(st, keyOf(sel))) items.push(h('div', { class: 'cal-it fire' }, h('span', { class: 'cal-it-ic' }, '🔥'), h('div', null, h('b', null, 'You learned English this day'), h('small', { class: 'th' }, 'วันนี้คุณเรียนภาษาอังกฤษ'))));
       const up = upcoming(st, 120).slice(0, 8);
       body.replaceChildren(
         h('div', { class: 'bd-row' }, ...bs.map((x) => bdCard(st, x, draw)), bs.some((x) => x.who === 'alvee') ? null : addCard(st, draw)),
+        modeTabs(),
+        h('div', { class: 'cal-lay' }, LAYERS.map(([k, n, c]) => { const on = layers()[k]; return h('button', { class: 'cal-lay-b' + (on ? ' on' : ''), style: { '--c': c }, 'aria-pressed': on ? 'true' : 'false', onclick: () => { st.set.cal = { ...layers(), [k]: !on }; A.saveSoon(); draw(); } }, n); })),
         h('div', { class: 'card cal-card' },
           h('div', { class: 'cal-head' },
             h('button', { class: 'icon-btn', 'aria-label': 'Previous month', onclick: () => move(-1) }, '‹'),
             h('div', { class: 'cal-title' }, h('b', { class: 'th' }, MN_TH[m] + ' ' + (y + 543)), h('small', null, MN[m] + ' ' + y)),
             h('button', { class: 'icon-btn', 'aria-label': 'Next month', onclick: () => move(1) }, '›')),
           grid,
-          h('div', { class: 'cal-leg' }, h('span', null, h('i', { class: 'th' }), '🇹🇭 Thailand'), h('span', null, h('i', { class: 'mv' }), '🇲🇻 Maldives'), h('span', null, h('i', { class: 'fire' }), 'Learned'), h('span', null, '🎂 Birthday')),
+          h('div', { class: 'cal-leg' }, h('span', null, h('i', { class: 'fire' }), 'Learned'), h('span', null, '🎂 Birthday'), h('span', { class: 'muted' }, 'Tap a colour above to show or hide it')),
           (CV.y !== Y(t).y || CV.m !== Y(t).m) ? h('button', { class: 'btn ghost block', onclick: () => { CV.y = Y(t).y; CV.m = Y(t).m; CV.sel = t; draw(); } }, 'Back to today') : null),
         h('div', { class: 'card cal-day' }, h('div', { class: 'sec-title' }, longDate(sel)), h('div', { class: 'small muted th' }, longTh(sel)),
           items.length ? h('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, ...items) : h('div', { class: 'small muted', style: { marginTop: '8px' } }, 'A normal day. A good day to learn a few words! · วันธรรมดา')),

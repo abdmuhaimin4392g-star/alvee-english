@@ -694,6 +694,7 @@
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
       h('div', { class: 'kpi' }, h('b', null, (() => { const m = Math.round(Object.values(st.days).reduce((a, d) => a + (d.sec || 0), 0) / 60); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; })()), h('span', null, 'Total time'))));
     root.append(activityCard(st));
+    if (A.storm) root.append(A.storm.jar(st));
     root.append(h('div', { class: 'small th muted' }, '🔥 Every day you learn adds to your fire. Rest whenever you like — it never goes out. · พักได้ทุกเมื่อ ไฟไม่มีวันดับ'));
     const got = A.MEDALS.filter((m) => st.badges[m.id]);
     const shelf = h('button', { class: 'card medal-shelf', onclick: () => A.go('medals') },
@@ -788,7 +789,7 @@
     }, 250);
     function timeUp() {
       document.querySelectorAll('.fb').forEach((x) => x.remove());
-      const left = ses.steps.slice(ses.i).filter((x) => !['tip', 'wintro', 'sintro', 'talkread'].includes(x.type) && !x.retry).length;
+      const left = ses.steps.slice(ses.i).filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate'].includes(x.type) && !x.retry).length;
       ses.graded += left;
       A.track('test_timeup', { node: ses.nodeId, unanswered: left });
       A.toast('⏰ Time is up!', 2600);
@@ -813,6 +814,8 @@
       A.clear(body);
       const R = RENDER[step.type];
       if (step.focus) body.append(focusLabel(step.focus));
+      body.classList.toggle('storm-on', !!step.storm);
+      if (step.storm && A.storm) body.append(A.storm.label(step));
       body.append(R ? R(step, ctl) : h('div', null, 'Unknown step'));
       window.scrollTo(0, 0);
     }
@@ -825,6 +828,7 @@
         const retry = !!step.retry;
         if (!retry) { ses.graded++; if (ok) ses.firstOk++; }
         if (step.item) ses.items[step.item] = (ses.items[step.item] !== false) && ok;
+        if (!retry && !ok && A.storm) { try { A.storm.add(A.state, step); } catch (e) { /* storms are extras */ } }
         // what this question tests; a wrong answer counts against the exact point she missed
         const sk = !ok && info.tag ? A.keySkill(info.tag) : (step.sk || 'other');
         if (!retry) A.skillRecord(A.state, sk, ok);
@@ -890,6 +894,7 @@
       if (hr < 8) st.tod.early = st.tod.early || now;
       if (hr >= 22) st.tod.night = st.tod.night || now;
       const rw = A.voyage.reward(ses, acc, passed);
+      let storm = null; try { storm = A.storm ? A.storm.settle(st, ses) : null; } catch (e) { /* storms are extras */ }
       const newBadges = A.checkBadges(st);
       const after = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
       try {
@@ -904,7 +909,7 @@
       A.flush();
       A.session = null;
       if (ses.timeUp) A.session = null;
-      A.go('result', { ses, acc, xp, secs, passed, stars, newBadges, rw, unitUp: after.units > before.units, monthUp: after.months > before.months, lvlUp: lvlAfter > lvlBefore ? lvlAfter : 0 });
+      A.go('result', { ses, acc, xp, secs, passed, stars, newBadges, rw, storm, unitUp: after.units > before.units, monthUp: after.months > before.months, lvlUp: lvlAfter > lvlBefore ? lvlAfter : 0 });
     }
 
     setTimeout(render, 0);
@@ -932,6 +937,7 @@
       h('div', { class: 'box' }, h('b', null, r.acc + '%'), h('span', null, 'Correct')),
       h('div', { class: 'box' }, h('b', null, Math.max(1, Math.round(r.secs / 60)) + 'm'), h('span', null, 'Time'))));
     const blk = A.voyage.resultBlock(rw, ses); if (blk) root.append(blk);
+    if (r.storm && A.storm) root.append(A.storm.resultBlock(r.storm));
     if (ses.node && r.passed && !A.nextNode(st)) {
       root.append(h('div', { class: 'card stack', style: { width: '100%', border: '3px double var(--mango)', background: 'var(--mango-tint)', textAlign: 'center' } },
         h('div', { style: { fontSize: '2.6rem' } }, '🎓'),
@@ -1369,6 +1375,7 @@
     A.state = A.fixState(A.newerState(await A.api.loadState().catch(() => null)));
     try { A.applyBoost(A.state); } catch (e) { /* boosters are extras */ }
     applySettings();
+    if (A.markSeen) A.markSeen(A.state);
     A.msgs = [];
     A.track('app_open', { ua: navigator.userAgent.slice(0, 120) });
     A.go('home');
