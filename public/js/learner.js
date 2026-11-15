@@ -301,9 +301,18 @@
     const err = h('div', { class: 'err', role: 'alert' });
     const u = h('input', { class: 'input', id: 'lg-user', autocomplete: 'username', autocapitalize: 'none', spellcheck: 'false', placeholder: 'username' });
     const p = h('input', { class: 'input', id: 'lg-pass', type: 'password', autocomplete: 'current-password', placeholder: 'password' });
+    u.value = A.store.get('ae.lastuser', '') || '';
+    // let the phone offer its saved password (Chrome / Android), and save it after a good login
+    if (A.api.mode === 'server' && navigator.credentials && window.PasswordCredential) {
+      navigator.credentials.get({ password: true, mediation: 'optional' }).then((c) => { if (c && c.password && !p.value) { u.value = c.id; p.value = c.password; } }).catch(() => {});
+    }
     const go = async (e) => {
       e.preventDefault(); err.textContent = '';
-      try { const me = await A.api.login(u.value, p.value); await A.enter(me); }
+      try {
+        const me = await A.api.login(u.value, p.value);
+        try { if (navigator.credentials && window.PasswordCredential) await navigator.credentials.store(new window.PasswordCredential({ id: u.value, password: p.value, name: me && me.name })); } catch (x) { /* the browser may say no */ }
+        await A.enter(me);
+      }
       catch (x) { err.textContent = (x && x.message) || 'Login failed'; }
     };
     const demo = A.api.mode === 'demo'

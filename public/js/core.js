@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.13';
+  A.VERSION = '5.14';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -395,7 +395,7 @@
     async init() { /* nothing */ }
     async setupNeeded() { return (await this.call('setup')).needed; }
     async setup(d) { const j = await this.call('setup', d); this.token = j.token; A.store.set('ae.token', j.token); A.store.set('ae.user', j.user); return j.user; }
-    async login(username, password) { const j = await this.call('login', { username, password }); this.token = j.token; A.store.set('ae.token', j.token); A.store.set('ae.user', j.user); return j.user; }
+    async login(username, password) { const j = await this.call('login', { username, password }); this.token = j.token; A.store.set('ae.lastuser', username); A.store.set('ae.token', j.token); A.store.set('ae.user', j.user); return j.user; }
     // stay signed in: only a real "not signed in" answer from the server logs out.
     // No signal, or the server restarting for an update, keeps her in the app with the last known login.
     async me() {
