@@ -1221,10 +1221,10 @@ function seaView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cur
   root.append(h('div',{class:'v3-clocks',id:'v3ck',html:m3ClockHtml()}));
   const oc=document.createElement('div');oc.className='oc';oc.id='oc';oc.setAttribute('role','group');oc.setAttribute('aria-label','Voyage map from Thailand to the Maldives. Drag up and down to look along the route.');
   const SP={};let html=geoLabels()+
-    `<span class="plab hw" data-x="46.5" data-y="37.6" style="left:46.5%;top:37.6%">Lighthouse</span>`+`<span class="plab hw dest" data-x="50" data-y="${(RT.yEnd+8).toFixed(2)}" style="left:50%;top:0">❤️ Addu Atoll · Maldives</span>`+
+    `<span class="plab hw" data-x="46.5" data-y="37.6" style="left:46.5%;top:37.6%">Lighthouse</span>`+`<span class="plab hw dest" data-x="50" data-y="${(RT.yEnd+8).toFixed(2)}" style="left:50%;top:0">🏁 Addu Atoll · Maldives</span>`+
     RT.seas.map(o=>`<span class="plab gl sea v3sea" data-x="${o.x.toFixed(2)}" data-y="${o.y.toFixed(2)}" style="left:${o.x}%;top:${o.y}%">${escH(o.n)}</span>`).join('');
   const flagOf=si=>`<span class="flags"><span class="pf">${V.flag(V.SEAS[si].flag).replace('<svg ','<svg class="fl" ')}</span></span>`;
-  RT.main.forEach(m=>{const c=V.chap(st,m.isl),d=c.all,open=V.islandOpen(st,m.isl),nx=m.gi===cur&&!d,ic=m.gi===N-1?'❤️':m.isl.u%3===0?'🏰':'📖',pr=c.done&&!d?' <i class="ip">'+c.done+'/'+c.total+'</i>':'';
+  RT.main.forEach(m=>{const c=V.chap(st,m.isl),d=c.all,open=V.islandOpen(st,m.isl),nx=m.gi===cur&&!d,ic=m.gi===N-1?'🏁':m.isl.u%3===0?'🏰':'📖',pr=c.done&&!d?' <i class="ip">'+c.done+'/'+c.total+'</i>':'';
     html+=`<button class="isl${d?' done':''}${nx?' next':''}${open?'':' lk'}${m.isl.u%3===0?' test':''}" data-k="m${m.gi}" data-x="${m.x.toFixed(2)}" data-y="${m.y.toFixed(2)}" style="left:${m.x}%;top:${m.y}%" aria-label="${escH(m.isl.name)}, chapter ${m.gi+1}${d?', finished':open?'':', locked'}"><span class="ib"><span class="sand"></span><i class="ig">${ic}</i>${d?flagOf(m.isl.sea):''}</span><span class="il">${escH(m.isl.name)}${pr}</span></button>`});
   RT.side.forEach((o,i)=>{const d=s.side[o.isl.id],open=V.islandOpen(st,o.isl);
     html+=`<button class="isl side${d?' done':''}${open?'':' lk'}" data-k="s${i}" data-x="${o.x.toFixed(2)}" data-y="${o.y.toFixed(2)}" style="left:${o.x}%;top:${o.y}%" aria-label="${escH(o.isl.name)}, side mission"><span class="ib"><span class="sand"></span><i class="ig">🧭</i></span><span class="il">${escH(o.isl.name)}</span></button>`});

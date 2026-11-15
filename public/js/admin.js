@@ -46,6 +46,7 @@
       h('button', { class: 'btn ghost', style: { minHeight: '40px', padding: '8px 12px' }, onclick: async () => { clearInterval(ADM.timer); await A.api.logout(); A.user = null; A.go('login'); } }, 'Log out')));
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
+    s.append(h('button', { class: 'card talk-item sbx-open', onclick: playSheet }, h('div', { class: 'av' }, '🎮'), h('div', { style: { flex: 1 } }, h('b', null, 'Play her app (demo copy)'), h('div', { class: 'small muted' }, 'Her screens with a copy of her progress. Nothing you do reaches her account or this dashboard.')), h('span', { class: 'muted' }, '›')));
     const tabs = [['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
@@ -180,6 +181,19 @@
     if (!ua) return null;
     if (/iPhone/.test(ua)) return 'iPhone'; if (/iPad/.test(ua)) return 'iPad'; if (/Android/.test(ua)) return 'Android';
     if (/Mac/.test(ua)) return 'Mac'; if (/Windows/.test(ua)) return 'Windows'; return null;
+  }
+
+  // ---------------------------------------------------------------- play a demo copy of her app (sandbox.js)
+  function playSheet() {
+    const l = L(); if (!l || !A.sandbox) return;
+    const has = !!A.store.get('ae.sbx.' + ADM.uid, null);
+    const go = (fresh) => { sh.close(); A.sandbox.start(ADM.uid, l, ADM.data && ADM.data.state, fresh); };
+    const sh = A.sheet(h('div', { class: 'stack', style: { gap: '10px' } },
+      h('h2', null, '🎮 Play her app'),
+      h('p', { class: 'small muted' }, 'You see exactly what ' + l.name + ' sees, with a copy of her progress. Play lessons, the map, the test, anything. It is saved only on this phone, never on the server: her account, her feed and this dashboard do not change.'),
+      has ? h('button', { class: 'btn block', onclick: () => go(false) }, '▶ Go on with my demo copy') : null,
+      h('button', { class: 'btn ' + (has ? 'ghost ' : '') + 'block', onclick: () => go(true) }, has ? '📥 Start again from a fresh copy of her account' : '▶ Make a copy and play'),
+      h('div', { class: 'small muted' }, 'Tap “Exit” at the top (or Log out in her app) to come back here.')));
   }
 
   // ---------------------------------------------------------------- personality test (her answers, one by one)

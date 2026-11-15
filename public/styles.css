@@ -1221,3 +1221,9 @@ p.th.pt-desc { color: #bfe3df; }
 .pt-adm-scl .b { font-weight: 700; }
 .pt-adm-q.none { opacity: .55; }
 .pt-adm-q .th { font-family: var(--font-th); }
+/* the dashboard's demo copy of her app */
+.sbx-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(70px + var(--safe-b, 0px)); z-index: 300; display: flex; align-items: center; gap: 10px;
+  background: #3b1f6b; color: #fff; padding: 6px 6px 6px 12px; border-radius: 99px; font: 600 .78rem var(--font-body); box-shadow: 0 8px 20px -8px rgba(0,0,0,.6); white-space: nowrap; max-width: calc(100vw - 16px); }
+.sbx-bar span { overflow: hidden; text-overflow: ellipsis; }
+.sbx-bar button { border: 0; border-radius: 99px; background: #ffd36b; color: #3a2400; font: 700 .8rem var(--font-body); padding: 6px 12px; cursor: pointer; }
+.adm .sbx-open { margin: 0; }

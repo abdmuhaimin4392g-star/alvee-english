@@ -64,7 +64,7 @@
       });
       root.append(sec);
     });
-    root.append(h('div', { class: 'card dest-card' }, h('div', { html: SC.svg('mv3', 'art') }), h('div', { class: 'dest-tx' }, h('b', null, '❤️ Destination: Addu Atoll, Maldives'), h('div', { class: 'small muted' }, 'Someone is waiting for you there.'))));
+    root.append(h('div', { class: 'card dest-card' }, h('div', { html: SC.svg('mv3', 'art') }), h('div', { class: 'dest-tx' }, h('b', null, '🏁 Destination: Addu Atoll, Maldives'), h('div', { class: 'small muted' }, 'The last island of the voyage.'))));
     if (!o.readOnly) A.presence = { screen: 'voyage', title: 'Chapter ' + (cur + 1) };
     return root;
   };
