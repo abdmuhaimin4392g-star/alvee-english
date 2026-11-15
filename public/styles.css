@@ -1727,3 +1727,11 @@ html.dark .g-plant { background: rgba(0, 0, 0, .25); }
 .sm-card.up .sm-face { transform: rotateX(0deg); }
 .sm-card.done .sm-face { border-color: #3fbf7f; box-shadow: 0 0 0 3px color-mix(in srgb, #3fbf7f 25%, transparent); }
 @media (prefers-reduced-motion: reduce) { .g-sky .bub, .g-sky .fish, .g-pe { animation: none; } }
+
+/* admin: Voice tab */
+.vc-voices { display: grid; gap: 6px; }
+.vc-v { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1.5px solid var(--line); cursor: pointer; }
+.vc-v.on { border-color: #0e8a8a; background: color-mix(in srgb, #0e8a8a 10%, transparent); }
+.vc-bar-wrap { height: 12px; border-radius: 999px; background: color-mix(in srgb, var(--line) 60%, transparent); overflow: hidden; }
+.vc-bar { height: 100%; }
+.vc-bar i { display: block; height: 100%; background: linear-gradient(90deg, #2fb5d6, #0e8a8a); border-radius: inherit; }

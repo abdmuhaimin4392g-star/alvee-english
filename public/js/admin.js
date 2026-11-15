@@ -50,7 +50,7 @@
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
     s.append(h('button', { class: 'card talk-item sbx-open', onclick: () => ADM.tab('demo') }, h('div', { class: 'av' }, '🎮'), h('div', { style: { flex: 1 } }, h('b', null, 'Play her app (demo copy)'), h('div', { class: 'small muted' }, 'Her screens with a copy of her progress. Nothing you do reaches her account or this dashboard.')), h('span', { class: 'muted' }, '›')));
-    const tabs = [['demo', '🎮 Demo'], ['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    const tabs = [['demo', '🎮 Demo'], ['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['voice', '🎙️ Voice'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);
@@ -62,6 +62,7 @@
   };
   function body() {
     if (ADM.cur === 'demo') return demo();
+    if (ADM.cur === 'voice') return voiceTab();
     if (ADM.cur === 'live') return live();
     if (ADM.cur === 'progress') return progress();
     if (ADM.cur === 'ptest') return personality();
@@ -185,6 +186,51 @@
     if (!ua) return null;
     if (/iPhone/.test(ua)) return 'iPhone'; if (/iPad/.test(ua)) return 'iPad'; if (/Android/.test(ua)) return 'Android';
     if (/Mac/.test(ua)) return 'Mac'; if (/Windows/.test(ua)) return 'Windows'; return null;
+  }
+
+  // ---------------------------------------------------------------- 🎙️ Voice: record the whole course with a real American voice (server/voice.js)
+  function voiceTab() {
+    const box = h('div', { class: 'stack vc-tab', style: { gap: '12px' } }, h('div', { class: 'card' }, 'Loading…'));
+    let timer = null;
+    const call = (p, b) => A.api.call(p, b);
+    async function draw() {
+      let d; try { d = await call('admin/voice'); } catch (e) { box.replaceChildren(h('div', { class: 'card' }, '⚠️ ' + e.message)); return; }
+      if (!document.body.contains(box) && timer) { clearInterval(timer); return; }
+      const pct = d.total ? Math.round((d.have / d.total) * 100) : 0;
+      const msg = h('div', { class: 'small', style: { minHeight: '1.2em' } });
+      const err = (e) => { msg.textContent = '⚠️ ' + (e.message || e); };
+      const keyIn = h('input', { class: 'input', type: 'password', autocomplete: 'off', placeholder: d.hasKey ? 'Saved key ends in …' + d.keyEnd + ' (paste to replace)' : 'Paste your Google API key' });
+      let pick = d.voice || d.voices[0][0];
+      const cards = h('div', { class: 'vc-voices' }, ...d.voices.map(([id, name, desc]) => h('label', { class: 'vc-v' + (pick === id ? ' on' : '') },
+        h('input', { type: 'radio', name: 'vc', checked: pick === id ? true : null, onchange: (ev) => { pick = id; [...cards.children].forEach((c) => c.classList.toggle('on', c.contains(ev.target))); } }),
+        h('div', { style: { flex: 1 } }, h('b', null, name), h('div', { class: 'small muted' }, desc)),
+        h('button', { class: 'chip', disabled: d.hasKey ? null : true, onclick: async (e) => { e.preventDefault(); const b = e.currentTarget; b.textContent = '…'; try { const r = await call('admin/voice/sample', { voice: id }); const a = new Audio(r.audio); a.play().catch((x) => err(x)); b.textContent = '▶ Play'; } catch (x) { b.textContent = '▶ Play'; err(x); } } }, '▶ Play'))));
+      const j = d.job || {};
+      const bar = h('div', { class: 'vc-bar' }, h('i', { style: { width: pct + '%' } }));
+      box.replaceChildren(
+        h('div', { class: 'card stack', style: { gap: '8px' } },
+          h('b', null, '🎙️ Real American voice'),
+          h('div', { class: 'small muted' }, 'Records every English line of the course once (' + d.total + ' lines, about ' + Math.round(d.chars / 1000) + 'k characters) with a Google Chirp 3 HD voice and keeps the files on your server. Google gives 1 million characters free each month, so this should cost nothing. Lines without a recording keep the phone voice.'),
+          h('div', { class: 'row', style: { gap: '8px', alignItems: 'center' } }, h('div', { class: 'vc-bar-wrap', style: { flex: 1 } }, bar), h('b', null, pct + '%')),
+          h('div', { class: 'small' }, d.have + ' of ' + d.total + ' lines recorded' + (d.voice ? ' · voice: ' + d.voice.split('-').pop() : '') + (d.off ? ' · turned OFF for her' : '')),
+          j.on ? h('div', { class: 'small' }, '⏺ Recording… ' + j.done + ' done' + (j.fail ? ' · ' + j.fail + ' failed' : '') + ' · ' + Math.max(0, j.total - j.done - j.fail) + ' to go') : j.err ? h('div', { class: 'small', style: { color: '#c0392b' } }, '⚠️ Last error: ' + j.err) : null),
+        h('div', { class: 'card stack', style: { gap: '8px' } },
+          h('b', null, '1 · Google key'),
+          h('div', { class: 'small muted' }, d.hasKey ? '✅ A key is saved on the server.' : 'Google Cloud Console → new project → turn on billing → APIs & Services → enable “Cloud Text-to-Speech API” → Credentials → Create credentials → API key → restrict it to Cloud Text-to-Speech API.'),
+          h('div', { class: 'row', style: { gap: '8px' } }, keyIn, h('button', { class: 'btn', onclick: async () => { msg.textContent = 'Checking the key with Google…'; try { await call('admin/voice/key', { key: keyIn.value }); msg.textContent = '✅ Key saved'; draw(); } catch (e) { err(e); } } }, 'Save'))),
+        h('div', { class: 'card stack', style: { gap: '8px' } }, h('b', null, '2 · Choose the voice'), cards),
+        h('div', { class: 'card stack', style: { gap: '8px' } },
+          h('b', null, '3 · Record'),
+          j.on ? h('button', { class: 'btn block', onclick: async () => { await call('admin/voice/stop', {}); draw(); } }, '⏹ Stop') :
+            h('button', { class: 'btn mango block', disabled: d.hasKey ? null : true, onclick: async () => { try { await call('admin/voice/start', { voice: pick }); msg.textContent = 'Started'; setTimeout(draw, 800); } catch (e) { err(e); } } }, d.voice && pick === d.voice && d.have ? '⏺ Record the missing ' + (d.total - d.have) + ' lines' : '⏺ Record all ' + d.total + ' lines with this voice'),
+          d.have ? h('button', { class: 'btn ghost block', onclick: async () => { await call('admin/voice/off', { off: !d.off }); draw(); } }, d.off ? '▶ Turn the real voice ON for her' : '⏸ Turn the real voice OFF for her') : null,
+          h('div', { class: 'small muted' }, 'She can also switch it on or off on her Me page. Changing the voice records everything again in the new voice.')),
+        msg);
+      if (j.on && !timer) timer = setInterval(() => { if (!document.body.contains(box)) { clearInterval(timer); timer = null; return; } draw(); }, 2500);
+      if (!j.on && timer) { clearInterval(timer); timer = null; }
+    }
+    draw();
+    return box;
   }
 
   // ---------------------------------------------------------------- the Demo tab: her app in a phone frame (an iframe of /?sbx=<id>)

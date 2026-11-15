@@ -717,6 +717,7 @@
     const sw = (label, on, fn) => h('div', { class: 'switch' }, h('span', { class: 'th' }, label), h('button', { class: 'toggle' + (on ? ' on' : ''), role: 'switch', 'aria-checked': on ? 'true' : 'false', 'aria-label': label, onclick: fn }));
     root.append(h('div', { class: 'card', style: { padding: '4px 16px' } },
       sw('🐢 Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
+      A.voice && A.voice.has() ? sw('🎙️ Real American voice', set.realVoice !== false, () => { set.realVoice = set.realVoice === false; A.saveSoon(); A.go('me'); setTimeout(() => A.speech.say('Hello! This is my English voice. Is it clear?'), 200); }) : null,
       A.speech.ok && A.speech.list().length > 1 ? h('div', { class: 'switch' }, h('span', null, '🗣️ English voice'), h('select', { class: 'input voice-pick', 'aria-label': 'English voice', onchange: (e) => { set.voice = e.target.value; A.speech.pick(); A.saveSoon(); A.speech.say('Hello! This is my English voice. Is it clear?'); } },
         A.speech.list().slice(0, 12).map((v) => h('option', { value: v.name, selected: A.speech.voice && A.speech.voice.name === v.name ? true : null }, v.name.replace(/\s*\(.*\)$/, '') + ' · ' + v.lang)))) : null,
       sw('🔔 Sound effects', set.sfx, () => { set.sfx = !set.sfx; applySettings(); A.saveSoon(); A.go('me'); }),

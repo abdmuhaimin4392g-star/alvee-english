@@ -25,6 +25,7 @@ const DB_FILE = path.join(DATA, 'db.json');
 const atomicWrite = (file, text) => { const tmp = file + '.' + process.pid + '.tmp'; fs.writeFileSync(tmp, text); fs.renameSync(tmp, file); };
 const readJSON = (file, d) => { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { return d; } };
 
+const VOICE = require('./voice')({ DATA, PUB, readJSON: (f, d) => readJSON(f, d), atomicWrite: (f, t) => atomicWrite(f, t) });
 const db = readJSON(DB_FILE, { users: [], sessions: {}, msgs: [], presence: {}, setupCode: null });
 db.users = db.users || []; db.sessions = db.sessions || {}; db.msgs = db.msgs || []; db.presence = db.presence || {};
 let dbTimer = null;
@@ -335,6 +336,11 @@ async function api(req, res, route, query) {
     appendEvents(u.id, [{ t: Date.now(), type: 'admin_reset', what: str(b.label, 120) || 'lessons', n: removed }]);
     return send(res, 200, { ok: 1, removed });
   }
+  if (route.startsWith('admin/voice')) {
+    const vb = method === 'POST' ? await readBody(req, 5000) : {};
+    const r = await VOICE.admin(route, method, vb, send, res);
+    if (r !== null) return;
+  }
   return send(res, 404, { error: 'Not found' });
 }
 
@@ -449,6 +455,7 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://x');
     if (url.pathname === '/healthz') return send(res, 200, { ok: 1 });
     if (url.pathname.startsWith('/api/')) return await api(req, res, url.pathname.slice(5).replace(/\/+$/, ''), url.searchParams);
+    if (url.pathname.startsWith('/voice/')) return VOICE.serve(req, res, url.pathname);
     if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, { error: 'Method not allowed' });
     return serveStatic(req, res, url.pathname);
   } catch (e) {

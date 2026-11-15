@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.16';
+  A.VERSION = '5.17';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -170,6 +170,23 @@
       } catch (e) { this.voice = null; }
     },
     say(text, slow) {
+      if (!text) return false;
+      // a real recorded voice when the server has one for this line
+      try {
+        const url = A.voice && A.voice.url(text);
+        if (url) {
+          if (this.ok) { try { window.speechSynthesis.cancel(); } catch (e) { /* ignore */ } }
+          const a = A.voice.el();
+          a.pause(); a.src = url; a.playbackRate = slow ? 0.72 : this.rate < 0.85 ? 0.85 : 1; try { a.preservesPitch = true; a.webkitPreservesPitch = true; } catch (e) { /* old */ }
+          const p = a.play();
+          if (p && p.catch) p.catch(() => { A.voice.miss = (A.voice.miss || 0) + 1; this.tts(text, slow); });
+          if (A.track) A.track('audio', { text: String(text).slice(0, 90), slow: slow ? 1 : 0, real: 1 });
+          return true;
+        }
+      } catch (e) { /* fall back to the phone voice */ }
+      return this.tts(text, slow);
+    },
+    tts(text, slow) {
       if (!this.ok || !text) return false;
       try {
         window.speechSynthesis.cancel();
@@ -185,6 +202,33 @@
       } catch (e) { return false; }
     },
   });
+  // ------------------------------------------------------------- the recorded voice (server/voice.js)
+  const vnorm = (s) => String(s || '').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\{bf\}/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  const cyrb53 = (str) => {
+    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  };
+  A.voice = {
+    v: '', ids: null, _el: null,
+    on() { return !(A.state && A.state.set && A.state.set.realVoice === false); },
+    el() { if (!this._el) { this._el = new Audio(); this._el.preload = 'auto'; } return this._el; },
+    url(text) { if (!this.ids || !this.v || !this.on()) return null; const id = cyrb53(vnorm(text)); return this.ids.has(id) ? 'voice/' + this.v + '/' + id + '.mp3' : null; },
+    async load() {
+      try { const r = await fetch('voice/manifest.json', { cache: 'no-cache' }); if (!r.ok) return; const j = await r.json(); this.v = j.v || ''; this.ids = new Set(j.ids || []); } catch (e) { /* no recorded voice */ }
+    },
+    has: () => !!(A.voice.ids && A.voice.ids.size && A.voice.v),
+  };
+  A.voice.id = (t) => cyrb53(vnorm(t));
+  { const m = document.querySelector('meta[name="ae-mode"]'); if (m && m.content === 'server') { A.voice.load(); setInterval(() => A.voice.load(), 10 * 60e3); } }
+  // iPhone only plays sound after a tap: wake the audio player on the first touch
+  document.addEventListener('pointerdown', function wake() {
+    try { const a = A.voice.el(); a.muted = true; a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; const p = a.play(); if (p && p.then) p.then(() => { a.pause(); a.muted = false; }).catch(() => { a.muted = false; }); else a.muted = false; } catch (e) { /* ignore */ }
+    document.removeEventListener('pointerdown', wake, true);
+  }, true);
+
   // iPhone only speaks after a first speech started by a tap: start a silent one on the first touch
   if (Speech.ok) {
     const unlock = () => {
