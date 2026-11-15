@@ -1421,3 +1421,25 @@ body.tyd-on #app { background: radial-gradient(120% 60% at 80% 0%, rgba(182,156,
 .tyd-r .s { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; }
 .tyd-r .s .tyd-pic { border-width: 1.5px; box-shadow: none; }
 .voice-pick { max-width: 58%; min-height: 40px; padding: 6px 10px; font-size: .85rem; }
+
+/* activity chart (Me page) */
+.act-card { display: flex; flex-direction: column; gap: 10px; overflow: hidden; background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, #ff9fb5 14%, transparent), transparent 60%), var(--surface); }
+.act-emoji { font-size: 1.8rem; }
+.act-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.act-tab { border: 1px solid var(--line); background: transparent; color: inherit; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.act-tab.on { color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+.act-svg { width: 100%; height: auto; display: block; }
+.act-grid { stroke: var(--line); stroke-dasharray: 3 5; }
+.act-bar { transform-box: fill-box; transform-origin: bottom; animation: actgrow .6s cubic-bezier(.2,.9,.3,1.2) both; }
+@keyframes actgrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.act-val { font-size: 10px; font-weight: 800; text-anchor: middle; fill: currentColor; }
+.act-star { font-size: 11px; text-anchor: middle; fill: #ffc24b; }
+.act-day { font-size: 10px; text-anchor: middle; fill: currentColor; opacity: .55; }
+.act-day.on { opacity: 1; font-size: 16px; fill: #ff6f91; }
+.act-date { font-size: 8.5px; text-anchor: middle; fill: currentColor; opacity: .45; }
+.act-date.on { opacity: .8; font-weight: 700; }
+.act-sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.act-sum > div { background: color-mix(in srgb, var(--line) 35%, transparent); border-radius: 14px; padding: 8px 4px; }
+.act-sum b { display: block; font-size: 1.1rem; }
+.act-sum span { font-size: .72rem; opacity: .7; }
+@media (prefers-reduced-motion: reduce) { .act-bar { animation: none; } }

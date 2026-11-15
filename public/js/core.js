@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.9';
+  A.VERSION = '5.10';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -560,6 +560,15 @@
     const today = A.todayNum();
     let s = st.srs[id];
     if (!s) {
+      // words she meets for the first time (alone or inside a sentence) count as new words that day
+      try {
+        const keysOf = (x) => x.startsWith('w:') ? [x.slice(2)] : x.startsWith('s:') && A.S(x.slice(2)) ? A.words(A.S(x.slice(2)).t).map((t) => A.keyOf(t)).filter((k) => k && k !== '#') : [];
+        if (!st.wseen) { st.wseen = {}; Object.keys(st.srs).forEach((x) => keysOf(x).forEach((k) => { st.wseen[k] = 1; })); }
+        const keys = keysOf(id), seen = st.wseen;
+        let fresh = 0;
+        keys.forEach((k) => { if (!seen[k] && !st.srs['w:' + k]) { seen[k] = 1; fresh++; } });
+        if (fresh) { const d = A.day(st); d.nw = (d.nw || 0) + fresh; }
+      } catch (e) { /* counting only */ }
       s = st.srs[id] = { b: ok ? 1 : 0, d: today + (ok ? 1 : 0), n: 1, c: ok ? 1 : 0, w: ok ? 0 : 1, t: Date.now() };
       return s;
     }
@@ -589,7 +598,7 @@
   A.weakSkills = (st) => Object.entries(st.sk || {}).filter(([, r]) => r.h.length >= 5 && A.skillAcc(r, true) < 0.75)
     .map(([id, r]) => ({ id, acc: A.skillAcc(r, true), n: r.n })).sort((a, b) => a.acc - b.acc || b.n - a.n);
   A.dueItems = (st) => { const t = A.todayNum(); return Object.keys(st.srs).filter((id) => st.srs[id].d <= t); };
-  A.wordCount = (st) => Object.keys(st.srs).filter((k) => k.startsWith('w:')).length;
+  A.wordCount = (st) => { const s = new Set(Object.keys(st.wseen || {})); Object.keys(st.srs).forEach((k) => { if (k.startsWith('w:')) s.add(k.slice(2)); }); return s.size; };
 
   // medals — a collection with bronze / silver / gold / pearl tiers. ids of medals already earned never change.
   const lessonsDone = (st) => Object.keys(st.done).filter((k) => C.lessons[k]).length;
@@ -681,6 +690,8 @@
   A.track = (type, data) => {
     if (!A.user || A.user.role !== 'learner' || !A.api) return;
     A.queue.push({ t: Date.now(), type, ...(data || {}) });
+    // daily counts for her activity chart
+    if ((type === 'lookup' || type === 'hint') && A.state) { try { const d = A.day(A.state); d.look = (d.look || 0) + 1; } catch (e) { /* no day */ } }
     keepQueue();
     if (A.queue.length >= 25) A.flush();
   };

@@ -137,19 +137,26 @@
   V.qday = (st) => { const s = V.st(st); const k = A.dkey(); if (!s.q[k]) { s.q = { [k]: { claimed: {} } }; } return s.q[k]; };
   V.count = (key, n) => { if (V.ctl().questOff) return; const d = V.qday(); d[key] = (d[key] || 0) + (n || 1); };
   V.quests = () => {
-    const r = seeded(hashStr(A.dkey()));
+    const d = V.qday(), round = d.r || 0, base = d.base || {};
+    const r = seeded(hashStr(A.dkey() + (round ? ':' + round : '')));
     const pool = QDEF.slice(), out = [];
     const fam = (id) => id.replace(/\d+$/, '');
     while (out.length < 3 && pool.length) { const q = pool.splice(Math.floor(r() * pool.length), 1)[0]; if (!out.some((x) => fam(x[0]) === fam(q[0]))) out.push(q); }
-    const d = V.qday();
-    return out.map(([id, en, th, test]) => ({ id, en, th, done: test(d), claimed: !!d.claimed[id] }));
+    // each round counts only what she does after it starts
+    const now = {}; Object.keys(d).forEach((k) => { if (typeof d[k] === 'number' && k !== 'r') now[k] = d[k] - (base[k] || 0); });
+    return out.map(([id, en, th, test]) => ({ id, en, th, done: test(now), claimed: !!d.claimed[id], round }));
   };
   V.claimQuest = (id) => {
     const d = V.qday(); if (d.claimed[id]) return 0;
     const q = V.quests().find((x) => x.id === id); if (!q || !q.done) return 0;
     d.claimed[id] = Date.now();
     let got = V.addPearls(3);
-    if (V.quests().every((x) => x.claimed)) { got += V.addPearls(5); V.st().keys += 1; d.key = 1; }
+    if (V.quests().every((x) => x.claimed)) {
+      got += V.addPearls(5); V.st().keys += 1; d.key = 1;
+      // and straight away a new round of three
+      const base = {}; Object.keys(d).forEach((k) => { if (typeof d[k] === 'number' && k !== 'r') base[k] = d[k]; });
+      d.r = (d.r || 0) + 1; d.base = base; d.claimed = {};
+    }
     A.track('quest_claim', { id, got });
     A.saveSoon();
     return got;
@@ -193,7 +200,8 @@
   V.boatP = (st) => { st = st || A.state; const R = V.route().main, cur = V.curIndex(st), c = V.chap(st, R[cur]); return c.all ? cur : cur - 1 + (c.done / c.total) * 0.85; };
   V.chapOf = (n) => V.route().main.find((x) => x.nodes.includes(n));
   // a long voyage: a few new lessons a day (set on your dashboard), and stars to cross into each new sea
-  V.dayLimit = () => (A.user && A.user.cfg && +A.user.cfg.newLimit) || 0;
+  // no daily limit any more: she can always go on from where she stopped
+  V.dayLimit = () => 0;
   V.newToday = (st) => ((st || A.state).days[A.dkey()] || {}).les || 0;
   V.capped = (st) => V.dayLimit() > 0 && V.newToday(st) >= V.dayLimit();
   V.gate = (st, isl) => {

@@ -281,12 +281,12 @@
   function questSheet() {
     const q = V.quests(), s = V.st();
     const box = h('div', { class: 'stack', style: { gap: '10px' } },
-      h('div', { class: 'row', style: { gap: '10px' } }, mascot('party', 56), h('div', null, h('h2', null, 'Today’s quests'), h('div', { class: 'muted small' }, 'Finish all three for +5 bonus pearls and a 🔑 key.'))));
+      h('div', { class: 'row', style: { gap: '10px' } }, mascot('party', 56), h('div', null, h('h2', null, 'Quests' + (q[0] && q[0].round ? ' · round ' + (q[0].round + 1) : '')), h('div', { class: 'muted small' }, 'Finish all three for +5 bonus pearls and a 🔑 key. Then three new quests start right away.'))));
     q.forEach((x) => box.append(h('div', { class: 'quest' + (x.claimed ? ' claimed' : x.done ? ' ready' : '') },
       h('span', { class: 'qi' }, x.claimed ? '✅' : x.done ? '🎁' : '⬜'),
       h('div', { style: { flex: 1 } }, h('b', null, x.en)),
       x.done && !x.claimed ? h('button', { class: 'btn mango', style: { minHeight: '40px', padding: '6px 12px' }, onclick: () => { const had = s.keys; const k = V.claimQuest(x.id); A.sfx.play('good'); sh.close(); refreshHud(); if (V.st().keys > had) { A.confetti(); A.notify({ ic: '🔑', t: 'You earned a key!', s: 'All three quests done. Use it on a sealed chest.', go: ['journey'] }); } else A.toast('+' + k + ' pearls'); questSheet(); } }, 'Claim +3') : h('span', { class: 'small muted' }, x.claimed ? 'claimed' : '+3 pearls'))));
-    box.append(h('div', { class: 'small muted' }, 'New quests every day at midnight.'));
+    box.append(h('div', { class: 'small muted' }, 'There is always a new quest round waiting. No limit!'));
     const sh = A.sheet(box);
   }
   V.questSheet = questSheet;

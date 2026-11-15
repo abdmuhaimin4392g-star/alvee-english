@@ -360,7 +360,7 @@
     const next = A.nextNode(st);
     const due = A.dueItems(st).length;
     const lessonsToday = (st.days[tk] && st.days[tk].les) || 0;
-    const capped = (cfg.newLimit > 0 && lessonsToday >= cfg.newLimit) || (next && A.voyage.lockWhy(st, next) === 'today');
+    const capped = false; // no daily limit: she always goes on from where she stopped
     const gated = next && A.voyage.lockWhy(st, next) === 'gate';
     const root = h('div', { class: 'screen' });
 
@@ -619,6 +619,51 @@
   A.medalSheet = medalSheet;
 
   // ---------------------------------------------------------------- me
+  // ------------------------------------------------------------- activity chart (Me page)
+  let actTab = 'time';
+  function activityCard(st) {
+    const N = 14, now = Date.now();
+    const keys = []; for (let i = N - 1; i >= 0; i--) keys.push(A.dkey(now - i * 864e5));
+    const get = { time: (d) => Math.round((d.sec || 0) / 60), nw: (d) => d.nw || 0, look: (d) => d.look || 0 };
+    const TABS = [['time', '⏱️', 'Time', 'เวลา', ['#ffb36b', '#ff6f91']], ['nw', '🌱', 'New words', 'คำใหม่', ['#7be0b0', '#2bb3a3']], ['look', '🔎', 'Looked up', 'คำที่เปิดดู', ['#9fb8ff', '#7a6cff']]];
+    const fmt = (t, v) => t === 'time' ? (v >= 60 ? Math.floor(v / 60) + 'h ' + (v % 60 ? (v % 60) + 'm' : '') : v + 'm') : String(v);
+    const card = h('div', { class: 'card act-card' });
+    const draw = () => {
+      const tab = TABS.find((t) => t[0] === actTab) || TABS[0], g = get[tab[0]];
+      const vals = keys.map((k) => (st.days[k] ? g(st.days[k]) : 0));
+      const total = vals.reduce((a, b) => a + b, 0), active = vals.filter((v) => v > 0).length;
+      const max = Math.max(1, ...vals), best = vals.indexOf(Math.max(...vals));
+      const W = 336, H = 168, top = 26, base = 132, bw = 16, gap = (W - 16 - N * bw) / (N - 1);
+      let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="act-svg" role="img" aria-label="' + tab[2] + ' per day, last 14 days">' +
+        '<defs><linearGradient id="actg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="' + tab[4][1] + '"/><stop offset="1" stop-color="' + tab[4][0] + '"/></linearGradient>' +
+        '<filter id="actglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>';
+      [0.5, 1].forEach((f) => { const y = base - (base - top) * f; svg += '<line x1="8" x2="' + (W - 8) + '" y1="' + y + '" y2="' + y + '" class="act-grid"/>'; });
+      vals.forEach((v, i) => {
+        const x = 8 + i * (bw + gap), hh = v ? Math.max(6, (base - top) * (v / max)) : 3, y = base - hh, today = i === N - 1;
+        const d = new Date(now - (N - 1 - i) * 864e5), lab = today ? 'Today' : 'SMTWTFS'[d.getDay()];
+        if (today && v) svg += '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + hh + '" rx="8" fill="' + tab[4][0] + '" opacity=".55" filter="url(#actglow)"/>';
+        svg += '<rect class="act-bar" style="animation-delay:' + i * 35 + 'ms" x="' + x + '" y="' + y + '" width="' + bw + '" height="' + hh + '" rx="8" fill="' + (v ? 'url(#actg)' : 'var(--line)') + '"' + (today ? ' stroke="#fff" stroke-width="1.5"' : '') + '><title>' + d.toDateString() + ': ' + fmt(tab[0], v) + '</title></rect>';
+        if (v && (today || i === best)) svg += '<text x="' + (x + bw / 2) + '" y="' + (y - 7) + '" class="act-val">' + fmt(tab[0], v).trim() + '</text>';
+        if (i === best && v && !today) svg += '<text x="' + (x + bw / 2) + '" y="' + (y - 20) + '" class="act-star">★</text>';
+        svg += '<text x="' + (x + bw / 2) + '" y="' + (base + 16) + '" class="act-day' + (today ? ' on' : '') + '">' + (today ? '•' : lab) + '</text>';
+        if (d.getDate() === 1 || i === 0) svg += '<text x="' + (x + bw / 2) + '" y="' + (base + 30) + '" class="act-date">' + d.getDate() + '/' + (d.getMonth() + 1) + '</text>';
+      });
+      svg += '<text x="' + (W - 8 - bw / 2) + '" y="' + (base + 30) + '" class="act-date on">Today</text></svg>';
+      const avg = active ? Math.round(total / active) : 0;
+      card.replaceChildren(...[
+        h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'My learning days'), h('div', { class: 'small muted th' }, 'Last 14 days · 14 วันที่ผ่านมา')), h('span', { class: 'act-emoji' }, tab[1])),
+        h('div', { class: 'act-tabs', role: 'tablist' }, TABS.map((t) => h('button', { class: 'act-tab' + (t[0] === tab[0] ? ' on' : ''), role: 'tab', 'aria-selected': t[0] === tab[0] ? 'true' : 'false', style: t[0] === tab[0] ? { background: 'linear-gradient(135deg,' + t[4][0] + ',' + t[4][1] + ')' } : null, onclick: () => { actTab = t[0]; draw(); } }, t[1] + ' ' + t[2]))),
+        h('div', { class: 'act-chart', html: svg }),
+        h('div', { class: 'act-sum' },
+          h('div', null, h('b', null, fmt(tab[0], vals[N - 1])), h('span', null, 'Today')),
+          h('div', null, h('b', null, fmt(tab[0], total)), h('span', null, '14 days')),
+          h('div', null, h('b', null, fmt(tab[0], avg)), h('span', null, 'Per active day'))),
+        tab[0] !== 'time' && !total ? h('div', { class: 'tiny muted th' }, 'Counting starts from today. · เริ่มนับตั้งแต่วันนี้') : null].filter(Boolean));
+    };
+    draw();
+    return card;
+  }
+
   VIEWS.me = () => {
     const st = A.state;
     const xp = A.totalXP(st), lvl = A.level(xp), tl = A.title(lvl);
@@ -636,6 +681,7 @@
       h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Streak')),
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
       h('div', { class: 'kpi' }, h('b', null, st.freezes + '🧊'), h('span', null, 'Rest days'))));
+    root.append(activityCard(st));
     root.append(h('div', { class: 'small th muted' }, '🧊 Rest day: learn 7 days in a row to earn a rest day (keep up to 2). Miss a day and your 🔥 stays alight.'));
     const got = A.MEDALS.filter((m) => st.badges[m.id]);
     const shelf = h('button', { class: 'card medal-shelf', onclick: () => A.go('medals') },

@@ -659,12 +659,11 @@
     const msg2 = h('div', { class: 'small', role: 'status' });
     box.append(h('div', { class: 'card stack' }, h('b', null, 'Her plan'),
       sel('s-goal', 'Daily goal', cfg.goal || 30, [[20, '20 XP · easy (about 1 short lesson)'], [30, '30 XP · normal (about 1 lesson)'], [50, '50 XP · serious (2 lessons)'], [80, '80 XP · intense']]),
-      sel('s-limit', 'New lessons per day', cfg.newLimit || 0, [[0, 'No limit'], [1, '1 new lesson a day'], [2, '2 a day'], [3, '3 a day'], [4, '4 a day'], [5, '5 a day']]),
       sel('s-unlock', 'Lesson order', cfg.unlockAll ? 1 : 0, [[0, 'Step by step (recommended)'], [1, 'Unlock everything']]),
       f('s-start', 'Program start date', cfg.start, 'date'),
       h('button', { class: 'btn block', onclick: async () => {
         const v = (id) => document.getElementById(id).value;
-        await A.api.updateUser(ADM.uid, { cfg: { goal: +v('s-goal'), newLimit: +v('s-limit'), unlockAll: v('s-unlock') === '1', start: v('s-start') || cfg.start } });
+        await A.api.updateUser(ADM.uid, { cfg: { goal: +v('s-goal'), newLimit: 0, unlockAll: v('s-unlock') === '1', start: v('s-start') || cfg.start } });
         ADM.learners = await A.api.learners(); msg2.textContent = 'Saved.';
       } }, 'Save plan'), msg2));
     const msg3 = h('div', { class: 'small', role: 'status' });
