@@ -85,70 +85,50 @@ function main() {
   }
 }
 
-// ------------------------------------------------------------------ version 5.3: count only what happened after the map update
-// XP, study days, time, streak, rest days and medals start from the moment of the version 5 fresh start.
-// Pearls, shells, treasure, postcards and boats she had before it are taken away too, so every number she sees is from the new voyage.
-// A full copy is kept in archive/ first. Running it again does nothing.
-const dayIn = (t, tz) => { try { return new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(t)); } catch (e) { return new Date(t).toISOString().slice(0, 10); } };
-function countFromMapUpdate(u, file) {
+// ------------------------------------------------------------------ version 5.4: XP and medals back to zero
+// XP, study days, time, streak, rest days and medals go back to zero.
+// Collections: only what she had BEFORE the map update is taken away (pearls, shells, treasure, postcards, boats).
+// Everything she collected after the update (including the last few hours) stays, and so do gold, keys and logs.
+// Her finished lessons stay. A full copy is kept in archive/ first. Running it again does nothing.
+function zeroAll(u, file) {
   const st = readJSON(file, null);
-  if (!st || !st.v5reset || st.v53stats) return;
-  const cut = st.v5reset, id = safeId(u.id), who = u.name || u.username;
+  if (!st || st.v54zero) return;
+  const id = safeId(u.id), who = u.name || u.username;
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  fs.copyFileSync(file, path.join(DATA, 'archive', id + '-' + stamp + '-before-v5.3-count-from-today.json'));
+  fs.copyFileSync(file, path.join(DATA, 'archive', id + '-' + stamp + '-before-v5.4-zero.json'));
   const xpBefore = Object.values(st.days || {}).reduce((a, d) => a + ((d && d.xp) || 0), 0);
-  // 1. study days: rebuild them from the answer log after the map update
-  let events = [];
-  try { events = fs.readFileSync(path.join(DATA, 'events', id + '.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return null; } }).filter(Boolean); } catch (e) { /* no log */ }
-  const days = {};
-  const dayKey = (t) => dayIn(t, 'Asia/Bangkok');
-  for (const e of events) {
-    if (e.type !== 'lesson_end' || !(e.t >= cut)) continue;
-    const k = dayKey(e.t), d = days[k] || (days[k] = { xp: 0, sec: 0, n: 0, ok: 0, les: 0 });
-    d.xp += +e.xp || 0; d.sec += +e.secs || 0; d.n += +e.graded || 0; d.ok += Math.max(0, (+e.graded || 0) - (+e.wrong || 0));
-  }
-  for (const [k, r] of Object.entries(st.done || {})) {
-    if (/^(talk|check):/.test(k) || !r || !(r.t >= cut)) continue;
-    const d = days[dayKey(r.t)] || (days[dayKey(r.t)] = { xp: 0, sec: 0, n: 0, ok: 0, les: 0 }); d.les += 1;
-  }
-  // if the log is missing, keep the phone's own numbers for the days from the update on
-  const first = dayKey(cut);
-  if (!events.some((e) => e.type === 'lesson_end' && e.t >= cut)) for (const [k, d] of Object.entries(st.days || {})) if (k >= first && !days[k]) days[k] = d;
-  st.days = days;
-  st.frozen = []; st.freezes = 0; st.reviews = 0; st.best = 0; st.tod = {};
-  // 2. medals: only the ones won after the update stay (the others can be won again)
-  const keep = {}; let medalsGone = 0;
-  for (const [k, t] of Object.entries(st.badges || {})) { if (typeof t === 'number' && t >= cut) keep[k] = t; else medalsGone++; }
-  st.badges = keep;
-  // 3. collections from before the update
+  const medals = Object.keys(st.badges || {}).length;
+  st.days = {}; st.badges = {}; st.frozen = []; st.freezes = 0; st.reviews = 0; st.best = 0; st.tod = {};
+  // the copy made just before the map update tells us what she already had then
   const arch = fs.readdirSync(path.join(DATA, 'archive')).filter((f) => f.startsWith(id + '-') && f.endsWith('-before-v5-fresh-start.json')).sort()[0];
   const old = arch ? ((readJSON(path.join(DATA, 'archive', arch), {}) || {}).sea || {}) : null;
   const s = st.sea || (st.sea = {});
-  if (old) {
-    const minus = (a, b) => Math.max(0, (a || 0) - (b || 0));
+  let kept = 'no copy from before the update was found, so her collections were left as they are';
+  if (old && !st.v53stats) {   // (5.3 already did this part if it ran)
+    const minus = (x, y) => Math.max(0, (x || 0) - (y || 0));
     s.p = minus(s.p, old.p); s.pt = minus(s.pt, old.pt);
     if (s.rp && old.rp) for (const k of ['p', 'b', 'g']) s.rp[k] = minus(s.rp[k], old.rp[k]);
     for (const k of Object.keys(s.sh || {})) { const n = minus(s.sh[k], (old.sh || {})[k]); if (n) s.sh[k] = n; else delete s.sh[k]; }
-    for (const k of Object.keys(s.tre || {})) { const c = s.tre[k] || {}, o = (old.tre || {})[k]; const n = minus(c.n || 1, o ? (o.n || 1) : 0); if (n) s.tre[k] = { n, t: Math.max(c.t || 0, cut) }; else delete s.tre[k]; }
+    for (const k of Object.keys(s.tre || {})) { const c = s.tre[k] || {}, o = (old.tre || {})[k]; const n = minus(c.n || 1, o ? (o.n || 1) : 0); if (n) s.tre[k] = { n, t: Math.max(c.t || 0, st.v5reset || 0) }; else delete s.tre[k]; }
     for (const k of Object.keys(s.pc || {})) if ((old.pc || {})[k]) delete s.pc[k];
     const oldBoats = (old.boats || []).filter((b) => b !== 'sloop');
     s.boats = (s.boats || ['sloop']).filter((b) => !oldBoats.includes(b));
     if (!s.boats.includes('sloop')) s.boats.unshift('sloop');
     if (!s.boats.includes(s.boat)) s.boat = 'sloop';
-  }
-  st.v53stats = Date.now();
+    kept = 'kept what she collected after the map update: ' + (s.p || 0) + ' pearls, ' + Object.keys(s.sh || {}).length + ' kinds of shell, ' + Object.keys(s.tre || {}).length + ' treasures, ' + (s.gold || 0) + ' gold, ' + (s.keys || 0) + ' keys';
+  } else if (st.v53stats) kept = 'collections from before the update were already removed by 5.3; the rest stays';
+  st.v54zero = Date.now();
   st.rev = (st.rev || 0) + 5000; st.resetAt = Date.now();
   atomicWrite(file, JSON.stringify(st));
-  const xpNow = Object.values(days).reduce((a, d) => a + d.xp, 0);
-  fs.appendFileSync(path.join(DATA, 'events', id + '.jsonl'), JSON.stringify({ t: Date.now(), st: Date.now(), type: 'admin_reset', what: 'count only from the map update (XP ' + xpBefore + ' → ' + xpNow + ')', n: medalsGone }) + '\n');
-  console.log('• ' + who + ': now counting only from the map update (' + new Date(cut).toISOString().slice(0, 16).replace('T', ' ') + ' UTC).');
-  console.log('    XP ' + xpBefore + ' → ' + xpNow + ' · study days ' + Object.keys(days).length + ' · medals kept ' + Object.keys(keep).length + ' (' + medalsGone + ' from before removed)' + (old ? ' · old pearls, shells, treasure, postcards and boats removed' : ''));
-  console.log('    A copy of everything before is in archive/.');
+  fs.appendFileSync(path.join(DATA, 'events', id + '.jsonl'), JSON.stringify({ t: Date.now(), st: Date.now(), type: 'admin_reset', what: 'XP and medals back to zero (XP ' + xpBefore + ' → 0, ' + medals + ' medals); collections from before the map update removed', n: 0 }) + '\n');
+  console.log('• ' + who + ': XP ' + xpBefore + ' → 0 and ' + medals + ' medals removed.');
+  console.log('    ' + kept + '. Finished lessons stay. A copy of everything before is in archive/.');
 }
-function main53() {
+function main54() {
   const db = readJSON(path.join(DATA, 'db.json'), null);
   if (!db || !Array.isArray(db.users)) return;
-  for (const u of db.users.filter((x) => x.role === 'learner')) countFromMapUpdate(u, path.join(DATA, 'state', safeId(u.id) + '.json'));
+  fs.mkdirSync(path.join(DATA, 'archive'), { recursive: true });
+  for (const u of db.users.filter((x) => x.role === 'learner')) zeroAll(u, path.join(DATA, 'state', safeId(u.id) + '.json'));
 }
 try { main(); } catch (e) { console.error('migration problem (the app still runs):', e.message); }
-try { main53(); } catch (e) { console.error('migration problem (the app still runs):', e.message); }
+try { main54(); } catch (e) { console.error('migration problem (the app still runs):', e.message); }
