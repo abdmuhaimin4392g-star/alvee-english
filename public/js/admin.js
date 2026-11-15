@@ -46,7 +46,7 @@
       h('button', { class: 'btn ghost', style: { minHeight: '40px', padding: '8px 12px' }, onclick: async () => { clearInterval(ADM.timer); await A.api.logout(); A.user = null; A.go('login'); } }, 'Log out')));
     if (!ADM.uid) { s.append(h('div', { class: 'card' }, 'No learner account yet. Create one in Settings.')); root.append(s); return; }
     s.append(h('div', { id: 'adm-status' }, statusCard()));
-    const tabs = [['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
+    const tabs = [['live', '⚡ Live'], ['watch', '📺 Her screen'], ['control', '🎮 Control Room'], ['insights', '🧠 Insights'], ['progress', '📈 Progress'], ['ptest', '🧭 Personality'], ['mistakes', '❌ Mistakes'], ['words', '📚 Words'], ['msgs', '💌 Messages'], ['settings', '⚙️ Settings']];
     s.append(h('div', { class: 'tabs', role: 'tablist' }, tabs.map(([k, t]) => h('button', { class: 'chip' + (ADM.cur === k ? ' on' : ''), role: 'tab', 'aria-selected': ADM.cur === k ? 'true' : 'false', onclick: () => ADM.tab(k) }, t))));
     s.append(h('div', { id: 'adm-body', class: 'stack', style: { gap: '14px' } }, body()));
     root.append(s);
@@ -59,6 +59,7 @@
   function body() {
     if (ADM.cur === 'live') return live();
     if (ADM.cur === 'progress') return progress();
+    if (ADM.cur === 'ptest') return personality();
     if (ADM.cur === 'insights') return insights();
     if (ADM.cur === 'control') return control();
     if (ADM.cur === 'watch') return watch();
@@ -163,6 +164,11 @@
       case 'sell': icon = '🪙'; main = 'Sold ' + e.n + ' ' + e.k + ' pearl' + (e.n > 1 ? 's' : ''); detail = '+' + e.gold + ' gold'; break;
       case 'boat_select': icon = '⛵'; main = 'Now sailing: ' + A.voyage.boat(e.id).n; break;
       case 'test_timeup': icon = '⏰'; main = 'Time ran out in a test'; detail = e.unanswered + ' questions not answered'; break;
+      case 'ptest_open': icon = '🧭'; main = 'Opened the personality test'; detail = (e.n ? e.n + ' of 60 answered' : 'not started yet') + (e.from ? ' · from the ' + ({ map: 'voyage map', me: 'Me page', note: 'notification' }[e.from] || e.from) : ''); break;
+      case 'ptest_answer': { const q = ptQ(e.q); icon = '🧭'; main = 'Personality Q' + (q ? q.n : '?') + ': ' + ptLabel(e.v) + (e.change ? ' (changed)' : ''); detail = q ? q.en : e.q; break; }
+      case 'ptest_explain': { const q = ptQ(e.q); icon = '💡'; main = 'Opened “Explain more” on personality Q' + (q ? q.n : '?'); detail = q ? q.en : e.q; break; }
+      case 'ptest_pause': icon = '⏸️'; main = 'Paused the personality test'; detail = e.n + ' of 60 answered'; break;
+      case 'ptest_done': { const T = window.PTEST && window.PTEST.types[String(e.code || '').slice(0, 4)]; icon = '🏆'; main = 'Finished the personality test: ' + e.code; detail = (T ? T.n + ' · ' : '') + (e.mins || '?') + ' min'; break; }
       case 'admin_reset': icon = '↺'; main = 'You reset ' + (e.what || 'lessons'); detail = (e.n || 0) + ' finished steps cleared'; break;
       case 'night_mode': icon = '🌙'; main = 'Night mode: ' + e.v; break;
       case 'install_help': case 'install_prompt': case 'app_installed': icon = '📲'; main = e.type === 'app_installed' ? 'Installed the app' : 'Looked at how to install the app'; break;
@@ -174,6 +180,68 @@
     if (!ua) return null;
     if (/iPhone/.test(ua)) return 'iPhone'; if (/iPad/.test(ua)) return 'iPad'; if (/Android/.test(ua)) return 'Android';
     if (/Mac/.test(ua)) return 'Mac'; if (/Windows/.test(ua)) return 'Windows'; return null;
+  }
+
+  // ---------------------------------------------------------------- personality test (her answers, one by one)
+  const ptQ = (id) => { const P = window.PTEST; if (!P) return null; const i = P.qs.findIndex((q) => q.id === id); return i < 0 ? null : { ...P.qs[i], n: i + 1 }; };
+  const ptLabel = (v) => { const P = window.PTEST, x = P && P.scale.find((s) => s[0] === v); return x ? x[1] : String(v); };
+  function personality() {
+    const P = window.PTEST, PT = A.ptest, box = h('div', { class: 'stack', style: { gap: '14px' } });
+    if (!P || !PT) return box;
+    const st = stOf(), p = PT.st(st), n = PT.count(p), N = P.qs.length, sc = PT.score(p);
+    const DIMN = { mind: 'Mind', energy: 'Energy', nature: 'Nature', tactics: 'Tactics', identity: 'Identity' };
+    const explained = Object.keys(p.x || {}).filter((k) => p.x[k] > 0);
+    const last = Object.values(p.a).reduce((m, r) => Math.max(m, r[1] || 0), 0);
+    const status = p.done ? 'Finished ' + new Date(p.done).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) + ' · took about ' + Math.max(1, Math.round((p.done - (p.start || p.done)) / 60000)) + ' min'
+      : n ? 'In progress: ' + n + ' of ' + N + ' answered · last answer ' + A.ago(last) : 'Not started yet. It opens on her phone every time she opens the voyage map.';
+    box.append(h('div', { class: 'card stack' },
+      h('div', { class: 'row between' }, h('b', null, '🧭 What kind of sailor is she?'), h('span', { class: 'pill ' + (p.done ? 'good' : n ? 'sea' : 'grey') }, p.done ? 'Done' : n + ' / ' + N)),
+      h('div', { class: 'small muted' }, status),
+      h('div', { class: 'small muted' }, '60 questions on the five scales of the 16 personalities model, in English with Thai. She opened “Explain more” on ' + explained.length + ' question' + (explained.length === 1 ? '' : 's') + '.')));
+    const res = p.done && p.res ? p.res : n ? { code: sc.code, id: sc.id, full: sc.full, pct: sc.pct } : null;
+    if (res) {
+      const T = P.types[res.code];
+      box.append(h('div', { class: 'card stack pt-adm-res' },
+        h('div', { class: 'small muted' }, p.done ? 'Her result' : 'So far she leans towards (not final yet)'),
+        h('div', { class: 'row', style: { gap: '14px', alignItems: 'center' } }, h('div', { style: { fontSize: '2.6rem' } }, T.ic),
+          h('div', { style: { flex: 1 } }, h('div', { class: 'pt-adm-code' }, res.full), h('b', null, T.n), h('div', { class: 'small muted' }, T.th))),
+        h('div', { class: 'small' }, T.en),
+        h('div', { class: 'small muted' }, P.ident[res.id][0]),
+        ...P.dims.map((d) => {
+          const letter = d.k === 'identity' ? res.id : res.code['mind energy nature tactics'.split(' ').indexOf(d.k)], pa = res.pct[d.k], lead = letter === d.a ? pa : 100 - pa;
+          return h('div', { class: 'pt-adm-scl' },
+            h('div', { class: 'row between small' }, h('span', { class: letter === d.a ? 'b' : 'muted' }, P.poles[d.k][d.a][0] + ' ' + d.a), h('span', { class: 'muted tiny' }, DIMN[d.k]), h('span', { class: letter === d.b ? 'b' : 'muted' }, d.b + ' ' + P.poles[d.k][d.b][0])),
+            h('div', { class: 'pt-bar ' + d.k + (letter === d.b ? ' r' : '') }, h('i', { style: { width: lead + '%' } })),
+            h('div', { class: 'tiny muted', style: { textAlign: letter === d.b ? 'right' : 'left' } }, lead + '% ' + P.poles[d.k][letter][0] + ' · ' + sc.dims[d.k].n + ' answers'));
+        })));
+    }
+    // every question with her answer
+    ADM.ptDim = ADM.ptDim || 'all';
+    const chips = h('div', { class: 'row wrap' }, [['all', 'All 60'], ['mind', 'Mind E/I'], ['energy', 'Energy N/S'], ['nature', 'Nature T/F'], ['tactics', 'Tactics J/P'], ['identity', 'Identity A/T'], ['explained', '💡 Explained']].map(([k, t]) => h('button', { class: 'chip' + (ADM.ptDim === k ? ' on' : ''), onclick: () => { ADM.ptDim = k; ADM.render(); } }, t)));
+    const list = h('div', { class: 'card feed', style: { padding: '4px 12px' } });
+    P.qs.forEach((q, i) => {
+      if (ADM.ptDim === 'explained' ? !(p.x[q.id] > 0) : ADM.ptDim !== 'all' && q.dim !== ADM.ptDim) return;
+      const r = p.a[q.id], v = r ? r[0] : null, d = P.dims.find((x) => x.k === q.dim);
+      const toward = v == null || v === 0 ? null : v > 0 ? q.pole : q.pole === d.a ? d.b : d.a;
+      list.append(h('div', { class: 'ev pt-adm-q' + (r ? '' : ' none') },
+        h('span', { class: 'i' }, q.ic),
+        h('div', { style: { flex: 1, minWidth: 0 } },
+          h('div', null, h('b', null, 'Q' + (i + 1) + ' '), q.en),
+          h('div', { class: 'd th' }, q.th),
+          h('div', { class: 'row wrap', style: { gap: '6px', marginTop: '4px' } },
+            r ? h('span', { class: 'pill ' + (v > 0 ? 'good' : v < 0 ? 'pt-dg' : 'grey') }, ptLabel(v)) : h('span', { class: 'pill grey' }, 'not answered yet'),
+            toward ? h('span', { class: 'tiny muted' }, '→ ' + toward + ' (' + P.poles[q.dim][toward][0].toLowerCase() + ')') : null,
+            p.x[q.id] ? h('span', { class: 'tiny muted' }, '💡 explained ×' + p.x[q.id]) : null,
+            h('span', { class: 'tiny muted' }, DIMN[q.dim] + ': agree = ' + q.pole))),
+        h('span', { class: 'tm' }, r ? A.clock(r[1]) : '')));
+    });
+    if (!list.childNodes.length) list.append(h('div', { class: 'small muted', style: { padding: '12px 0' } }, 'Nothing here yet.'));
+    box.append(h('div', { class: 'stack', style: { gap: '8px' } }, h('b', null, 'Her answers'), chips, list));
+    if (n || p.done) box.append(h('button', { class: 'btn ghost block', onclick: async () => {
+      if (!confirm('Let her take the personality test again from question 1? Her answers now are kept in the archive on the server.')) return;
+      try { await A.api.resetPart(ADM.uid, { ptest: 1, label: 'the personality test' }); A.toast('Done — it starts again the next time she opens the map'); await ADM.refresh(true); } catch (e) { A.toast('Could not reset: ' + e.message); }
+    } }, '↺ Let her take the test again'));
+    return box;
   }
 
   // ---------------------------------------------------------------- progress

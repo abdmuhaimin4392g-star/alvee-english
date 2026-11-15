@@ -1,5 +1,5 @@
 
-/* ================================================================ THE KRAKEN (art from Operation Crab) ================================================================
+/* ================================================================ THE KRAKEN ================================================================
    Now and then, while she is on the map (never during a lesson), the Kraken rises under her boat.
    She fires the cannons by tapping the big button. Every few seconds it bites the hull.
    Win: gold, pearls, sometimes a key. Lose: the hull is torn. If the hull breaks, the boat sinks and
@@ -7,12 +7,12 @@
 const KR={on:false,phase:'',hp:0,max:0,t0:0,dur:20000,cool:0,bite:0,armT:0,tick:0,sink0:0,art:null,ui:null,fire:null,ov:null};
 const krCtl=()=>(AE.voyage&&AE.voyage.ctl())||{};
 function krCan(){const st=AE.state,s=AE.voyage.st(st);if(!m3Here()||AE.session||document.hidden||!M3_OK()||!M3.boats.al)return false;
-  if(document.querySelector('.sheet,#trv,.pop-note'))return false;if(krCtl().krakenOff)return false;
+  if(document.querySelector('.sheet,#trv,.pop-note,.pt-ov'))return false;if(krCtl().krakenOff)return false;
   if(Object.keys(st.done||{}).length<2)return false;const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}
   if(s.kr.n>=3)return false;if(Date.now()-(s.kr.last||0)<75*60e3)return false;return true}
 function krArm(){clearTimeout(KR.armT);if(KR.on)return;const s=AE.voyage.st(),c=krCtl(),forced=!!(c.kraken&&c.kraken>(s.kr.seen||0));
   KR.armT=setTimeout(()=>{if(!m3Here()||KR.on)return;
-    if(forced){if(AE.session||document.querySelector('.sheet,#trv')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
+    if(forced){if(AE.session||document.querySelector('.sheet,#trv,.pt-ov')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
     if(krCan()&&Math.random()<.5)krStart();else krArm()},forced?5000:40000+Math.random()*110000)}
 function krBoom(hit){const a=trAC();if(!a)return;try{const t=a.currentTime,n=a.createBufferSource(),len=Math.floor(a.sampleRate*.45),b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);
   n.buffer=b;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=hit?900:1500;const g=a.createGain();g.gain.value=.55;n.connect(lp);lp.connect(g);g.connect(a.destination);n.start(t);trTone(75,0,.32,'sine',.3,38)}catch(e){}}

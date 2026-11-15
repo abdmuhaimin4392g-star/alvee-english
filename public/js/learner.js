@@ -290,7 +290,7 @@
   function nav(cur) {
     const items = [['home', '🏝️', 'Home'], ['journey', '🧭', 'Voyage'], ['talks', '💬', 'Talk'], ['treasure', '💰', 'Treasure'], ['me', '🐢', 'Me']];
     const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words') && v === 'me');
-    return h('nav', { class: 'nav crab-nav', 'aria-label': 'Main menu' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', 'data-v': v, 'aria-current': on(v) ? 'page' : null, onclick: () => { try { A.sfx.play('tap'); } catch (e) { /* quiet */ } A.go(v); } }, h('i', { class: 'e' }, ic), h('span', { class: 'lb' }, t)))));
+    return h('nav', { class: 'nav main-nav', 'aria-label': 'Main menu' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', 'data-v': v, 'aria-current': on(v) ? 'page' : null, onclick: () => { try { A.sfx.play('tap'); } catch (e) { /* quiet */ } A.go(v); } }, h('i', { class: 'e' }, ic), h('span', { class: 'lb' }, t)))));
   }
 
   const VIEWS = {};
@@ -427,7 +427,7 @@
   VIEWS.journey = () => {
     const st = A.state, cfg = A.user.cfg || {};
     const root = h('div', { class: 'screen' });
-    root.append(h('div', null, h('h1', null, 'Your 6-month journey'), h('p', { class: 'muted' }, 'Step by step, six months to real English')));
+    root.append(h('div', null, h('h1', null, 'Your English voyage'), h('p', { class: 'muted' }, 'Island by island, all the way to real English')));
     const nextId = (A.nextNode(st) || {}).id;
     let firstOpenEl = null;
     C.months.forEach((m) => {

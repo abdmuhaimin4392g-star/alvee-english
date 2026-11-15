@@ -1,5 +1,5 @@
 
-/* ================================================================ THE CHEST OPENING (from Operation Crab) ================================================================ */
+/* ================================================================ THE CHEST OPENING ================================================================ */
 const TRV={on:false,tm:[]};let AC=null;
 const trRgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 const TR_CHG=[600,800,1050,1400,1900];
@@ -44,4 +44,4 @@ function trReveal(roll,opt){opt=opt||{};if(!roll||!roll.item)return;trCloseNow()
   const close=()=>{trCloseNow();if(opt.done)try{opt.done()}catch(e){}};
   o.addEventListener('click',e=>{const b=e.target.closest('[data-tr]');if(b){if(b.dataset.tr==='book'){close();AE.go('treasure','book:'+it[0])}else close();return}
     if(+o.dataset.st>=4)return;TRV.tm.forEach(clearTimeout);TRV.tm=[];st(3);trAudioOpen(Math.min(ri,2));TRV.tm.push(setTimeout(()=>st(4),380))})}
-AE.crab.reveal=trReveal;
+AE.map3d.reveal=trReveal;

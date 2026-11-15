@@ -328,6 +328,8 @@ async function api(req, res, route, query) {
     let removed = 0;
     for (const id of (Array.isArray(b.done) ? b.done : []).slice(0, 500)) if (st.done && st.done[id]) { delete st.done[id]; removed++; }
     for (const id of (Array.isArray(b.items) ? b.items : []).slice(0, 5000)) if (st.srs && st.srs[id]) delete st.srs[id];
+    // the personality test starts again (a new round: the phone's own copy of the old answers is not used); the prize is not given twice
+    if (b.ptest && st.ptest) { removed += Object.keys(st.ptest.a || {}).length; st.ptest = { gen: Date.now(), a: {}, x: {}, prize: st.ptest.prize }; }
     st.rev = (st.rev || 0) + 1000; st.resetAt = Date.now();
     atomicWrite(stateFile(u.id), JSON.stringify(st));
     appendEvents(u.id, [{ t: Date.now(), type: 'admin_reset', what: str(b.label, 120) || 'lessons', n: removed }]);

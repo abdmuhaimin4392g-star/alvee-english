@@ -1,4 +1,4 @@
-/* scenes.js — twenty painted scenes of Maldives and Thailand, drawn in code (from Operation Crab) */
+/* scenes.js — twenty painted scenes of Maldives and Thailand, drawn in code */
 (function(){
 const ART={};
 (function(){

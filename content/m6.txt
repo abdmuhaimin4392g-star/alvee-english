@@ -320,9 +320,9 @@ Thank you for telling us. = ขอบคุณที่แจ้งให้เ�
 Please call me if you need anything. = ถ้าต้องการอะไร โทรหาฉันได้เลยนะคะ
 
 # ------------------------------------------------------------------ UNIT 24
-@unit 24 | Graduation | จบหลักสูตร | 👑 | คุยเรื่องทั่วไปได้อย่างมั่นใจ
+@unit 24 | Graduation | จบการเดินทาง | 👑 | คุยเรื่องทั่วไปได้อย่างมั่นใจ
 
-@tip | สรุปทั้งหมดใน 6 เดือน
+@tip | สรุปทุกอย่างที่เรียนมาตลอดการเดินทาง
 tr: am / is / are | I am happy.
 tr: ทำเป็นประจำ | She works here.
 tr: กำลังทำ | I am working.
@@ -353,7 +353,7 @@ I can't wait to see you! = อยากเจอคุณจะแย่แล�
 
 @lesson 24.3 | My English journey | เส้นทางภาษาอังกฤษของฉัน
 new: anymore word
-Six months ago, I didn't speak much English. = หกเดือนที่แล้ว ฉันพูดภาษาอังกฤษได้ไม่มาก
+When I started, I didn't speak much English. = ตอนเริ่มเรียน ฉันพูดภาษาอังกฤษได้ไม่มาก
 Now I can talk to guests every day. = ตอนนี้ฉันคุยกับแขกได้ทุกวัน
 I don't forget "am" anymore! = ฉันไม่ลืมคำว่า am อีกแล้ว!
 I learned a lot of new words. = ฉันได้เรียนคำศัพท์ใหม่มากมาย
@@ -376,9 +376,9 @@ B: Guess what? I finished my English course today! = รู้อะไรไห
 x: Guess what? I finish my English course yesterday!
 x: Guess what? I finished my English course tomorrow!
 A: Congratulations! I'm so proud of you! = ยินดีด้วย! ภูมิใจในตัวเธอมาก!
-B: Thank you! I studied every day for six months. = ขอบคุณค่ะ! ฉันเรียนทุกวันตลอดหกเดือน
-x: Thank you! I study every day for six months ago.
-x: Thank you! I studyed every day for six months.
+B: Thank you! I studied a little every day. = ขอบคุณค่ะ! ฉันเรียนวันละนิดทุกวัน
+x: Thank you! I study a little every day yesterday.
+x: Thank you! I studyed a little every day.
 A: Your English is really good now. = ตอนนี้ภาษาอังกฤษของเธอเก่งมากจริง ๆ
 B: I can talk to guests, and I never forget "am"! = ฉันคุยกับแขกได้ และฉันไม่เคยลืม am เลย!
 x: I can talks to guests, and I never forget "am"!
@@ -409,7 +409,7 @@ x: You're welcome. If you need anything, just calls me.
 @lesson 24.5 | I can speak English! | ฉันพูดภาษาอังกฤษได้!
 new:
 I can speak English now. = ตอนนี้ฉันพูดภาษาอังกฤษได้แล้ว
-Six months ago I was a new learner. = เมื่อหกเดือนที่แล้วฉันยังเป็นมือใหม่
+At the beginning, I was a new learner. = ตอนแรก ฉันยังเป็นมือใหม่
 I studied a little every day. = ฉันเรียนวันละนิดทุกวัน
 I made mistakes, but I learned. = ฉันทำผิดบ้าง แต่ฉันก็ได้เรียนรู้
 I am proud of myself. = ฉันภูมิใจในตัวเอง
@@ -417,7 +417,7 @@ I will keep learning. = ฉันจะเรียนต่อไปเรื�
 Thank you for helping me. = ขอบคุณที่ช่วยฉันนะ
 I love you. See you soon! = รักนะ แล้วเจอกันเร็ว ๆ นี้!
 
-@talk sixmonths | Six months of English | หกเดือนกับภาษาอังกฤษ | love | {bf} | 💙
+@talk acrossthesea | Across the sea in English | ข้ามทะเลด้วยภาษาอังกฤษ | love | {bf} | 💙
 A: How do you feel about your English now? = ตอนนี้รู้สึกยังไงกับภาษาอังกฤษของตัวเอง
 B: I feel good. I can talk to guests now. = รู้สึกดีค่ะ ตอนนี้ฉันคุยกับแขกได้แล้ว
 x: I feel good. I can talks to guests now.

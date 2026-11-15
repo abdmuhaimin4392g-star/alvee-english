@@ -15,7 +15,7 @@ function spawnHtml(sp,x,y,reach,id){const k=sp.kind,g=sp.gift,gk=g&&g.kind;const
   if(k==='pearl'||k==='pearls'||gk==='pearls')return `<button class="shell eco oy${far}" ${pos} aria-label="Open an oyster">${ECO_OY_SVG}</button>`;
   if(k==='bottle')return `<button class="shell bottle${far}" ${pos} aria-label="A message in a bottle">${AE.voyage.bottleSVG()}</button>`;
   return `<button class="shell${far}" ${pos} aria-label="Collect a shell">🐚</button>`}
-function crabView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cur=V.curIndex(st),R=V.route(),N=RT.N;
+function seaView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cur=V.curIndex(st),R=V.route(),N=RT.N;
   const root=h('div',{class:'screen voyage3'});root.append(V.hud(st));
   const ci=RT.main[cur],sea=V.SEAS[ci.isl.sea];
   const mus=h('button',{class:'v3-ib'+(AE.music&&AE.music.allowed()?' on':''),'aria-label':'Music',onclick:()=>{const on=AE.music.toggle();mus.classList.toggle('on',on);mus.textContent=on?'🎵':'🔇'}},AE.music&&AE.music.allowed()?'🎵':'🔇');
@@ -46,4 +46,4 @@ function crabView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cu
   requestAnimationFrame(()=>{const nav=document.querySelector('.nav');oc.style.bottom=(nav?nav.offsetHeight:64)+'px';m3Mount();mapCreature();hubSky();krArm()});
   AE.presence={screen:'voyage',title:'Chapter '+(cur+1)};
   return root}
-AE.crab={ok:()=>m3Gl(),view:crabView,M3,RT,look:m3LookAt,follow:m3Follow};
+AE.map3d={ok:()=>m3Gl(),view:seaView,M3,RT,look:m3LookAt,follow:m3Follow};

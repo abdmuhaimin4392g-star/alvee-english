@@ -1,10 +1,10 @@
-/* crab3d.js — the 3D voyage map from Operation Crab, carried over to Alvee English.
-   The sea, sky, weather, land, islands, palms, lighthouse, clouds, rain, boats, wakes and route ribbons are the
-   Operation Crab engine (three.js r128, self-hosted in vendor/). The route is Alvee's: from Thailand, south down
-   the eastern sea, across the far south, and north again to the Maldives. Built by tools/crab3d (see README). */
+/* map3d.js — the 3D voyage map of Alvee English.
+   The sea, sky, weather, land, islands, palms, lighthouse, clouds, rain, boats, wakes and route ribbons are drawn
+   with three.js r128 (self-hosted in vendor/). The route is Alvee's: from Thailand, south down the eastern sea,
+   across the far south, and north again to the Maldives. Built by tools/map3d (see README). */
 (function () {
 const AE = window.AE;
-/* ---- small stand-ins for the Operation Crab globals this engine expects ---- */
+/* ---- small stand-ins for the globals this engine expects ---- */
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const PERF = (() => { const lite = (navigator.deviceMemory && navigator.deviceMemory < 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4); return { lite: !!lite, pk: lite ? 0.6 : 1 }; })();
 const PREF = { calm: false };

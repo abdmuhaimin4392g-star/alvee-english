@@ -23,7 +23,7 @@
     { id: 'sl', en: 'Sri Lanka Coast', th: 'ชายฝั่งศรีลังกา', from: 16, to: 18, ter: 'jungle', col: ['#2EA59A', '#0E6460'], art: ['mv7', 'mv10'], flag: 'th',
       names: ['Tea Hills Bay', 'Spice Garden', 'Elephant Beach', 'Peacock Point', 'Cinnamon Cliffs', 'Stilt Fisher Bay', 'Leopard Rock', 'Gem Market', 'Lighthouse of Hope', 'Whale Watch Point', 'Surfer’s Bay', 'Coconut Hill', 'Lotus Pond', 'Sea Fort', 'Golden Sands', 'Rock Temple Cove', 'Cricket Green', 'Monsoon Bay', 'Mango Cliff', 'Sapphire Point', 'Kite Hill', 'Lagoon Gate'] },
     { id: 'nm', en: 'Northern Atolls', th: 'อะทอลล์ตอนเหนือ (มัลดีฟส์)', from: 19, to: 21, ter: 'atoll', col: ['#2FD0C6', '#0F8792'], art: ['mv3', 'mv5', 'mv9'], flag: 'mv',
-      names: ['Coral Gate', 'Lagoon Light', 'White Sand Isle', 'Manta Point', 'Reef Garden', 'Hammock Cay', 'Turtle Nest Island', 'Palm Shadow', 'Glass Water', 'Fish Market Isle', 'Shark Fin Reef', 'Pearl Lagoon', 'Sea Star Sandbank', 'Sun Deck Island', 'Dhoni Harbour', 'Seaplane Bay', 'Coconut Crab Isle', 'Lagoon Swing', 'Starlight Beach', 'Glowing Bay', 'Driftwood Isle', 'Sandbar Picnic'] },
+      names: ['Coral Gate', 'Lagoon Light', 'White Sand Isle', 'Manta Point', 'Reef Garden', 'Hammock Cay', 'Turtle Nest Island', 'Palm Shadow', 'Glass Water', 'Fish Market Isle', 'Shark Fin Reef', 'Pearl Lagoon', 'Sea Star Sandbank', 'Sun Deck Island', 'Dhoni Harbour', 'Seaplane Bay', 'Frangipani Isle', 'Lagoon Swing', 'Starlight Beach', 'Glowing Bay', 'Driftwood Isle', 'Sandbar Picnic'] },
     { id: 'south', en: 'Malé to Addu', th: 'จากมาเลถึงอัดดู', from: 22, to: 24, ter: 'atoll', col: ['#3DDCCB', '#0C97A0'], art: ['mv1', 'mv2', 'mv8'], flag: 'mv',
       names: ['Capital Harbour', 'Airport Island', 'Blue Mosque Point', 'Sunset Jetty', 'Surf Point', 'Garden Island', 'Fish Market Pier', 'Wedding Beach', 'Equator Line', 'Coral Stone Mosque', 'Mangrove Lake', 'Seven Wonders Reef', 'Kite Lagoon', 'Banana Reef', 'Swing Beach', 'Runway Island', 'Link Road', 'Freshwater Lake', 'Turtle Sands', 'Last Lighthouse', 'Almost Home', 'Harbour of Dreams'] },
   ];
@@ -65,7 +65,7 @@
   };
   V.shellSVG = (id, size) => { const s = V.shell(id) || V.SHELLS[0]; return `<svg class="shell-svg" viewBox="0 0 60 60" width="${size || 40}" height="${size || 40}" aria-hidden="true">${SHAPE[s[4]](s[5], s[6])}<ellipse cx="22" cy="18" rx="6" ry="3" fill="#fff" opacity=".35"/></svg>`; };
 
-  // ---------------------------------------------------------------- boats (all the Op Crab boats, unlocked with pearls)
+  // ---------------------------------------------------------------- boats (bought with gold in the shop)
   V.BOATS = [
     { id: 'sloop', n: 'Little Sloop', th: 'เรือใบลำน้อย', g: 0, isl: 0, w: 60, d: 'A small wooden sailing boat flying the Thai flag. Every great voyage starts with one.' },
     { id: 'hb', n: 'Harbour Houseboat', th: 'เรือบ้าน', g: 300, isl: 1, w: 58, d: 'A cosy floating home with glowing windows. Slow, snug and surprisingly sturdy.' },
@@ -157,6 +157,11 @@
 
   // ---------------------------------------------------------------- the route: one island per chapter (unit); each island holds its lessons,
   // the conversation and the timed test. Plus a side island after every third chapter.
+  // each chapter's voyage name; the English it teaches is shown under it (isl.focus)
+  V.CH_NAMES = ['Raise the Anchor', 'Meet the Crew', 'All Aboard!', 'Hello from the Harbour', 'The Island Market', 'Life on Deck',
+    'Message in a Bottle', 'Sunrise to Sunset', 'Full Sail Ahead', 'The Treasure Map', 'Learning the Ropes', 'Compass and Stars',
+    'Footprints in the Sand', 'The Captain’s Log', 'Tales from the Tide', 'Questions at the Port', 'Promises at Sea', 'The Next Port',
+    'If the Wind Changes', 'Manners of the Sea', 'The Curious Seagull', 'My Voyage Story', 'Master of the Harbour', 'Land Ho! Home at Last'];
   let ROUTE = null;
   V.resetRoute = () => { ROUTE = null; };
   V.route = () => {
@@ -167,7 +172,7 @@
         const nodes = A.nodes.filter((n) => n.u === u);
         if (!nodes.length) continue;
         const k = u - sea.from, unit = A.unit(u);
-        const isl = { kind: 'chap', u, nodes, node: nodes[nodes.length - 1], sea: si, k, name: sea.names[(k * 7) % sea.names.length], title: unit ? unit.en : '', gi: main.length };
+        const isl = { kind: 'chap', u, nodes, node: nodes[nodes.length - 1], sea: si, k, name: sea.names[(k * 7) % sea.names.length], title: V.CH_NAMES[u - 1] || (unit ? unit.en : ''), focus: unit ? unit.en : '', gi: main.length };
         main.push(isl); all.push(isl);
         if (main.length % 3 === 2) {
           const sid = 'side:' + sea.id + ':' + k;

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Builds public/js/crab3d.js from the Operation Crab 3D map blocks (in src/) plus pre.js and glue.js."""
+"""Builds public/js/map3d.js (the 3D voyage map) from the map engine blocks in src/ plus pre.js and the glue files,
+and public/map.css from the style files. The finished files must not name the other game: the build stops if they do."""
+import re
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, 'src')
-OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', '..', 'public', 'js', 'crab3d.js')
+OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', '..', 'public', 'js', 'map3d.js')
 
 def rd(n): return open(os.path.join(SRC, n)).read()
 def rep(t, a, b, n=1):
@@ -73,7 +75,7 @@ i = sail.find('/* where the two boats'); j = sail.find('/* ---- the 3D map: V wa
 sail = sail[:i] + sail[j:]
 sail = sail.replace("VIEW_NOW==='hub'", "m3Here()")
 
-# ---- no reef: the Hydra stays in Operation Crab
+# ---- no reef and no Hydra
 w2 = cut(w2, "  /* -- the Hydra's reef", "\n}", "")
 
 # ---- one boat
@@ -81,11 +83,21 @@ glue = ''.join(open(os.path.join(HERE, f)).read() for f in ['glue_main.js', 'trs
 parts = [open(os.path.join(HERE, 'pre.js')).read(), eng, beam, world, sky, sail, wmart, w2, skins, fleet, live, glue, '\n})();\n']
 out = '\n'.join(parts)
 out = out.replace("['maya','mari']", "['al']")
+# the engine's two player ids become the two countries (only Alvee's boat 'al' sails here)
+out = out.replace("'maya'", "'mv'").replace("'mari'", "'th'")
+# comments in the engine blocks that talk about the other game's players
+out = re.sub(r'a country flag as a small grid of coloured cells:[^.]*\.', 'a country flag as a small grid of coloured cells.', out)
 for bad in ['VIEW_NOW', 'MISSIONS', 'ISL_X', 'MAPY(', 'Hydra', 'hydra']:
     if bad in out: print('warning: still has', bad, out.count(bad))
 open(OUT, 'w').write(out)
 print('wrote', OUT, len(out))
 
-CSS = os.path.join(HERE, '..', '..', 'public', 'crab.css')
-open(CSS, 'w').write(''.join(open(os.path.join(HERE, f)).read() + '\n' for f in ['crab_base.css', 'crab_extra.css', 'kraken.css', 'kraken_extra.css']))
+CSS = os.path.join(HERE, '..', '..', 'public', 'map.css')
+css = ''.join(open(os.path.join(HERE, f)).read() + '\n' for f in ['map_base.css', 'map_extra.css', 'kraken.css', 'kraken_extra.css'])
+open(CSS, 'w').write(css)
 print('wrote', CSS)
+
+# nothing from the other game may reach her phone
+for name, text in (('map3d.js', out), ('map.css', css)):
+    hits = sorted(set(m.group(0) for m in re.finditer(r'(?i)c[r]ab|o[p]eration c|\bm[a]ya\b|\bm[a]ri\b', text)))
+    if hits: raise SystemExit('stop: ' + name + ' still names ' + ', '.join(hits))

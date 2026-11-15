@@ -1,15 +1,18 @@
 
-/* ================================================================ ALVEE'S VOYAGE ON THE OPERATION CRAB MAP ================================================================ */
+/* ================================================================ ALVEE'S VOYAGE ON THE 3D MAP ================================================================ */
 const ECO_OY_SVG=`<svg viewBox="0 0 44 40" width="42" height="38" aria-hidden="true"><ellipse cx="22" cy="33" rx="18" ry="4.5" fill="rgba(255,255,255,.3)"/><path d="M22 4C11 4 3 14 3 24c0 5 4 9 9 9h20c5 0 9-4 9-9C41 14 33 4 22 4z" fill="#7d8aa6"/><path d="M22 6v26M14 8l-4 24M30 8l4 24M8 14l-1 17M36 14l1 17" stroke="#586685" stroke-width="1.2" opacity=".7" fill="none"/><path d="M10 14c3-5 8-8 12-8" stroke="#d3dcee" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".85"/><ellipse cx="22" cy="31.5" rx="9" ry="2.6" fill="#4b5876"/><path class="spk" d="M34 6l1.2 3 3 1.2-3 1.2L34 14.4l-1.2-3-3-1.2 3-1.2z" fill="#fff"/></svg>`;
 
-/* ---- the route, laid out once in map percent (x 0..100 across; y 0..100 is the Operation Crab frame, and the sea goes on south) ----
-   Like the Operation Crab map, the islands swing from one side of the sea to the other. The voyage leaves the Andaman coast
+/* ---- the route, laid out once in map percent (x 0..100 across; y 0..100 is the first map frame, and the sea goes on south) ----
+   The islands swing from one side of the sea to the other. The voyage leaves the Andaman coast
    below Thailand and sails south, island by island, until the Maldives: the last two seas are atolls, and the end is Addu.
    Distances are measured in the frame's own pixels (400 x 960). */
 const RT={ok:false};
 const PXX=4,PXY=9.6,SUB=10,YSTEP=9.4,Y0=45;
 const ZX=[68,26,70,30,72,25,64,33,69,28,73,31];
-function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.length;
+function rtBuild(){const R0=AE.voyage.route();
+  /* the route can be built again (her booster lessons change the lists): keep the layout, point it at the new islands */
+  if(RT.ok){if(RT.R!==R0){RT.R=R0;RT.main.forEach((m,i)=>{if(R0.main[i])m.isl=R0.main[i]});const sd=R0.all.filter(x=>x.kind==='side');RT.side.forEach((m,i)=>{if(sd[i])m.isl=sd[i]})}return RT}
+  const V=AE.voyage,R=R0,N=R.main.length;
   const main=R.main.map((isl,i)=>({isl,gi:i,x:i===N-1?50:ZX[i%ZX.length],y:Y0+i*YSTEP}));
   const side=[];R.all.forEach(isl=>{if(isl.kind!=='side')return;const a=main[isl.anchor.gi],b=main[Math.min(N-1,isl.anchor.gi+1)];side.push({isl,x:a.x>50?13:87,y:(a.y+b.y)/2,anchor:a.gi})});
   const seas=[];V.SEAS.forEach((sea,si)=>{const m=main.find(x=>x.isl.sea===si);if(!m)return;seas.push({si,n:sea.en,x:m.x>50?27:73,y:m.y-1.2})});
@@ -20,7 +23,7 @@ function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.len
   dense.push(keys[keys.length-1]);
   /* where the Maldives begin: the first island of the atoll seas */
   const mvAt=main.find(m=>V.SEAS[m.isl.sea].flag==='mv');
-  Object.assign(RT,{ok:true,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
+  Object.assign(RT,{ok:true,R,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
 /* p = progress in islands: -1 is the dock, 0 the first island, N-1 the last */
 const rtP=p=>{const d=RT.dense,f=Math.max(0,Math.min(d.length-1,(p+1)*SUB)),i=Math.floor(f),k=f-i,a=d[i],b=d[Math.min(d.length-1,i+1)];return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k]};
 const rtBoatP=()=>AE.voyage.boatP(AE.state);

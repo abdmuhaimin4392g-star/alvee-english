@@ -22,8 +22,12 @@ NODE_BIN="$(command -v node)"
 
 # 2. app files (code only — data lives in $DATA_DIR)
 mkdir -p "$APP_DIR" "$DATA_DIR"
-cp -r "$SRC/server" "$SRC/public" "$SRC/package.json" "$APP_DIR/"
-[ -d "$SRC/content" ] && cp -r "$SRC/content" "$SRC/tools" "$APP_DIR/" || true
+cp -r "$SRC/server" "$SRC/package.json" "$APP_DIR/"
+# fresh copies of the code folders, so files from older versions never linger
+for d in public tools content; do
+  [ -d "$SRC/$d" ] || continue
+  rm -rf "$APP_DIR/$d.new" && cp -r "$SRC/$d" "$APP_DIR/$d.new" && rm -rf "$APP_DIR/$d" && mv "$APP_DIR/$d.new" "$APP_DIR/$d"
+done
 # one-time data steps for this version (a full copy of her progress is kept in $DATA_DIR/archive first)
 if [ -f "$APP_DIR/server/migrate-v5.js" ]; then
   systemctl stop alvee-english 2>/dev/null || true

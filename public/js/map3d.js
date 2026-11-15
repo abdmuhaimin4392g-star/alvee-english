@@ -1,10 +1,10 @@
-/* crab3d.js — the 3D voyage map from Operation Crab, carried over to Alvee English.
-   The sea, sky, weather, land, islands, palms, lighthouse, clouds, rain, boats, wakes and route ribbons are the
-   Operation Crab engine (three.js r128, self-hosted in vendor/). The route is Alvee's: from Thailand, south down
-   the eastern sea, across the far south, and north again to the Maldives. Built by tools/crab3d (see README). */
+/* map3d.js — the 3D voyage map of Alvee English.
+   The sea, sky, weather, land, islands, palms, lighthouse, clouds, rain, boats, wakes and route ribbons are drawn
+   with three.js r128 (self-hosted in vendor/). The route is Alvee's: from Thailand, south down the eastern sea,
+   across the far south, and north again to the Maldives. Built by tools/map3d (see README). */
 (function () {
 const AE = window.AE;
-/* ---- small stand-ins for the Operation Crab globals this engine expects ---- */
+/* ---- small stand-ins for the globals this engine expects ---- */
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const PERF = (() => { const lite = (navigator.deviceMemory && navigator.deviceMemory < 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4); return { lite: !!lite, pk: lite ? 0.6 : 1 }; })();
 const PREF = { calm: false };
@@ -283,10 +283,10 @@ function palmGeo(b,x,y,z,h,lean,seed,col){const rnd=(i)=>{const s=Math.sin(seed*
     for(let i=0;i<n;i++){const t0=i/n,t1=(i+1)/n,w0=len*.17*Math.sin(Math.PI*Math.pow(Math.max(.02,t0),.55)),w1=len*.17*Math.sin(Math.PI*Math.pow(Math.max(.02,t1),.55)),c0=lerp3(gA,gB,t0),c1=lerp3(gA,gB,t1);
       b.quad([line[i][0]+px*w0,line[i][1],line[i][2]+pz*w0],[line[i+1][0]+px*w1,line[i+1][1],line[i+1][2]+pz*w1],[line[i+1][0]-px*w1,line[i+1][1],line[i+1][2]-pz*w1],[line[i][0]-px*w0,line[i][1],line[i][2]-pz*w0],c0,{n:[0,1,0],up:1,cols:[c0,c1,c1,c0],or:[x,z],sws:[1,1,1,1]})}}
   b.box(top[0]-.18,top[1]-.5,top[2],.36,.36,.36,rgb('#5b3a1f'),{or:[x,z],sw:.9})}
-/* a country flag as a small grid of coloured cells: Maldives for Maya, Thailand for Mari.
+/* a country flag as a small grid of coloured cells.
    o = where it is hoisted, dir = which way it flies, swk = how much the wind moves the free end */
 function flagGeo(b,w,o,dir,len,hgt,swk,ph){
-  const mal=w==='maya',NC=12,NR=mal?8:6,cl=len/NC,ch=hgt/NR,red=rgb(mal?'#d21034':'#a51931'),grn=rgb('#007e3a'),wht=rgb('#f4f5f8'),blu=rgb('#2c3590');
+  const mal=w==='mv',NC=12,NR=mal?8:6,cl=len/NC,ch=hgt/NR,red=rgb(mal?'#d21034':'#a51931'),grn=rgb('#007e3a'),wht=rgb('#f4f5f8'),blu=rgb('#2c3590');
   const cres={'2,4':1,'2,5':1,'2,6':1,'3,3':1,'3,4':1,'4,3':1,'4,4':1,'5,4':1,'5,5':1,'5,6':1};
   const colAt=(r,c)=>mal?((r>=2&&r<=5&&c>=2&&c<=9)?(cres[r+','+c]?wht:grn):red):[red,wht,blu,blu,wht,red][r];
   const dl=Math.hypot(dir[0],dir[2])||1,dx=dir[0]/dl,dz=dir[2]/dl,nx=dz,nz=-dx;
@@ -386,7 +386,7 @@ function m3Build(){
     m.frustumCulled=false;m.renderOrder=-2;m.visible=false;m.userData.N=N;sc.add(m);return m};
   M3.rib={done:ribbon('#1fe0cf',.9,.8,RT.dn+2),ahead:ribbon('#ff5f7e',.9,.42,RT.dn+2),gap:ribbon('#ffbf47',1.3,.85,40)};
   /* ===== boats ===== */
-  const boat=(w)=>{const b=GB(),cs=BOATCOL[w],c1=rgb(cs[0]),parch=rgb('#f6e8c0'),parch2=rgb('#e3cc94'),wood=rgb('#6a3f1e'),woodD=rgb('#4a2a12'),woodDD=rgb('#2e1a0c'),woodL=rgb('#a9723a'),pl=rgb('#7a4a24'),dark=rgb('#3a2210'),gold=rgb('#e0b04a'),glow=[1,.84,.48],sg=w==='maya'?-1:1;
+  const boat=(w)=>{const b=GB(),cs=BOATCOL[w],c1=rgb(cs[0]),parch=rgb('#f6e8c0'),parch2=rgb('#e3cc94'),wood=rgb('#6a3f1e'),woodD=rgb('#4a2a12'),woodDD=rgb('#2e1a0c'),woodL=rgb('#a9723a'),pl=rgb('#7a4a24'),dark=rgb('#3a2210'),gold=rgb('#e0b04a'),glow=[1,.84,.48],sg=w==='mv'?-1:1;
     /* hull: stacked planked layers, narrow keel up to a wide gold-railed deck */
     const F=[[0,-4.2],[.8,-3.3],[1.25,-2],[1.45,-.4],[1.5,1],[1.45,2.4],[1.2,3],[-1.2,3],[-1.45,2.4],[-1.5,1],[-1.45,-.4],[-1.25,-2],[-.8,-3.3]],cen=[0,-.4];
     const R=(kx,kz)=>F.map(p=>[p[0]*kx,-.4+(p[1]+.4)*kz]);
@@ -412,11 +412,11 @@ function m3Build(){
     /* jib */
     b.tri([0,2.15,-5.05],[0,6.6,-.62],[0,2,-1.9],parch2,{flat:1});b.tri([0,2.15,-5.05],[0,3.3,-3.9],[0,2.6,-3.0],c1,{flat:1});
     /* the sailor's country flag, high on the mast, flying out to the side so it faces the camera */
-    flagGeo(b,w,[0,7.05,-.5],[sg*.5,0,.87],1.62,1.08,.34,w==='maya'?0:1.7);
+    flagGeo(b,w,[0,7.05,-.5],[sg*.5,0,.87],1.62,1.08,.34,w==='mv'?0:1.7);
     return b.done(T)};
   ['al'].forEach(w=>{const un=Object.assign({},U,{uGh:{value:0}}),m=new T.Mesh(boat(w),worldMat(un));
     m.frustumCulled=false;const wk=m3WakeMake(T,U);m.add(wk.arms);m.add(wk.trail);
-    sc.add(m);M3.boats[w]={mesh:m,wake:wk.arms,trail:wk.trail,wm:wk.mats,un,cx:50,cy:95,tx:50,ty:95,px:50,py:95,lean:0,ghost:true,ph:w==='maya'?0:2.1,init:false}});
+    sc.add(m);M3.boats[w]={mesh:m,wake:wk.arms,trail:wk.trail,wm:wk.mats,un,cx:50,cy:95,tx:50,ty:95,px:50,py:95,lean:0,ghost:true,ph:w==='mv'?0:2.1,init:false}});
   /* ===== the shore map: shallows and foam lines around every island, drawn once and read by the sea shader ===== */
   {const xs=[],zs=[];ISL.forEach(a=>{xs.push(a[0]-a[2]*3,a[0]+a[2]*3);zs.push(a[1]-a[3]*3,a[1]+a[3]*3)});
     const x0=Math.min(...xs)-4,x1=Math.max(...xs)+4,z0=Math.min(...zs)-4,z1=Math.max(...zs)+4,W=x1-x0,Hh=z1-z0,cw=512,chh=Math.max(256,Math.min(M3.maxTex,Math.round(cw*Hh/W)));
@@ -543,7 +543,7 @@ function hubSky(){if(!m3Here())return;const oc=$('#oc');if(!oc)return;const W=wo
    at its own random speed (it speeds up and slows down by itself), and leaves a V wake, ripples and bubbles.
    An offline boat sits still with no wake. Progress positions are never touched: sailing is only an offset. */
 const SAIL={last:0,tagAt:0,t2:0,pair:null,pairAt:0};
-const sailO=w=>SAIL[w]||(SAIL[w]={k:0,kt:0,nx:0,amp:0,ph:w==='maya'?.7:3.1,ox:0,oy:0,bx:0,vx:0,vy:0,yaw:0,on:false,was:false,burst:0,acc:0,racc:0});
+const sailO=w=>SAIL[w]||(SAIL[w]={k:0,kt:0,nx:0,amp:0,ph:w==='mv'?.7:3.1,ox:0,oy:0,bx:0,vx:0,vy:0,yaw:0,on:false,was:false,burst:0,acc:0,racc:0});
 const sailOn=w=>!!(S.me&&(w===S.me||(typeof onlineNow==='function'&&onlineNow())));
 function sailStep(){const now=performance.now();let dt=(now-SAIL.last)/1000;if(dt<.004)return;SAIL.last=now;dt=Math.min(.1,dt);
   const calm=m3Calm(),t=now/1000;
@@ -556,7 +556,7 @@ function sailStep(){const now=performance.now();let dt=(now-SAIL.last)/1000;if(d
     if(calm){s.ox=s.oy=s.vx=s.vy=s.yaw=0;return}
     if(on)s.amp+=(1-s.amp)*(1-Math.exp(-dt*.5));
     s.ph+=dt*s.k*.275*(typeof ecoSpd==='function'?ecoSpd(w):1);
-    const bias=w==='maya'?-2.6:2.6,sd=w==='maya'?0:1.7,
+    const bias=w==='mv'?-2.6:2.6,sd=w==='mv'?0:1.7,
       ox=s.amp*(bias+1.8*Math.sin(s.ph*.9+sd)+.6*Math.sin(s.ph*2.3+.6)),oy=s.amp*(.9*Math.sin(s.ph*.7+1.1)+.45*Math.sin(s.ph*1.9+2.2)),
       kv=1-Math.exp(-dt*6);
     s.bx=s.amp*bias;s.vx+=((ox-s.ox)/dt-s.vx)*kv;s.vy+=((oy-s.oy)/dt-s.vy)*kv;s.ox=ox;s.oy=oy;
@@ -853,7 +853,7 @@ function sk3Mast(b,x,y,z,h,col,yardY,yardW){b.box(x,y,z,.3,h,.3,col,{});if(yardY
 function sk3Side(b,H,kx,y,h,z0,z1,step,col,o){for(let z=z0;z<=z1-step*.5;z+=step){const zc=z+step/2,x=sk3Hw(H,zc)*kx;[-1,1].forEach(s=>b.box(s*x,y,zc,.08,h,step*.96,col,o))}}
 
 /* ---- 1. Harbour Houseboat: a blunt teal barge with a two-storey wooden cabin, a red roof and a chimney ---- */
-SK3.mk.hb=(b,w)=>{const sg=w==='maya'?-1:1,tealD=rgb('#1b6479'),teal=rgb('#2e9bb0'),teal2=rgb('#46b6c6'),or=rgb('#eca43b'),deck=rgb('#d8b47e'),cream=rgb('#f3ddb0'),cream2=rgb('#e9ce98'),roof=rgb('#d9622f'),roofD=rgb('#a8421e'),wood=rgb('#8a5530'),green=rgb('#3f9a52'),dark=rgb('#3a2210'),glow=[1,.84,.48],brick=rgb('#9a5a30');
+SK3.mk.hb=(b,w)=>{const sg=w==='mv'?-1:1,tealD=rgb('#1b6479'),teal=rgb('#2e9bb0'),teal2=rgb('#46b6c6'),or=rgb('#eca43b'),deck=rgb('#d8b47e'),cream=rgb('#f3ddb0'),cream2=rgb('#e9ce98'),roof=rgb('#d9622f'),roofD=rgb('#a8421e'),wood=rgb('#8a5530'),green=rgb('#3f9a52'),dark=rgb('#3a2210'),glow=[1,.84,.48],brick=rgb('#9a5a30');
   const H=[[0,-3.5],[.9,-3.4],[1.4,-2.7],[1.62,-1.2],[1.68,1],[1.62,2.7],[1.38,3.3]],F=sk3Ring(H),cen=[0,-.1];
   sk3Loft(b,F,cen,[{y:-.9,kx:.62,kz:.82},{y:-.3,kx:.9,kz:.94},{y:.45,kx:1,kz:1},{y:.82,kx:1.03,kz:1.015},{y:.98,kx:1.03,kz:1.015}],[tealD,teal,teal2,or],deck);
   [-1,1].forEach(s=>[-1.6,.3,2.2].forEach(z=>b.box(s*1.72,.2,z,.14,.34,.4,rgb('#2a1a0c'),{})));
@@ -864,10 +864,10 @@ SK3.mk.hb=(b,w)=>{const sg=w==='maya'?-1:1,tealD=rgb('#1b6479'),teal=rgb('#2e9bb
   b.box(.8,.98,-1.9,.55,.5,.55,green,{});b.box(-.75,.98,-2.45,.46,.44,.46,green,{});b.cyl(-.85,.98,-1.55,.3,.3,.5,8,wood,{cap:1,top:rgb('#5a3a22')});
   [-1,1].forEach(s=>{for(let z=-3;z<=-.7;z+=.77)b.box(s*1.55,.98,z,.07,.46,.07,or,{});b.box(s*1.55,1.42,-1.85,.07,.07,2.4,or,{})});
   b.box(0,.98,-3.05,.1,1.2,.1,dark,{});b.box(0,2.1,-3.05,.3,.3,.3,glow,{glow:1});
-  b.box(0,3.92,2.4,.1,1.8,.1,dark,{});flagGeo(b,w,[0,4.85,2.4],[sg*.5,0,.87],1.25,.84,.34,w==='maya'?0:1.7)};
+  b.box(0,3.92,2.4,.1,1.8,.1,dark,{});flagGeo(b,w,[0,4.85,2.4],[sg*.5,0,.87],1.25,.84,.34,w==='mv'?0:1.7)};
 
 /* ---- 2. Toy Corsair: a chubby cartoon pirate ship, two masts, striped sails, black flag ---- */
-SK3.mk.toy=(b,w)=>{const sg=w==='maya'?-1:1,brown=rgb('#8b3d1f'),blk=rgb('#2a1d16'),cream=rgb('#f2dfb8'),rim=rgb('#c4552a'),deck=rgb('#cb9156'),dark=rgb('#3a2210'),gold=rgb('#f4c23d'),glow=[1,.84,.48],red=rgb('#e8573a'),yel=rgb('#f6c242');
+SK3.mk.toy=(b,w)=>{const sg=w==='mv'?-1:1,brown=rgb('#8b3d1f'),blk=rgb('#2a1d16'),cream=rgb('#f2dfb8'),rim=rgb('#c4552a'),deck=rgb('#cb9156'),dark=rgb('#3a2210'),gold=rgb('#f4c23d'),glow=[1,.84,.48],red=rgb('#e8573a'),yel=rgb('#f6c242');
   const H=[[0,-3.9],[.9,-3.5],[1.45,-2.3],[1.72,-.6],[1.75,1.4],[1.55,2.7],[1.05,3.2]],F=sk3Ring(H),cen=[0,-.3];
   sk3Loft(b,F,cen,[{y:-.95,kx:.55,kz:.8},{y:-.3,kx:.88,kz:.94},{y:.2,kx:1,kz:1},{y:.85,kx:1.03,kz:1.012},{y:1.08,kx:1.05,kz:1.02}],[brown,blk,cream,rim],deck);
   [-1,1].forEach(s=>[-1.8,-.7,.4,1.5].forEach(z=>b.box(s*1.77,.35,z,.1,.4,.4,gold,{glow:1})));
@@ -880,10 +880,10 @@ SK3.mk.toy=(b,w)=>{const sg=w==='maya'?-1:1,brown=rgb('#8b3d1f'),blk=rgb('#2a1d1
   /* the black flag with a skull, high on the main mast, and the sailor's own flag on the fore mast */
   {const x=0,y=7.12,z=-.3,L=1.3*sg,blk2=rgb('#15151a'),wh=rgb('#f4f4f4');b.quad([x,y,z],[x+L,y,z],[x+L,y+.85,z],[x,y+.85,z],blk2,{flat:1});
    b.box(x+L*.5,y+.32,z,.3,.3,.06,wh,{flat:1});b.quad([x+L*.18,y+.14,z+.02],[x+L*.82,y+.58,z+.02],[x+L*.82,y+.66,z+.02],[x+L*.18,y+.22,z+.02],wh,{flat:1});b.quad([x+L*.18,y+.58,z+.02],[x+L*.82,y+.14,z+.02],[x+L*.82,y+.22,z+.02],[x+L*.18,y+.66,z+.02],wh,{flat:1})}
-  flagGeo(b,w,[0,4.65,-2.3],[sg*.5,0,.87],1.3,.88,.34,w==='maya'?0:1.7)};
+  flagGeo(b,w,[0,4.65,-2.3],[sg*.5,0,.87],1.3,.88,.34,w==='mv'?0:1.7)};
 
 /* ---- 3. Striped-Sail Galleon: three masts, candy-striped sails, a tall carved stern ---- */
-SK3.mk.gal=(b,w)=>{const sg=w==='maya'?-1:1,woodD=rgb('#5d3a1c'),wood=rgb('#8a5a2b'),wood2=rgb('#9a6a35'),band=rgb('#4c5b6a'),gold=rgb('#d9a93f'),deck=rgb('#b78447'),dark=rgb('#2e1a0c'),glow=[1,.84,.48],red=rgb('#d9503f'),cream=rgb('#f6e6da'),tan=rgb('#c58a4a');
+SK3.mk.gal=(b,w)=>{const sg=w==='mv'?-1:1,woodD=rgb('#5d3a1c'),wood=rgb('#8a5a2b'),wood2=rgb('#9a6a35'),band=rgb('#4c5b6a'),gold=rgb('#d9a93f'),deck=rgb('#b78447'),dark=rgb('#2e1a0c'),glow=[1,.84,.48],red=rgb('#d9503f'),cream=rgb('#f6e6da'),tan=rgb('#c58a4a');
   const H=[[0,-4.2],[.85,-3.6],[1.4,-2.3],[1.68,-.5],[1.72,1.5],[1.55,3.0],[1.15,3.4]],F=sk3Ring(H),cen=[0,-.3];
   sk3Loft(b,F,cen,[{y:-1,kx:.52,kz:.8},{y:-.3,kx:.9,kz:.94},{y:.3,kx:1,kz:1},{y:.8,kx:1.03,kz:1.012},{y:1.15,kx:1.05,kz:1.02}],[woodD,wood,band,gold],deck);
   [-1,1].forEach(s=>[-1.5,-.5,.5,1.5].forEach(z=>b.box(s*1.72,.45,z,.1,.3,.4,dark,{})));
@@ -898,10 +898,10 @@ SK3.mk.gal=(b,w)=>{const sg=w==='maya'?-1:1,woodD=rgb('#5d3a1c'),wood=rgb('#8a5a
   sk3Sail(b,0,2.0,-2.7,3.1,2.9,2.3,.6,6,st);sk3Sail(b,0,4.4,-2.6,2.3,2.1,1.15,.45,4,st);
   sk3Sail(b,0,3.95,2.0,2.3,2.1,1.65,.4,4,st);
   b.tri([0,6.55,-2.3],[sg*1.1,6.35,-1.95],[0,6.15,-2.3],red,{flat:1});b.tri([0,6.95,2.3],[sg*1.0,6.75,2.62],[0,6.55,2.3],red,{flat:1});
-  flagGeo(b,w,[0,7.13,-.4],[sg*.5,0,.87],1.62,1.08,.34,w==='maya'?0:1.7)};
+  flagGeo(b,w,[0,7.13,-.4],[sg*.5,0,.87],1.62,1.08,.34,w==='mv'?0:1.7)};
 
 /* ---- 4. Modern Motor Yacht: white, low and fast, a long glass saloon and a radar arch ---- */
-SK3.mk.ym=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#34455f'),white=rgb('#f3f6fa'),white2=rgb('#e3e9f1'),rim=rgb('#c7d0db'),teak=rgb('#c79a62'),glass=rgb('#1b3550'),grey=rgb('#8f9bab'),pad=rgb('#d9d4c8');
+SK3.mk.ym=(b,w)=>{const sg=w==='mv'?-1:1,navy=rgb('#34455f'),white=rgb('#f3f6fa'),white2=rgb('#e3e9f1'),rim=rgb('#c7d0db'),teak=rgb('#c79a62'),glass=rgb('#1b3550'),grey=rgb('#8f9bab'),pad=rgb('#d9d4c8');
   const H=[[0,-4.7],[.5,-3.9],[.95,-2.5],[1.15,-.6],[1.22,1.2],[1.24,3.3]],F=sk3Ring(H),cen=[0,-.3];
   sk3Loft(b,F,cen,[{y:-.9,kx:.45,kz:.78},{y:-.05,kx:.92,kz:.96},{y:1.0,kx:1,kz:1},{y:1.14,kx:1.03,kz:1.01}],[navy,white,rim],teak);
   sk3Side(b,H,.99,.32,.42,-2.4,3.0,1.2,glass,{win:1,cw:.9,ch:.45});
@@ -912,10 +912,10 @@ SK3.mk.ym=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#34455f'),white=rgb('#f3f6f
   b.box(0,3.19,.7,.06,1.5,.06,grey,{});
   b.box(0,1.14,-2.2,1.3,.2,1.7,pad,{});b.box(0,1.14,-3.5,.9,.1,.5,white2,{});
   [-1,1].forEach(s=>{b.box(s*1.12,1.14,-1.0,.06,.4,.06,rim,{});b.box(s*1.12,1.14,2.9,.06,.4,.06,rim,{})});
-  b.box(0,1.14,3.0,.08,1.8,.08,grey,{});flagGeo(b,w,[0,2.28,3.0],[sg*.4,0,.9],1.0,.66,.34,w==='maya'?0:1.7)};
+  b.box(0,1.14,3.0,.08,1.8,.08,grey,{});flagGeo(b,w,[0,2.28,3.0],[sg*.4,0,.9],1.0,.66,.34,w==='mv'?0:1.7)};
 
 /* ---- 5. Grand Superyacht: a long dark hull, white tiers of glass, a radar mast ---- */
-SK3.mk.sy=(b,w)=>{const sg=w==='maya'?-1:1,dark=rgb('#1f2937'),white=rgb('#f1f4f8'),white2=rgb('#e2e8f0'),rim=rgb('#c8d0db'),teak=rgb('#bf9a68'),glass=rgb('#16283a'),grey=rgb('#8f9bab'),red=rgb('#d1313f');
+SK3.mk.sy=(b,w)=>{const sg=w==='mv'?-1:1,dark=rgb('#1f2937'),white=rgb('#f1f4f8'),white2=rgb('#e2e8f0'),rim=rgb('#c8d0db'),teak=rgb('#bf9a68'),glass=rgb('#16283a'),grey=rgb('#8f9bab'),red=rgb('#d1313f');
   const H=[[0,-5.8],[.5,-4.8],[1.0,-3.2],[1.28,-1.2],[1.4,1.5],[1.4,3.9]],F=sk3Ring(H),cen=[0,-.8];
   sk3Loft(b,F,cen,[{y:-1,kx:.5,kz:.8},{y:.15,kx:.94,kz:.97},{y:1.25,kx:1,kz:1},{y:1.4,kx:1.03,kz:1.01}],[dark,white,rim],teak);
   sk3Side(b,H,.985,.55,.34,-3.9,3.6,1.25,glass,{win:1,cw:1,ch:.34});
@@ -927,7 +927,7 @@ SK3.mk.sy=(b,w)=>{const sg=w==='maya'?-1:1,dark=rgb('#1f2937'),white=rgb('#f1f4f
   b.box(0,4.3,1.0,.12,1.7,.12,grey,{});b.box(0,5.55,1.0,1.2,.08,.14,grey,{});b.box(0,5.0,1.0,.7,.07,.07,grey,{});b.cyl(0,4.25,-.3,.3,.26,.32,8,white,{cap:1,top:white2});
   b.box(0,1.4,-3.0,1.4,.14,2.2,rgb('#d9d4c8'),{});b.cyl(0,1.4,-4.1,.5,.5,.1,10,red,{cap:1,top:rgb('#c63a47')});
   [-1,1].forEach(s=>{b.box(s*1.16,1.4,-2.0,.06,.4,.06,rim,{});b.box(s*1.3,1.4,3.5,.06,.4,.06,rim,{})});
-  b.box(0,1.4,3.8,.08,1.9,.08,grey,{});flagGeo(b,w,[0,2.58,3.8],[sg*.4,0,.9],1.1,.72,.34,w==='maya'?0:1.7)};
+  b.box(0,1.4,3.8,.08,1.9,.08,grey,{});flagGeo(b,w,[0,2.58,3.8],[sg*.4,0,.9],1.1,.72,.34,w==='mv'?0:1.7)};
 
 /* ---- plumbing: put the right model on the right boat ---- */
 function sk3Geo(id,w){const k=id+w;if(SK3.geo[k])return SK3.geo[k];try{if(!SK3.mk[id]||typeof M3==='undefined'||!M3.T)return null;const b=GB();SK3.mk[id](b,w);return SK3.geo[k]=b.done(M3.T)}catch(e){return null}}
@@ -938,7 +938,7 @@ function sk3Apply(w,b){if(!b||!b.mesh)return;const s=typeof skinOf==='function'?
   b.skid=id}
 function sk3All(){try{if(typeof M3!=='undefined'&&M3.boats)['al'].forEach(w=>sk3Apply(w,M3.boats[w]))}catch(e){}}
 /* ---- 6. Expedition Voyager: navy hull, a helipad on the bow, decks that step down to a teak stern ---- */
-SK3.mk.nv=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#16264a'),navy2=rgb('#22396b'),white=rgb('#f2f5f9'),white2=rgb('#e1e7ef'),rim=rgb('#c3ccd9'),teak=rgb('#c49a62'),glass=rgb('#13243a'),grey=rgb('#8f9bab'),pad=rgb('#2b6f86'),dark=rgb('#20252e'),pool=rgb('#2aa6c8');
+SK3.mk.nv=(b,w)=>{const sg=w==='mv'?-1:1,navy=rgb('#16264a'),navy2=rgb('#22396b'),white=rgb('#f2f5f9'),white2=rgb('#e1e7ef'),rim=rgb('#c3ccd9'),teak=rgb('#c49a62'),glass=rgb('#13243a'),grey=rgb('#8f9bab'),pad=rgb('#2b6f86'),dark=rgb('#20252e'),pool=rgb('#2aa6c8');
   const H=[[0,-6.6],[.55,-5.4],[1.1,-3.6],[1.5,-1.2],[1.62,1.6],[1.6,4.5]],F=sk3Ring(H),cen=[0,-.8];
   sk3Loft(b,F,cen,[{y:-1.1,kx:.5,kz:.82},{y:.1,kx:.94,kz:.97},{y:1.35,kx:1,kz:1},{y:1.5,kx:1.03,kz:1.01}],[navy,navy2,rim],teak);
   sk3Side(b,H,.985,.62,.32,-4.6,3.9,1.3,glass,{win:1,cw:1,ch:.32});
@@ -951,10 +951,10 @@ SK3.mk.nv=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#16264a'),navy2=rgb('#22396
   b.box(0,4.4,-.2,.12,1.7,.12,grey,{});b.box(0,5.5,-.2,1.2,.08,.14,grey,{});b.box(0,5.0,-.2,.7,.07,.07,grey,{});b.cyl(0,4.4,1.1,.3,.26,.34,8,white,{cap:1,top:white2});
   b.box(0,1.5,4.0,2.1,.1,1.5,teak,{});b.box(0,1.58,3.9,1.1,.05,.8,pool,{});
   [-1,1].forEach(s=>{b.box(s*1.0,1.5,2.9,.06,.4,.06,rim,{});b.box(s*1.0,1.5,4.6,.06,.4,.06,rim,{})});
-  b.box(0,1.5,4.6,.08,1.7,.08,grey,{});flagGeo(b,w,[0,3.0,4.6],[sg*.4,0,.9],1.1,.72,.34,w==='maya'?0:1.7)};
+  b.box(0,1.5,4.6,.08,1.7,.08,grey,{});flagGeo(b,w,[0,3.0,4.6],[sg*.4,0,.9],1.1,.72,.34,w==='mv'?0:1.7)};
 
 /* ---- 7. Sapphire Terrace: a deep blue hull under five white terraces that step up toward a radar mast ---- */
-SK3.mk.sap=(b,w)=>{const sg=w==='maya'?-1:1,blue=rgb('#17378a'),blue2=rgb('#2455b0'),white=rgb('#f5f8fc'),white2=rgb('#e3e9f2'),rim=rgb('#c9d1de'),teak=rgb('#c9a06a'),glass=rgb('#122438'),grey=rgb('#8f9bab'),pool=rgb('#35c4e8'),dark=rgb('#1c2330');
+SK3.mk.sap=(b,w)=>{const sg=w==='mv'?-1:1,blue=rgb('#17378a'),blue2=rgb('#2455b0'),white=rgb('#f5f8fc'),white2=rgb('#e3e9f2'),rim=rgb('#c9d1de'),teak=rgb('#c9a06a'),glass=rgb('#122438'),grey=rgb('#8f9bab'),pool=rgb('#35c4e8'),dark=rgb('#1c2330');
   const H=[[0,-7.6],[.6,-6.3],[1.2,-4.3],[1.65,-1.8],[1.85,1.4],[1.85,5.2]],F=sk3Ring(H),cen=[0,-1];
   sk3Loft(b,F,cen,[{y:-1.3,kx:.5,kz:.84},{y:.1,kx:.95,kz:.97},{y:1.6,kx:1,kz:1},{y:1.8,kx:1.03,kz:1.01}],[blue,blue2,rim],teak);
   sk3Side(b,H,.985,.7,.36,-5.2,4.6,1.4,glass,{win:1,cw:1,ch:.36});
@@ -964,10 +964,10 @@ SK3.mk.sap=(b,w)=>{const sg=w==='maya'?-1:1,blue=rgb('#17378a'),blue2=rgb('#2455
   b.box(0,5.25,1.1,.12,1.5,.12,grey,{});b.box(0,6.1,1.1,1.1,.08,.14,grey,{});b.cyl(-.5,5.2,.7,.28,.24,.3,8,white,{cap:1,top:white2});b.cyl(.5,5.2,.7,.28,.24,.3,8,white,{cap:1,top:white2});
   b.box(0,1.8,4.2,2.3,.06,1.8,pool,{});b.box(0,1.8,5.5,2.8,.08,1.2,teak,{});
   [-1,1].forEach(s=>{b.box(s*1.2,1.8,4.3,.06,.4,.06,rim,{});b.box(s*1.2,1.8,2.8,.06,.4,.06,rim,{})});
-  b.box(0,1.8,5.7,.08,1.9,.08,grey,{});flagGeo(b,w,[0,3.5,5.7],[sg*.4,0,.9],1.2,.78,.34,w==='maya'?0:1.7)};
+  b.box(0,1.8,5.7,.08,1.9,.08,grey,{});flagGeo(b,w,[0,3.5,5.7],[sg*.4,0,.9],1.2,.78,.34,w==='mv'?0:1.7)};
 
 /* ---- 8. Leviathan Liner: a white wall of decks with blue funnels and a rooftop water park ---- */
-SK3.mk.lev=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#16306b'),white=rgb('#f6f8fb'),white2=rgb('#e4eaf2'),rim=rgb('#cdd5e0'),glass=rgb('#14283d'),grey=rgb('#8f9bab'),blue=rgb('#2b7bd1'),orange=rgb('#f08a24'),pool=rgb('#35c4e8'),red=rgb('#d9442f'),purple=rgb('#8a3fd1'),yel=rgb('#f2c230'),teak=rgb('#c9a06a');
+SK3.mk.lev=(b,w)=>{const sg=w==='mv'?-1:1,navy=rgb('#16306b'),white=rgb('#f6f8fb'),white2=rgb('#e4eaf2'),rim=rgb('#cdd5e0'),glass=rgb('#14283d'),grey=rgb('#8f9bab'),blue=rgb('#2b7bd1'),orange=rgb('#f08a24'),pool=rgb('#35c4e8'),red=rgb('#d9442f'),purple=rgb('#8a3fd1'),yel=rgb('#f2c230'),teak=rgb('#c9a06a');
   const H=[[0,-9.4],[.8,-8.0],[1.7,-5.6],[2.2,-2.4],[2.35,1.0],[2.35,6.2],[2.1,8.6]],F=sk3Ring(H),cen=[0,-.4];
   sk3Loft(b,F,cen,[{y:-1.4,kx:.55,kz:.84},{y:-.2,kx:.95,kz:.97},{y:3.4,kx:1,kz:1},{y:3.6,kx:1.015,kz:1.005}],[navy,white,rim],white2);
   [.1,.85,1.6,2.35].forEach(y=>sk3Side(b,H,.99,y,.28,-7.0,7.8,1.15,glass,{win:1,cw:1,ch:.28}));
@@ -985,10 +985,10 @@ SK3.mk.lev=(b,w)=>{const sg=w==='maya'?-1:1,navy=rgb('#16306b'),white=rgb('#f6f8
   slide(.2,8.6,5.2,1.5,7.0,6.4,.5,blue);
   [-1,1].forEach(s=>{b.box(s*1.5,5.7,-2.0,.08,.4,3.0,rim,{});b.box(s*1.7,5.7,6.0,.06,.4,.06,rim,{})});
   b.box(0,6.5,-.2,.1,1.0,.1,grey,{});
-  b.box(0,3.6,8.4,.08,2.0,.08,grey,{});flagGeo(b,w,[0,5.0,8.4],[sg*.4,0,.9],1.3,.84,.34,w==='maya'?0:1.7)};
+  b.box(0,3.6,8.4,.08,2.0,.08,grey,{});flagGeo(b,w,[0,5.0,8.4],[sg*.4,0,.9],1.3,.84,.34,w==='mv'?0:1.7)};
 SK3.meta.nv={ks:.86,bow:-6.2,stern:4.8};SK3.meta.sap={ks:.8,bow:-7.2,stern:5.6};SK3.meta.lev={ks:.62,bow:-9.0,stern:8.6};
 
-const PLACES={mv:{k:'mv',n:'Maldives',city:'Malé',who:'maya',tz:'Indian/Maldives',lat:4.1755,lon:73.5093,ic:'🌴'},th:{k:'th',n:'Thailand',city:'Bangkok',who:'mari',tz:'Asia/Bangkok',lat:13.7563,lon:100.5018,ic:'🐘'}};
+const PLACES={mv:{k:'mv',n:'Maldives',city:'Malé',who:'mv',tz:'Indian/Maldives',lat:4.1755,lon:73.5093,ic:'🌴'},th:{k:'th',n:'Thailand',city:'Bangkok',who:'th',tz:'Asia/Bangkok',lat:13.7563,lon:100.5018,ic:'🐘'}};
 const GEO={now:()=>window.__now||Date.now()};
 const RAD=Math.PI/180,DAYMS=864e5,J1970=2440588,J2000=2451545,OBL=RAD*23.4397;
 const toDays=t=>t/DAYMS-0.5+J1970-J2000;
@@ -1028,17 +1028,20 @@ let WSNAP=null;function world(force){const t=GEO.now();if(!force&&WSNAP&&Math.ab
 
 
 
-/* ================================================================ ALVEE'S VOYAGE ON THE OPERATION CRAB MAP ================================================================ */
+/* ================================================================ ALVEE'S VOYAGE ON THE 3D MAP ================================================================ */
 const ECO_OY_SVG=`<svg viewBox="0 0 44 40" width="42" height="38" aria-hidden="true"><ellipse cx="22" cy="33" rx="18" ry="4.5" fill="rgba(255,255,255,.3)"/><path d="M22 4C11 4 3 14 3 24c0 5 4 9 9 9h20c5 0 9-4 9-9C41 14 33 4 22 4z" fill="#7d8aa6"/><path d="M22 6v26M14 8l-4 24M30 8l4 24M8 14l-1 17M36 14l1 17" stroke="#586685" stroke-width="1.2" opacity=".7" fill="none"/><path d="M10 14c3-5 8-8 12-8" stroke="#d3dcee" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".85"/><ellipse cx="22" cy="31.5" rx="9" ry="2.6" fill="#4b5876"/><path class="spk" d="M34 6l1.2 3 3 1.2-3 1.2L34 14.4l-1.2-3-3-1.2 3-1.2z" fill="#fff"/></svg>`;
 
-/* ---- the route, laid out once in map percent (x 0..100 across; y 0..100 is the Operation Crab frame, and the sea goes on south) ----
-   Like the Operation Crab map, the islands swing from one side of the sea to the other. The voyage leaves the Andaman coast
+/* ---- the route, laid out once in map percent (x 0..100 across; y 0..100 is the first map frame, and the sea goes on south) ----
+   The islands swing from one side of the sea to the other. The voyage leaves the Andaman coast
    below Thailand and sails south, island by island, until the Maldives: the last two seas are atolls, and the end is Addu.
    Distances are measured in the frame's own pixels (400 x 960). */
 const RT={ok:false};
 const PXX=4,PXY=9.6,SUB=10,YSTEP=9.4,Y0=45;
 const ZX=[68,26,70,30,72,25,64,33,69,28,73,31];
-function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.length;
+function rtBuild(){const R0=AE.voyage.route();
+  /* the route can be built again (her booster lessons change the lists): keep the layout, point it at the new islands */
+  if(RT.ok){if(RT.R!==R0){RT.R=R0;RT.main.forEach((m,i)=>{if(R0.main[i])m.isl=R0.main[i]});const sd=R0.all.filter(x=>x.kind==='side');RT.side.forEach((m,i)=>{if(sd[i])m.isl=sd[i]})}return RT}
+  const V=AE.voyage,R=R0,N=R.main.length;
   const main=R.main.map((isl,i)=>({isl,gi:i,x:i===N-1?50:ZX[i%ZX.length],y:Y0+i*YSTEP}));
   const side=[];R.all.forEach(isl=>{if(isl.kind!=='side')return;const a=main[isl.anchor.gi],b=main[Math.min(N-1,isl.anchor.gi+1)];side.push({isl,x:a.x>50?13:87,y:(a.y+b.y)/2,anchor:a.gi})});
   const seas=[];V.SEAS.forEach((sea,si)=>{const m=main.find(x=>x.isl.sea===si);if(!m)return;seas.push({si,n:sea.en,x:m.x>50?27:73,y:m.y-1.2})});
@@ -1049,7 +1052,7 @@ function rtBuild(){if(RT.ok)return RT;const V=AE.voyage,R=V.route(),N=R.main.len
   dense.push(keys[keys.length-1]);
   /* where the Maldives begin: the first island of the atoll seas */
   const mvAt=main.find(m=>V.SEAS[m.isl.sea].flag==='mv');
-  Object.assign(RT,{ok:true,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
+  Object.assign(RT,{ok:true,R,N,main,side,seas,dense,dn:dense.length,yEnd:main[N-1].y,ymax:main[N-1].y+18,mvY:mvAt?mvAt.y:main[N-1].y});M3.ymax=RT.ymax;return RT}
 /* p = progress in islands: -1 is the dock, 0 the first island, N-1 the last */
 const rtP=p=>{const d=RT.dense,f=Math.max(0,Math.min(d.length-1,(p+1)*SUB)),i=Math.floor(f),k=f-i,a=d[i],b=d[Math.min(d.length-1,i+1)];return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k]};
 const rtBoatP=()=>AE.voyage.boatP(AE.state);
@@ -1210,7 +1213,7 @@ function spawnHtml(sp,x,y,reach,id){const k=sp.kind,g=sp.gift,gk=g&&g.kind;const
   if(k==='pearl'||k==='pearls'||gk==='pearls')return `<button class="shell eco oy${far}" ${pos} aria-label="Open an oyster">${ECO_OY_SVG}</button>`;
   if(k==='bottle')return `<button class="shell bottle${far}" ${pos} aria-label="A message in a bottle">${AE.voyage.bottleSVG()}</button>`;
   return `<button class="shell${far}" ${pos} aria-label="Collect a shell">🐚</button>`}
-function crabView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cur=V.curIndex(st),R=V.route(),N=RT.N;
+function seaView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cur=V.curIndex(st),R=V.route(),N=RT.N;
   const root=h('div',{class:'screen voyage3'});root.append(V.hud(st));
   const ci=RT.main[cur],sea=V.SEAS[ci.isl.sea];
   const mus=h('button',{class:'v3-ib'+(AE.music&&AE.music.allowed()?' on':''),'aria-label':'Music',onclick:()=>{const on=AE.music.toggle();mus.classList.toggle('on',on);mus.textContent=on?'🎵':'🔇'}},AE.music&&AE.music.allowed()?'🎵':'🔇');
@@ -1241,9 +1244,9 @@ function crabView(st,arg){const V=AE.voyage,h=AE.h,s=V.st(st);rtBuild();const cu
   requestAnimationFrame(()=>{const nav=document.querySelector('.nav');oc.style.bottom=(nav?nav.offsetHeight:64)+'px';m3Mount();mapCreature();hubSky();krArm()});
   AE.presence={screen:'voyage',title:'Chapter '+(cur+1)};
   return root}
-AE.crab={ok:()=>m3Gl(),view:crabView,M3,RT,look:m3LookAt,follow:m3Follow};
+AE.map3d={ok:()=>m3Gl(),view:seaView,M3,RT,look:m3LookAt,follow:m3Follow};
 
-/* ================================================================ THE CHEST OPENING (from Operation Crab) ================================================================ */
+/* ================================================================ THE CHEST OPENING ================================================================ */
 const TRV={on:false,tm:[]};let AC=null;
 const trRgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 const TR_CHG=[600,800,1050,1400,1900];
@@ -1288,9 +1291,9 @@ function trReveal(roll,opt){opt=opt||{};if(!roll||!roll.item)return;trCloseNow()
   const close=()=>{trCloseNow();if(opt.done)try{opt.done()}catch(e){}};
   o.addEventListener('click',e=>{const b=e.target.closest('[data-tr]');if(b){if(b.dataset.tr==='book'){close();AE.go('treasure','book:'+it[0])}else close();return}
     if(+o.dataset.st>=4)return;TRV.tm.forEach(clearTimeout);TRV.tm=[];st(3);trAudioOpen(Math.min(ri,2));TRV.tm.push(setTimeout(()=>st(4),380))})}
-AE.crab.reveal=trReveal;
+AE.map3d.reveal=trReveal;
 
-/* ================================================================ THE KRAKEN (art from Operation Crab) ================================================================
+/* ================================================================ THE KRAKEN ================================================================
    Now and then, while she is on the map (never during a lesson), the Kraken rises under her boat.
    She fires the cannons by tapping the big button. Every few seconds it bites the hull.
    Win: gold, pearls, sometimes a key. Lose: the hull is torn. If the hull breaks, the boat sinks and
@@ -1298,12 +1301,12 @@ AE.crab.reveal=trReveal;
 const KR={on:false,phase:'',hp:0,max:0,t0:0,dur:20000,cool:0,bite:0,armT:0,tick:0,sink0:0,art:null,ui:null,fire:null,ov:null};
 const krCtl=()=>(AE.voyage&&AE.voyage.ctl())||{};
 function krCan(){const st=AE.state,s=AE.voyage.st(st);if(!m3Here()||AE.session||document.hidden||!M3_OK()||!M3.boats.al)return false;
-  if(document.querySelector('.sheet,#trv,.pop-note'))return false;if(krCtl().krakenOff)return false;
+  if(document.querySelector('.sheet,#trv,.pop-note,.pt-ov'))return false;if(krCtl().krakenOff)return false;
   if(Object.keys(st.done||{}).length<2)return false;const day=AE.dkey();if(s.kr.day!==day){s.kr.day=day;s.kr.n=0}
   if(s.kr.n>=3)return false;if(Date.now()-(s.kr.last||0)<75*60e3)return false;return true}
 function krArm(){clearTimeout(KR.armT);if(KR.on)return;const s=AE.voyage.st(),c=krCtl(),forced=!!(c.kraken&&c.kraken>(s.kr.seen||0));
   KR.armT=setTimeout(()=>{if(!m3Here()||KR.on)return;
-    if(forced){if(AE.session||document.querySelector('.sheet,#trv')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
+    if(forced){if(AE.session||document.querySelector('.sheet,#trv,.pt-ov')||!M3_OK()){krArm();return}s.kr.seen=c.kraken;krStart();return}
     if(krCan()&&Math.random()<.5)krStart();else krArm()},forced?5000:40000+Math.random()*110000)}
 function krBoom(hit){const a=trAC();if(!a)return;try{const t=a.currentTime,n=a.createBufferSource(),len=Math.floor(a.sampleRate*.45),b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);
   n.buffer=b;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=hit?900:1500;const g=a.createGain();g.gain.value=.55;n.connect(lp);lp.connect(g);g.connect(a.destination);n.start(t);trTone(75,0,.32,'sine',.3,38)}catch(e){}}

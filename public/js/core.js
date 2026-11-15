@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.4';
+  A.VERSION = '5.5';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -349,6 +349,7 @@
       let removed = 0;
       (part.done || []).forEach((id) => { if (st.done && st.done[id]) { delete st.done[id]; removed++; } });
       (part.items || []).forEach((id) => { if (st.srs) delete st.srs[id]; });
+      if (part.ptest && st.ptest) { removed += Object.keys(st.ptest.a || {}).length; st.ptest = { gen: Date.now(), a: {}, x: {}, prize: st.ptest.prize }; }
       st.rev = (st.rev || 0) + 1000; st.resetAt = Date.now();
       A.store.set(this.k('state.' + uid), st);
       this.append(uid, [{ t: Date.now(), type: 'admin_reset', what: part.label, n: removed }]);
@@ -471,6 +472,8 @@
       });
     });
     A.buildNodes(want);
+    // the voyage route holds the old node list: build it again (logging out and in again on the same phone)
+    if (A.voyage && A.voyage.resetRoute) A.voyage.resetRoute();
   };
   A.nodeById = (id) => A.nodes.find((n) => n.id === id);
   // progress that belongs to a node (used by the dashboard's reset)
@@ -700,7 +703,7 @@
     snap() {
       const app = document.getElementById('app'); if (!app) return '';
       const parts = [app.outerHTML];
-      document.querySelectorAll('body > .fb, body > .sheet, body > .veil, body > .toast').forEach((x) => parts.push(x.outerHTML));
+      document.querySelectorAll('body > .fb, body > .sheet, body > .veil, body > .toast, body > .pt-ov').forEach((x) => parts.push(x.outerHTML));
       return parts.join('').replace(/<script[\s\S]*?<\/script>/gi, '').slice(0, 400000);
     },
     async loop() {

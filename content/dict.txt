@@ -1352,7 +1352,7 @@ of course | phr | แน่นอน / ได้เลย | ออฟ-คอร�
 + Of course I can help you. = แน่นอนค่ะ ฉันช่วยคุณได้
 + Yes, of course! = ได้เลยค่ะ!
 course | n | หลักสูตร / คอร์ส | คอร์ส | 📚 | of course = แน่นอน
-+ This English course is six months. = คอร์สภาษาอังกฤษนี้ใช้เวลาหกเดือน
++ This English course is fun. = คอร์สภาษาอังกฤษนี้สนุกมาก
 + I like this course. = ฉันชอบคอร์สนี้
 fall | v:=,fell,= | ตก / ล้ม | ฟอล | 🤕 | fall down = หกล้ม
 + Be careful! Don't fall. = ระวังนะ! อย่าล้ม

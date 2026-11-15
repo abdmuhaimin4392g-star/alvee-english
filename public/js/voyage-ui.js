@@ -32,7 +32,7 @@
   }
   V.keySheet = keySheet;
   // ---------------------------------------------------------------- the map (2D: used when a phone cannot draw 3D, and on your dashboard)
-  VIEWS.journey = (arg) => (A.crab && A.crab.ok() ? A.crab.view(A.state, arg) : V.mapView(A.state, {}));
+  VIEWS.journey = (arg) => (A.map3d && A.map3d.ok() ? A.map3d.view(A.state, arg) : V.mapView(A.state, {}));
   V.mapView = (st, opts) => {
     const o = opts || {};
     const s = V.st(st), R = V.route(), cur = V.curIndex(st);
@@ -166,7 +166,7 @@
     content.append(h('div', { class: 'small muted' }, h('span', { class: 'flagc sm', html: flag(sea.flag) }), ' ' + sea.en));
     if (isl.kind === 'chap') {
       const c = V.chap(st, isl);
-      content.append(h('div', { class: 'row between' }, h('div', null, h('div', { class: 'small muted' }, 'Chapter ' + (isl.gi + 1) + ' of ' + V.route().main.length), h('h2', null, isl.name), h('div', null, h('b', null, isl.title))), h('div', { class: 'chap-ring', style: { '--p': (c.done / c.total) * 100 } }, h('b', null, c.done + '/' + c.total))));
+      content.append(h('div', { class: 'row between' }, h('div', null, h('div', { class: 'small muted' }, 'Chapter ' + (isl.gi + 1) + ' of ' + V.route().main.length), h('h2', null, isl.name), h('div', null, h('b', null, isl.title)), isl.focus ? h('div', { class: 'small muted' }, '📘 English: ' + isl.focus) : null), h('div', { class: 'chap-ring', style: { '--p': (c.done / c.total) * 100 } }, h('b', null, c.done + '/' + c.total))));
       const g = V.gate(st, isl);
       if (g && !g.ok) content.append(h('div', { class: 'gate' }, h('b', null, '⭐ Sea gate'), h('div', null, 'Collect ' + g.need + ' stars in the ' + g.sea.en + ' to sail into the ' + sea.en + '. You have ' + g.have + '.'), h('div', { class: 'gate-bar' }, h('i', { style: { width: Math.min(100, g.have / g.need * 100) + '%' } })), h('div', { class: 'small muted' }, 'Replay lessons and get 3 stars (90% or more).')));
       if (V.capped(st) && !c.all) content.append(h('div', { class: 'note' }, '⏳ You learned ' + V.newToday(st) + ' new lesson' + (V.newToday(st) > 1 ? 's' : '') + ' today. New ones open again tomorrow. Meanwhile: replay for stars, review, collect on the sea, or fight the Kraken!'));
@@ -255,7 +255,7 @@
   }
   V.treasureCard = treasureCard;
   function treasureReveal(roll, gift) {
-    if (A.crab && A.crab.reveal) { A.crab.reveal(roll, { gift: !!gift }); return; }
+    if (A.map3d && A.map3d.reveal) { A.map3d.reveal(roll, { gift: !!gift }); return; }
     A.sfx.play('done'); setTimeout(A.confetti, 100);
     A.sheet(h('div', { class: 'stack', style: { alignItems: 'center', textAlign: 'center', gap: '10px' } },
       h('div', { class: 'small muted' }, gift ? '🎁 A gift for you' : '✨ You found'),
@@ -269,7 +269,7 @@
     const box = h('div', { class: 'stack', style: { width: '100%', gap: '10px', alignItems: 'center' } });
     if (rw.locked) box.append(h('div', { class: 'card stack', style: { width: '100%', textAlign: 'center' } }, h('div', { class: 'chest-stage', html: ses.kind === 'bottle' ? V.bottleSVG() : V.chestSVG(ses.arg && (ses.arg.golden || ses.arg.sealed)) }), h('b', null, 'The lock stayed shut'), h('div', { class: 'small' }, 'Try again. The chest is still there' + (ses.arg && ses.arg.sealed ? ', and you kept your key.' : '.'))));
     if (rw.chest) {
-      if (!rw.shown && A.crab && A.crab.reveal) { rw.shown = 1; setTimeout(() => A.crab.reveal(rw.chest, { golden: !!rw.golden, sealed: !!rw.sealed }), 450); }
+      if (!rw.shown && A.map3d && A.map3d.reveal) { rw.shown = 1; setTimeout(() => A.map3d.reveal(rw.chest, { golden: !!rw.golden, sealed: !!rw.sealed }), 450); }
       box.append(h('div', { class: 'chest-stage open', html: V.chestSVG(!!(rw.golden || rw.sealed), true) }));
       box.append(treasureCard(rw.chest.item, rw.chest.isNew, true));
     }
