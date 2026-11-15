@@ -366,6 +366,7 @@
 
     root.append(A.topStrip());
     root.append(A.voyage.homeHero(st, { greet: gEn, streak: sk, lvl }));
+    if (A.cal) { try { root.append(A.cal.homeStrip(st)); } catch (e) { /* calendar is an extra */ } }
 
     // messages from you are switched off on her side for now (they come back in a later update)
 
@@ -667,22 +668,33 @@
   VIEWS.me = () => {
     const st = A.state;
     const xp = A.totalXP(st), lvl = A.level(xp), tl = A.title(lvl);
-    const days = Object.values(st.days).filter((d) => d.xp > 0).length;
     const n = Object.values(st.days).reduce((a, d) => a + (d.n || 0), 0), ok = Object.values(st.days).reduce((a, d) => a + (d.ok || 0), 0);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', { class: 'card stack', style: { alignItems: 'center', textAlign: 'center' } },
-      h('div', { style: { fontSize: '3rem' } }, tl[3]), h('h1', null, A.user.name), h('div', { class: 'muted' }, tl[1] + ' · Level ' + lvl),
-      h('div', { class: 'goal-bar', style: { width: '100%' } }, h('i', { style: { width: ((xp - A.levelXP(lvl)) / (A.levelXP(lvl + 1) - A.levelXP(lvl))) * 100 + '%' } })),
-      h('div', { class: 'small muted num' }, (A.levelXP(lvl + 1) - xp) + ' XP to level ' + (lvl + 1))));
+    {
+      const lo = A.levelXP(lvl), hi = A.levelXP(lvl + 1), frac = Math.max(0, Math.min(1, (xp - lo) / (hi - lo)));
+      const nextT = A.TITLES.find((t) => t[0] > lvl);
+      const C = 2 * Math.PI * 58;
+      const ring = '<svg viewBox="0 0 132 132" class="pf-ring" aria-hidden="true"><defs><linearGradient id="pfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd36b"/><stop offset=".55" stop-color="#ff8fab"/><stop offset="1" stop-color="#8f7bff"/></linearGradient></defs>' +
+        '<circle cx="66" cy="66" r="58" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="7"/>' +
+        '<circle cx="66" cy="66" r="58" fill="none" stroke="url(#pfg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + (frac * C).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 66 66)"/></svg>';
+      const hero = h('div', { class: 'pf-hero' },
+        h('div', { class: 'pf-sky', 'aria-hidden': 'true' }, ...Array.from({ length: 9 }, (_, i) => h('i', { style: { left: (7 + i * 11) + '%', animationDelay: (i * 0.7) + 's', width: (4 + (i % 3) * 3) + 'px', height: (4 + (i % 3) * 3) + 'px' } }))),
+        h('div', { class: 'pf-av' }, h('span', { html: ring }), h('div', { class: 'pf-tao' }, A.art.mascotEl('wave', 86)), h('span', { class: 'pf-lvl' }, 'Lv ' + lvl)),
+        h('h1', { class: 'pf-name' }, A.user.name),
+        h('div', { class: 'pf-rank' }, h('span', { class: 'pf-rank-ic' }, tl[3]), h('div', null, h('b', null, tl[1]), h('small', { class: 'th' }, tl[2]))),
+        h('div', { class: 'pf-xp' }, h('div', { class: 'pf-xpbar' }, h('i', { style: { width: (frac * 100).toFixed(1) + '%' } })), h('div', { class: 'pf-xptxt num' }, (hi - xp) + ' XP to level ' + (lvl + 1))),
+        nextT ? h('div', { class: 'pf-next' }, 'Next rank · ', h('b', null, nextT[3] + ' ' + nextT[1]), ' at level ' + nextT[0]) : h('div', { class: 'pf-next' }, '✨ Highest rank reached'));
+      root.append(hero);
+    }
     root.append(h('div', { class: 'kpis' },
       h('div', { class: 'kpi' }, h('b', null, xp), h('span', null, 'Total XP')),
       h('div', { class: 'kpi' }, h('b', null, A.wordCount(st)), h('span', null, 'Words')),
-      h('div', { class: 'kpi' }, h('b', null, days), h('span', null, 'Days')),
-      h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Streak')),
+      h('div', { class: 'kpi' }, h('b', null, Object.values(st.days).reduce((a, d) => a + (d.les || 0), 0)), h('span', null, 'Lessons')),
+      h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Learning days')),
       h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
-      h('div', { class: 'kpi' }, h('b', null, st.freezes + '🧊'), h('span', null, 'Rest days'))));
+      h('div', { class: 'kpi' }, h('b', null, (() => { const m = Math.round(Object.values(st.days).reduce((a, d) => a + (d.sec || 0), 0) / 60); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; })()), h('span', null, 'Total time'))));
     root.append(activityCard(st));
-    root.append(h('div', { class: 'small th muted' }, '🧊 Rest day: learn 7 days in a row to earn a rest day (keep up to 2). Miss a day and your 🔥 stays alight.'));
+    root.append(h('div', { class: 'small th muted' }, '🔥 Every day you learn adds to your fire. Rest whenever you like — it never goes out. · พักได้ทุกเมื่อ ไฟไม่มีวันดับ'));
     const got = A.MEDALS.filter((m) => st.badges[m.id]);
     const shelf = h('button', { class: 'card medal-shelf', onclick: () => A.go('medals') },
       h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'Treasure chest'), h('div', { class: 'small muted' }, got.length + ' / ' + A.MEDALS.length + ' medals')), h('span', { class: 'pill sea' }, 'See all ›')),
@@ -877,8 +889,6 @@
       st.tod = st.tod || {};
       if (hr < 8) st.tod.early = st.tod.early || now;
       if (hr >= 22) st.tod.night = st.tod.night || now;
-      const sk = A.streak(st);
-      if (sk > 0 && sk % 7 === 0 && !st.badges['fz' + sk]) { st.badges['fz' + sk] = now; st.freezes = Math.min(2, (st.freezes || 0) + 1); }
       const rw = A.voyage.reward(ses, acc, passed);
       const newBadges = A.checkBadges(st);
       const after = { units: A.unitsDone(st), months: A.monthsDone(st), cur: A.voyage.curIndex(st), ready: A.voyage.ctl().questOff ? 0 : A.voyage.quests().filter((x) => x.done).length };
@@ -1359,8 +1369,6 @@
     A.state = A.fixState(A.newerState(await A.api.loadState().catch(() => null)));
     try { A.applyBoost(A.state); } catch (e) { /* boosters are extras */ }
     applySettings();
-    const fz = A.applyFreezes(A.state);
-    if (fz) { A.saveSoon(); A.track('rest_day_used', { days: fz }); setTimeout(() => A.toast('🧊 You used ' + fz + ' rest day' + (fz > 1 ? 's' : '') + '. Your 🔥 is still alight!', 3200), 600); }
     A.msgs = [];
     A.track('app_open', { ua: navigator.userAgent.slice(0, 120) });
     A.go('home');

@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.10';
+  A.VERSION = '5.11';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -530,21 +530,17 @@
   A.totalXP = (st) => Object.values(st.days).reduce((a, d) => a + (d.xp || 0), 0);
   A.level = (xp) => 1 + Math.floor(Math.sqrt(xp / 30));
   A.levelXP = (lvl) => 30 * (lvl - 1) * (lvl - 1);
-  A.TITLES = [[1, 'New learner', 'มือใหม่', '🌱'], [3, 'Hard worker', 'นักเรียนขยัน', '📗'], [5, 'Little talker', 'เริ่มพูดได้', '🗣️'],
-    [7, 'Chatter', 'นักสนทนา', '💬'], [9, 'Front desk pro', 'พนักงานต้อนรับมือโปร', '🛎️'], [11, 'Rising star', 'ดาวรุ่ง', '⭐'],
-    [13, 'Superstar', 'ซูเปอร์สตาร์', '🌟'], [15, 'English queen', 'ราชินีภาษาอังกฤษ', '👑']];
+  A.TITLES = [[1, 'Morning Tide', 'น้ำขึ้นยามเช้า', '🌅'], [3, 'Pearl Seeker', 'นักตามหาไข่มุก', '🦪'], [5, 'Wave Rider', 'ผู้โต้คลื่น', '🌊'],
+    [7, 'Coral Voice', 'เสียงแห่งปะการัง', '🪸'], [9, 'Lagoon Charmer', 'เสน่ห์แห่งลากูน', '🐚'], [11, 'Island Star', 'ดาวประจำเกาะ', '⭐'],
+    [13, 'Moonlit Voice', 'เสียงใต้แสงจันทร์', '🌙'], [15, 'Queen of Words', 'ราชินีแห่งถ้อยคำ', '👑'], [18, 'Golden Compass', 'เข็มทิศทองคำ', '🧭'], [21, 'Legend of the Sea', 'ตำนานแห่งท้องทะเล', '💎']];
   A.title = (lvl) => A.TITLES.filter((t) => lvl >= t[0]).at(-1);
   A.day = (st, key) => st.days[key || A.dkey()] || (st.days[key || A.dkey()] = { xp: 0, sec: 0, n: 0, ok: 0, les: 0 });
   A.active = (st, key) => (st.days[key] && st.days[key].xp > 0) || st.frozen.includes(key);
-  A.streak = (st) => {
-    const d = new Date();
-    if (!A.active(st, A.dkey(d))) d.setDate(d.getDate() - 1);
-    let n = 0;
-    while (A.active(st, A.dkey(d)) && n < 2000) { n++; d.setDate(d.getDate() - 1); }
-    return n;
-  };
+  // 🔥 = learning days. Rest is free: a day off never puts the fire out.
+  A.streak = (st) => Object.keys(st.days).filter((k) => A.active(st, k)).length;
   // use saved rest days to protect the streak after missed days
   A.applyFreezes = (st) => {
+    if (st) return 0; // rest days are no longer needed
     if (!st.freezes) return 0;
     const d = new Date(); d.setDate(d.getDate() - 1);
     const gap = [];
@@ -607,43 +603,43 @@
   const lookups = (st) => Object.values(st.look).reduce((a, b) => a + b, 0);
   const hotelTalk = (st) => Object.keys(st.done).filter((k) => k.startsWith('talk:') && C.talks[k.slice(5)] && C.talks[k.slice(5)].cat === 'hotel').length;
   const bestStreak = (st) => Math.max(A.streak(st), st.best || 0);
-  const MEDAL_HOW = {"first": "Finish your first lesson", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn 3 days in a row", "streak7": "Learn 7 days in a row", "streak14": "Learn 14 days in a row", "streak30": "Learn 30 days in a row", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
+  const MEDAL_HOW = {"first": "Finish your first lesson", "lessons10": "Finish 10 lessons", "lessons40": "Finish 40 lessons", "perfect": "Get every answer right in one lesson", "perfect10": "Get 100% in 10 lessons", "streak3": "Learn on 3 days", "streak7": "Learn on 7 days", "streak14": "Learn on 14 days", "streak30": "Learn on 30 days", "words25": "Know 25 words", "words100": "Know 100 words", "words300": "Know 300 words", "words600": "Know 600 words", "talk1": "Finish your first conversation", "talks10": "Finish 10 conversations", "talks25": "Finish 25 conversations", "hotel": "Practise a hotel conversation", "review10": "Review 10 times", "review50": "Review 50 times", "curious": "Look up 50 words", "early": "Learn before 8 in the morning", "night": "Learn after 10 at night", "xp1000": "Collect 1000 XP", "month1": "Sail through the first sea", "month2": "Sail through the Gulf of Thailand", "month3": "Sail through the Strait of Malacca", "month4": "Sail through the Andaman Sea", "month5": "Reach the coast of Sri Lanka", "grad": "Sail all the way to Addu, Maldives", "tre10": "Find 10 treasures", "tre50": "Find 50 treasures", "shells8": "Collect 8 kinds of shell", "boat3": "Own 3 boats", "side5": "Finish 5 side missions"};
   // [id, icon, tier, category, English name, Thai name, how to get it (Thai), progress(st) -> [now, goal]]
   A.MEDALS = [
-    ['first', 'book', 'bronze', 'learn', 'First Step', 'ก้าวแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
-    ['lessons10', 'book', 'silver', 'learn', 'Bookworm', 'หนอนหนังสือ', 'เรียนจบ 10 บท', (st) => [lessonsDone(st), 10]],
-    ['lessons40', 'book', 'gold', 'learn', 'Scholar', 'นักปราชญ์ตัวน้อย', 'เรียนจบ 40 บท', (st) => [lessonsDone(st), 40]],
-    ['perfect', 'target', 'bronze', 'star', 'Bullseye', 'เป๊ะทุกข้อ', 'ไม่ผิดเลยสักข้อใน 1 บท', (st) => [Math.min(1, perfects(st)), 1]],
-    ['perfect10', 'hundred', 'gold', 'star', 'Perfectionist', 'สมบูรณ์แบบ', 'ได้ 100% ครบ 10 บท', (st) => [perfects(st), 10]],
-    ['streak3', 'flame', 'bronze', 'streak', 'Warm Up', 'อุ่นเครื่อง', 'เรียน 3 วันติดกัน', (st) => [bestStreak(st), 3]],
-    ['streak7', 'flame', 'silver', 'streak', 'On Fire', 'ไฟลุก', 'เรียน 7 วันติดกัน', (st) => [bestStreak(st), 7]],
-    ['streak14', 'bolt', 'gold', 'streak', 'Unstoppable', 'หยุดไม่อยู่', 'เรียน 14 วันติดกัน', (st) => [bestStreak(st), 14]],
-    ['streak30', 'crown', 'pearl', 'streak', 'Ocean Queen', 'ราชินีแห่งท้องทะเล', 'เรียน 30 วันติดกัน', (st) => [bestStreak(st), 30]],
-    ['words25', 'sprout', 'bronze', 'words', 'Seedling', 'ต้นกล้า', 'รู้ 25 คำ', (st) => [A.wordCount(st), 25]],
-    ['words100', 'sprout', 'silver', 'words', 'Word Garden', 'สวนคำศัพท์', 'รู้ 100 คำ', (st) => [A.wordCount(st), 100]],
-    ['words300', 'palm', 'gold', 'words', 'Word Forest', 'ป่าคำศัพท์', 'รู้ 300 คำ', (st) => [A.wordCount(st), 300]],
-    ['words600', 'gem', 'pearl', 'words', 'Word Treasure', 'ขุมทรัพย์คำศัพท์', 'รู้ 600 คำ', (st) => [A.wordCount(st), 600]],
-    ['talk1', 'chat', 'bronze', 'talk', 'Hello!', 'สวัสดี!', 'ฝึกบทสนทนาครั้งแรก', (st) => [Math.min(1, talksDone(st)), 1]],
-    ['talks10', 'chat', 'silver', 'talk', 'Chatterbox', 'ช่างคุย', 'ฝึกบทสนทนา 10 เรื่อง', (st) => [talksDone(st), 10]],
-    ['talks25', 'music', 'gold', 'talk', 'Smooth Talker', 'พูดคล่อง', 'ฝึกบทสนทนา 25 เรื่อง', (st) => [talksDone(st), 25]],
-    ['hotel', 'bell', 'silver', 'talk', 'Front Desk Star', 'ดาวเด่นแผนกต้อนรับ', 'ฝึกบทสนทนาเรื่องโรงแรม', (st) => [Math.min(1, hotelTalk(st)), 1]],
-    ['review10', 'repeat', 'bronze', 'learn', 'Never Forget', 'ไม่มีวันลืม', 'ทบทวน 10 ครั้ง', (st) => [st.reviews || 0, 10]],
-    ['review50', 'repeat', 'gold', 'learn', 'Memory Master', 'เซียนความจำ', 'ทบทวน 50 ครั้ง', (st) => [st.reviews || 0, 50]],
-    ['curious', 'search', 'bronze', 'learn', 'Curious Cat', 'ช่างสงสัย', 'แตะดูความหมายคำ 50 ครั้ง', (st) => [lookups(st), 50]],
-    ['early', 'sunrise', 'silver', 'time', 'Early Bird', 'นกตื่นเช้า', 'เรียนก่อน 8 โมงเช้า', (st) => [st.badges.early || (st.tod && st.tod.early) ? 1 : 0, 1]],
-    ['night', 'moon', 'silver', 'time', 'Night Owl', 'นกฮูกกลางคืน', 'เรียนหลัง 4 ทุ่ม', (st) => [st.badges.night || (st.tod && st.tod.night) ? 1 : 0, 1]],
-    ['xp1000', 'bolt', 'gold', 'star', '1000 XP', 'พลัง 1000 XP', 'สะสม 1000 XP', (st) => [A.totalXP(st), 1000]],
-    ['month1', 'shell', 'bronze', 'month', 'River Leaver', 'ลาก่อนเจ้าพระยา', 'ล่องผ่านแม่น้ำเจ้าพระยา (ทะเลที่ 1)', (st) => [Math.min(1, A.seasDone(st)), 1]],
-    ['month2', 'wave', 'silver', 'month', 'Gulf Sailor', 'กะลาสีอ่าวไทย', 'ล่องผ่านอ่าวไทย (ทะเลที่ 2)', (st) => [Math.min(2, A.seasDone(st)), 2]],
+    ['first', 'book', 'bronze', 'learn', 'First Light', 'แสงแรก', 'เรียนบทแรกให้จบ', (st) => [Math.min(1, lessonsDone(st) + talksDone(st)), 1]],
+    ['lessons10', 'book', 'silver', 'learn', 'Page Turner', 'นักพลิกหน้ากระดาษ', 'เรียนจบ 10 บท', (st) => [lessonsDone(st), 10]],
+    ['lessons40', 'book', 'gold', 'learn', 'Scholar of the Sea', 'ปราชญ์แห่งท้องทะเล', 'เรียนจบ 40 บท', (st) => [lessonsDone(st), 40]],
+    ['perfect', 'target', 'bronze', 'star', 'Flawless Pearl', 'ไข่มุกไร้ที่ติ', 'ไม่ผิดเลยสักข้อใน 1 บท', (st) => [Math.min(1, perfects(st)), 1]],
+    ['perfect10', 'hundred', 'gold', 'star', 'Diamond Mind', 'จิตใจดั่งเพชร', 'ได้ 100% ครบ 10 บท', (st) => [perfects(st), 10]],
+    ['streak3', 'flame', 'bronze', 'streak', 'First Spark', 'ประกายแรก', 'เรียนครบ 3 วัน', (st) => [bestStreak(st), 3]],
+    ['streak7', 'flame', 'silver', 'streak', 'Steady Flame', 'เปลวไฟมั่นคง', 'เรียนครบ 7 วัน', (st) => [bestStreak(st), 7]],
+    ['streak14', 'bolt', 'gold', 'streak', 'Lighthouse', 'ประภาคาร', 'เรียนครบ 14 วัน', (st) => [bestStreak(st), 14]],
+    ['streak30', 'crown', 'pearl', 'streak', 'Eternal Flame', 'เปลวไฟนิรันดร์', 'เรียนครบ 30 วัน', (st) => [bestStreak(st), 30]],
+    ['words25', 'sprout', 'bronze', 'words', 'Seed of Words', 'เมล็ดพันธุ์แห่งคำ', 'รู้ 25 คำ', (st) => [A.wordCount(st), 25]],
+    ['words100', 'sprout', 'silver', 'words', 'Blooming Garden', 'สวนคำที่เบ่งบาน', 'รู้ 100 คำ', (st) => [A.wordCount(st), 100]],
+    ['words300', 'palm', 'gold', 'words', 'Whispering Forest', 'ป่าแห่งเสียงกระซิบ', 'รู้ 300 คำ', (st) => [A.wordCount(st), 300]],
+    ['words600', 'gem', 'pearl', 'words', 'Library of the Sea', 'ห้องสมุดใต้ทะเล', 'รู้ 600 คำ', (st) => [A.wordCount(st), 600]],
+    ['talk1', 'chat', 'bronze', 'talk', 'First Hello', 'คำทักทายแรก', 'ฝึกบทสนทนาครั้งแรก', (st) => [Math.min(1, talksDone(st)), 1]],
+    ['talks10', 'chat', 'silver', 'talk', 'Silver Voice', 'เสียงสีเงิน', 'ฝึกบทสนทนา 10 เรื่อง', (st) => [talksDone(st), 10]],
+    ['talks25', 'music', 'gold', 'talk', 'Golden Voice', 'เสียงสีทอง', 'ฝึกบทสนทนา 25 เรื่อง', (st) => [talksDone(st), 25]],
+    ['hotel', 'bell', 'silver', 'talk', 'Grand Lobby Star', 'ดาวแห่งล็อบบี้', 'ฝึกบทสนทนาเรื่องโรงแรม', (st) => [Math.min(1, hotelTalk(st)), 1]],
+    ['review10', 'repeat', 'bronze', 'learn', 'Echo Keeper', 'ผู้เก็บเสียงสะท้อน', 'ทบทวน 10 ครั้ง', (st) => [st.reviews || 0, 10]],
+    ['review50', 'repeat', 'gold', 'learn', 'Memory Palace', 'วังแห่งความทรงจำ', 'ทบทวน 50 ครั้ง', (st) => [st.reviews || 0, 50]],
+    ['curious', 'search', 'bronze', 'learn', 'Curious Mind', 'จิตใจใฝ่รู้', 'แตะดูความหมายคำ 50 ครั้ง', (st) => [lookups(st), 50]],
+    ['early', 'sunrise', 'silver', 'time', 'Sunrise Scholar', 'นักเรียนรุ่งอรุณ', 'เรียนก่อน 8 โมงเช้า', (st) => [st.badges.early || (st.tod && st.tod.early) ? 1 : 0, 1]],
+    ['night', 'moon', 'silver', 'time', 'Moonlight Scholar', 'นักเรียนใต้แสงจันทร์', 'เรียนหลัง 4 ทุ่ม', (st) => [st.badges.night || (st.tod && st.tod.night) ? 1 : 0, 1]],
+    ['xp1000', 'bolt', 'gold', 'star', 'Thousand Sparks', 'ประกายพันดวง', 'สะสม 1000 XP', (st) => [A.totalXP(st), 1000]],
+    ['month1', 'shell', 'bronze', 'month', 'Farewell, River', 'ลาก่อนเจ้าพระยา', 'ล่องผ่านแม่น้ำเจ้าพระยา (ทะเลที่ 1)', (st) => [Math.min(1, A.seasDone(st)), 1]],
+    ['month2', 'wave', 'silver', 'month', 'Gulf Wanderer', 'นักท่องอ่าวไทย', 'ล่องผ่านอ่าวไทย (ทะเลที่ 2)', (st) => [Math.min(2, A.seasDone(st)), 2]],
     ['month3', 'palm', 'silver', 'month', 'Strait Runner', 'นักเดินเรือช่องแคบ', 'ล่องผ่านช่องแคบมะละกา (ทะเลที่ 3)', (st) => [Math.min(3, A.seasDone(st)), 3]],
     ['month4', 'sun', 'gold', 'month', 'Andaman Explorer', 'นักสำรวจอันดามัน', 'ล่องผ่านทะเลอันดามัน (ทะเลที่ 4)', (st) => [Math.min(4, A.seasDone(st)), 4]],
     ['month5', 'hotel', 'gold', 'month', 'Ocean Crosser', 'ข้ามมหาสมุทร', 'ล่องถึงชายฝั่งศรีลังกา (ทะเลที่ 6)', (st) => [Math.min(6, A.seasDone(st)), 6]],
     ['grad', 'heart', 'pearl', 'month', 'Arrived in the Maldives', 'ถึงมัลดีฟส์แล้ว', 'ล่องเรือถึงอัดดู มัลดีฟส์', (st) => [A.seasDone(st), 8]],
     ['tre10', 'gem', 'bronze', 'star', 'Treasure Hunter', 'นักล่าสมบัติ', 'พบสมบัติ 10 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 10]],
-    ['tre50', 'gem', 'gold', 'star', 'Treasure Queen', 'ราชินีสมบัติ', 'พบสมบัติ 50 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 50]],
+    ['tre50', 'gem', 'gold', 'star', 'Keeper of Treasures', 'ผู้พิทักษ์สมบัติ', 'พบสมบัติ 50 ชิ้น', (st) => [Object.keys((st.sea && st.sea.tre) || {}).length, 50]],
     ['shells8', 'shell', 'silver', 'words', 'Shell Collector', 'นักสะสมเปลือกหอย', 'เก็บเปลือกหอยครบ 8 ชนิด', (st) => [Object.keys((st.sea && st.sea.sh) || {}).length, 8]],
     ['boat3', 'wave', 'silver', 'time', 'Fleet Captain', 'กัปตันกองเรือ', 'มีเรือ 3 ลำ', (st) => [((st.sea && st.sea.boats) || ['sloop']).length, 3]],
-    ['side5', 'search', 'gold', 'learn', 'Explorer', 'นักผจญภัย', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
+    ['side5', 'search', 'gold', 'learn', 'Hidden Isles', 'เกาะลับแล', 'ทำภารกิจเสริม 5 เกาะ', (st) => [Object.keys((st.sea && st.sea.side) || {}).length, 5]],
   ].map(([id, icon, tier, cat, en, th, how, prog]) => ({ id, icon, tier, cat, en, th, how: MEDAL_HOW[id] || how, prog }));
   A.medal = (id) => A.MEDALS.find((m) => m.id === id);
   A.BADGES = A.MEDALS.map((m) => [m.id, '', m.en, m.th]); // older code paths
@@ -676,7 +672,7 @@
     if (t.type === 'unit') return 'After Unit ' + t.v;
     if (t.type === 'month') return 'After Month ' + t.v;
     if (t.type === 'sea') return 'After sea ' + t.v;
-    if (t.type === 'streak') return 'At a ' + t.v + '-day streak';
+    if (t.type === 'streak') return 'After ' + t.v + ' learning days';
     if (t.type === 'xp') return 'At ' + t.v + ' XP';
     if (t.type === 'node') return 'After lesson ' + t.v;
     return '';

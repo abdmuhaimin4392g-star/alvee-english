@@ -273,9 +273,9 @@
     const secs = days.reduce((a, [, d]) => a + (d.sec || 0), 0);
     const n = days.reduce((a, [, d]) => a + (d.n || 0), 0), ok = days.reduce((a, [, d]) => a + (d.ok || 0), 0);
     box.append(h('div', { class: 'kpis' },
-      kpi(xp, 'Total XP'), kpi(lvl, 'Level · ' + A.title(lvl)[1]), kpi(A.streak(st) + '🔥', 'Streak'),
+      kpi(xp, 'Total XP'), kpi(lvl, 'Level · ' + A.title(lvl)[1]), kpi(A.streak(st) + '🔥', 'Learning days'),
       kpi(A.wordCount(st), 'Words learned'), kpi(days.filter(([, d]) => d.xp > 0).length, 'Days studied'), kpi(Math.round(secs / 60) + 'm', 'Total time'),
-      kpi(n ? Math.round(ok / n * 100) + '%' : '–', 'First-try correct'), kpi(A.dueItems(st).length, 'Due for review'), kpi(st.freezes, 'Rest days saved')));
+      kpi(n ? Math.round(ok / n * 100) + '%' : '–', 'First-try correct'), kpi(A.dueItems(st).length, 'Due for review')));
     // 21-day chart
     const bars = h('div', { class: 'bars', role: 'img', 'aria-label': 'Minutes studied per day, last 21 days' });
     const vals = [];
@@ -613,7 +613,7 @@
       h('option', { value: 'now' }, 'Show it now'),
       ...C.units.filter((u) => A.nodes.some((n) => n.u === u.id)).map((u) => h('option', { value: 'unit:' + u.id }, 'When she finishes Unit ' + u.id)),
       ...[1, 2, 3, 4, 5, 6, 7, 8].map((m) => h('option', { value: 'sea:' + m }, 'When she finishes sea ' + m + ' (' + A.voyage.SEAS[m - 1].en + ')')),
-      ...[3, 7, 14, 30, 60, 100].map((n) => h('option', { value: 'streak:' + n }, 'At a ' + n + '-day streak')),
+      ...[3, 7, 14, 30, 60, 100].map((n) => h('option', { value: 'streak:' + n }, 'After ' + n + ' learning days')),
       ...[500, 1000, 2500, 5000].map((n) => h('option', { value: 'xp:' + n }, 'At ' + n + ' XP')));
     const out = h('div', { class: 'small muted' });
     box.append(h('div', { class: 'card stack' }, h('b', null, 'Send Alvee a message'),
