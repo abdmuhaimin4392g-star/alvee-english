@@ -70,6 +70,4 @@ window.PTCMP = {
     nature: { same: ['You both decide with your hearts and care about how people feel.', 'ทั้งคู่ตัดสินใจด้วยหัวใจ และใส่ใจความรู้สึกของผู้คน'], diff: ['One of you starts with feelings, the other with logic. Ask “How do you feel?” and “What do you think?”', 'คนหนึ่งเริ่มจากความรู้สึก อีกคนเริ่มจากเหตุผล ลองถามกันว่า “รู้สึกอย่างไร” และ “คิดอย่างไร”'] },
     tactics: { same: ['You both like plans and keeping your word, so life together feels steady.', 'ทั้งคู่ชอบวางแผนและรักษาคำพูด ชีวิตด้วยกันจึงรู้สึกมั่นคง'], diff: ['One likes plans, the other likes freedom. Agree on the important plans and keep the rest flexible.', 'คนหนึ่งชอบแผน อีกคนชอบอิสระ ตกลงกันเรื่องแผนการที่สำคัญ แล้วให้เรื่องอื่นยืดหยุ่นได้'] },
   },
-  // for INFJ and the types that share three letters with it
-  boundary: ['Muhay understands people deeply, but he also protects his own boundaries very firmly. When he says “no” or asks for space, it is not anger: it is how he stays calm and strong.', 'มูไฮเข้าใจผู้คนอย่างลึกซึ้ง แต่เขาก็ปกป้องขอบเขตของตัวเองอย่างหนักแน่นมาก เมื่อเขาปฏิเสธหรือขอพื้นที่ส่วนตัว นั่นไม่ใช่ความโกรธ แต่เป็นวิธีที่ทำให้เขาสงบและเข้มแข็ง'],
 };

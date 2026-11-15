@@ -73,7 +73,6 @@
       A.clear(body);
       if (tab === 'over') {
         body.append(h('div', { class: 'card' }, bi(X.intro[0], X.intro[1])));
-        if (mu) body.append(h('div', { class: 'card ty-muhay' }, h('b', null, '💙 Muhay is an ' + MUHAY), bi(CM.boundary[0], CM.boundary[1])));
         const letters = code.split('').map((l, i) => { const d = P.dims[i], pole = P.poles[d.k][l]; return h('div', { class: 'ty-let' }, h('b', null, l), h('div', null, h('b', null, pole[0]), h('span', { class: 'th' }, ' · ' + pole[1]), bi(pole[2], pole[3], 'small'))); });
         body.append(h('div', { class: 'card stack', style: { gap: '8px' } }, h('b', null, '🔤 The four letters'), ...letters));
         body.append(h('div', { class: 'card stack', style: { gap: '6px' } }, h('b', null, '⭐ In three words'), h('div', { class: 'row wrap', style: { gap: '6px' } }, T.s.map(([en, th]) => h('span', { class: 'ty-chip' }, en, h('small', { class: 'th' }, th))))));
@@ -121,7 +120,6 @@
         bi(note[0], note[1], 'small')));
     });
     root.append(lets);
-    root.append(h('div', { class: 'card ty-muhay' }, h('b', null, '💙 About Muhay'), bi(CM.boundary[0], CM.boundary[1])));
     CM.groups.forEach((g) => {
       const box = h('div', { class: 'card stack ty-cg', style: { gap: '10px' } }, h('b', null, g.ic + ' ' + g.en, h('span', { class: 'th muted' }, ' · ' + g.th)));
       g.rows.forEach(([dim, en, th, men, mth, pol]) => {
