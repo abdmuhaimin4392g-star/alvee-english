@@ -411,12 +411,21 @@
     root.append(A.voyage.homeHero(st, { greet: gEn, streak: sk, lvl }));
     if (A.cal) { try { root.append(A.cal.homeStrip(st)); } catch (e) { /* calendar is an extra */ } }
     if (A.garden) { try { const g = A.garden.homeCard(st); if (g) root.append(g); } catch (e) { /* garden is an extra */ } }
+    try { const bt = A.voyage.boatTeaser && A.voyage.boatTeaser(st); if (bt) root.append(bt); } catch (e) { /* extras */ }
+    if (A.storm && A.storm.active) { try {
+      const act = A.storm.active(st), wall = A.storm.wall(st, (A.reachedUnit(st, A.user.cfg) || 1) + 1);
+      if (act.length) root.append(h('button', { class: 'card storm-home' + (wall.length ? ' wall' : ''), onclick: () => A.play('storm') },
+        h('span', { class: 'sh-ic' }, wall.length ? '🌀' : '⚡'),
+        h('div', { style: { flex: 1, textAlign: 'left' } }, h('b', null, wall.length ? 'Storm Wall ahead' : act.length + ' storm' + (act.length > 1 ? 's' : '') + ' in your sky'),
+          h('div', { class: 'small th' }, (wall.length ? 'Clear ' + wall.length + ' to reach the next chapter · ' : '') + 'ฝึกเรื่องที่ยังพลาดด้วยประโยคใหม่')),
+        h('span', { class: 'pill' }, 'Train ›')));
+    } catch (e) { /* storms are extras */ } }
 
     // messages from you are switched off on her side for now (they come back in a later update)
 
     const pct = Math.min(1, xpToday / goal);
     const ring = h('div', { class: 'ring', html: `<svg viewBox="0 0 36 36" width="58" height="58"><circle cx="18" cy="18" r="15.5" fill="none" style="stroke:var(--sea-tint)" stroke-width="4"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="${pct >= 1 ? '#17955A' : '#FFB21E'}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(pct * 97.4).toFixed(1)} 97.4"/></svg>` }, h('span', null, pct >= 1 ? '✓' : Math.round(pct * 100) + '%'));
-    const today = h('div', { class: 'card today' });
+    const today = h('div', { class: 'card today dash-today' });
     if (next) {
       const t = A.nodeTitle(next);
       const u = A.unit(next.u);
@@ -449,11 +458,12 @@
     }
 
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
-    root.append(h('div', { class: 'tiles' },
-      h('button', { class: 'tile t-talk', onclick: () => A.go('talks') }, h('span', { class: 'blob', html: A.art.icon('chat', 26) }), 'Talk', h('span', { class: 'sub' }, 'Real conversations')),
-      h('button', { class: 'tile t-words', onclick: () => A.go('words') }, h('span', { class: 'blob', html: A.art.icon('sprout', 26) }), 'Words', h('span', { class: 'sub' }, A.wordCount(st) + ' words')),
-      h('button', { class: 'tile t-medal', onclick: () => A.go('medals') }, h('span', { class: 'blob', html: A.art.icon('medal', 26) }), 'Medals', h('span', { class: 'sub' }, got + ' medals')),
-      h('button', { class: 'tile t-gram', onclick: () => A.go('grammar') }, h('span', { class: 'blob', html: A.art.icon('book', 26) }), 'Grammar', h('span', { class: 'sub' }, 'All the rules'))));
+    const dt = (cls, e, en, sub, fn) => h('button', { class: 'dash-tile ' + cls, onclick: fn }, h('span', { class: 'dt-pic', html: A.emoHTML(e) }), h('b', null, en), h('span', { class: 'dt-sub' }, sub));
+    root.append(h('div', { class: 'dash-tiles' },
+      dt('d-talk', '💬', 'Talk', 'Real conversations', () => A.go('talks')),
+      dt('d-words', '🪸', 'Words', A.wordCount(st) + ' words', () => A.go('words')),
+      dt('d-medal', '🏅', 'Medals', got + ' medals', () => A.go('medals')),
+      dt('d-gram', '📖', 'Grammar', 'All the rules', () => A.go('grammar'))));
     return root;
   };
 
@@ -595,7 +605,7 @@
   VIEWS.grammar = () => {
     const reach = A.reachedUnit(A.state, A.user.cfg);
     const root = h('div', { class: 'screen' });
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'muted' }, 'Every grammar tip you have met'))));
+    root.append(h('div', { class: 'row page-head ph-gram' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'), h('div', null, h('h1', null, 'Grammar book'), h('p', { class: 'muted' }, 'Every grammar tip you have met'))));
     Object.values(C.tips).forEach((t) => {
       const open = (t.u || 1) <= reach;
       root.append(h('button', { class: 'card talk-item' + (open ? '' : ' locked'), onclick: () => (open ? A.sheet(tipView(t.id)) : A.toast('🔒 Opens at Unit ' + t.u)) },
@@ -628,7 +638,7 @@
     const st = A.state;
     const root = h('div', { class: 'screen' });
     const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
-    root.append(h('div', { class: 'row' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'),
+    root.append(h('div', { class: 'row page-head ph-medal' }, h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'),
       h('div', { style: { flex: 1 } }, h('h1', null, 'Treasure chest'), h('p', { class: 'muted' }, A.user.name + '’s medals'))));
     const tiers = ['bronze', 'silver', 'gold', 'pearl'].map((t) => [t, A.MEDALS.filter((m) => m.tier === t && st.badges[m.id]).length, A.MEDALS.filter((m) => m.tier === t).length]);
     root.append(h('div', { class: 'card chest' }, mascot(got ? 'party' : 'wave', 70),
@@ -730,14 +740,38 @@
         nextT ? h('div', { class: 'pf-next' }, 'Next rank · ', h('b', null, nextT[3] + ' ' + nextT[1]), ' at level ' + nextT[0]) : h('div', { class: 'pf-next' }, '✨ Highest rank reached'));
       root.append(hero);
     }
-    root.append(h('div', { class: 'kpis' },
-      h('div', { class: 'kpi' }, h('b', null, xp), h('span', null, 'Total XP')),
-      h('div', { class: 'kpi' }, h('b', null, A.wordCount(st)), h('span', null, 'Words')),
-      h('div', { class: 'kpi' }, h('b', null, Object.values(st.days).reduce((a, d) => a + (d.les || 0), 0)), h('span', null, 'Lessons')),
-      h('div', { class: 'kpi' }, h('b', null, A.streak(st) + '🔥'), h('span', null, 'Learning days')),
-      h('div', { class: 'kpi' }, h('b', null, n ? Math.round((ok / n) * 100) + '%' : '–'), h('span', null, 'Correct')),
-      h('div', { class: 'kpi' }, h('b', null, A.fmtMin(Object.values(st.days).reduce((a, d) => a + A.studySec(d), 0))), h('span', null, 'Study time')),
-      h('div', { class: 'kpi' }, h('b', null, A.fmtMin(Object.values(st.days).reduce((a, d) => a + A.appSec(d), 0))), h('span', null, 'Time on app'))));
+    {
+      const days = Object.values(st.days);
+      const les = days.reduce((a, d) => a + (d.les || 0), 0);
+      const study = days.reduce((a, d) => a + A.studySec(d), 0), app = days.reduce((a, d) => a + A.appSec(d), 0);
+      // each number sits on its own coloured gem
+      const gem = (g, cls, val, en, th) => h('div', { class: 'gem-kpi ' + cls },
+        h('img', { class: 'gk-gem', src: 'img/gems/' + g + '.webp', alt: '', draggable: 'false' }),
+        h('b', { class: 'num' }, val), h('span', null, en), h('small', { class: 'th' }, th));
+      root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('💎') }), h('div', null, h('b', null, 'My gems of progress'), h('small', { class: 'th' }, 'อัญมณีแห่งความก้าวหน้า'))));
+      root.append(h('div', { class: 'gem-kpis' },
+        gem('p05', 'g-topaz', xp, 'Total XP', 'คะแนน'),
+        gem('p02', 'g-emerald', A.wordCount(st), 'Words', 'คำศัพท์'),
+        gem('p03', 'g-sapphire', les, 'Lessons', 'บทเรียน'),
+        gem('p01', 'g-ruby', A.streak(st), 'Learning days', 'วันที่เรียน'),
+        gem('p04', 'g-amethyst', n ? Math.round((ok / n) * 100) + '%' : '–', 'Correct', 'ตอบถูก'),
+        gem('p06', 'g-aqua', A.fmtMin(study), 'Study time', 'App ' + A.fmtMin(app))));
+    }
+    {
+      // her rooms: big colourful doors to every page of her profile
+      const act = A.storm && A.storm.active ? A.storm.active(st).length : 0;
+      const got = A.MEDALS.filter((m) => st.badges[m.id]).length;
+      const room = (cls, e, en, th, sub, fn, badge) => h('button', { class: 'me-tile ' + cls, onclick: fn },
+        h('span', { class: 'mt-pic', html: A.emoHTML(e) }), badge ? h('span', { class: 'mt-badge' }, badge) : null,
+        h('b', null, en), h('small', { class: 'th' }, th), h('span', { class: 'mt-sub' }, sub));
+      root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('🗝️') }), h('div', null, h('b', null, 'My rooms'), h('small', { class: 'th' }, 'ห้องของฉัน'))));
+      root.append(h('div', { class: 'me-grid' },
+        room('mt-reef', '🪸', 'Word Reef', 'แนวปะการังคำศัพท์', A.wordCount(st) + ' words', () => A.go('words')),
+        room('mt-gram', '📖', 'Grammar book', 'สมุดไวยากรณ์', 'All the rules', () => A.go('grammar')),
+        room('mt-medal', '🏅', 'Medals', 'เหรียญรางวัล', got + ' / ' + A.MEDALS.length, () => A.go('medals')),
+        room('mt-storm', act ? '⛈️' : '🌈', 'Storm Training', 'ฝึกจุดที่พลาด', act ? act + ' to clear' : 'Sky is clear', () => (act ? A.play('storm') : A.go('treasure')), act || null),
+        room('mt-chest', '💎', 'Treasure book', 'สมุดสมบัติ', 'Gems & finds', () => A.go('treasure'))));
+    }
     root.append(activityCard(st));
     if (A.storm) root.append(A.storm.jar(st));
     root.append(h('div', { class: 'small th muted' }, '🔥 Every day you learn adds to your fire. Rest whenever you like — it never goes out. · พักได้ทุกเมื่อ ไฟไม่มีวันดับ'));
@@ -746,10 +780,10 @@
       h('div', { class: 'row between' }, h('div', null, h('div', { class: 'sec-title' }, 'Treasure chest'), h('div', { class: 'small muted' }, got.length + ' / ' + A.MEDALS.length + ' medals')), h('span', { class: 'pill sea' }, 'See all ›')),
       h('div', { class: 'shelf-row' }, (got.length ? got.slice(-5).reverse() : A.MEDALS.slice(0, 5)).map((m) => h('span', { class: 'shelf-m', html: A.art.medal(m, { size: 58, locked: !st.badges[m.id] }) }))));
     root.append(shelf);
-    root.append(h('button', { class: 'card talk-item', onclick: () => A.go('grammar') }, h('div', { class: 'av' }, '📖'), h('div', { style: { flex: 1 } }, h('b', null, 'Grammar book'), h('div', { class: 'small muted' }, 'All the rules in one place')), '›'));
     const set = st.set;
+    root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('⚙️') }), h('div', null, h('b', null, 'Settings'), h('small', { class: 'th' }, 'การตั้งค่า'))));
     const sw = (label, on, fn) => h('div', { class: 'switch' }, h('span', { class: 'th' }, label), h('button', { class: 'toggle' + (on ? ' on' : ''), role: 'switch', 'aria-checked': on ? 'true' : 'false', 'aria-label': label, onclick: fn }));
-    root.append(h('div', { class: 'card', style: { padding: '4px 16px' } },
+    root.append(h('div', { class: 'card set-card', style: { padding: '4px 16px' } },
       sw('🐢 Slower voice', set.slow, () => { set.slow = !set.slow; applySettings(); A.saveSoon(); A.go('me'); }),
       A.voice && A.voice.has() ? sw('🎙️ Real American voice', set.realVoice !== false, () => { set.realVoice = set.realVoice === false; A.saveSoon(); A.go('me'); setTimeout(() => A.speech.say('Hello! This is my English voice. Is it clear?'), 200); }) : null,
       A.speech.ok && A.speech.list().length > 1 ? h('div', { class: 'switch' }, h('span', null, '🗣️ English voice'), h('select', { class: 'input voice-pick', 'aria-label': 'English voice', onchange: (e) => { set.voice = e.target.value; A.speech.pick(); A.saveSoon(); A.speech.say('Hello! This is my English voice. Is it clear?'); } },
@@ -798,7 +832,7 @@
     const ses = A.buildSession(kind, arg, A.state);
     if (!ses.steps.length) { A.toast(kind === 'review' ? 'Nothing to review yet. Learn a new lesson first!' : 'Nothing here yet'); return; }
     A.session = ses;
-    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'vocab' ? '💎 Word Chest' : kind === 'garden' ? '🪸 Word Reef' : kind === 'focus' ? 'Extra practice'
+    const title = ses.node ? A.nodeTitle(ses.node).en : kind === 'talk' ? A.fill(C.talks[arg].en) : kind === 'review' ? 'Review' : kind === 'bonus' ? '🏝️ Idiom Cove' : kind === 'storm' ? '⚡ Storm Training' : kind === 'vocab' ? '💎 Word Chest' : kind === 'garden' ? '🪸 Word Reef' : kind === 'focus' ? 'Extra practice'
       : kind === 'chest' ? (arg.golden ? 'Golden chest' : 'Treasure chest') : kind === 'bottle' ? 'Message in a bottle' : kind === 'side' ? 'Side mission: ' + arg.name : 'Mistakes';
     ses.title = title;
     ses.nodeId = ses.node ? ses.node.id : kind === 'talk' ? 'talk:' + arg : kind === 'side' ? arg.id : kind === 'chest' || kind === 'bottle' ? kind + ':' + arg.id : kind;
@@ -861,8 +895,8 @@
       A.clear(body);
       const R = RENDER[step.type];
       if (step.focus) body.append(focusLabel(step.focus));
-      body.classList.toggle('storm-on', !!step.storm);
-      if (step.storm && A.storm) body.append(A.storm.label(step));
+      body.classList.toggle('storm-on', !!(step.storm || step.stormcx));
+      if ((step.storm || step.stormcx) && A.storm) body.append(A.storm.label(step));
       body.append(R ? R(step, ctl) : h('div', null, 'Unknown step'));
       window.scrollTo(0, 0);
     }
@@ -876,6 +910,7 @@
         if (!retry) { ses.graded++; if (ok) ses.firstOk++; }
         if (step.item) ses.items[step.item] = (ses.items[step.item] !== false) && ok;
         if (!retry && !ok && A.storm) { try { A.storm.add(A.state, step); } catch (e) { /* storms are extras */ } }
+        if (!retry && A.storm && A.storm.hit && step.stormcx) { try { A.storm.hit(A.state, step, ok); } catch (e) { /* storms are extras */ } }
         // what this question tests; a wrong answer counts against the exact point she missed
         const sk = !ok && info.tag ? A.keySkill(info.tag) : (step.sk || 'other');
         if (!retry) A.skillRecord(A.state, sk, ok);
@@ -1016,6 +1051,7 @@
       btns.append(h('button', { class: 'btn block', onclick: () => A.go('journey') }, '🌊 Back to the sea'));
     } else if (!r.passed && ses.node) btns.append(h('button', { class: 'btn mango block', onclick: () => A.play('node', ses.node.id) }, 'Try again'), h('button', { class: 'btn ghost block', onclick: () => A.play('review') }, 'Review first'));
     else if (ses.node) btns.append(h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail to the next island'));
+    else if (ses.kind === 'storm') btns.append(A.storm.active(A.state).length ? h('button', { class: 'btn mango block', onclick: () => A.play('storm') }, '⚡ Train again') : h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Sail on'));
     else if (ses.kind === 'garden') btns.append(h('button', { class: 'btn mango block', onclick: () => A.go('words') }, '🪸 Back to my reef'));
     else if (ses.kind === 'bonus' || ses.kind === 'vocab') btns.append(r.passed ? h('button', { class: 'btn mango block sail-btn', onclick: () => A.go('journey') }, '⛵ Back to the voyage') : h('button', { class: 'btn mango block', onclick: () => A.play(ses.kind, ses.arg) }, 'Try again'));
     btns.append(h('button', { class: 'btn ghost block', onclick: () => A.go('home') }, 'Home'));

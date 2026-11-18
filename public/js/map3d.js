@@ -1280,7 +1280,7 @@ function trReveal(roll,opt){opt=opt||{};if(!roll||!roll.item)return;trCloseNow()
   let fx=0,fy=0,fs=.3;if(opt.from&&opt.from.width){const cx=opt.from.left+opt.from.width/2,cy=opt.from.top+opt.from.height/2;fx=cx-innerWidth/2;fy=cy-innerHeight*.38;fs=Math.max(.2,Math.min(.5,opt.from.width/200))}
   o.style.setProperty('--fx',fx+'px');o.style.setProperty('--fy',fy+'px');o.style.setProperty('--fs',fs);
   o.innerHTML=`<div class="trv-bg"></div><div class="trv-rays"></div><div class="trv-tip">${opt.gift?'A gift is on its way…':'The chest is glowing…'}</div>
-   <div class="trv-stage"><div class="trv-beam"></div><div class="trv-chest">${TR_SVG}<span class="trv-orb">🔥</span></div><div class="trv-item"><div class="tr-aura"></div><div class="em">${AE.emoHTML(it[1])}</div></div></div>
+   <div class="trv-stage"><div class="trv-beam"></div><div class="trv-chest">${TR_SVG}<span class="trv-orb">🔥</span></div><div class="trv-item"><div class="tr-aura"></div><div class="em">${AE.voyage.itemPicHTML?AE.voyage.itemPicHTML(it):AE.emoHTML(it[1])}</div></div></div>
    <div class="trv-flash"></div><div class="trcard" role="dialog" aria-label="${escH(it[2])}">${trCardHtml(roll,opt)}</div>`;
   document.body.appendChild(o);TRV.on=true;
   try{if(roll.isNew&&AE.notify)AE.notify({quiet:1,ic:it[1],t:'New treasure: '+it[2],s:R.n+' · '+(T.SETS[it[4]]||{}).n,go:['treasure','book:'+it[0]]})}catch(e){}

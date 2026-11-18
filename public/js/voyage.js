@@ -80,6 +80,8 @@
     { id: 'lev', n: 'Leviathan Liner', th: 'เรือสำราญยักษ์', g: 38000, isl: 23, w: 104, d: 'A floating city: eight decks, a rooftop water park and slides that spiral into the sky.' },
   ];
   V.boat = (id) => V.BOATS.find((b) => b.id === id) || V.BOATS[0];
+  // the next boat she can work towards (always bought with gold)
+  V.nextBoat = (st) => { const s = V.st(st); return V.BOATS.find((b) => !s.boats.includes(b.id)) || null; };
   V.boatPic = (id, flip, cls) => {
     const b = V.boat(id);
     if (b.id === 'sloop') return `<span class="boat-pic ${cls || ''}" style="--bw:${b.w}px">${T.sloop(flip)}</span>`;
@@ -219,6 +221,7 @@
     if (ch && ch.nodes[0] === n) { const g = V.gate(st, ch); if (g && !g.ok) return 'gate'; }
     if (n.kind === 'lesson' && !n.boost && V.capped(st)) return 'today';
     if (A.bonus && A.bonus.needed(st, n)) return 'bonus';
+    if (ch && ch.nodes[0] === n && A.storm && A.storm.wall && A.storm.wall(st, n.u).length) return 'storm';
     return null;
   };
   V.nodeOpen = (st, n) => !V.lockWhy(st, n);
@@ -276,11 +279,15 @@
   // ---------------------------------------------------------------- treasure rolls
   V.rollTreasure = (golden) => {
     // ordinary chests never hold legendary things; golden chests rarely; sealed chests (opened with a key) hold only rare and better
-    const W = golden === 'sealed' ? { c: 0, u: 0, r: 72, e: 24.5, l: 3.5 } : golden ? { c: 44, u: 36, r: 15, e: 4.4, l: 0.6 } : { c: 70, u: 24, r: 5.2, e: 0.8, l: 0 };
+    const W = golden === 'map' ? { c: 0, u: 22, r: 44, e: 25, l: 9 } : golden === 'prism' ? { c: 46, u: 30, r: 16, e: 6.5, l: 1.5 } : golden === 'sealed' ? { c: 0, u: 0, r: 72, e: 24.5, l: 3.5 } : golden ? { c: 44, u: 36, r: 15, e: 4.4, l: 0.6 } : { c: 70, u: 24, r: 5.2, e: 0.8, l: 0 };
     let t = Math.random() * Object.values(W).reduce((a, b) => a + b, 0), rar = 'c';
     for (const k of T.ORDER) { t -= W[k]; if (t <= 0) { rar = k; break; } }
     const s = V.st();
-    const L = T.ITEMS.filter((x) => x[3] === rar);
+    const ok = (x) => (V.canDrop ? V.canDrop(x, golden) : true);
+    const nightGlow = golden !== 'map' && golden !== 'prism' && V.isNight && V.isNight() && Math.random() < 0.15;
+    let L = T.ITEMS.filter((x) => x[3] === rar && ok(x) && (!nightGlow || x[4] === 'glow'));
+    if (!L.length) L = T.ITEMS.filter((x) => ok(x) && (!nightGlow || x[4] === 'glow'));
+    if (!L.length) L = T.ITEMS.filter((x) => ok(x));
     const fresh = L.filter((x) => !s.tre[x[0]]);
     const it = (fresh.length && Math.random() < (rar === 'e' || rar === 'l' ? 0.3 : 0.45) ? A.pick(fresh) : A.pick(L));
     const cur = s.tre[it[0]];
@@ -300,13 +307,14 @@
       if (acc === 100) V.count('perfect');
       if (node.kind === 'lesson') add(first ? 3 + (acc === 100 ? 2 : 0) : 1, 'island finished');
       else if (node.kind === 'talk') { add(first ? 3 : 1, 'conversation'); V.count('talk'); }
-      else { add(first ? 6 + (acc === 100 ? 3 : 0) : 2, 'test passed'); if (first) { out.chest = V.rollTreasure(true); out.golden = 1; s.keys += 1; out.lines.push(['+1 key 🔑 · test passed']); } }
+      else { add(first ? 6 + (acc === 100 ? 3 : 0) : 2, 'test passed'); if (first) { out.chest = V.rollTreasure(true); out.golden = 1; s.keys += 1; out.lines.push(['+1 key 🔑 · test passed']); if (A.collect) { A.collect.fragment(st, 'chapter test'); out.lines.push(['+1 map piece 🧩']); } } }
     }
     if (ses.kind === 'talk') V.count('talk');
     if (['review', 'mistakes', 'focus'].includes(ses.kind)) { add(1, 'practice'); V.count(ses.kind === 'focus' ? 'focus' : 'review'); }
     if (ses.kind === 'garden') add(2, 'word reef');
+    if (ses.kind === 'storm') add(3, 'storm training');
     if ((ses.kind === 'bonus' || ses.kind === 'vocab') && ses.bonusFirst != null) {
-      if (ses.bonusFirst) { add(4, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove'); if (Math.random() < 0.35) out.chest = V.rollTreasure(false); } else add(1, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove');
+      if (ses.bonusFirst) { add(4, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove'); if (A.collect) { A.collect.fragment(st, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove'); out.lines.push(['+1 map piece 🧩']); } if (Math.random() < 0.35) out.chest = V.rollTreasure(false); } else add(1, ses.kind === 'vocab' ? 'Word Chest' : 'Idiom Cove');
     }
     if (ses.kind === 'chest') {
       const sp = ses.arg;

@@ -314,8 +314,13 @@
       const card = T
         ? h('button', { class: 'card talk-item pt-me', onclick: () => A.go('types') }, h('div', { class: 'av' }, T.ic), h('div', { style: { flex: 1 } }, h('b', null, 'My personality: ' + p.res.full), h('div', { class: 'small muted' }, T.n + ' · all 16 types · you and Muhay')), h('span', { class: 'muted' }, '›'))
         : h('button', { class: 'card talk-item pt-me', onclick: () => PT.open('me') }, h('div', { class: 'av' }, '🧭'), h('div', { style: { flex: 1 } }, h('b', null, 'What is your personality type?'), h('div', { class: 'small muted' }, n ? n + ' of ' + N + ' answered · tap to go on' : N + ' questions · win a golden chest')), h('span', { class: 'muted' }, '›'));
-      const shelf = root.querySelector('.medal-shelf');
-      if (shelf) shelf.after(card); else root.append(card);
+      const grid = root.querySelector('.me-grid');
+      if (grid) {
+        const tile = h('button', { class: 'me-tile mt-pt', onclick: T ? () => A.go('types') : () => PT.open('me') },
+          h('span', { class: 'mt-pic', html: A.emoHTML(T ? T.ic : '🧭') }), h('b', null, T ? p.res.full : 'Personality'), h('small', { class: 'th' }, 'บุคลิกภาพ'),
+          h('span', { class: 'mt-sub' }, T ? 'My type · all 16' : (n ? n + ' / ' + N + ' answered' : N + ' questions')));
+        grid.append(tile);
+      } else { const shelf = root.querySelector('.medal-shelf'); if (shelf) shelf.after(card); else root.append(card); }
     } catch (e) { /* the page still works */ }
     return root;
   };

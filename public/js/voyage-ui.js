@@ -174,7 +174,7 @@
       isl.nodes.forEach((n, i) => {
         if (n.kind === 'check' && A.bonus) A.bonus.rows(st, n.u, () => sh.close()).forEach((r) => list.append(r));
         const d = st.done[n.id], op = V.nodeOpen(st, n), t = A.nodeTitle(n), isNext = c.next === n;
-        list.append(h('button', { class: 'les-row' + (d ? ' done' : '') + (isNext && op ? ' next' : '') + (op ? '' : ' lk') + (n.kind === 'check' ? ' test' : ''), onclick: () => { if (!op) { const w = V.lockWhy(st, n); A.toast(w === 'today' ? '⏳ That was enough new lessons for today. Come back tomorrow! Replay a lesson for more stars.' : w === 'gate' ? '⭐ Collect more stars in the sea behind you first.' : w === 'bonus' ? '🏝️💎 Finish the Word Chest and the Idiom Cove first. They open the test!' : '🔒 Finish the one before it first.', 3400); return; } sh.close(); A.play('node', n.id); } },
+        list.append(h('button', { class: 'les-row' + (d ? ' done' : '') + (isNext && op ? ' next' : '') + (op ? '' : ' lk') + (n.kind === 'check' ? ' test' : ''), onclick: () => { if (!op) { const w = V.lockWhy(st, n); A.toast(w === 'today' ? '⏳ That was enough new lessons for today. Come back tomorrow! Replay a lesson for more stars.' : w === 'gate' ? '⭐ Collect more stars in the sea behind you first.' : w === 'storm' ? '🌀 A Storm Wall blocks the way. Clear your storms in Storm Training first!' : w === 'bonus' ? '🏝️💎 Finish the Word Chest and the Idiom Cove first. They open the test!' : '🔒 Finish the one before it first.', 3400); return; } sh.close(); A.play('node', n.id); } },
           h('span', { class: 'lr-ic' }, d ? '✅' : op ? NODE_IC(n) : V.lockWhy(st, n) === 'today' ? '⏳' : '🔒'),
           h('div', { class: 'lr-tx' }, h('b', null, t.en), h('span', { class: 'small muted' }, n.kind === 'check' ? '⏱️ Timed test · pass with ' + A.passMark(n) + '%' + (A.typingOn && A.typingOn(n) ? ' · ⌨️ typing' : '') : n.boost ? 'Booster · extra practice for a tricky point' : n.kind === 'talk' ? 'Conversation' : 'Lesson ' + n.id)),
           h('span', { class: 'lr-st' }, d ? '★'.repeat(d.s) : isNext && op ? '▶' : '')));
@@ -224,6 +224,18 @@
   };
 
   // ---------------------------------------------------------------- home: the voyage hero
+  // the next boat, always peeking: a shadow until its chapter, then the real boat with a gold bar
+  V.boatTeaser = (st) => {
+    const b = V.nextBoat(st); if (!b) return null;
+    const s = V.st(st), cur = V.curIndex(st), seen = cur >= b.isl, pct = Math.min(100, Math.round((s.gold / b.g) * 100));
+    return h('button', { class: 'card boat-tease' + (seen ? ' seen' : ''), onclick: () => A.go('treasure', 'shop') },
+      h('div', { class: 'bt-pic' + (seen ? '' : ' shadow-boat'), html: V.boatPic(b.id) }),
+      h('div', { class: 'bt-tx' },
+        h('small', null, seen ? '⛵ Next boat' : '✨ Something on the horizon…'),
+        h('b', null, seen ? b.n : '??? Mystery boat'),
+        h('div', { class: 'bc-gold' }, h('div', { class: 'bc-gold-bar' }, h('i', { style: { width: pct + '%' } })), h('small', { class: 'num' }, V.coinEl(), ' ' + s.gold.toLocaleString('en-US') + ' / ' + b.g.toLocaleString('en-US'))),
+        h('small', { class: 'th muted' }, seen ? (s.gold >= b.g ? 'You can buy it now! · ซื้อได้แล้ว!' : 'Save gold to buy it · เก็บทองเพื่อซื้อ') : 'Appears at chapter ' + (b.isl + 1) + ' · ปรากฏที่บทที่ ' + (b.isl + 1))));
+  };
   V.homeHero = (st, o) => {
     const s = V.st(st), R = V.route(), cur = V.curIndex(st), chap = R.main[cur], c = V.chap(st, chap), sea = V.SEAS[chap.sea];
     const dots = h('div', { class: 'hh-dots' }, chap.nodes.map((n) => h('i', { class: st.done[n.id] ? 'on' : c.next === n ? 'now' : '' })));
@@ -249,12 +261,13 @@
   function treasureCard(it, isNew, big) {
     const r = RAR[it[3]], set = T.SETS[it[4]];
     return h('div', { class: 'tre-card r-' + it[3] + (big ? ' big' : ''), style: { '--rc': r.col } },
-      h('div', { class: 'tre-e' }, A.emoEl(it[1])),
+      h('div', { class: 'tre-e' }, V.itemPic ? V.itemPic(it) : A.emoEl(it[1])),
       h('div', { class: 'tre-n' }, it[2]),
       h('div', { class: 'tre-m' }, h('span', { class: 'rar-chip', style: { '--rc': r.col } }, r.n), ' ' + set.ic + ' ' + set.n, isNew ? h('span', { class: 'new-chip' }, 'NEW') : null),
       big ? h('p', { class: 'tre-story' }, it[5]) : null);
   }
   V.treasureCard = treasureCard;
+  V.showReveal = (roll) => treasureReveal(roll, false);
   function treasureReveal(roll, gift) {
     if (A.map3d && A.map3d.reveal) { A.map3d.reveal(roll, { gift: !!gift }); return; }
     A.sfx.play('done'); setTimeout(A.confetti, 100);
@@ -306,6 +319,7 @@
     root.append(h('div', { class: 'tabs scroll' }, tabs.map(([k, t]) => h('button', { class: k === tab ? 'on' : '', onclick: () => (k === 'medals' ? A.go('medals') : A.go('treasure', k)) }, t))));
     if (tab === 'book') {
       const got = Object.keys(s.tre).length;
+      if (A.collect) root.append(A.collect.panel(st));
       if (A.storm) root.append(A.storm.jar(st));
       root.append(h('div', { class: 'card chest' }, h('div', { html: V.chestSVG(true, true), class: 'chest-mini' }), h('div', { style: { flex: 1 } }, h('div', { class: 'chest-n' }, h('b', null, got), ' / ' + T.ITEMS.length), h('div', { class: 'small muted' }, 'Open chests on the sea to fill the book. Every ? is a treasure still waiting for you.'), h('div', { class: 'goal-bar', style: { marginTop: '6px' } }, h('i', { style: { width: (got / T.ITEMS.length) * 100 + '%' } })))));
       Object.entries(T.SETS).forEach(([k, set]) => {
@@ -316,7 +330,7 @@
           const own = s.tre[it[0]];
           const where = it[3] === 'l' ? 'Only in golden or sealed chests' : it[3] === 'e' ? 'Best found in golden or sealed chests' : it[3] === 'r' ? 'Sealed chests always hold rare or better' : 'Any chest on the sea';
           return h('button', { class: 'tre-cell r-' + it[3] + (own ? ' own' : '') + (focus === it[0] ? ' focus' : ''), 'data-id': it[0], style: { '--rc': RAR[it[3]].col }, onclick: () => own ? A.sheet(h('div', { class: 'stack', style: { alignItems: 'center' } }, treasureCard(it, false, true), h('div', { class: 'small muted' }, '× ' + own.n + ' · found ' + new Date(own.t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })))) : A.toast('🔍 ' + RAR[it[3]].n + ' · ' + where, 3200) },
-            own ? h('span', { class: 'te' }, A.emoEl(it[1])) : h('span', { class: 'te mys', 'aria-label': 'Not found yet' }, h('i', null, '?')), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
+            own ? h('span', { class: 'te' }, V.itemPic ? V.itemPic(it) : A.emoEl(it[1])) : h('span', { class: 'te mys', 'aria-label': 'Not found yet' }, h('i', null, '?')), h('span', { class: 'tn' }, own ? it[2] : '???'), own && own.n > 1 ? h('span', { class: 'tx' }, '×' + own.n) : null);
         })));
       });
     } else if (tab === 'shells') {
@@ -356,11 +370,13 @@
     box.append(h('div', { class: 'row between' }, h('h2', null, '⛵ Boatyard'), h('span', { class: 'small muted' }, s.boats.length + ' of ' + V.BOATS.length + ' boats')));
     box.append(h('div', { class: 'fleet' }, V.BOATS.map((b) => {
       const own = s.boats.includes(b.id), on = s.boat === b.id, seen = own || cur >= b.isl, can = !own && seen && s.gold >= b.g;
+      const next = V.nextBoat(st), goldBar = (b) => h('div', { class: 'bc-gold' }, h('div', { class: 'bc-gold-bar' }, h('i', { style: { width: Math.min(100, Math.round((s.gold / b.g) * 100)) + '%' } })), h('small', { class: 'num' }, V.coinEl(), ' ' + s.gold.toLocaleString('en-US') + ' / ' + b.g.toLocaleString('en-US')));
+      if (!seen && next && next.id === b.id) return h('div', { class: 'boat-card teaser' }, h('div', { class: 'bc-pic shadow-boat', html: V.boatPic(b.id) }), h('div', { class: 'bc-tx' }, h('b', null, '✨ ??? Your next boat'), h('div', { class: 'small muted' }, 'A shadow on the horizon… It appears at chapter ' + (b.isl + 1) + '. Save your gold!'), goldBar(b)), h('span', { class: 'pill' }, '🔒'));
       if (!seen) return h('div', { class: 'boat-card mystery' }, h('div', { class: 'bc-pic mys-boat' }, h('i', null, '?')), h('div', { class: 'bc-tx' }, h('b', null, '??? Mystery boat'), h('div', { class: 'small muted' }, 'Reach chapter ' + (b.isl + 1) + ' to see it. (' + (b.isl - cur) + ' more chapter' + (b.isl - cur > 1 ? 's' : '') + ')')), h('span', { class: 'pill' }, '🔒'));
       return h('div', { class: 'boat-card' + (on ? ' on' : '') + (own ? ' own' : '') + (focus === b.id ? ' focus' : '') },
         h('div', { class: 'bc-pic', html: V.boatPic(b.id) }),
         h('div', { class: 'bc-tx' }, h('b', null, b.n), h('div', { class: 'small muted' }, b.d),
-          own ? null : h('div', { class: 'small num price' }, V.coinEl(), ' ' + b.g.toLocaleString('en-US') + ' gold')),
+          own ? null : h('div', { class: 'small num price' }, V.coinEl(), ' ' + b.g.toLocaleString('en-US') + ' gold'), own || can ? null : goldBar(b)),
         on ? h('span', { class: 'pill good' }, 'Sailing') : own ? h('button', { class: 'btn', onclick: () => { s.boat = b.id; A.saveSoon(); A.track('boat_select', { id: b.id }); A.go('treasure', 'shop'); } }, 'Sail it')
           : h('button', { class: 'btn ' + (can ? 'mango' : 'ghost'), disabled: can ? null : true, onclick: () => { if (!can) return; s.gold -= b.g; s.boats.push(b.id); s.boat = b.id; A.saveSoon(); A.track('boat_unlock', { id: b.id, g: b.g }); A.sfx.play('done'); A.confetti(); A.notify({ ic: '⛵', t: 'You bought the ' + b.n + '!', s: 'It is sailing on your map now.', go: ['journey'] }); A.go('treasure', 'shop:' + b.id); } }, can ? 'Buy' : 'Need ' + (b.g - s.gold).toLocaleString('en-US')));
     })));

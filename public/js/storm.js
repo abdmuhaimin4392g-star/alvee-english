@@ -71,7 +71,7 @@
         h('div', { class: 'jar-pic', html: jar }),
         h('div', { style: { flex: 1, minWidth: 0 } },
           h('div', { class: 'sec-title' }, '🫙 Storm Jar'),
-          h('div', { class: 'small muted th' }, 'Every mistake becomes a cloud. Tests bring 3 back. Answer right → 🌈 · คำตอบผิดกลายเป็นเมฆ ตอบถูกในการสอบ = ไข่มุกสายรุ้ง'),
+          h('div', { class: 'small muted th' }, 'Every mistake becomes a storm. Get the same idea right in new sentences to clear it → 🌈 · ทุกคำตอบที่ผิดกลายเป็นพายุ ตอบเรื่องเดิมให้ถูกในประโยคใหม่เพื่อสยบพายุ'),
           h('div', { class: 'jar-row' },
             h('span', { class: 'jar-chip rb' }, '🌈 ' + S.calm),
             ...[1, 2, 3].map((lv) => (by[lv] ? h('span', { class: 'jar-chip lv' + lv, title: CLOUD_N[lv] + ' · ' + CLOUD_TH[lv] }, CLOUD[lv] + ' ' + by[lv]) : null)))));

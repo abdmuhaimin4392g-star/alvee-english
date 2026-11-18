@@ -329,6 +329,8 @@
     return null;
   }
   A.sentQuiz = sentQuiz;
+  A.wordQuizFor = (key, kind, u) => wordQuiz(key, A.wordsThrough ? A.wordsThrough(A.C.units[Math.max(0, (u || 1) - 1)].lessons.slice(-1)[0]) : [], kind, u);
+  A.typeQuizFor = (sid, u, mode) => typeQuiz(sid, A.sentsUpTo(u || 1), mode);
 
   // extra practice for her weakest grammar point (the app adapts to her mistakes)
   const FOCUS_TYPE = { vocab: null, listen: 'listen', talk: 'reply' };
@@ -435,7 +437,10 @@
     if (L.u >= 5) { let k = 0; for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'gap'); if (q) { steps.push(q); if (++k >= (L.u >= 9 ? 2 : 1)) break; } } }
     if (L.u >= 13) { for (const sid of A.shuffle(L.sents.slice())) { const q = typeQuiz(sid, spool, 'dict'); if (q) { steps.push(q); break; } } }
     A.shuffle(teach).slice(0, 2).forEach((k) => { const q = wordQuiz(k, pool, A.pick(['pic', 'wfit']), L.u); if (q) steps.push(q); });
-    return noRepeatTypes(steps);
+    const out = noRepeatTypes(steps);
+    // ⚡ squalls: her weak points come back in the middle of the lesson, in new sentences
+    if (A.storm && A.storm.squalls && !L.boost) { try { const sq = A.storm.squalls(st, L.u, new Set(L.sents), 2); sq.forEach((q, i) => out.splice(Math.floor(out.length * (i + 1) / (sq.length + 1)), 0, q)); } catch (e) { /* squalls are extras */ } }
+    return out;
   }
 
   function talkSteps(talkId) {
@@ -474,7 +479,9 @@
     }
     const main = noRepeatTypes(A.shuffle(steps));
     // ⛈️ the Storm Round: up to 3 questions she got wrong before come back at the end of the test
-    const storm = stormSteps(node, st, pool, spool, new Set(main.map((x) => x.item).filter(Boolean)));
+    const usedS = new Set(main.map((x) => x.sid).filter(Boolean));
+    let storm = A.storm && A.storm.roundSteps ? A.storm.roundSteps(st, node.u, usedS) : [];
+    if (!storm.length) storm = stormSteps(node, st, pool, spool, new Set(main.map((x) => x.item).filter(Boolean)));
     return storm.length ? [...main, { type: 'stormgate', n: storm.length }, ...storm] : main;
   }
   // the questions she missed are kept as "storm clouds" (st.storm.list). A test brings back three of them.
@@ -578,13 +585,14 @@
     else if (kind === 'side') steps = sideSteps(arg, st);
     else if (kind === 'bonus') steps = A.bonusSteps ? A.bonusSteps(arg, st) : [];
     else if (kind === 'vocab') steps = A.vocabSteps ? A.vocabSteps(arg, st) : [];
+    else if (kind === 'storm') steps = A.storm && A.storm.trainSteps ? A.storm.trainSteps(st) : [];
     else if (kind === 'garden') steps = A.gardenSteps && A.garden ? A.gardenSteps(st, A.garden.pickWater(st, 12)) : [];
     steps = steps.filter(Boolean);
     const test = !!(node && node.kind === 'check');
     // tests and speed rounds run against the clock; everything else just shows a stopwatch
     const ctl = A.ctl || {};
     const timed = test || (kind === 'side' && arg && arg.mission === 'speed');
-    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate', 'idcard', 'gcard'].includes(x.type)).length;
+    const graded = steps.filter((x) => !['tip', 'wintro', 'sintro', 'talkread', 'stormgate', 'idcard', 'gcard', 'stormeye'].includes(x.type)).length;
     return {
       kind, arg, node, steps, i: 0, started: Date.now(), items: {}, graded: 0, firstOk: 0, retries: {},
       test, lookups: 0, timed, limit: timed ? (graded * (test ? +ctl.testSec || 30 : 15) + steps.filter((x) => x.type === 'typegap').length * 15 + steps.filter((x) => x.type === 'dict').length * 35) * 1000 : 0,
