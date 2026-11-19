@@ -1462,6 +1462,7 @@
     A.loadQueue();
     A.ctl = A.store.get('ae.ctl', {}) || {};
     await Promise.race([A.loadCtl(), new Promise((r) => setTimeout(r, 2500))]);
+    A.maintCheck();
     A.state = A.fixState(A.newerState(await A.api.loadState().catch(() => null)));
     try { A.applyBoost(A.state); } catch (e) { /* boosters are extras */ }
     applySettings();

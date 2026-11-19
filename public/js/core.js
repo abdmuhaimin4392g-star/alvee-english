@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.25';
+  A.VERSION = '5.26';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -784,6 +784,26 @@
       A.store.set('ae.ctl', A.ctl);
       if (before != null && before !== A.ctl.rev && A.user && A.user.role === 'learner' && !A.session && ['journey', 'home'].includes(A.view)) A.go(A.view);
     } catch (e) { A.ctl = A.store.get('ae.ctl', {}) || {}; }
+    A.maintCheck();
+  };
+  // maintenance screen: while Muhay is preparing an update, her app shows this instead (Control Room switch)
+  A.maintCheck = () => {
+    const on = !!(A.user && A.user.role === 'learner' && !(A.sandbox && A.sandbox.on) && A.ctl && A.ctl.maint);
+    const ov = document.getElementById('maint-ov');
+    if (!on) { if (ov) ov.remove(); return; }
+    if (ov) return;
+    const h = A.h;
+    const btn = h('button', { class: 'mt-btn', onclick: async () => { btn.disabled = true; btn.textContent = '…'; await A.loadCtl(); setTimeout(() => { btn.disabled = false; btn.textContent = '🔄 Check again'; }, 600); } }, '🔄 Check again');
+    document.body.append(h('div', { id: 'maint-ov', role: 'alertdialog', 'aria-modal': 'true', 'aria-label': 'Upgrading' },
+      h('div', { class: 'mt-sky' }, ...Array.from({ length: 12 }, (_, i) => h('i', { style: { left: (i * 29 % 100) + '%', top: (i * 17 % 60) + '%', animationDelay: (i * 0.35) + 's' } }))),
+      h('div', { class: 'mt-card' },
+        h('div', { class: 'mt-art' }, h('span', { class: 'mt-boat', html: A.emoHTML('⛵') }), h('span', { class: 'mt-tool', html: A.emoHTML('🛠️') })),
+        h('h1', null, 'Upgrading your voyage'),
+        h('p', null, 'Something special is being built for you. Please come back a little later!'),
+        h('p', { class: 'th' }, 'กำลังอัปเกรดแอปอยู่ มีของพิเศษกำลังมา กลับมาอีกครั้งในอีกสักครู่นะ'),
+        btn,
+        h('small', null, '💛 Your progress is safe. · ความคืบหน้าของเธอปลอดภัย')),
+      h('div', { class: 'mt-sea' }, h('i'), h('i'))));
   };
   // the live view: while the dashboard is watching, her screen is mirrored to it (she is not told)
   A.live = {

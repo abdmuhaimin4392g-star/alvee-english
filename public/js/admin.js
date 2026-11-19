@@ -432,6 +432,11 @@
   function controlCards(c, st) {
     const V = A.voyage, T = A.treasure, s = V.st(st), R = V.route();
     const out = [];
+    // maintenance screen (closes her app for a while, e.g. while a big update is prepared)
+    out.push(h('div', { class: 'card stack maint-card' + (c.maint ? ' on' : '') },
+      h('b', null, '🛠️ Maintenance screen: ' + (c.maint ? 'ON' : 'OFF')),
+      h('div', { class: 'small' }, c.maint ? 'Her app shows “Upgrading your voyage” and she cannot use it. Turn it off when the update is ready.' : 'She can use the app normally.'),
+      h('button', { class: 'btn block ' + (c.maint ? 'mango' : 'ghost'), onclick: () => setCtl({ patch: { maint: !c.maint } }, c.maint ? 'Maintenance off: her app opens again' : 'Maintenance on: her app is closed for now') }, c.maint ? '✅ Turn it off (open her app)' : '🛠️ Turn it on (close her app)')));
     // gifts
     const kind = h('select', { class: 'input' }, [['chest', '🧰 Treasure chest (she answers 3 questions)'], ['golden', '🏆 Golden chest (better treasure)'], ['bottle', '🍾 Message in a bottle'], ['pearls', '⚪ Pearls'], ['gold', '🪙 Gold coins'], ['logs', '🪵 Wood logs (repair her boat)'], ['key', '🔑 Keys (open sealed chests)'], ['sealed', '🔒 Sealed chest (rare treasure, needs a key)'], ['shells', '🐚 Shells'], ['item', '💎 A treasure item'], ['boat', '⛵ A boat']].map(([v, t]) => h('option', { value: v }, t)));
     const n = h('input', { class: 'input', type: 'number', min: 1, max: 5000, value: 10, style: { maxWidth: '110px' } });

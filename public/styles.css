@@ -2138,3 +2138,24 @@ img.coral.faded { filter: grayscale(1) brightness(1.5) contrast(.8) drop-shadow(
 .cb-bars.locked { display: block; } .cb-lock { padding: 12px 14px; border-radius: 16px; background: var(--surface-2); border: 2px dashed var(--line); }
 .cb-lock small { color: var(--muted); }
 .cb-reader { padding: 10px; border-radius: 14px; background: linear-gradient(120deg, #f3ecff, #fff1f6); } .cb-reader small { color: var(--muted); }
+
+/* maintenance screen (Control Room switch) */
+#maint-ov { position: fixed; inset: 0; z-index: 2147483000; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; background: linear-gradient(#0b2a4a, #1b5c8a 55%, #2bb3a3); color: #fff; text-align: center; }
+#maint-ov .mt-sky { position: absolute; inset: 0; pointer-events: none; }
+#maint-ov .mt-sky i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff; opacity: .8; animation: mttw 2.6s ease-in-out infinite; }
+@keyframes mttw { 50% { opacity: .15; transform: scale(.6); } }
+#maint-ov .mt-card { position: relative; z-index: 2; max-width: 360px; padding: 26px 22px 22px; border-radius: 28px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+#maint-ov .mt-art { position: relative; width: 120px; height: 110px; margin: 0 auto 6px; }
+#maint-ov .mt-boat .emo-img { width: 104px; height: 104px; animation: mtbob 3s ease-in-out infinite; filter: drop-shadow(0 8px 10px rgba(0,0,0,.35)); }
+#maint-ov .mt-tool { position: absolute; right: -8px; top: -6px; } #maint-ov .mt-tool .emo-img { width: 46px; height: 46px; animation: mtwork 1.4s ease-in-out infinite; transform-origin: 30% 70%; }
+@keyframes mtbob { 50% { transform: translateY(-8px) rotate(-3deg); } }
+@keyframes mtwork { 50% { transform: rotate(-22deg); } }
+#maint-ov h1 { color: #fff !important; -webkit-text-fill-color: #fff; font-size: 1.6rem; margin: 6px 0 8px; }
+#maint-ov p { margin: 0 0 8px; opacity: .95; line-height: 1.45; } #maint-ov p.th { font-size: .92rem; opacity: .85; }
+#maint-ov .mt-btn { margin: 10px 0 12px; min-height: 48px; padding: 10px 22px; border: 0; border-radius: 99px; background: linear-gradient(#ffd36b, #ffb21e); color: #4a2a00; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 0 #c98a00; }
+#maint-ov small { display: block; opacity: .85; }
+#maint-ov .mt-sea { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; }
+#maint-ov .mt-sea i { position: absolute; left: -50%; width: 200%; height: 40px; border-radius: 50%; background: rgba(255,255,255,.14); animation: mtwave 6s ease-in-out infinite; }
+#maint-ov .mt-sea i:nth-child(1) { top: 10%; } #maint-ov .mt-sea i:nth-child(2) { top: 45%; animation-delay: -3s; opacity: .6; }
+@keyframes mtwave { 50% { transform: translateX(12%); } }
+.maint-card.on { border: 2px solid #ffb21e; background: linear-gradient(160deg, #fff6dc, #fff); }
