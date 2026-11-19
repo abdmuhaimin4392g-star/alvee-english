@@ -1347,16 +1347,16 @@ function krClean(delay){clearInterval(KR.tick);const a=KR.art,u=KR.ui,f=KR.fire,
 function krEnd(why){if(!KR.on)return;const st=AE.state,V=AE.voyage,s=V.st(st),cur=V.curIndex(st),say=document.getElementById('krsay'),tl=document.querySelector('.kru .krt');
   KR.phase=why;
   if(why==='win'){
-    s.kr.won=(s.kr.won||0)+1;const gold=30+cur*4+Math.floor(Math.random()*25),pearls=2+Math.floor(Math.random()*3);V.addGold(gold);V.addPearls(pearls);
+    s.kr.won=(s.kr.won||0)+1;s.kr.res='won';s.kr.end=Date.now();const gold=30+cur*4+Math.floor(Math.random()*25),pearls=2+Math.floor(Math.random()*3);V.addGold(gold);V.addPearls(pearls);
     let extra='';if(Math.random()<.3){s.rp.p+=1;extra+=', a pink pearl'}if(Math.random()<.12){s.keys+=1;extra+=' and a 🔑 key'}
     if(KR.art)KR.art.classList.add('flee');if(tl){tl.className='krt good';tl.innerHTML='🎉 You drove it away!'}if(say)say.textContent='+'+gold+' gold, +'+pearls+' pearls'+extra;
     trAudioOpen(3);trBurst(2,'#46e39a');AE.track('kraken',{r:'won',gold,pearls});AE.saveSoon();V.refreshHud&&V.refreshHud();
     setTimeout(()=>AE.notify({ic:'🐙',t:'You beat the Kraken!',s:'+'+gold+' gold and +'+pearls+' pearls'+extra+'.',go:['treasure','shop']}),1600);
     krClean(2300);setTimeout(()=>{KR.on=false;KR.phase='';krArm()},2400);return}
-  if(why==='away'){s.hull=Math.max(1,s.hull-10);AE.saveSoon();krClean(0);KR.on=false;KR.phase='';AE.notify({quiet:1,ic:'🐙',t:'The Kraken bit your boat while you were away',s:'Hull −10%. Wood logs can fix it.',go:['boat']});return}
+  if(why==='away'){s.hull=Math.max(1,s.hull-10);s.kr.res='bit';s.kr.end=Date.now();AE.saveSoon();krClean(0);KR.on=false;KR.phase='';AE.notify({quiet:1,ic:'🐙',t:'The Kraken bit your boat while you were away',s:'Hull −10%. Wood logs can fix it.',go:['boat']});return}
   if(why==='time')s.hull=Math.max(0,s.hull-20);
   if(s.hull>0){s.kr.lost=(s.kr.lost||0)+1;if(KR.art)KR.art.classList.add('flee');if(tl){tl.className='krt bad';tl.innerHTML='😣 The Kraken tore the hull'}if(say)say.textContent='Hull '+s.hull+'%. Collect wood logs to repair it.';krHull();
-    AE.track('kraken',{r:'lost',hull:s.hull});AE.saveSoon();setTimeout(()=>AE.notify({ic:'🪵',t:'Your hull is at '+s.hull+'%',s:'Pick up wood logs on the sea and repair your boat.',go:['boat']}),1500);krClean(2300);setTimeout(()=>{KR.on=false;KR.phase='';krArm()},2400);return}
+    s.kr.res='lost';s.kr.end=Date.now();AE.track('kraken',{r:'lost',hull:s.hull});AE.saveSoon();setTimeout(()=>AE.notify({ic:'🪵',t:'Your hull is at '+s.hull+'%',s:'Pick up wood logs on the sea and repair your boat.',go:['boat']}),1500);krClean(2300);setTimeout(()=>{KR.on=false;KR.phase='';krArm()},2400);return}
   /* the boat sinks */
   KR.phase='sink';KR.sink0=performance.now();s.kr.sunk=(s.kr.sunk||0)+1;
   if(KR.art)KR.art.classList.add('sink');if(tl){tl.className='krt bad';tl.innerHTML='🌊 Your boat is sinking!'}if(say)say.textContent='The Kraken pulls it under…';
@@ -1364,7 +1364,7 @@ function krEnd(why){if(!KR.on)return;const st=AE.state,V=AE.voyage,s=V.st(st),cu
   if(s.rp.p>0&&Math.random()<.5){s.rp.p-=1;lost.push('1 pink pearl')}
   const own=Object.keys(s.tre).filter(id=>{const it=AE.treasure.byId[id];return it&&['c','u','r'].includes(it[3])});
   if(own.length){const id=own[Math.floor(Math.random()*own.length)],it=AE.treasure.byId[id],o=s.tre[id];if(o.n>1)o.n-=1;else delete s.tre[id];lost.push(it[1]+' '+it[2])}
-  s.hull=40;AE.track('kraken',{r:'sunk',lost:lost.join(', ')});AE.saveSoon();
+  s.hull=40;s.kr.res='sunk';s.kr.end=Date.now();AE.track('kraken',{r:'sunk',lost:lost.join(', ')});AE.saveSoon();
   trTone(220,0,2.2,'sine',.08,55);buzz([200,100,300]);
   setTimeout(()=>{krClean(0);KR.on=false;KR.phase='';krHull();V.refreshHud&&V.refreshHud();
     const h=AE.h;AE.sheet(h('div',{class:'stack',style:{alignItems:'center',textAlign:'center',gap:'10px'}},h('div',{style:{fontSize:'3.4rem'}},'🌊🐙'),h('h2',null,'Your boat sank!'),

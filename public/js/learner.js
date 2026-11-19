@@ -282,7 +282,7 @@
     const V = VIEWS[view];
     if (!V) return;
     root.append(V(arg));
-    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure', 'types', 'type', 'typevs'].includes(view)) {
+    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure', 'types', 'type', 'typevs', 'cabin'].includes(view)) {
       root.append(nav(view));
       if (A.paintBadges) A.paintBadges();
       A.setPresence({ screen: view });
@@ -323,7 +323,7 @@
 
   function nav(cur) {
     const items = [['home', '🏝️', 'Home'], ['journey', '🧭', 'Voyage'], ['talks', '💬', 'Talk'], ['treasure', '💰', 'Treasure'], ['me', '🐢', 'Me']];
-    const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'words' || cur === 'types' || cur === 'type' || cur === 'typevs') && v === 'me');
+    const on = (v) => cur === v || (cur === 'medals' && v === 'treasure') || ((cur === 'grammar' || cur === 'cabin' || cur === 'words' || cur === 'types' || cur === 'type' || cur === 'typevs') && v === 'me');
     return h('nav', { class: 'nav main-nav', 'aria-label': 'Main menu' }, h('div', { class: 'in' }, items.map(([v, ic, t]) => h('button', { class: on(v) ? 'on' : '', 'data-v': v, 'aria-current': on(v) ? 'page' : null, onclick: () => { try { A.sfx.play('tap'); } catch (e) { /* quiet */ } A.go(v); } }, h('i', { class: 'e' }, ic), h('span', { class: 'lb' }, t)))));
   }
 
@@ -411,6 +411,7 @@
     root.append(A.voyage.homeHero(st, { greet: gEn, streak: sk, lvl }));
     if (A.cal) { try { root.append(A.cal.homeStrip(st)); } catch (e) { /* calendar is an extra */ } }
     if (A.garden) { try { const g = A.garden.homeCard(st); if (g) root.append(g); } catch (e) { /* garden is an extra */ } }
+    if (A.cabin) { try { const cc = A.cabin.homeCard(st); if (cc) root.append(cc); } catch (e) { /* cat extras */ } }
     try { const bt = A.voyage.boatTeaser && A.voyage.boatTeaser(st); if (bt) root.append(bt); } catch (e) { /* extras */ }
     if (A.storm && A.storm.active) { try {
       const act = A.storm.active(st), wall = A.storm.wall(st, (A.reachedUnit(st, A.user.cfg) || 1) + 1);
@@ -744,18 +745,17 @@
       const days = Object.values(st.days);
       const les = days.reduce((a, d) => a + (d.les || 0), 0);
       const study = days.reduce((a, d) => a + A.studySec(d), 0), app = days.reduce((a, d) => a + A.appSec(d), 0);
-      // each number sits on its own coloured gem
-      const gem = (g, cls, val, en, th) => h('div', { class: 'gem-kpi ' + cls },
-        h('img', { class: 'gk-gem', src: 'img/gems/' + g + '.webp', alt: '', draggable: 'false' }),
+      // colourful, shining number tiles
+      const gem = (e, cls, val, en, th) => h('div', { class: 'gem-kpi ' + cls },
+        h('span', { class: 'gk-ic', html: A.emoHTML(e) }),
         h('b', { class: 'num' }, val), h('span', null, en), h('small', { class: 'th' }, th));
-      root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('💎') }), h('div', null, h('b', null, 'My gems of progress'), h('small', { class: 'th' }, 'อัญมณีแห่งความก้าวหน้า'))));
       root.append(h('div', { class: 'gem-kpis' },
-        gem('p05', 'g-topaz', xp, 'Total XP', 'คะแนน'),
-        gem('p02', 'g-emerald', A.wordCount(st), 'Words', 'คำศัพท์'),
-        gem('p03', 'g-sapphire', les, 'Lessons', 'บทเรียน'),
-        gem('p01', 'g-ruby', A.streak(st), 'Learning days', 'วันที่เรียน'),
-        gem('p04', 'g-amethyst', n ? Math.round((ok / n) * 100) + '%' : '–', 'Correct', 'ตอบถูก'),
-        gem('p06', 'g-aqua', A.fmtMin(study), 'Study time', 'App ' + A.fmtMin(app))));
+        gem('⚡', 'g-topaz', xp, 'Total XP', 'คะแนน'),
+        gem('📚', 'g-emerald', A.wordCount(st), 'Words', 'คำศัพท์'),
+        gem('📖', 'g-sapphire', les, 'Lessons', 'บทเรียน'),
+        gem('🔥', 'g-ruby', A.streak(st), 'Learning days', 'วันที่เรียน'),
+        gem('🎯', 'g-amethyst', n ? Math.round((ok / n) * 100) + '%' : '–', 'Correct', 'ตอบถูก'),
+        gem('⏱️', 'g-aqua', A.fmtMin(study), 'Study time', 'App ' + A.fmtMin(app))));
     }
     {
       // her rooms: big colourful doors to every page of her profile
@@ -766,6 +766,7 @@
         h('b', null, en), h('small', { class: 'th' }, th), h('span', { class: 'mt-sub' }, sub));
       root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('🗝️') }), h('div', null, h('b', null, 'My rooms'), h('small', { class: 'th' }, 'ห้องของฉัน'))));
       root.append(h('div', { class: 'me-grid' },
+        A.cabin ? A.cabin.meTile(st) : null,
         room('mt-reef', '🪸', 'Word Reef', 'แนวปะการังคำศัพท์', A.wordCount(st) + ' words', () => A.go('words')),
         room('mt-gram', '📖', 'Grammar book', 'สมุดไวยากรณ์', 'All the rules', () => A.go('grammar')),
         room('mt-medal', '🏅', 'Medals', 'เหรียญรางวัล', got + ' / ' + A.MEDALS.length, () => A.go('medals')),
@@ -1281,11 +1282,12 @@
     const bank = h('div', { class: 'bank' });
     const placed = [];
     const check = h('button', { class: 'btn block', disabled: true }, 'Check');
-    step.tiles.tiles.forEach((t) => {
-      const b = h('button', { class: 'wtile', onclick: () => {
+    step.tiles.tiles.forEach((t, gi) => {
+      const gc = ' wg' + ((gi * 5 + String(step.sid || '').length) % 7);
+      const b = h('button', { class: 'wtile' + gc, onclick: () => {
         if (b.classList.contains('used')) return;
         b.classList.add('used'); A.sfx.play('tap');
-        const p = h('button', { class: 'wtile', onclick: () => { p.remove(); b.classList.remove('used'); placed.splice(placed.indexOf(t), 1); check.disabled = !placed.length; } }, t.w);
+        const p = h('button', { class: 'wtile' + gc, onclick: () => { p.remove(); b.classList.remove('used'); placed.splice(placed.indexOf(t), 1); check.disabled = !placed.length; } }, t.w);
         placed.push(t); line.append(p); check.disabled = false;
         if (D[A.keyOf(t.w)]) A.speech.say(t.w);
       } }, t.w);

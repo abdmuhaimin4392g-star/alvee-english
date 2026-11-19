@@ -21,7 +21,7 @@
     return el;
   };
   // ------------------------------------------------------------- updates reach the phone even if the app stays open
-  A.VERSION = '5.23';
+  A.VERSION = '5.24';
   A.checkUpdate = async (force) => {
     if (!document.querySelector('meta[name="ae-mode"][content="server"]')) return;
     try {
@@ -370,6 +370,8 @@
       if (m && !m.readAt) { m.readAt = Date.now(); A.store.set(this.k('msgs'), all); }
     }
     async coachName() { const a = this.users().find((u) => u.role === 'admin'); return a ? a.name : 'Boyfriend'; }
+    async photo() { return A.store.get(this.k('photo'), null); }
+    async setPhoto(data) { if (data) A.store.set(this.k('photo'), data); else A.store.del(this.k('photo')); }
     // ---- admin
     async learners() {
       return this.users().filter((u) => u.role === 'learner').map((u) => {
@@ -467,6 +469,8 @@
     async inbox() { return (await this.call('inbox')).msgs; }
     async readMsg(id) { await this.call('inbox/read', { id }); }
     async coachName() { return (await this.call('coach')).name; }
+    async photo(uid) { return (await this.call('photo' + (uid ? '?uid=' + encodeURIComponent(uid) : ''))).data; }
+    async setPhoto(data, uid) { await this.call('photo' + (uid ? '?uid=' + encodeURIComponent(uid) : ''), { data }); }
     async learners() { return (await this.call('admin/learners')).learners; }
     async learner(uid) { return this.call('admin/learner?uid=' + encodeURIComponent(uid)); }
     async events(uid, since) { return (await this.call('admin/events?uid=' + encodeURIComponent(uid) + '&since=' + (since || 0))).events; }

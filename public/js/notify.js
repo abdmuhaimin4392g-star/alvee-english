@@ -6,7 +6,7 @@
   'use strict';
   const A = window.AE, h = A.h;
   const inbox = () => { const st = A.state; if (!st) return []; if (!Array.isArray(st.inbox)) st.inbox = []; return st.inbox; };
-  const tabOf = (go) => { const v = go && go[0]; return v === 'treasure' || v === 'medals' ? 'treasure' : v === 'journey' || v === 'quests' || v === 'boat' ? 'journey' : v === 'talks' ? 'talks' : v === 'me' || v === 'words' || v === 'grammar' ? 'me' : 'home'; };
+  const tabOf = (go) => { const v = go && go[0]; return v === 'treasure' || v === 'medals' ? 'treasure' : v === 'journey' || v === 'quests' || v === 'boat' ? 'journey' : v === 'talks' ? 'talks' : v === 'me' || v === 'words' || v === 'grammar' || v === 'cabin' ? 'me' : 'home'; };
   A.unread = (tab) => inbox().filter((n) => !n.read && (!tab || tabOf(n.go) === tab)).length;
 
   // open what a notification points at
