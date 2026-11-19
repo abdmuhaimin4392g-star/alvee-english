@@ -92,6 +92,49 @@ NGINX
   echo "Remember: the domain's DNS A record must point to this server."
 fi
 
+# 6. automatic updates: every 5 minutes the server checks GitHub, and when a new version
+#    is there it runs this installer by itself (code only — her progress is never touched).
+#    Turn off with:  systemctl disable --now alvee-english-update.timer
+cat > /usr/local/bin/alvee-english-update <<UPD
+#!/usr/bin/env bash
+set -uo pipefail
+REPO=https://github.com/abdmuhaimin4392g-star/alvee-english
+REMOTE=\$(curl -fsSL --max-time 20 "https://raw.githubusercontent.com/abdmuhaimin4392g-star/alvee-english/main/public/version.txt?t=\$(date +%s)" | tr -d '[:space:]') || exit 0
+LOCAL=\$(tr -d '[:space:]' < $APP_DIR/public/version.txt 2>/dev/null || echo none)
+[ -n "\$REMOTE" ] && [ "\$REMOTE" != "\$LOCAL" ] || exit 0
+TMP=\$(mktemp -d)
+if curl -fsSL --max-time 180 "\$REPO/archive/refs/heads/main.tar.gz" | tar -xz -C "\$TMP"; then
+  echo "\$(date '+%F %T') updating \$LOCAL -> \$REMOTE"
+  bash "\$TMP/alvee-english-main/deploy/install.sh" $DOMAIN
+fi
+rm -rf "\$TMP"
+UPD
+chmod +x /usr/local/bin/alvee-english-update
+cat > /etc/systemd/system/alvee-english-update.service <<UNIT
+[Unit]
+Description=Alvee English: install new versions from GitHub
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/alvee-english-update
+StandardOutput=append:/var/log/alvee-english-update.log
+StandardError=append:/var/log/alvee-english-update.log
+UNIT
+cat > /etc/systemd/system/alvee-english-update.timer <<UNIT
+[Unit]
+Description=Check GitHub for Alvee English updates every 5 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now alvee-english-update.timer >/dev/null 2>&1 && echo "✓ Automatic updates on (every 5 minutes from GitHub)"
+
 # 5. first-time setup code
 if [ -f "$DATA_DIR/SETUP-CODE.txt" ]; then
   echo ""
