@@ -23,6 +23,9 @@
       async livePush() { return { w: 0 }; },
       async inbox() { return []; },
       async coachName() { return coach; },
+      // her cabin pictures: the demo shows her real ones (read only, never changed from the demo)
+      async photo(u, k) { try { return await real.api.photo(uid, k); } catch (e) { return null; } },
+      async setPhoto() { A.toast('In the demo, pictures are not saved.'); },
       async logout() { setTimeout(() => SB.exit(), 0); },
     };
     return new Proxy(base, { get: (t, k) => (k in t ? t[k] : async () => ({})) });

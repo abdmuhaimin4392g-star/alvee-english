@@ -258,7 +258,7 @@
   let PHOTO = undefined, FIGURE = undefined;
   const loadPhoto = async () => {
     if (PHOTO !== undefined) return PHOTO;
-    try { PHOTO = (A.api.photo && (await A.api.photo())) || null; } catch (e) { PHOTO = null; }
+    try { const d = A.api.photo && (await A.api.photo()); PHOTO = typeof d === 'string' && /^data:image\//.test(d) ? d : null; } catch (e) { PHOTO = null; }
     return PHOTO;
   };
   // kind 'figure' = a picture of her with no background (a PNG), standing in the cabin
@@ -358,7 +358,7 @@
   // ------------------------------------------------------------------ the page (one full screen, nothing to scroll)
   const loadFigure = async () => {
     if (FIGURE !== undefined) return FIGURE;
-    try { FIGURE = (A.api.photo && (await A.api.photo(null, 'figure'))) || null; } catch (e) { FIGURE = null; }
+    try { const d = A.api.photo && (await A.api.photo(null, 'figure')); FIGURE = typeof d === 'string' && /^data:image\//.test(d) ? d : null; } catch (e) { FIGURE = null; }
     return FIGURE;
   };
   VIEWS.cabin = () => {
