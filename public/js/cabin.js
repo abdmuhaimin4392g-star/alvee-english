@@ -40,18 +40,54 @@
     ['w_hat', '🎩', 'Top hat', 'หมวกทรงสูง', 450, 'wear', { x: 200, y: 26, s: 112, r: -10 }],
     ['w_star', '⭐', 'Star clip', 'กิ๊บดาว', 0, 'wear', { x: 140, y: 104, s: 54, r: -10 }],
     ['w_crown', '👑', 'Little crown', 'มงกุฎน้อย', 0, 'wear', { x: 204, y: 44, s: 104, r: -12 }],
-    ['d_plant', '🪴', 'Plant', 'ต้นไม้', 200, 'decor', { slot: 'floor' }],
-    ['d_basket', '🧺', 'Toy basket', 'ตะกร้าของเล่น', 180, 'decor', { slot: 'floor2' }],
-    ['d_bowl', '🐠', 'Fish bowl', 'โหลปลา', 350, 'decor', { slot: 'shelf' }],
-    ['d_candle', '🕯️', 'Candle', 'เทียน', 150, 'decor', { slot: 'shelf2' }],
-    ['d_frame', '🖼️', 'Sea painting', 'ภาพทะเล', 260, 'decor', { slot: 'wall' }],
-    ['d_chime', '🎐', 'Wind chime', 'กระดิ่งลม', 220, 'decor', { slot: 'hang' }],
-    ['d_moon', '🌙', 'Moon lamp', 'โคมพระจันทร์', 0, 'decor', { slot: 'shelf3' }],
-    ['d_balloon', '🎈', 'Balloon', 'ลูกโป่ง', 0, 'decor', { slot: 'hang2' }],
+    // decorations: surf = where it goes (floor, wall, shelf, ceil); w/h = size in px at the front of the room
+    ['d_plant', '🪴', 'House plant', 'ต้นไม้ในกระถาง', 200, 'decor', { surf: 'floor', w: 96, h: 110 }],
+    ['d_cactus', '🌵', 'Cactus', 'กระบองเพชร', 150, 'decor', { surf: 'floor', w: 80, h: 100 }],
+    ['d_basket', '🧺', 'Toy basket', 'ตะกร้าของเล่น', 180, 'decor', { surf: 'floor', w: 96, h: 86 }],
+    ['d_palm', '🌴', 'Palm tree', 'ต้นปาล์ม', 380, 'decor', { surf: 'floor', w: 150, h: 190 }],
+    ['d_balloon', '🎈', 'Balloon', 'ลูกโป่ง', 0, 'decor', { surf: 'floor', w: 64, h: 150, float: 1 }],
+    ['d_frame', '🖼️', 'Sea painting', 'ภาพทะเล', 260, 'decor', { surf: 'wall', w: 92, h: 92 }],
+    ['d_map', '🗺️', 'Treasure map', 'แผนที่สมบัติ', 240, 'decor', { surf: 'wall', w: 96, h: 96 }],
+    ['d_ring', '🛟', 'Life ring', 'ห่วงชูชีพ', 180, 'decor', { surf: 'wall', w: 84, h: 84 }],
+    ['d_wheel', '☸️', 'Ship wheel', 'พวงมาลัยเรือ', 340, 'decor', { surf: 'wall', w: 100, h: 100 }],
+    ['d_mirror', '🪞', 'Mirror', 'กระจก', 220, 'decor', { surf: 'wall', w: 70, h: 96 }],
+    ['d_anchor', '⚓', 'Anchor', 'สมอเรือ', 160, 'decor', { surf: 'wall', w: 76, h: 76 }],
+    ['d_bowl', '🐠', 'Fish bowl', 'โหลปลา', 350, 'decor', { surf: 'shelf', w: 58, h: 58, bowl: 1 }],
+    ['d_candle', '🕯️', 'Candle', 'เทียน', 150, 'decor', { surf: 'shelf', w: 40, h: 54, glow: 1 }],
+    ['d_books', '📚', 'Story books', 'หนังสือนิทาน', 120, 'decor', { surf: 'shelf', w: 56, h: 52 }],
+    ['d_shell', '🐚', 'Big shell', 'เปลือกหอยใหญ่', 100, 'decor', { surf: 'shelf', w: 46, h: 40 }],
+    ['d_tea', '🫖', 'Teapot', 'กาน้ำชา', 140, 'decor', { surf: 'shelf', w: 50, h: 46 }],
+    ['d_tulip', '🌷', 'Tulips', 'ดอกทิวลิป', 120, 'decor', { surf: 'shelf', w: 46, h: 58 }],
+    ['d_diya', '🪔', 'Oil lamp', 'ตะเกียงน้ำมัน', 160, 'decor', { surf: 'shelf', w: 50, h: 40, glow: 1 }],
+    ['d_moon', '🌙', 'Moon lamp', 'โคมพระจันทร์', 0, 'decor', { surf: 'shelf', w: 50, h: 50, glow: 1 }],
+    ['d_parrot', '🦜', 'Parrot friend', 'เพื่อนนกแก้ว', 0, 'decor', { surf: 'shelf', w: 56, h: 60 }],
+    ['d_chime', '🎐', 'Wind chime', 'กระดิ่งลม', 220, 'decor', { surf: 'ceil', w: 46, h: 66 }],
+    ['d_lantern', '🏮', 'Red lantern', 'โคมแดง', 200, 'decor', { surf: 'ceil', w: 54, h: 66, glow: 1 }],
   ];
   const IT = {}; ITEMS.forEach((x) => (IT[x[0]] = x));
   C.ITEMS = ITEMS;
   C.pickPhoto = (...a) => pickPhoto(...a);
+  // where each decoration goes first (floor: x across 0-1, z depth 0 front - 1 back; walls: u wall, x/z along, y height; shelf: u shelf, x along)
+  const DEF = {
+    d_plant: { s: 'floor', x: 0.08, z: 0.9 }, d_cactus: { s: 'floor', x: 0.6, z: 0.98 }, d_basket: { s: 'floor', x: 0.42, z: 0.97 },
+    d_palm: { s: 'floor', x: 0.75, z: 0.95 }, d_balloon: { s: 'floor', x: 0.62, z: 0.8 },
+    d_frame: { s: 'wall', u: 'left', z: 0.55, y: 0.36 }, d_map: { s: 'wall', u: 'back', x: 0.3, y: 0.16 }, d_ring: { s: 'wall', u: 'right', z: 0.5, y: 0.36 },
+    d_wheel: { s: 'wall', u: 'left', z: 0.2, y: 0.3 }, d_mirror: { s: 'wall', u: 'right', z: 0.18, y: 0.33 }, d_anchor: { s: 'wall', u: 'back', x: 0.5, y: 0.5 },
+    d_bowl: { s: 'shelf', u: 'sh1', x: 0.5 }, d_candle: { s: 'shelf', u: 'sh1', x: 0.85 }, d_books: { s: 'shelf', u: 'sh1', x: 0.16 },
+    d_shell: { s: 'shelf', u: 'crate', x: 0.25 }, d_tea: { s: 'shelf', u: 'crate', x: 0.7 }, d_tulip: { s: 'shelf', u: 'crate', x: 0.5 },
+    d_diya: { s: 'shelf', u: 'crate', x: 0.3 }, d_moon: { s: 'shelf', u: 'crate', x: 0.6 }, d_parrot: { s: 'shelf', u: 'sh1', x: 0.33 },
+    d_chime: { s: 'ceil', x: 0.3, z: 0.45 }, d_lantern: { s: 'ceil', x: 0.78, z: 0.6 },
+  };
+  C.DEF = DEF;
+  // put a decoration in the room at its first spot (moved a little if that spot is taken)
+  const placeDefault = (c, id) => {
+    const d = DEF[id]; if (!d) return;
+    const taken = (p) => Object.keys(c.place).some((k) => { const q = c.place[k]; return k !== id && q.s === p.s && q.u === p.u && Math.abs((q.x || 0) - (p.x || 0)) < 0.12 && Math.abs((q.z || 0) - (p.z || 0)) < 0.12 && Math.abs((q.y || 0) - (p.y || 0)) < 0.12; });
+    const p = { ...d };
+    for (let i = 0; i < 8 && taken(p); i++) { if (p.x != null) p.x = Math.max(0.08, Math.min(0.92, d.x + (i % 2 ? -1 : 1) * 0.13 * Math.ceil((i + 1) / 2))); else if (p.z != null) p.z = Math.max(0.08, Math.min(0.92, d.z + (i % 2 ? -1 : 1) * 0.13 * Math.ceil((i + 1) / 2))); }
+    c.place[id] = p;
+  };
+  C.placeDefault = placeDefault;
   const FAV_FOODS = ['f_milk', 'f_fish', 'f_tuna', 'f_shrimp', 'f_sushi'];
   const FAV_TOYS = ['t_yarn', 't_ball', 't_mouse', 't_feather', 't_laser'];
   const SPOTS = { head: ['head', 'หัว'], cheek: ['cheeks', 'แก้ม'], chin: ['chin', 'คาง'] };
@@ -70,6 +106,8 @@
     }
     const c = st.cabin;
     c.inv = c.inv || {}; c.own = c.own || {}; c.decor = c.decor || {}; c.known = c.known || {}; c.cnt = c.cnt || {}; c.toyLog = c.toyLog || [];
+    if (!c.place) { c.place = {}; Object.keys(c.decor).forEach((k) => { if (c.decor[k] && c.own[k] && DEF[k]) placeDefault(c, k); }); }
+    Object.keys(c.place).forEach((k) => { if (!c.own[k] || !DEF[k]) delete c.place[k]; });
     return c;
   };
   C.name = (st) => { const c = st && st.cabin; return (c && c.name) || 'your cat'; };
@@ -390,9 +428,14 @@
     const think = h('div', { class: 'cb-think', 'aria-label': 'What he is thinking' });
     cat.append(think);
     const bubble = h('button', { class: 'cb-bubble', onclick: () => { const l = bubble._line; if (l) A.speech.say(l[0]); } });
-    const back = h('div', { class: 'cb-bwall' }, h('div', { class: 'cb-wall' }), h('div', { class: 'cb-shelf l' }), win);
-    const backDecor = h('div', { class: 'cb-decor' }); back.append(backDecor);
-    const room = h('div', { class: 'cb-room' }, back, h('div', { class: 'cb-lw' }), h('div', { class: 'cb-rw' }), h('div', { class: 'cb-ceil' }), h('div', { class: 'cb-fl' }), lantern, decorL, her, bigbed, cat, fx);
+    // the 3D room: back wall (porthole, a shelf that sticks out), side walls, ceiling, deck floor, a wooden side table
+    const shelfItems = h('div', { class: 'sh-items' });
+    const shelf = h('div', { class: 'cb-shelf3d' }, h('i', { class: 'sh-top' }), h('i', { class: 'sh-front' }), h('i', { class: 'sh-br l' }), h('i', { class: 'sh-br r' }), shelfItems);
+    const back = h('div', { class: 'cb-bwall' }, h('div', { class: 'cb-wall' }), win, shelf);
+    const lw = h('div', { class: 'cb-lw' }), rw = h('div', { class: 'cb-rw' }), ceil = h('div', { class: 'cb-ceil' }), fl = h('div', { class: 'cb-fl' }, h('i', { class: 'cb-rug' }));
+    const crateTop = h('div', { class: 'crate-items' });
+    const crate = h('div', { class: 'cb-crate' }, h('i', { class: 'cf front' }), h('i', { class: 'cf top' }), h('i', { class: 'cf left' }), crateTop);
+    const room = h('div', { class: 'cb-room' }, back, lw, rw, ceil, fl, crate, lantern, decorL, her, bigbed, cat, fx);
     scene.append(room);
     root.append(scene);
 
@@ -437,13 +480,49 @@
       const it = c.wear && IT[c.wear];
       if (it) { const p = it[6]; w.append(h('span', { class: 'cb-w', style: { left: ((p.x - p.s / 2) / 391 * 100) + '%', top: ((p.y - p.s / 2) / 473 * 100) + '%', width: (p.s / 391 * 100) + '%', transform: 'rotate(' + p.r + 'deg)' }, html: A.emoHTML(it[1]) })); }
     };
+    // ---- decorations stand in the 3D room (positions are kept as fractions, so every phone size works)
+    const DEPTH = 420;                 // room depth in px (same as the CSS)
+    const decEls = [];
+    const placeEl = (id) => {
+      const it = IT[id], p = c.place[id], m = it[6];
+      const kids = m.bowl ? [h('span', { class: 'bowl-glass' }, h('span', { class: 'bowl-fish', html: A.emoHTML('🐠') }), h('i', { class: 'bowl-water' }))] : [h('span', { class: 'd-pic', html: A.emoHTML(it[1]) })];
+      const el = h('button', { class: 'cb-d d-' + p.s + (m.glow ? ' glow' : '') + (m.bowl ? ' bowl' : '') + (m.float ? ' float' : ''), 'aria-label': it[2], 'data-id': id, style: { width: m.w + 'px', height: m.h + 'px' }, onclick: (e) => { e.stopPropagation(); if (!DEC.on) poke(el, it); } }, ...kids);
+      return el;
+    };
     const paintDecor = () => {
-      A.clear(decorL); A.clear(backDecor);
-      Object.keys(c.decor).filter((k) => c.decor[k] && IT[k]).forEach((k) => {
-        const sl = IT[k][6].slot, el = h('button', { class: 'cb-d s-' + sl, 'aria-label': IT[k][2], html: A.emoHTML(IT[k][1]), onclick: (e) => { e.stopPropagation(); poke(el, IT[k]); } });
-        (/^shelf|^wall/.test(sl) ? backDecor : decorL).append(el);
+      decEls.forEach((e) => e.remove()); decEls.length = 0;
+      const W = scene.clientWidth || innerWidth, H = scene.clientHeight || innerHeight;
+      // the side table sits on the floor at the back right
+      crate.style.cssText = 'left:' + (0.9 * W - 45) + 'px;top:' + (H - 90) + 'px;transform:translateZ(' + (-0.9 * DEPTH) + 'px)';
+      Object.keys(c.place).forEach((id) => {
+        if (!IT[id] || !c.own[id]) return;
+        const p = c.place[id], m = IT[id][6], el = placeEl(id), st2 = el.style;
+        if (p.s === 'floor') {
+          st2.left = (p.x * W - m.w / 2) + 'px'; st2.top = (H - m.h) + 'px'; st2.transform = 'translateZ(' + (-p.z * DEPTH) + 'px)';
+          room.append(el);
+          const sh = h('i', { class: 'cb-dsh', style: { left: (p.x * W - m.w * 0.42) + 'px', top: (DEPTH - p.z * DEPTH - 16) + 'px', width: (m.w * 0.84) + 'px' } });
+          fl.append(sh); decEls.push(sh);
+        } else if (p.s === 'wall') {
+          st2.top = (p.y * H - m.h / 2) + 'px';
+          if (p.u === 'back') { st2.left = (p.x * W - m.w / 2) + 'px'; back.append(el); }
+          else if (p.u === 'left') { st2.left = (p.z * DEPTH - m.w / 2) + 'px'; lw.append(el); }
+          else { st2.left = (DEPTH - p.z * DEPTH - m.w / 2) + 'px'; rw.append(el); }
+        } else if (p.s === 'shelf') {
+          const box = p.u === 'crate' ? crateTop : shelfItems, bw = p.u === 'crate' ? 90 : shelfItems.clientWidth || 0.3 * W;
+          st2.left = (p.x * bw - m.w / 2) + 'px'; st2.bottom = '0px';
+          box.append(el);
+        } else if (p.s === 'ceil') {
+          const top = 0.07 * H;
+          st2.left = (p.x * W - m.w / 2) + 'px'; st2.top = top + 'px'; st2.transform = 'translateZ(' + (-p.z * DEPTH) + 'px)';
+          el.prepend(h('i', { class: 'd-str', style: { height: top + 'px', top: -top + 'px' } }));
+          room.append(el);
+        }
+        decEls.push(el);
       });
     };
+    const DEC = { on: false };
+    const onResize = () => { if (!root.isConnected) { removeEventListener('resize', onResize); return; } paintDecor(); };
+    addEventListener('resize', onResize);
     const say = (l, ms) => {
       line = l; bubble._line = l;
       A.clear(bubble).append(h('span', { class: 'cb-see' }, '👀'), h('div', null, h('b', null, l[0]), h('small', { class: 'th' }, l[1])));
@@ -726,7 +805,7 @@
       const it = IT[id];
       if (s.gold < it[4]) return;
       s.gold -= it[4]; C.give(st, id);
-      if (it[5] === 'decor') { c.decor[id] = 1; c.newT = now(); paintDecor(); }
+      if (it[5] === 'decor') { placeDefault(c, id); c.newT = now(); paintDecor(); }
       if (it[5] === 'wear') { c.wear = id; c.newT = now(); paintWear(); }
       A.track('cabin_buy', { id, g: it[4] }); A.sfx.play('done'); A.toast(it[1] + ' ' + it[2] + ' is yours!');
       save(); paint(); redraw && redraw();
@@ -743,7 +822,7 @@
             ...wears.map((x) => h('button', { class: 'cb-item' + (c.wear === x[0] ? ' on' : ''), onclick: () => { c.wear = x[0]; c.newT = now(); paintWear(); save(); paint(); draw(); } }, pic(x[1]), h('b', null, x[2]))))
             : h('div', { class: 'note' }, 'No bows or hats yet. Buy one, or find a crown in a chest!'),
           h('div', { class: 'sec-title' }, 'Cabin things'),
-          decs.length ? h('div', { class: 'cb-grid' }, ...decs.map((x) => h('button', { class: 'cb-item' + (c.decor[x[0]] ? ' on' : ''), onclick: () => { c.decor[x[0]] = c.decor[x[0]] ? 0 : 1; if (c.decor[x[0]]) c.newT = now(); paintDecor(); save(); paint(); draw(); } }, pic(x[1]), h('b', null, x[2]), h('small', null, c.decor[x[0]] ? 'In the cabin' : 'Put out'))))
+          decs.length ? h('div', { class: 'cb-grid' }, ...decs.map((x) => h('button', { class: 'cb-item' + (c.place[x[0]] ? ' on' : ''), onclick: () => { if (c.place[x[0]]) delete c.place[x[0]]; else { placeDefault(c, x[0]); c.newT = now(); } paintDecor(); save(); paint(); draw(); } }, pic(x[1]), h('b', null, x[2]), h('small', null, c.place[x[0]] ? 'In the cabin' : 'Put out'))))
             : h('div', { class: 'note' }, 'Make the cabin cosy: plants, a fish bowl, a candle… from the shop.'),
           h('button', { class: 'btn ghost block', onclick: () => { sh.close(); shop('wear'); } }, '🛒 Shop')));
       };
@@ -810,7 +889,7 @@
     // ------------------------------------------------ saving + life loop
     function save() { A.saveSoon(); }
     let ps = 0; const paintSoon = () => { clearTimeout(ps); ps = setTimeout(paint, 400); };
-    paintWear(); paintDecor(); paint();
+    paintWear(); paint(); requestAnimationFrame(() => requestAnimationFrame(paintDecor));
     if (!c.name) setTimeout(() => nameSheet(false), 350);
     else if (c.lonely) setTimeout(() => SND.meow(true), 600);
     let tickN = 0, nextIdle = now() + 5000, nextBlink = now() + 2500;

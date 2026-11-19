@@ -2315,3 +2315,51 @@ img.coral.faded { filter: grayscale(1) brightness(1.5) contrast(.8) drop-shadow(
 .cabin-full .cb-info .cb-bubble { position: static; width: auto; max-width: none; }
 .cabin-full .cb-info .cb-pill { position: static; width: auto; max-width: none; top: auto; right: auto; left: auto; bottom: auto; }
 .cabin-full .cb-think { left: 58%; top: -24%; }
+
+/* ===== Cat Cabin step 2: furniture and decorations in 3D ===== */
+.cabin-full .cb-scene { perspective: 600px; perspective-origin: 50% 18%; }
+.cb-bwall { transform: translateZ(-420px); }
+.cb-lw, .cb-rw { width: 420px; }
+.cb-fl, .cb-ceil { height: 420px; }
+.cabin-full .cb-bwall .cb-win { top: 10%; right: 8%; width: 40%; }
+/* a wooden shelf that sticks out of the back wall */
+.cb-shelf3d { position: absolute; left: 6%; top: 44%; width: 32%; height: 10px; transform-style: preserve-3d; }
+.cb-shelf3d .sh-top { position: absolute; left: 0; right: 0; bottom: 100%; height: 48px; transform-origin: bottom center; transform: rotateX(-90deg); background: linear-gradient(#b07a46, #8a5a30); }
+.cb-shelf3d .sh-front { position: absolute; inset: 0; transform: translateZ(48px); background: linear-gradient(#9a6436, #6e4322); box-shadow: 0 6px 10px rgba(0,0,0,.35); }
+.cb-shelf3d .sh-br { position: absolute; top: 100%; width: 8px; height: 26px; background: #5a3418; transform-origin: top; transform: translateZ(20px) skewY(-30deg); }
+.cb-shelf3d .sh-br.l { left: 10%; } .cb-shelf3d .sh-br.r { right: 10%; }
+.cb-shelf3d .sh-items { position: absolute; left: 0; right: 0; bottom: 100%; height: 0; transform-style: preserve-3d; transform: translateZ(26px); }
+/* a wooden side table (a real cube) on the floor at the back right */
+.cb-crate { position: absolute; width: 90px; height: 90px; transform-style: preserve-3d; }
+.cb-crate .cf { position: absolute; inset: 0; background:
+  repeating-linear-gradient(180deg, transparent 0 26px, rgba(40,18,6,.55) 26px 30px),
+  linear-gradient(#b8844e, #94632f); border: 3px solid #6e4322; box-sizing: border-box; }
+.cb-crate .cf.front { transform: translateZ(45px); }
+.cb-crate .cf.top { transform: rotateX(90deg) translateZ(45px); background: linear-gradient(135deg, #c99862, #a8763f); }
+.cb-crate .cf.left { transform: rotateY(-90deg) translateZ(45px); filter: brightness(.75); }
+.cb-crate .crate-items { position: absolute; left: 0; right: 0; top: 0; height: 0; transform-style: preserve-3d; }
+/* decorations */
+.cb-d { position: absolute; display: block; border: 0; padding: 0; background: none; cursor: pointer; transform-origin: 50% 100%; }
+.cb-d .d-pic { display: block; width: 100%; height: 100%; } .cb-d .d-pic .emo-img { width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; filter: drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+.shelf-items .cb-d, .sh-items .cb-d, .crate-items .cb-d { bottom: 0; }
+.cb-dsh { position: absolute; height: 32px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.45), rgba(0,0,0,0)); pointer-events: none; }
+.cb-d.float .d-pic { animation: cbbob 3.4s ease-in-out infinite; } .cb-d.float::after { content: ""; position: absolute; left: 50%; top: 45%; bottom: 0; width: 1.5px; background: rgba(255,255,255,.7); }
+.cb-d.glow::before { content: ""; position: absolute; left: -60%; right: -60%; top: -50%; bottom: -10%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 200, 110, .55), rgba(255, 170, 80, 0)); animation: cbflick 2.2s ease-in-out infinite; pointer-events: none; }
+@keyframes cbflick { 0%, 100% { opacity: .85; transform: scale(1); } 45% { opacity: 1; transform: scale(1.06); } 70% { opacity: .75; transform: scale(.97); } }
+.cb-d.d-ceil { transform-origin: 50% 0; animation: cbswing 3.6s ease-in-out infinite; }
+.cb-d .d-str { position: absolute; left: 50%; width: 2px; margin-left: -1px; background: #2a170a; }
+.cb-d.d-wall .d-pic .emo-img { filter: drop-shadow(3px 5px 4px rgba(0,0,0,.45)); }
+/* the fish bowl: glass, water and a fish swimming round */
+.bowl-glass { position: absolute; inset: 0; border-radius: 50% 50% 46% 46%; background: radial-gradient(60% 50% at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,.08) 60%), rgba(180, 225, 255, .22); border: 2px solid rgba(255,255,255,.55); overflow: hidden; box-shadow: inset 0 -6px 10px rgba(60,140,200,.35), 0 4px 6px rgba(0,0,0,.3); }
+.bowl-water { position: absolute; left: 0; right: 0; bottom: 0; top: 34%; background: linear-gradient(rgba(90,180,240,.35), rgba(40,120,200,.55)); }
+.bowl-fish { position: absolute; top: 40%; left: 10%; width: 46%; z-index: 1; animation: cbfish 5s ease-in-out infinite; } .bowl-fish .emo-img { width: 100%; height: auto; }
+@keyframes cbfish { 0%, 100% { left: 6%; transform: scaleX(-1); } 48% { left: 48%; transform: scaleX(-1); } 52% { left: 48%; transform: scaleX(1); } 96% { left: 6%; transform: scaleX(1); } }
+.cb-d.bowl.poked .bowl-fish { animation-duration: 1.2s; }
+/* a round rug on the deck floor (lies flat) */
+.cb-rug { position: absolute; left: 30%; width: 40%; top: 16%; height: 30%; border-radius: 50%; background: radial-gradient(closest-side, #f3c46b 0 22%, #c9563f 23% 38%, #2f8f8a 39% 52%, #f0e1c0 53% 66%, #b9452f 67% 82%, rgba(185,69,47,0) 83%); opacity: .9; }
+/* new layout heights so the back of the floor shows behind the bed */
+.cabin-full .cb-her { bottom: 21%; }
+.cb-bigbed { bottom: 11%; height: 18%; }
+.cabin-full .cb-unit { bottom: 13%; }
+.cabin-full .cb-scene { perspective-origin: 50% 8%; }
+.cabin-full .cb-her { height: 44%; }
