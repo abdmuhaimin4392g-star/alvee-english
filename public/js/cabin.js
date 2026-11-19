@@ -51,6 +51,7 @@
   ];
   const IT = {}; ITEMS.forEach((x) => (IT[x[0]] = x));
   C.ITEMS = ITEMS;
+  C.pickPhoto = (...a) => pickPhoto(...a);
   const FAV_FOODS = ['f_milk', 'f_fish', 'f_tuna', 'f_shrimp', 'f_sushi'];
   const FAV_TOYS = ['t_yarn', 't_ball', 't_mouse', 't_feather', 't_laser'];
   const SPOTS = { head: ['head', 'หัว'], cheek: ['cheeks', 'แก้ม'], chin: ['chin', 'คาง'] };
@@ -99,24 +100,24 @@
   // Alvee must read the clues and guess the feeling word in English; then she sees what her cat needs.
   // [emoji, mood name, thai, colour, guess word, thought pictures (vague → clear), signs she can see, what helps]
   const MD = {
-    scared: ['🙀', 'Scared', 'กลัว', '#6a5acd', 'scared', ['💥', '🌊', '🐙'], [['Her eyes are very big and round.', 'ตาเธอโตและกลมมาก'], ['She is shaking and stays low.', 'เธอตัวสั่นและหมอบต่ำ'], ['She keeps looking at the window.', 'เธอมองไปที่หน้าต่างตลอด']], ['Pet her gently three times to make her feel safe.', 'ลูบเธอเบา ๆ สามครั้งให้รู้สึกปลอดภัย']],
-    startled: ['🙀', 'Scared', 'ตกใจ', '#6a5acd', 'scared', ['⚡', '✋', '💦'], [['She jumped when you tapped so fast.', 'เธอสะดุ้งตอนแตะเร็ว ๆ'], ['Her eyes are wide open.', 'ตาเธอเบิกกว้าง'], ['She does not move.', 'เธอไม่ขยับเลย']], ['Wait a little and touch her slowly.', 'รอสักครู่แล้วค่อย ๆ ลูบ']],
-    excited: ['😸', 'Excited', 'ตื่นเต้น', '#e08a00', 'excited', ['⚔️', '🐙', '🏆'], [['Her eyes shine and she looks at you.', 'ตาเธอเป็นประกายและมองเธอ'], ['She sits up tall.', 'เธอนั่งตัวตรง'], ['The battle outside is over and it is quiet now.', 'การต่อสู้ข้างนอกจบแล้ว ตอนนี้เงียบ']], ['Pet her. She is proud of her captain!', 'ลูบเธอสิ เธอภูมิใจในกัปตัน']],
-    sleeping: ['💤', 'Sleeping', 'กำลังหลับ', '#3b4a8a', 'sleepy', ['💤', '🌙', '🛏️'], [['She is sleeping. Let her rest.', 'เธอกำลังหลับ ปล่อยให้พัก'], ['Her paws twitch. She is dreaming.', 'อุ้งเท้ากระตุก เธอกำลังฝัน'], ['She breathes slowly.', 'เธอหายใจช้า ๆ']], ['Let her sleep. Come back later.', 'ปล่อยให้หลับ แล้วค่อยกลับมา']],
-    drowsy: ['😽', 'Sleepy', 'ง่วง', '#5a6ab0', 'sleepy', ['🌙', '🛏️', '💤'], [['Her eyes are half closed.', 'ตาเธอปรือ'], ['She yawns again and again.', 'เธอหาวไม่หยุด'], ['It is the middle of the night.', 'ตอนนี้กลางดึก']], ['Leave her alone. She will sleep again.', 'อย่ากวน เดี๋ยวเธอจะหลับต่อ']],
-    grumpy: ['😾', 'Grumpy', 'หงุดหงิด', '#c5163f', 'grumpy', ['💢', '✋', '🚫'], [['She turned her back to you.', 'เธอหันหลังให้'], ['Her tail flicks fast.', 'หางเธอสะบัดเร็ว'], ['She moves away from your hand.', 'เธอขยับหนีมือ']], ['Give her some space for a minute.', 'ให้พื้นที่เธอสักนาที']],
-    hungry: ['😿', 'Hungry', 'หิว', '#f07b1d', 'hungry', ['🍽️', '🐟', '🥣'], [['She keeps looking at her empty bowl.', 'เธอมองชามที่ว่างอยู่เรื่อย ๆ'], ['Her tummy makes a little sound.', 'ท้องเธอร้องเบา ๆ'], ['She sniffs the air and licks her lips.', 'เธอดมกลิ่นแล้วเลียปาก']], ['Give her food.', 'ให้อาหารเธอ']],
-    lonely: ['😿', 'Lonely', 'เหงา', '#2867c9', 'lonely', ['🚪', '⏳', '💗'], [['She ran to you when you came in.', 'เธอวิ่งมาหาตอนเข้ามา'], ['She meows softly and follows you.', 'เธอร้องเบา ๆ และเดินตาม'], ['You were away for a long time.', 'เธอไม่ได้มานาน']], ['Stay and pet her for a while.', 'อยู่ลูบเธอสักพัก']],
-    worried: ['😿', 'Worried', 'กังวล', '#0f8aa6', 'worried', ['💧', '🪵', '⛵'], [['She looks at the floor and listens.', 'เธอมองพื้นและฟังเสียง'], ['She hears water dripping somewhere.', 'เธอได้ยินเสียงน้ำหยด'], ['The boat is hurt.', 'เรือได้รับความเสียหาย']], ['Repair the boat with wood logs on the map.', 'ซ่อมเรือด้วยท่อนไม้บนแผนที่']],
-    itchy: ['😾', 'Itchy', 'คัน', '#8a6a00', 'itchy', ['🪶', '🫧', '🪮'], [['She scratches behind her ear.', 'เธอเกาหลังหู'], ['Her fur looks messy.', 'ขนเธอดูยุ่ง'], ['She licks her fur again and again.', 'เธอเลียขนซ้ำ ๆ']], ['Brush her fur.', 'แปรงขนให้เธอ']],
-    tired: ['😽', 'Tired', 'เหนื่อย', '#5a6ab0', 'tired', ['🥱', '🛏️', '💤'], [['She lies down and moves slowly.', 'เธอนอนลงและขยับช้า ๆ'], ['She does not want to play.', 'เธอไม่อยากเล่น'], ['Her eyes close for a second.', 'ตาเธอปิดไปชั่วครู่']], ['Let her take a nap.', 'ให้เธองีบ']],
-    proud: ['😻', 'Proud', 'ภูมิใจ', '#d4357a', 'proud', ['📚', '⭐', '🏅'], [['She looks at your English book.', 'เธอมองหนังสือภาษาอังกฤษของเธอ'], ['She sits next to you and purrs.', 'เธอนั่งข้าง ๆ และครางเบา ๆ'], ['You finished a lesson today.', 'วันนี้เธอเรียนจบหนึ่งบท']], ['Pet her or play. She is proud of you!', 'ลูบหรือเล่นกับเธอ เธอภูมิใจในตัวเธอ']],
-    curious: ['😺', 'Curious', 'อยากรู้', '#0d8a5f', 'curious', ['❓', '👀', '✨'], [['She stares at something new.', 'เธอจ้องของใหม่'], ['Her ears point forward.', 'หูเธอชี้ไปข้างหน้า'], ['She walks around it slowly.', 'เธอเดินวนรอบ ๆ ช้า ๆ']], ['Let her explore her new things.', 'ปล่อยให้เธอสำรวจของใหม่']],
-    playful: ['😸', 'Playful', 'อยากเล่น', '#e08a00', 'playful', ['⚡', '🧶', '🐭'], [['Her tail moves left and right.', 'หางเธอส่ายไปมา'], ['She jumps at a shadow.', 'เธอกระโดดใส่เงา'], ['She brings you a toy.', 'เธอคาบของเล่นมาให้']], ['Play with her.', 'เล่นกับเธอ']],
-    cuddly: ['😻', 'Loving', 'อยากอ้อน', '#d4357a', 'loving', ['💗', '✋', '💞'], [['She rubs her head on your hand.', 'เธอเอาหัวถูมือ'], ['She purrs loudly.', 'เธอครางเสียงดัง'], ['She slowly blinks at you.', 'เธอกะพริบตาช้า ๆ ใส่เธอ']], ['Pet her favourite spot.', 'ลูบตรงที่เธอชอบ']],
-    happy: ['😺', 'Happy', 'มีความสุข', '#17955a', 'happy', ['🌞', '🎵', '💛'], [['She purrs and her eyes are soft.', 'เธอครางและตาดูอ่อนโยน'], ['Her tail is up high.', 'หางเธอตั้งสูง'], ['She stretches and rolls over.', 'เธอยืดตัวและกลิ้ง']], ['Keep doing what you do!', 'ทำแบบนี้ต่อไป']],
-    bored: ['😼', 'Bored', 'เบื่อ', '#6a6a6a', 'bored', ['🕰️', '😑', '🧶'], [['She stares at the wall.', 'เธอจ้องผนัง'], ['She sighs and lies down.', 'เธอถอนหายใจและนอนลง'], ['She looks at the toy basket.', 'เธอมองตะกร้าของเล่น']], ['Play with her or buy a new toy.', 'เล่นกับเธอหรือซื้อของเล่นใหม่']],
-    calm: ['😺', 'Calm', 'สบายใจ', '#0e8a8a', 'calm', ['🌊', '☁️', '🎶'], [['She watches the waves quietly.', 'เธอดูคลื่นเงียบ ๆ'], ['She breathes slowly.', 'เธอหายใจช้า ๆ'], ['Everything looks peaceful.', 'ทุกอย่างดูสงบ']], ['She is fine. Pet her if you like.', 'เธอสบายดี ลูบเธอได้นะ']],
+    scared: ['🙀', 'Scared', 'กลัว', '#6a5acd', 'scared', ['💥', '🌊', '🐙'], [['His eyes are very big and round.', 'ตาเขาโตและกลมมาก'], ['He is shaking and stays low.', 'เขาตัวสั่นและหมอบต่ำ'], ['He keeps looking at the window.', 'เขามองไปที่หน้าต่างตลอด']], ['Pet him gently three times to make him feel safe.', 'ลูบเขาเบา ๆ สามครั้งให้รู้สึกปลอดภัย']],
+    startled: ['🙀', 'Scared', 'ตกใจ', '#6a5acd', 'scared', ['⚡', '✋', '💦'], [['He jumped when you tapped so fast.', 'เขาสะดุ้งตอนแตะเร็ว ๆ'], ['His eyes are wide open.', 'ตาเขาเบิกกว้าง'], ['He does not move.', 'เขาไม่ขยับเลย']], ['Wait a little and touch him slowly.', 'รอสักครู่แล้วค่อย ๆ ลูบ']],
+    excited: ['😸', 'Excited', 'ตื่นเต้น', '#e08a00', 'excited', ['⚔️', '🐙', '🏆'], [['His eyes shine and he looks at you.', 'ตาเขาเป็นประกายและมองเธอ'], ['He sits up tall.', 'เขานั่งตัวตรง'], ['The battle outside is over and it is quiet now.', 'การต่อสู้ข้างนอกจบแล้ว ตอนนี้เงียบ']], ['Pet him. He is proud of his captain!', 'ลูบเขาสิ เขาภูมิใจในกัปตัน']],
+    sleeping: ['💤', 'Sleeping', 'กำลังหลับ', '#3b4a8a', 'sleepy', ['💤', '🌙', '🛏️'], [['He is sleeping. Let him rest.', 'เขากำลังหลับ ปล่อยให้พัก'], ['His paws twitch. He is dreaming.', 'อุ้งเท้ากระตุก เขากำลังฝัน'], ['He breathes slowly.', 'เขาหายใจช้า ๆ']], ['Let him sleep. Come back later.', 'ปล่อยให้หลับ แล้วค่อยกลับมา']],
+    drowsy: ['😽', 'Sleepy', 'ง่วง', '#5a6ab0', 'sleepy', ['🌙', '🛏️', '💤'], [['His eyes are half closed.', 'ตาเขาปรือ'], ['He yawns again and again.', 'เขาหาวไม่หยุด'], ['It is the middle of the night.', 'ตอนนี้กลางดึก']], ['Leave him alone. He will sleep again.', 'อย่ากวน เดี๋ยวเขาจะหลับต่อ']],
+    grumpy: ['😾', 'Grumpy', 'หงุดหงิด', '#c5163f', 'grumpy', ['💢', '✋', '🚫'], [['He turned his back to you.', 'เขาหันหลังให้'], ['His tail flicks fast.', 'หางเขาสะบัดเร็ว'], ['He moves away from your hand.', 'เขาขยับหนีมือเธอ']], ['Give him some space for a minute.', 'ให้พื้นที่เขาสักนาที']],
+    hungry: ['😿', 'Hungry', 'หิว', '#f07b1d', 'hungry', ['🍽️', '🐟', '🥣'], [['He keeps looking at his empty bowl.', 'เขามองชามที่ว่างอยู่เรื่อย ๆ'], ['His tummy makes a little sound.', 'ท้องเขาร้องเบา ๆ'], ['He sniffs the air and licks his lips.', 'เขาดมกลิ่นแล้วเลียปาก']], ['Give his food.', 'ให้อาหารเขา']],
+    lonely: ['😿', 'Lonely', 'เหงา', '#2867c9', 'lonely', ['🚪', '⏳', '💗'], [['He ran to you when you came in.', 'เขาวิ่งมาหาตอนเธอเข้ามา'], ['He meows softly and follows you.', 'เขาร้องเบา ๆ และเดินตาม'], ['You were away for a long time.', 'เธอไม่ได้มานาน']], ['Stay and pet him for a while.', 'อยู่ลูบเขาสักพัก']],
+    worried: ['😿', 'Worried', 'กังวล', '#0f8aa6', 'worried', ['💧', '🪵', '⛵'], [['He looks at the floor and listens.', 'เขามองพื้นและฟังเสียง'], ['He hears water dripping somewhere.', 'เขาได้ยินเสียงน้ำหยด'], ['The boat is hurt.', 'เรือได้รับความเสียหาย']], ['Repair the boat with wood logs on the map.', 'ซ่อมเรือด้วยท่อนไม้บนแผนที่']],
+    itchy: ['😾', 'Itchy', 'คัน', '#8a6a00', 'itchy', ['🪶', '🫧', '🪮'], [['He scratches behind his ear.', 'เขาเกาหลังหู'], ['His fur looks messy.', 'ขนเขาดูยุ่ง'], ['He licks his fur again and again.', 'เขาเลียขนซ้ำ ๆ']], ['Brush his fur.', 'แปรงขนให้เขา']],
+    tired: ['😽', 'Tired', 'เหนื่อย', '#5a6ab0', 'tired', ['🥱', '🛏️', '💤'], [['He lies down and moves slowly.', 'เขานอนลงและขยับช้า ๆ'], ['He does not want to play.', 'เขาไม่อยากเล่น'], ['His eyes close for a second.', 'ตาเขาปิดไปชั่วครู่']], ['Let him take a nap.', 'ให้เขางีบ']],
+    proud: ['😻', 'Proud', 'ภูมิใจ', '#d4357a', 'proud', ['📚', '⭐', '🏅'], [['He looks at your English book.', 'เขามองหนังสือภาษาอังกฤษของเธอ'], ['He sits next to you and purrs.', 'เขานั่งข้าง ๆ และครางเบา ๆ'], ['You finished a lesson today.', 'วันนี้เธอเรียนจบหนึ่งบท']], ['Pet him or play. He is proud of you!', 'ลูบหรือเล่นกับเขา เขาภูมิใจในตัวเธอ']],
+    curious: ['😺', 'Curious', 'อยากรู้', '#0d8a5f', 'curious', ['❓', '👀', '✨'], [['He stares at something new.', 'เขาจ้องของใหม่'], ['His ears point forward.', 'หูเขาชี้ไปข้างหน้า'], ['He walks around it slowly.', 'เขาเดินวนรอบ ๆ ช้า ๆ']], ['Let him explore his new things.', 'ปล่อยให้เขาสำรวจของใหม่']],
+    playful: ['😸', 'Playful', 'อยากเล่น', '#e08a00', 'playful', ['⚡', '🧶', '🐭'], [['His tail moves left and right.', 'หางเขาส่ายไปมา'], ['He jumps at a shadow.', 'เขากระโดดใส่เงา'], ['He brings you a toy.', 'เขาคาบของเล่นมาให้']], ['Play with him.', 'เล่นกับเขา']],
+    cuddly: ['😻', 'Loving', 'อยากอ้อน', '#d4357a', 'loving', ['💗', '✋', '💞'], [['He rubs his head on your hand.', 'เขาเอาหัวถูมือเธอ'], ['He purrs loudly.', 'เขาครางเสียงดัง'], ['He slowly blinks at you.', 'เขากะพริบตาช้า ๆ ใส่เธอ']], ['Pet his favourite spot.', 'ลูบตรงที่เขาชอบ']],
+    happy: ['😺', 'Happy', 'มีความสุข', '#17955a', 'happy', ['🌞', '🎵', '💛'], [['He purrs and his eyes are soft.', 'เขาครางและตาดูอ่อนโยน'], ['His tail is up high.', 'หางเขาตั้งสูง'], ['He stretches and rolls over.', 'เขายืดตัวและกลิ้ง']], ['Keep doing what you do!', 'ทำแบบนี้ต่อไป']],
+    bored: ['😼', 'Bored', 'เบื่อ', '#6a6a6a', 'bored', ['🕰️', '😑', '🧶'], [['He stares at the wall.', 'เขาจ้องผนัง'], ['He sighs and lies down.', 'เขาถอนหายใจและนอนลง'], ['He looks at the toy basket.', 'เขามองตะกร้าของเล่น']], ['Play with him or buy a new toy.', 'เล่นกับเขาหรือซื้อของเล่นใหม่']],
+    calm: ['😺', 'Calm', 'สบายใจ', '#0e8a8a', 'calm', ['🌊', '☁️', '🎶'], [['He watches the waves quietly.', 'เขาดูคลื่นเงียบ ๆ'], ['He breathes slowly.', 'เขาหายใจช้า ๆ'], ['Everything looks peaceful.', 'ทุกอย่างดูสงบ']], ['He is fine. Pet him if you like.', 'เขาสบายดี ลูบเขาได้นะ']],
   };
   const MOODS = {};
   Object.keys(MD).forEach((k) => { const m = MD[k]; MOODS[k] = { e: m[0], en: m[1], th: m[2], col: m[3], word: m[4], think: m[5], signs: m[6], help: m[7] }; });
@@ -138,19 +139,19 @@
     if (kr && kr.res === 'won' && c.krCalm !== kr.last) return ['excited', 'You beat the Kraken'];
     if (kr && c.krCalm !== kr.last) return ['scared', kr.res === 'on' ? 'The Kraken is near the boat' : 'The Kraken attacked the boat'];
     if (asleepAt(c, t)) return ['sleeping', c.nap > t ? 'Taking a nap' : 'It is night in Thailand'];
-    if (c.wake && t - c.wake < 3 * MIN && (thHour(t) >= ((c.pers && c.pers.bed) || 22) || thHour(t) < 6.5)) return ['drowsy', 'You woke her up at night'];
+    if (c.wake && t - c.wake < 3 * MIN && (thHour(t) >= ((c.pers && c.pers.bed) || 22) || thHour(t) < 6.5)) return ['drowsy', 'You woke him up at night'];
     if (c.grumpy > t) return ['grumpy', 'Too much petting'];
-    if (c.hunger < 25) return ['hungry', 'Her food bowl is empty'];
+    if (c.hunger < 25) return ['hungry', 'His food bowl is empty'];
     if (c.lonely) return ['lonely', 'You were away for a long time'];
     if ((s.hull || 100) < 50) return ['worried', 'The hull is at ' + s.hull + '%'];
-    if (c.clean < 25) return ['itchy', 'Her fur needs brushing'];
+    if (c.clean < 25) return ['itchy', 'His fur needs brushing'];
     if (c.energy < 25) return ['tired', 'Low energy'];
     if (day && (day.les || 0) > 0 && c.proudDay !== tk) return ['proud', 'You finished a lesson today'];
     if (c.newT && t - c.newT < 8 * MIN) return ['curious', 'Something new in the cabin'];
     if (c.energy > 55 && c.hunger > 40 && t - (c.lastPlay || 0) > 3 * HOUR) return ['playful', 'No play for a while'];
-    if (c.bond > 70 && c.joy > 75) return ['cuddly', 'She loves you'];
-    if (c.joy > 62) return ['happy', 'All her needs are met'];
-    if (c.joy < 35) return ['bored', 'She needs fun'];
+    if (c.bond > 70 && c.joy > 75) return ['cuddly', 'He loves you'];
+    if (c.joy > 62) return ['happy', 'All his needs are met'];
+    if (c.joy < 35) return ['bored', 'He needs fun'];
     return ['calm', 'A quiet day at sea'];
   };
   const BONDS = [[0, 'New friend', 'เพื่อนใหม่'], [20, 'Friend', 'เพื่อน'], [45, 'Good friend', 'เพื่อนสนิท'], [70, 'Best friend', 'เพื่อนรักที่สุด'], [90, 'Family', 'ครอบครัว']];
@@ -160,10 +161,10 @@
   const DISC = [
     ['food', '🍽️', 'Favourite food', (c) => IT[c.pers.food][2]],
     ['toy', '🧸', 'Favourite toy', (c) => IT[c.pers.toy][2]],
-    ['spot', '✋', 'Favourite petting spot', (c) => 'Her ' + SPOTS[c.pers.spot][0]],
+    ['spot', '✋', 'Favourite petting spot', (c) => 'His ' + SPOTS[c.pers.spot][0]],
     ['limit', '⏱️', 'Petting limit', (c) => 'About ' + c.pers.petMax + ' pets, then a break'],
     ['bed', '🌙', 'Bedtime', (c) => (c.pers.bed - 12) + ' pm, Thai time'],
-    ['paws', '🐾', 'Paws', () => 'Does not like her paws touched'],
+    ['paws', '🐾', 'Paws', () => 'Does not like his paws touched'],
     ['kraken', '🐙', 'Biggest fear', () => 'The Kraken'],
     ['sea', '🌊', 'Loves to watch', () => 'The sea from the window'],
   ];
@@ -254,14 +255,15 @@
   };
 
   // ------------------------------------------------------------------ her photo (kept on the server, only for signed-in users)
-  let PHOTO = undefined;
+  let PHOTO = undefined, FIGURE = undefined;
   const loadPhoto = async () => {
     if (PHOTO !== undefined) return PHOTO;
     try { PHOTO = (A.api.photo && (await A.api.photo())) || null; } catch (e) { PHOTO = null; }
     return PHOTO;
   };
-  const pickPhoto = (done) => {
-    const inp = h('input', { type: 'file', accept: 'image/*', style: { display: 'none' } });
+  // kind 'figure' = a picture of her with no background (a PNG), standing in the cabin
+  const pickPhoto = (done, kind, uid) => {
+    const inp = h('input', { type: 'file', accept: kind === 'figure' ? 'image/png,image/webp' : 'image/*', style: { display: 'none' } });
     inp.addEventListener('change', () => {
       const f = inp.files && inp.files[0]; inp.remove();
       if (!f) return;
@@ -269,12 +271,23 @@
       rd.onload = () => {
         const img = new Image();
         img.onload = async () => {
-          const S = 480, cv = document.createElement('canvas'); cv.width = cv.height = S;
-          const m = Math.min(img.width, img.height), sx = (img.width - m) / 2, sy = Math.max(0, (img.height - m) / 2 - m * 0.08);
-          cv.getContext('2d').drawImage(img, sx, sy, m, m, 0, 0, S, S);
-          const data = cv.toDataURL('image/jpeg', 0.86);
-          try { await A.api.setPhoto(data); PHOTO = data; A.track('cabin_photo', {}); A.toast('📸 Photo saved!'); done && done(); }
-          catch (e) { A.toast('Could not save the photo. Try again with signal.'); }
+          const cv = document.createElement('canvas');
+          let data;
+          if (kind === 'figure') {
+            const k = Math.min(1, 900 / img.height); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+            cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+            data = cv.toDataURL('image/webp', 0.88); if (!/^data:image\/webp/.test(data)) data = cv.toDataURL('image/png');
+          } else {
+            const S = 480; cv.width = cv.height = S;
+            const m = Math.min(img.width, img.height), sx = (img.width - m) / 2, sy = Math.max(0, (img.height - m) / 2 - m * 0.08);
+            cv.getContext('2d').drawImage(img, sx, sy, m, m, 0, 0, S, S);
+            data = cv.toDataURL('image/jpeg', 0.86);
+          }
+          try {
+            await A.api.setPhoto(data, uid || null, kind === 'figure' ? 'figure' : null);
+            if (kind === 'figure') FIGURE = data; else PHOTO = data;
+            A.track('cabin_photo', { k: kind || 'photo' }); A.toast('📸 Picture saved!'); done && done();
+          } catch (e) { A.toast('Could not save the picture. Try again with signal.'); }
         };
         img.src = rd.result;
       };
@@ -285,29 +298,69 @@
 
   // ------------------------------------------------------------------ the cat, in layers
   const EYES = [[172, 140, 19, 15], [250, 121, 18, 15]];
+  // his tail (the picture has none): drawn in his own colours, it lies on the blanket and swishes
+  const TAILS = ['M70 350 C40 346 14 336 2 312 C-10 284 -10 252 8 232', 'M70 350 C36 350 4 340 -12 314 C-28 286 -34 254 -20 228', 'M70 350 C44 344 22 330 14 306 C6 280 10 254 30 238'];
+  const tailSVG = () => `<svg class="cb-tail" viewBox="0 0 391 473" aria-hidden="true"><defs>
+      <linearGradient id="cbtg" gradientUnits="userSpaceOnUse" x1="70" y1="350" x2="0" y2="230"><stop offset="0" stop-color="#e9a364"/><stop offset=".6" stop-color="#f0ad6c"/><stop offset="1" stop-color="#f6c48e"/></linearGradient>
+      <filter id="cbfurf" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="5"/><feGaussianBlur stdDeviation=".5"/></filter></defs>
+    <g class="cb-tg" filter="url(#cbfurf)">
+      <path class="t0" d="${TAILS[0]}" fill="none" stroke="#b9682d" stroke-width="31" stroke-linecap="round" opacity=".55"/>
+      <path class="t1" d="${TAILS[0]}" fill="none" stroke="url(#cbtg)" stroke-width="27" stroke-linecap="round"/>
+      <path class="t2" d="${TAILS[0]}" fill="none" stroke="#c4732f" stroke-width="27" stroke-dasharray="9 17" opacity=".7"/>
+      <path class="t3" d="${TAILS[0]}" fill="none" stroke="#ffe0bd" stroke-width="7" stroke-linecap="round" opacity=".35" transform="translate(-2 -6)"/>
+    </g></svg>`;
   const catEl = () => {
-    const eyes = EYES.map(([x, y, rx, ry]) => `<g class="eye" transform="rotate(-13 ${x} ${y})">
+    const LIDC = [['#e9a983', '#f1ba9a', '#f7c09b'], ['#f2b892', '#efb493', '#eeb291']];
+    const eyes = EYES.map(([x, y, rx, ry], i) => `<defs><linearGradient id="cblid${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${LIDC[i][0]}"/><stop offset=".7" stop-color="${LIDC[i][1]}"/><stop offset="1" stop-color="${LIDC[i][2]}"/></linearGradient></defs>
+      <g class="eye" transform="rotate(-13 ${x} ${y})">
         <ellipse class="pup" cx="${x}" cy="${y + 1}" rx="${rx * 0.62}" ry="${ry * 0.78}"/>
-        <ellipse class="lid" cx="${x}" cy="${y - 1}" rx="${rx + 4}" ry="${ry + 4}"/>
+        <g class="lidg"><ellipse class="lid" cx="${x}" cy="${y}" rx="${rx + 2.5}" ry="${ry + 2.5}" fill="url(#cblid${i})"/>
+        <path class="lash" d="M${x - rx - 1} ${y + 2} Q${x} ${y + ry + 3} ${x + rx + 1} ${y + 2}"/></g>
         <path class="shut" d="M${x - rx - 1} ${y + 1} Q${x} ${y + ry + 1} ${x + rx + 1} ${y + 1}"/>
         <path class="joy" d="M${x - rx} ${y + 6} Q${x} ${y - ry + 2} ${x + rx} ${y + 6}"/></g>`).join('');
-    const svg = `<svg class="cb-eyes" viewBox="0 0 391 473" aria-hidden="true"><defs><radialGradient id="cbfur" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#f7c491"/><stop offset="1" stop-color="#e39a63"/></radialGradient><filter id="cbsoft"><feGaussianBlur stdDeviation="1.1"/></filter></defs>${eyes}</svg>`;
-    const front = `<svg class="cb-front" viewBox="0 0 391 473" preserveAspectRatio="none" aria-hidden="true"><defs>
-        <linearGradient id="cbbl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c72c9"/><stop offset=".45" stop-color="#4a4fa6"/><stop offset="1" stop-color="#2b2f72"/></linearGradient>
-        <pattern id="cbq" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><rect width="34" height="34" fill="none"/><path d="M0 17H34M17 0V34" stroke="rgba(255,255,255,.16)" stroke-width="2" stroke-dasharray="4 4"/></pattern></defs>
+    const svg = `<svg class="cb-eyes" viewBox="0 0 391 473" aria-hidden="true"><defs><filter id="cbsoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>${eyes}</svg>`;
+    const front = `<svg class="cb-front" viewBox="0 0 391 473" preserveAspectRatio="none" aria-hidden="true">
       <path d="M-46 318 Q-10 330 22 352 Q90 392 150 420 Q205 448 250 452 Q300 456 352 446 Q372 440 380 424 Q410 418 440 430 L446 560 L-46 560 Z" fill="url(#cbbl)"/>
       <path d="M-46 318 Q-10 330 22 352 Q90 392 150 420 Q205 448 250 452 Q300 456 352 446 Q372 440 380 424 Q410 418 440 430 L446 560 L-46 560 Z" fill="url(#cbq)"/>
       <path d="M-30 330 Q20 352 80 384 Q160 430 250 452" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="5" stroke-linecap="round"/></svg>`;
     return h('div', { class: 'cb-unit' },
       h('div', { class: 'cb-flip' },
-        h('div', { class: 'cb-bedback' }),
+        h('span', { class: 'cb-tailwrap', html: tailSVG() }),
         h('div', { class: 'cb-cat' },
           h('img', { class: 'cb-body', src: 'img/cabin/cat_body.webp', alt: '', draggable: 'false' }),
           h('div', { class: 'cb-head' }, h('img', { src: 'img/cabin/cat_head.webp', alt: '', draggable: 'false' }), h('span', { html: svg }), h('div', { class: 'cb-wear' }))),
         h('span', { class: 'cb-frontwrap', html: front })));
   };
+  // the tail curls slowly all the time; how it moves shows his mood
+  const tailLoop = (unit) => {
+    const ps = [...unit.querySelectorAll('.cb-tg path')];
+    let k = 0, from = TAILS[0];
+    const num = (d) => d.match(/-?\d+(\.\d+)?/g).map(Number);
+    const step = () => {
+      if (!unit.isConnected) return;
+      const m = (unit.className.match(/m-(\w+)/) || [])[1] || 'calm';
+      const fast = m === 'grumpy' || m === 'startled' || m === 'playful' || m === 'excited';
+      const still = m === 'sleeping';
+      const to = TAILS[(k = (k + 1 + (fast ? 1 : 0)) % TAILS.length)];
+      const a = num(from), b = num(to), dur = still ? 4200 : fast ? 520 : 1700, t0 = performance.now();
+      const frame = (t) => {
+        if (!unit.isConnected) return;
+        const f = Math.min(1, (t - t0) / dur), e = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+        let i = 0; const d = to.replace(/-?\d+(\.\d+)?/g, () => { const v = a[i] + (b[i] - a[i]) * (still ? e * 0.25 : e); i++; return v.toFixed(1); });
+        ps.forEach((p) => p.setAttribute('d', d));
+        if (f < 1) requestAnimationFrame(frame); else { from = to; setTimeout(step, still ? 1500 : fast ? 60 : 300 + Math.random() * 900); }
+      };
+      requestAnimationFrame(frame);
+    };
+    step();
+  };
 
-  // ------------------------------------------------------------------ the page
+  // ------------------------------------------------------------------ the page (one full screen, nothing to scroll)
+  const loadFigure = async () => {
+    if (FIGURE !== undefined) return FIGURE;
+    try { FIGURE = (A.api.photo && (await A.api.photo(null, 'figure'))) || null; } catch (e) { FIGURE = null; }
+    return FIGURE;
+  };
   VIEWS.cabin = () => {
     const st = A.state, c = C.st(st), s = V.st(st);
     C.tick(c);
@@ -317,15 +370,9 @@
     c.lastVisit = t0;
     A.track('cabin_open', {});
     A.saveSoon();
+    const NM = () => c.name || 'your cat';
 
-    const root = h('div', { class: 'screen cabin' });
-    const goldEl = h('span', { class: 'num' }, V.fmtN(s.gold));
-    root.append(h('div', { class: 'cb-top' },
-      h('button', { class: 'icon-btn', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'),
-      h('div', { style: { flex: 1, minWidth: 0 } }, h('h1', null, (c.name || 'Your cat') + '’s Cabin'), h('div', { class: 'small th muted' }, 'ห้องของเราในเรือ')),
-      h('button', { class: 'cb-gold', onclick: () => shop() }, V.coinEl(), goldEl, h('b', null, '+'))));
-
-    // --- the scene
+    const root = h('div', { class: 'cabin-full' });
     const scene = h('div', { class: 'cb-scene' });
     const hr = new Date().getHours();
     const sky = hr >= 6 && hr < 17 ? 'day' : hr >= 17 && hr < 19 ? 'dusk' : 'night';
@@ -333,52 +380,73 @@
       h('div', { class: 'cb-sky' }, ...(sky === 'night' ? Array.from({ length: 14 }, (_, i) => h('i', { class: 'star', style: { left: (i * 37 % 100) + '%', top: (i * 23 % 55) + '%', animationDelay: (i * 0.4) + 's' } })) : []), h('i', { class: sky === 'night' ? 'moon' : 'sun' })),
       h('div', { class: 'cb-sea' }, h('i', { class: 'wave w1' }), h('i', { class: 'wave w2' })),
       h('span', { class: 'cb-boat', html: A.emoHTML('⛵') }),
-      h('span', { class: 'cb-tent', html: A.emoHTML('🐙') }));
-    const frame = h('button', { class: 'cb-frame', 'aria-label': 'My photo', onclick: () => photoSheet() }, h('div', { class: 'cb-photo' }, pic('📷'), h('small', null, 'Add my photo')), h('span', { class: 'cb-ribbon' }, A.user.name));
-    const paintPhoto = () => { const ph = frame.querySelector('.cb-photo'); A.clear(ph); if (PHOTO) ph.append(h('img', { src: PHOTO, alt: A.user.name })); else ph.append(pic('📷'), h('small', null, 'Add my photo')); };
-    loadPhoto().then(paintPhoto);
+      h('span', { class: 'cb-tent', html: A.emoHTML('🐙') }), h('span', { class: 'cb-gull' }, '〰'));
     const lantern = h('div', { class: 'cb-lantern' }, h('i'), pic('🏮'));
     const decorL = h('div', { class: 'cb-decor' });
+    const her = h('div', { class: 'cb-her' });
+    const bigbed = h('div', { class: 'cb-bigbed', html: '<svg viewBox="0 0 400 160" preserveAspectRatio="none"><defs><linearGradient id="cbbl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c72c9"/><stop offset=".45" stop-color="#4a4fa6"/><stop offset="1" stop-color="#2b2f72"/></linearGradient><pattern id="cbq" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><rect width="34" height="34" fill="none"/><path d="M0 17H34M17 0V34" stroke="rgba(255,255,255,.16)" stroke-width="2" stroke-dasharray="4 4"/></pattern></defs><path d="M0 40 Q60 8 140 22 Q220 36 290 14 Q350 0 400 26 L400 160 L0 160Z" fill="url(#cbbl)"/><path d="M0 40 Q60 8 140 22 Q220 36 290 14 Q350 0 400 26 L400 160 L0 160Z" fill="url(#cbq)"/><path d="M10 44 Q70 16 140 30" stroke="rgba(255,255,255,.3)" stroke-width="4" fill="none" stroke-linecap="round"/></svg>' });
     const cat = catEl();
     const fx = h('div', { class: 'cb-fx' });
+    const think = h('div', { class: 'cb-think', 'aria-label': 'What he is thinking' });
+    cat.append(think);
     const bubble = h('button', { class: 'cb-bubble', onclick: () => { const l = bubble._line; if (l) A.speech.say(l[0]); } });
-    const think = h('div', { class: 'cb-think', 'aria-label': 'What she is thinking' });
-    scene.append(h('div', { class: 'cb-wall' }), h('div', { class: 'cb-shelf l' }), h('div', { class: 'cb-shelf r' }), win, frame, lantern, decorL, h('div', { class: 'cb-floor' }), cat, think, fx);
-    root.append(scene, bubble);
+    const back = h('div', { class: 'cb-bwall' }, h('div', { class: 'cb-wall' }), h('div', { class: 'cb-shelf l' }), win);
+    const backDecor = h('div', { class: 'cb-decor' }); back.append(backDecor);
+    const room = h('div', { class: 'cb-room' }, back, h('div', { class: 'cb-lw' }), h('div', { class: 'cb-rw' }), h('div', { class: 'cb-ceil' }), h('div', { class: 'cb-fl' }), lantern, decorL, her, bigbed, cat, fx);
+    scene.append(room);
+    root.append(scene);
 
-    // --- reading her mind: guess the feeling, then her needs show
-    const guessBox = h('div', { class: 'card cb-guess' });
-    const moodBox = h('div', { class: 'card cb-mood' });
-    const bars = h('div', { class: 'cb-bars' });
-    root.append(guessBox, moodBox, bars);
+    // --- top: her picture, name and love; gold
+    const avatar = h('button', { class: 'cb-av', 'aria-label': 'My photo', onclick: () => photoSheet() });
+    const loveBar = h('i');
+    const prof = h('div', { class: 'cb-prof' }, avatar, h('div', { class: 'cb-pn' }, h('b', null, A.user.name, ' ', h('span', { class: 'cb-heart' }, '♥')), h('small', { class: 'cb-bondtxt' }, ''), h('div', { class: 'cb-love' }, loveBar)));
+    const goldEl = h('span', { class: 'num' }, V.fmtN(s.gold));
+    root.append(h('div', { class: 'cb-hud' },
+      h('button', { class: 'cb-back', 'aria-label': 'Back', onclick: () => A.back('me') }, '‹'), prof,
+      h('button', { class: 'cb-gold', onclick: () => shop() }, V.coinEl(), goldEl, h('b', null, '+'))));
+    const paintPhoto = () => { A.clear(avatar); if (PHOTO) avatar.append(h('img', { src: PHOTO, alt: A.user.name })); else avatar.append(pic('📷')); };
+    const paintHer = () => {
+      A.clear(her);
+      if (FIGURE) her.append(h('img', { src: FIGURE, alt: A.user.name, draggable: 'false' }));
+      else if (PHOTO) her.append(h('div', { class: 'cb-her-frame' }, h('img', { src: PHOTO, alt: A.user.name })));
+      her.classList.toggle('photo', !FIGURE && !!PHOTO);
+    };
+    loadPhoto().then(() => { paintPhoto(); paintHer(); });
+    loadFigure().then(paintHer);
+    const moodPill = h('button', { class: 'cb-pill', onclick: () => (clue().ok ? needsSheet() : guessSheet()) });
+    root.append(h('div', { class: 'cb-info' }, bubble, moodPill));
 
-    // --- actions
-    const act = (ic, en, th, fn, cls) => h('button', { class: 'cb-act ' + (cls || ''), onclick: fn }, pic(ic), h('b', null, en), h('small', { class: 'th' }, th));
-    root.append(h('div', { class: 'cb-acts' },
-      act('✋', 'Pet', 'ลูบ', () => petHint(), 'a-pet'),
-      act('🍽️', 'Feed', 'ให้อาหาร', () => feedSheet(), 'a-feed'),
-      act('🧶', 'Play', 'เล่น', () => playSheet(), 'a-play'),
-      act('🪮', 'Brush', 'แปรงขน', () => brush(), 'a-brush'),
-      act('💤', 'Nap', 'นอน', () => napOrWake(), 'a-nap'),
-      act('🛒', 'Shop', 'ร้านค้า', () => shop(), 'a-shop'),
-      act('🎀', 'Style', 'แต่งตัว', () => styleSheet(), 'a-style'),
-      act('📖', 'Diary', 'สมุดแมว', () => diary(), 'a-diary')));
+    // --- side buttons
+    const side = (ic, en, fn, cls) => h('button', { class: 'cb-side ' + cls, onclick: fn }, pic(ic), h('b', null, en));
+    root.append(h('div', { class: 'cb-left' }, side('🛒', 'Shop', () => shop(), 's-shop'), side('🎀', 'Style', () => styleSheet(), 's-style'), side('📖', 'Diary', () => diary(), 's-diary')));
+    // --- the feeling pill (guess first, then see his needs)
+    // --- bottom: cards + the big Pet wheel
+    const card = (ic, en, fn, cls) => h('button', { class: 'cb-card ' + cls, onclick: fn }, h('span', { class: 'cb-pin' }), pic(ic), h('b', null, en));
+    root.append(h('div', { class: 'cb-cards' },
+      card('🐟', 'Food', () => feedSheet(), 'a-feed'), card('🧶', 'Toys', () => playSheet(), 'a-play'), card('🪮', 'Brush', () => brush(), 'a-brush'), card('💤', 'Nap', () => napOrWake(), 'a-nap')));
+    root.append(h('button', { class: 'cb-wheel', 'aria-label': 'Pet him', onclick: () => petHint() },
+      h('span', { class: 'cb-wh', html: '<svg viewBox="0 0 120 120"><g fill="#8a5228" stroke="#5a3418" stroke-width="2">' + Array.from({ length: 8 }, (_, i) => `<rect x="55" y="2" width="10" height="26" rx="5" transform="rotate(${i * 45} 60 60)"/>`).join('') + '</g><circle cx="60" cy="60" r="40" fill="#b8783f" stroke="#5a3418" stroke-width="4"/><circle cx="60" cy="60" r="31" fill="#8a5228" stroke="#e0a35e" stroke-width="3"/></svg>' }),
+      h('span', { class: 'cb-wp' }, pic('🐾'), h('b', null, 'Pet me'))));
 
     // ------------------------------------------------ painting
     const unit = cat, catBox = cat.querySelector('.cb-cat'), flip = cat.querySelector('.cb-flip');
     let mood = null, line = null, busy = 0, lastMood = '';
+    tailLoop(unit);
     const paintWear = () => {
       const w = cat.querySelector('.cb-wear'); A.clear(w);
       const it = c.wear && IT[c.wear];
       if (it) { const p = it[6]; w.append(h('span', { class: 'cb-w', style: { left: ((p.x - p.s / 2) / 391 * 100) + '%', top: ((p.y - p.s / 2) / 473 * 100) + '%', width: (p.s / 391 * 100) + '%', transform: 'rotate(' + p.r + 'deg)' }, html: A.emoHTML(it[1]) })); }
     };
     const paintDecor = () => {
-      A.clear(decorL);
-      Object.keys(c.decor).filter((k) => c.decor[k] && IT[k]).forEach((k) => decorL.append(h('span', { class: 'cb-d s-' + IT[k][6].slot, html: A.emoHTML(IT[k][1]) })));
+      A.clear(decorL); A.clear(backDecor);
+      Object.keys(c.decor).filter((k) => c.decor[k] && IT[k]).forEach((k) => {
+        const sl = IT[k][6].slot, el = h('button', { class: 'cb-d s-' + sl, 'aria-label': IT[k][2], html: A.emoHTML(IT[k][1]), onclick: (e) => { e.stopPropagation(); poke(el, IT[k]); } });
+        (/^shelf|^wall/.test(sl) ? backDecor : decorL).append(el);
+      });
     };
     const say = (l, ms) => {
       line = l; bubble._line = l;
-      A.clear(bubble).append(h('span', { class: 'cb-see' }, '👀 What you see'), h('b', null, l[0]), h('small', { class: 'th' }, l[1]), h('span', { class: 'cb-spk', html: A.emoHTML('🔊') }));
+      A.clear(bubble).append(h('span', { class: 'cb-see' }, '👀'), h('div', null, h('b', null, l[0]), h('small', { class: 'th' }, l[1])));
       bubble.classList.remove('pop'); void bubble.offsetWidth; bubble.classList.add('pop');
       clearTimeout(say.t); if (ms) say.t = setTimeout(() => sayMood(), ms);
     };
@@ -398,60 +466,67 @@
       const list = q.ok ? [M.think[M.think.length - 1]] : M.think.slice(0, q.n);
       A.clear(think).append(h('i', { class: 'd1' }), h('i', { class: 'd2' }), h('div', { class: 'cb-cloud' + (q.ok ? ' ok' : '') }, ...list.map((e) => pic(e))));
     };
-    const paintGuess = () => {
-      const M = MOODS[mood[0]], q = clue(), nm = c.name || 'She';
-      A.clear(guessBox);
-      guessBox.classList.toggle('solved', !!q.ok);
-      if (q.ok) { guessBox.append(h('div', { class: 'cb-g-ok' }, pic('💡'), h('div', null, h('b', null, 'You understand ' + (c.name || 'her') + '!'), h('div', { class: 'small' }, M.help[0]), h('small', { class: 'th muted' }, M.help[1])))); return; }
-      guessBox.append(
-        h('div', { class: 'cb-g-head' }, pic('💭'), h('div', null, h('b', null, nm + ' cannot talk. What is she feeling?'), h('small', { class: 'th muted' }, 'แมวพูดไม่ได้ ดูท่าทางแล้วทายว่าเธอรู้สึกอย่างไร'))),
-        h('div', { class: 'cb-g-opts' }, ...q.opts.map((w) => h('button', { class: 'cb-g-o' + (q.bad.includes(w) ? ' bad' : ''), disabled: q.bad.includes(w) ? true : null, onclick: () => guess(w) }, h('b', null, 'She is ' + w), h('small', { class: 'th' }, WORDS[w])))),
+    let gSheet = null;
+    const guessSheet = () => {
+      const M = MOODS[mood[0]], q = clue();
+      const body = h('div', { class: 'stack' },
+        h('div', { class: 'cb-g-head' }, pic('💭'), h('div', null, h('b', null, 'What is ' + NM() + ' feeling?'), h('small', { class: 'th muted' }, 'ดูความคิดและท่าทางของเขา แล้วทายว่าเขารู้สึกอย่างไร'))),
+        h('div', { class: 'cb-g-clues' }, h('div', { class: 'cb-cloud big' }, ...M.think.slice(0, q.n).map((e) => pic(e))),
+          ...M.signs.slice(0, q.n).map((l) => h('div', { class: 'cb-g-sign' }, '👀 ', h('b', null, l[0]), h('small', { class: 'th' }, l[1])))),
+        h('div', { class: 'cb-g-opts' }, ...q.opts.map((w) => h('button', { class: 'cb-g-o' + (q.bad.includes(w) ? ' bad' : ''), disabled: q.bad.includes(w) ? true : null, onclick: () => guess(w) }, h('b', null, 'He is ' + w), h('small', { class: 'th' }, WORDS[w])))),
         h('div', { class: 'row between' },
-          h('button', { class: 'btn ghost cb-g-more', disabled: q.n >= 3 ? true : null, onclick: () => { q.n = Math.min(3, q.n + 1); A.track('cabin_clue', { m: mood[0], n: q.n }); save(); paintThink(); sayMood(); paintGuess(); } }, '👀 Watch closer (' + (3 - q.n) + ')'),
+          h('button', { class: 'btn ghost cb-g-more', disabled: q.n >= 3 ? true : null, onclick: () => { q.n = Math.min(3, q.n + 1); A.track('cabin_clue', { m: mood[0], n: q.n }); save(); paintThink(); sayMood(); guessSheet(); } }, '👀 Watch closer (' + (3 - q.n) + ')'),
           h('small', { class: 'muted' }, 'First try: +5 pearls')));
+      if (gSheet && gSheet.isConnected) gSheet.setContent(body); else gSheet = A.sheet(body);
+    };
+    const NEEDS = [['hunger', '🍗', 'Food', 'อิ่ม', '#ff9a4a'], ['joy', '😸', 'Joy', 'สุข', '#ff6f91'], ['energy', '⚡', 'Energy', 'พลัง', '#ffc94a'], ['clean', '🫧', 'Clean fur', 'สะอาด', '#4fc3e6'], ['bond', '💖', 'Love', 'ความผูกพัน', '#c86bff']];
+    const needsSheet = () => {
+      const M = MOODS[mood[0]], b = bondOf(c.bond);
+      A.sheet(h('div', { class: 'stack' },
+        h('div', { class: 'cb-mood' }, h('div', { class: 'cb-mood-ic', style: { background: M.col } }, pic(M.e)), h('div', { style: { flex: 1 } }, h('b', null, NM() + ' is ' + M.en.toLowerCase()), h('small', { class: 'th' }, M.th + ' · ' + mood[1]))),
+        h('div', { class: 'cb-g-ok' }, pic('💡'), h('div', null, h('b', null, M.help[0]), h('small', { class: 'th muted' }, M.help[1]))),
+        h('div', { class: 'cb-bars' }, ...NEEDS.map(([k, e, en, th, col]) => { const v = Math.round(c[k]); return h('div', { class: 'cb-bar' + (v < 25 ? ' low' : '') }, pic(e), h('div', { style: { flex: 1 } }, h('div', { class: 'cb-bl' }, h('span', null, en, ' ', h('small', { class: 'th' }, th)), h('b', { class: 'num' }, v)), h('div', { class: 'cb-bt' }, h('i', { style: { width: v + '%', background: col } })))); })),
+        h('div', { class: 'small muted' }, 'You and ' + NM() + ': ' + b[1] + ' · ' + b[2])));
     };
     const guess = (w) => {
       const M = MOODS[mood[0]], q = clue();
-      A.speech.say('She is ' + w);
+      A.speech.say('He is ' + w);
       if (w === M.word) {
         const pr = [5, 3, 2, 1][Math.min(3, q.tries)];
         q.ok = 1; c.bond = clamp(c.bond + (q.tries ? 1 : 2)); c.cnt.read = (c.cnt.read || 0) + 1; if (!q.tries) c.cnt.read1 = (c.cnt.read1 || 0) + 1;
         try { V.addPearls(pr); } catch (e) { /* ok */ }
         A.sfx.play('good'); A.track('cabin_guess', { m: mood[0], ok: 1, tries: q.tries });
-        A.toast('💡 Yes! She is ' + w + ' · ' + WORDS[w] + '  (+' + pr + ' pearls)', 3200);
-        happyEyes(1500); burst('✨', 3, 50, 35); SND.meow(); say(M.help, 6000);
+        A.toast('💡 Yes! He is ' + w + ' · ' + WORDS[w] + '  (+' + pr + ' pearls)', 3200);
+        if (gSheet) gSheet.close();
+        happyEyes(1500); burst('✨', 3, 70, 50); SND.meow(); say(M.help, 6000);
       } else {
         q.tries++; q.bad.push(w); q.n = Math.min(3, q.n + 1);
         A.sfx.play('bad'); A.track('cabin_guess', { m: mood[0], ok: 0, w });
-        anim('pull', 600); say(['Hmm… not ' + w + '. Watch her again.', 'ยังไม่ใช่ ลองดูท่าทางเธออีกที'], 3500);
+        anim('pull', 600); say(['Hmm… not ' + w + '. Watch him again.', 'ยังไม่ใช่ ลองดูท่าทางเขาอีกที'], 3500);
+        guessSheet();
       }
       save(); paint();
     };
-    const NEEDS = [['hunger', '🍗', 'Food', 'อิ่ม', '#ff9a4a'], ['joy', '😸', 'Joy', 'สุข', '#ff6f91'], ['energy', '⚡', 'Energy', 'พลัง', '#ffc94a'], ['clean', '🫧', 'Clean fur', 'สะอาด', '#4fc3e6'], ['bond', '💖', 'Love', 'ความผูกพัน', '#c86bff']];
     const paint = () => {
       const t = now();
       mood = C.mood(st, c, t);
       const M = MOODS[mood[0]];
-      const cls = 'cb-unit m-' + mood[0] + (mood[0] === 'scared' && c.own.t_box ? ' in-box' : '') + (flip._turn ? ' turned' : '');
-      unit.className = cls;
+      unit.className = 'cb-unit m-' + mood[0] + (mood[0] === 'scared' && c.own.t_box ? ' in-box' : '') + (flip._turn ? ' turned' : '');
       win.classList.toggle('storm', mood[0] === 'scared');
       scene.classList.toggle('dim', mood[0] === 'sleeping');
       if (mood[0] !== lastMood) { lastMood = mood[0]; clue(); sayMood(); if (mood[0] === 'scared') { discover(st, c, 'kraken'); SND.hiss(); } }
       const b = bondOf(c.bond), q = clue();
-      paintThink(); paintGuess();
-      A.clear(moodBox).append(
-        q.ok ? h('div', { class: 'cb-mood-ic', style: { background: M.col } }, pic(M.e)) : h('div', { class: 'cb-mood-ic unknown' }, pic('❓')),
-        h('div', { style: { flex: 1, minWidth: 0 } }, q.ok ? h('b', null, (c.name || 'She') + ' is ' + M.en.toLowerCase()) : h('b', null, (c.name || 'She') + ' seems…'), h('small', { class: 'th' }, q.ok ? M.th + ' · ' + mood[1] : 'Read the clues to find out')),
-        h('div', { class: 'cb-bond' }, h('small', null, b[1]), h('div', { class: 'cb-hearts' }, ...[0, 1, 2, 3, 4].map((i) => h('i', { class: c.bond >= i * 20 + 10 ? 'on' : '' }, '♥')))));
-      bars.classList.toggle('locked', !q.ok);
-      if (!q.ok) { A.clear(bars).append(h('div', { class: 'cb-lock' }, pic('🔒'), h('div', null, h('b', null, 'Her needs are a secret'), h('small', { class: 'th' }, 'Guess her feeling first, then you can see her needs. · ทายความรู้สึกก่อน แล้วจะเห็นความต้องการของเธอ')))); }
-      else A.clear(bars).append(...NEEDS.map(([k, e, en, th, col]) => {
-        const v = Math.round(c[k]);
-        return h('div', { class: 'cb-bar' + (v < 25 ? ' low' : '') }, pic(e), h('div', { style: { flex: 1 } }, h('div', { class: 'cb-bl' }, h('span', null, en, ' ', h('small', { class: 'th' }, th)), h('b', { class: 'num' }, v)), h('div', { class: 'cb-bt' }, h('i', { style: { width: v + '%', background: col } }))));
-      }));
+      paintThink();
+      root.querySelector('.cb-bondtxt').textContent = NM() + '’s ' + b[1].toLowerCase();
+      loveBar.style.width = Math.max(4, c.bond) + '%';
+      A.clear(moodPill).append(
+        q.ok ? h('span', { class: 'cb-pill-ic', style: { background: M.col } }, pic(M.e)) : h('span', { class: 'cb-pill-ic q' }, pic('💭')),
+        h('div', { class: 'cb-pill-t' }, q.ok ? h('b', null, M.en) : h('b', null, 'What is he feeling?'),
+          q.ok ? h('div', { class: 'cb-pill-bar' }, h('i', { style: { width: Math.round(c.joy) + '%' } })) : h('small', null, 'Tap to guess')));
+      moodPill.classList.toggle('ask', !q.ok);
       goldEl.textContent = V.fmtN(s.gold);
-      const nap = root.querySelector('.a-nap');
-      if (nap) { const sl = mood[0] === 'sleeping'; nap.querySelector('b').textContent = sl ? 'Wake up' : 'Nap'; nap.querySelector('small').textContent = sl ? 'ปลุก' : 'นอน'; }
+      const nap = root.querySelector('.a-nap b');
+      if (nap) nap.textContent = mood[0] === 'sleeping' ? 'Wake' : 'Nap';
     };
 
     // ------------------------------------------------ little effects
@@ -482,35 +557,35 @@
       const t = now(), M = mood[0];
       c.cnt.pet = (c.cnt.pet || 0) + 1;
       A.track('cabin_pet', { z: zone, m: M });
-      if (M === 'sleeping') { c.wake = t; c.nap = 0; c.joy = clamp(c.joy - 3); SND.meow(true); paint(); say(['She opens one eye and looks at you. She was sleeping!', 'เธอลืมตาข้างเดียวมองเธอ เธอกำลังหลับอยู่'], 5000); if (thHour(t) >= c.pers.bed || thHour(t) < 6.5) discover(st, c, 'bed'); return save(); }
+      if (M === 'sleeping') { c.wake = t; c.nap = 0; c.joy = clamp(c.joy - 3); SND.meow(true); paint(); say(['He opens one eye and looks at you. He was sleeping!', 'เขาลืมตาข้างเดียวมองเธอ เขากำลังหลับอยู่'], 5000); if (thHour(t) >= c.pers.bed || thHour(t) < 6.5) discover(st, c, 'bed'); return save(); }
       if (M === 'scared') {
         c.calmPets = (c.calmPets || 0) + 1; burst('💖', 2, ex, ey); SND.purr(0.8);
-        if (c.calmPets >= 3) { const kr = krInfo(st); if (kr) c.krCalm = kr.last; c.calmPets = 0; c.bond = clamp(c.bond + 3); happyEyes(2200); paint(); say(['She stops shaking and purrs. She feels safe now.', 'เธอหยุดสั่นและครางเบา ๆ ตอนนี้เธอรู้สึกปลอดภัยแล้ว'], 6000); }
-        else say(['She pushes her head into your hand. She is still shaking a little.', 'เธอซุกหัวกับมือเธอ ยังตัวสั่นอยู่นิดหน่อย'], 0);
+        if (c.calmPets >= 3) { const kr = krInfo(st); if (kr) c.krCalm = kr.last; c.calmPets = 0; c.bond = clamp(c.bond + 3); happyEyes(2200); paint(); say(['He stops shaking and purrs. He feels safe now.', 'เขาหยุดสั่นและครางเบา ๆ ตอนนี้เขารู้สึกปลอดภัยแล้ว'], 6000); }
+        else say(['He pushes his head into your hand. He is still shaking a little.', 'เขาซุกหัวกับมือเธอ ยังตัวสั่นอยู่นิดหน่อย'], 0);
         return save();
       }
       if (M === 'excited') { const kr = krInfo(st); if (kr) c.krCalm = kr.last; }
-      if (M === 'grumpy') { c.joy = clamp(c.joy - 2); anim('shake', 500); SND.hiss(); say(['She hisses softly and moves away.', 'เธอขู่เบา ๆ แล้วขยับหนี'], 4000); return save(); }
+      if (M === 'grumpy') { c.joy = clamp(c.joy - 2); anim('shake', 500); SND.hiss(); say(['He hisses softly and moves away.', 'เขาขู่เบา ๆ แล้วขยับหนี'], 4000); return save(); }
       pets.push(t); while (pets.length && t - pets[0] > 45000) pets.shift();
       if (pets.length > c.pers.petMax) {
         c.grumpy = t + 75000; pets.length = 0; c.joy = clamp(c.joy - 4); turn(true); SND.meow(true); discover(st, c, 'limit');
         setTimeout(() => turn(false), 8000);
         paint(); return save();
       }
-      if (zone === 'paws') { c.joy = clamp(c.joy - 1); anim('pull', 600); say(['She pulls her paws away quickly.', 'เธอดึงอุ้งเท้าหนีอย่างเร็ว'], 4000); c.cnt.paws = (c.cnt.paws || 0) + 1; if (c.cnt.paws >= 2) discover(st, c, 'paws'); return save(); }
+      if (zone === 'paws') { c.joy = clamp(c.joy - 1); anim('pull', 600); say(['He pulls his paws away quickly.', 'เขาดึงอุ้งเท้าหนีอย่างเร็ว'], 4000); c.cnt.paws = (c.cnt.paws || 0) + 1; if (c.cnt.paws >= 2) discover(st, c, 'paws'); return save(); }
       const fav = zone === c.pers.spot && zone !== 'back';
       const hungry = c.hunger < 25;
       c.joy = clamp(c.joy + (hungry ? 2 : fav ? 8 : 4));
       c.bond = clamp(c.bond + (fav ? 1.4 : 0.7));
-      if (c.lonely) { c.lonely--; if (!c.lonely) say(['She rubs against you again and again. She missed you!', 'เธอคลอเคลียไม่หยุด เธอคิดถึงเธอมาก'], 6000); }
+      if (c.lonely) { c.lonely--; if (!c.lonely) say(['He rubs against you again and again. He missed you!', 'เขาคลอเคลียไม่หยุด เขาคิดถึงเธอมาก'], 6000); }
       if (M === 'proud') c.proudDay = A.dkey();
       burst(fav ? '💖' : '❤️', fav ? 3 : 1, ex, ey);
       happyEyes(fav ? 2400 : 1300);
       catBox.style.setProperty('--lean', (zone === 'cheek' ? (ex < 50 ? -7 : 7) : zone === 'chin' ? -9 : 4) + 'deg');
       anim('lean', 1300);
       SND.purr(fav ? 2.2 : 1.2);
-      if (fav) { c.cnt['spot_' + zone] = (c.cnt['spot_' + zone] || 0) + 1; if (c.cnt['spot_' + zone] >= 3) discover(st, c, 'spot'); if (Math.random() < 0.3) say(['She closes her eyes and leans in. She loves this spot!', 'เธอหลับตาและเอนเข้าหา เธอชอบตรงนี้มาก'], 4500); }
-      else if (Math.random() < 0.12) say(['She purrs quietly.', 'เธอครางเบา ๆ'], 3500);
+      if (fav) { c.cnt['spot_' + zone] = (c.cnt['spot_' + zone] || 0) + 1; if (c.cnt['spot_' + zone] >= 3) discover(st, c, 'spot'); if (Math.random() < 0.3) say(['He closes his eyes and leans in. He loves this spot!', 'เขาหลับตาและเอนเข้าหา เขาชอบตรงนี้มาก'], 4500); }
+      else if (Math.random() < 0.12) say(['He purrs quietly.', 'เขาครางเบา ๆ'], 3500);
       save(); paintSoon();
     };
     let down = null, moved = 0, lastPet = 0;
@@ -537,14 +612,14 @@
       if (laser.on) return laser.go(x, y);
       if (!/m-sleeping/.test(unit.className)) look(x < 50 ? -8 : 8);
     });
-    const petHint = () => { if (mood[0] === 'sleeping') return pet('head', 50, 50); A.toast('✋ Stroke ' + (c.name || 'her') + ' with your finger. Try her head, cheeks or chin!', 3200); anim('lean', 900); };
+    const petHint = () => { if (mood[0] === 'sleeping') return pet('head', 50, 50); A.toast('✋ Stroke ' + (c.name || 'him') + ' with your finger. Try his head, cheeks or chin!', 3200); anim('lean', 900); };
 
     // ------------------------------------------------ feeding
     const bowl = (e) => { const b = h('div', { class: 'cb-bowl' }, pic('🥣', 'bw'), pic(e, 'fd')); fx.append(b); return b; };
     const feed = (id) => {
       const it = IT[id], M = mood[0];
       if (!c.inv[id]) return shop('food');
-      if (c.hunger > 92) { say(['She sniffs the food and walks away. She is not hungry.', 'เธอดมอาหารแล้วเดินหนี เธอยังไม่หิว'], 4000); return; }
+      if (c.hunger > 92) { say(['He sniffs the food and walks away. He is not hungry.', 'เขาดมอาหารแล้วเดินหนี เขายังไม่หิว'], 4000); return; }
       if (M === 'sleeping') { c.wake = now(); c.nap = 0; }
       c.inv[id]--; if (!c.inv[id]) delete c.inv[id];
       const fav = id === c.pers.food;
@@ -553,13 +628,13 @@
       c.cnt.fed = (c.cnt.fed || 0) + 1; if (fav) { c.cnt.favFood = (c.cnt.favFood || 0) + 1; if (c.cnt.favFood >= 2) discover(st, c, 'food'); }
       A.track('cabin_feed', { id, fav: fav ? 1 : 0 });
       busy = 1; const b = bowl(it[1]); catBox.classList.add('eat'); SND.crunch(5);
-      setTimeout(() => { catBox.classList.remove('eat'); b.remove(); busy = 0; happyEyes(1600); burst(fav ? '💖' : '✨', fav ? 4 : 2, 50, 40); SND.meow(); paint();
-        say(fav ? ['She eats every bit and licks the bowl clean. She loves it!', 'เธอกินหมดและเลียชามจนเกลี้ยง เธอชอบมาก'] : A.pick([['She eats happily.', 'เธอกินอย่างมีความสุข'], ['She licks her lips. Her tummy is full.', 'เธอเลียปาก ท้องอิ่มแล้ว']]), 5000); }, 2100);
+      setTimeout(() => { catBox.classList.remove('eat'); b.remove(); busy = 0; happyEyes(1600); burst(fav ? '💖' : '✨', fav ? 4 : 2, 72, 62); SND.meow(); paint();
+        say(fav ? ['He eats every bit and licks the bowl clean. He loves it!', 'เขากินหมดและเลียชามจนเกลี้ยง เขาชอบมาก'] : A.pick([['He eats happily.', 'เขากินอย่างมีความสุข'], ['He licks his lips. His tummy is full.', 'เขาเลียปาก ท้องอิ่มแล้ว']]), 5000); }, 2100);
       save();
     };
     const feedSheet = () => {
       const foods = ITEMS.filter((x) => x[5] === 'food' && c.inv[x[0]]);
-      const sh = A.sheet(h('div', { class: 'stack' }, h('h2', null, '🍽️ Feed ' + (c.name || 'her')), h('p', { class: 'small th muted' }, 'เลือกอาหาร · Food bar: ' + Math.round(c.hunger) + '%'),
+      const sh = A.sheet(h('div', { class: 'stack' }, h('h2', null, '🍽️ Feed ' + (c.name || 'him')), h('p', { class: 'small th muted' }, 'เลือกอาหาร · Food bar: ' + Math.round(c.hunger) + '%'),
         foods.length ? h('div', { class: 'cb-grid' }, ...foods.map((x) => h('button', { class: 'cb-item', onclick: () => { sh.close(); feed(x[0]); } }, pic(x[1]), h('b', null, x[2]), h('small', { class: 'th' }, x[3]), h('span', { class: 'pill' }, '×' + c.inv[x[0]]))))
           : h('div', { class: 'note' }, 'No food left. Buy some in the shop, or open chests on the map: they can hold cat food!'),
         h('button', { class: 'btn ghost block', onclick: () => { sh.close(); shop('food'); } }, '🛒 Buy food')));
@@ -570,9 +645,9 @@
     const play = (id) => {
       const it = IT[id], M = mood[0], t = now();
       if (M === 'sleeping') { pet('head', 50, 50); return; }
-      if (M === 'scared') { say(['She hides from the toy. She is too scared to play.', 'เธอหลบของเล่น เธอกลัวเกินกว่าจะเล่น'], 4500); return; }
-      if (c.hunger < 20) { say(['She looks at the toy, then at her bowl.', 'เธอมองของเล่น แล้วมองชามอาหาร'], 4000); return; }
-      if (c.energy < 15) { say(['She watches the toy but does not move.', 'เธอมองของเล่นแต่ไม่ขยับ'], 4000); return; }
+      if (M === 'scared') { say(['He hides from the toy. He is too scared to play.', 'เขาหลบของเล่น เขากลัวเกินกว่าจะเล่น'], 4500); return; }
+      if (c.hunger < 20) { say(['He looks at the toy, then at his bowl.', 'เขามองของเล่น แล้วมองชามอาหาร'], 4000); return; }
+      if (c.energy < 15) { say(['He watches the toy but does not move.', 'เขามองของเล่นแต่ไม่ขยับ'], 4000); return; }
       c.toyLog = (c.toyLog || []).filter((x) => t - x[1] < 10 * MIN); const same = c.toyLog.filter((x) => x[0] === id).length;
       c.toyLog.push([id, t]);
       const fav = id === c.pers.toy, bored = same >= 2 && id !== 't_laser';
@@ -587,21 +662,21 @@
       const toy = h('span', { class: 'cb-toy k-' + kind, html: A.emoHTML(it[1]) }); fx.append(toy);
       if (kind === 'box') { unit.classList.add('in-box'); toy.classList.add('k-boxfront'); }
       catBox.classList.add('play-' + kind);
-      const end = () => { toy.remove(); catBox.classList.remove('play-' + kind); unit.classList.remove('in-box'); busy = 0; happyEyes(1500); burst(fav ? '💖' : '✨', fav ? 4 : 2, 50, 40); paint();
-        say(bored ? ['She yawns at the toy. She played with it too many times.', 'เธอหาวใส่ของเล่น เล่นอันนี้บ่อยเกินไปแล้ว'] : fav ? ['She runs in circles. That is her favourite game!', 'เธอวิ่งวน นี่คือเกมโปรดของเธอ'] : A.pick([['She had fun!', 'เธอสนุกมาก'], ['She looks at you for more.', 'เธอมองเธอเหมือนอยากเล่นอีก'], ['She caught it!', 'เธอจับได้แล้ว']]), 5000); if (!bored) SND.meow(); };
+      const end = () => { toy.remove(); catBox.classList.remove('play-' + kind); unit.classList.remove('in-box'); busy = 0; happyEyes(1500); burst(fav ? '💖' : '✨', fav ? 4 : 2, 72, 62); paint();
+        say(bored ? ['He yawns at the toy. He played with it too many times.', 'เขาหาวใส่ของเล่น เล่นอันนี้บ่อยเกินไปแล้ว'] : fav ? ['He runs in circles. That is his favourite game!', 'เขาวิ่งวน นี่คือเกมโปรดของเขา'] : A.pick([['He had fun!', 'เขาสนุกมาก'], ['He looks at you for more.', 'เขามองเธอเหมือนอยากเล่นอีก'], ['He caught it!', 'เขาจับได้แล้ว']]), 5000); if (!bored) SND.meow(); };
       setTimeout(end, kind === 'box' ? 4200 : 3000);
     };
     const startLaser = () => {
       laser.on = true; busy = 1;
       const dot = h('i', { class: 'cb-laser' }); fx.append(dot);
-      say(['Tap anywhere in the room. She will chase the red dot!', 'แตะที่ไหนก็ได้ในห้อง เธอจะไล่จับจุดแดง'], 0);
+      say(['Tap anywhere in the room. He will chase the red dot!', 'แตะที่ไหนก็ได้ในห้อง เขาจะไล่จับจุดแดง'], 0);
       laser.go = (x, y) => { dot.style.left = x + '%'; dot.style.top = y + '%'; look(x < 50 ? -10 : 10); anim('pounce', 520); if (x < 38 && !flip._turn) turn(true); else if (x > 62 && flip._turn) turn(false); };
       laser.go(30, 70);
-      setTimeout(() => { laser.on = false; dot.remove(); busy = 0; if (flip._turn) turn(false); happyEyes(1500); burst('✨', 3, 50, 40); paint(); say(['She looks everywhere for the red dot.', 'เธอมองหาจุดแดงทุกที่'], 5000); }, 9000);
+      setTimeout(() => { laser.on = false; dot.remove(); busy = 0; if (flip._turn) turn(false); happyEyes(1500); burst('✨', 3, 72, 62); paint(); say(['He looks everywhere for the red dot.', 'เขามองหาจุดแดงทุกที่'], 5000); }, 9000);
     };
     const playSheet = () => {
       const toys = ITEMS.filter((x) => x[5] === 'toy' && c.own[x[0]]);
-      const sh = A.sheet(h('div', { class: 'stack' }, h('h2', null, '🧶 Play with ' + (c.name || 'her')), h('p', { class: 'small th muted' }, 'เลือกของเล่น · Energy: ' + Math.round(c.energy) + '%'),
+      const sh = A.sheet(h('div', { class: 'stack' }, h('h2', null, '🧶 Play with ' + (c.name || 'him')), h('p', { class: 'small th muted' }, 'เลือกของเล่น · Energy: ' + Math.round(c.energy) + '%'),
         h('div', { class: 'cb-grid' }, ...toys.map((x) => h('button', { class: 'cb-item', onclick: () => { sh.close(); play(x[0]); } }, pic(x[1]), h('b', null, x[2]), h('small', { class: 'th' }, x[3])))),
         h('button', { class: 'btn ghost block', onclick: () => { sh.close(); shop('toy'); } }, '🛒 More toys')));
     };
@@ -614,12 +689,12 @@
       c.clean = clamp(c.clean + 40); c.joy = clamp(c.joy + (itchy ? 12 : 5)); c.bond = clamp(c.bond + 1);
       A.track('cabin_brush', {}); save();
       busy = 1; const b = h('span', { class: 'cb-toy k-brush', html: A.emoHTML('🪮') }); fx.append(b); SND.purr(2.6); happyEyes(2600);
-      setTimeout(() => { b.remove(); busy = 0; burst('🫧', 4, 50, 55); paint(); say(itchy ? ['She stops scratching. Her fur is soft again.', 'เธอหยุดเกา ขนนุ่มอีกครั้ง'] : ['Her fur is soft and shiny.', 'ขนเธอนุ่มและเงางาม'], 5000); }, 2600);
+      setTimeout(() => { b.remove(); busy = 0; burst('🫧', 4, 72, 77); paint(); say(itchy ? ['He stops scratching. His fur is soft again.', 'เขาหยุดเกา ขนนุ่มอีกครั้ง'] : ['His fur is soft and shiny.', 'ขนเขานุ่มและเงางาม'], 5000); }, 2600);
     };
     const napOrWake = () => {
       const t = now();
       if (mood[0] === 'sleeping') return pet('head', 50, 50);
-      if (c.energy > 75 && mood[0] !== 'drowsy') { say(['She jumps off the bed. She is not sleepy.', 'เธอกระโดดลงจากที่นอน เธอยังไม่ง่วง'], 4000); return; }
+      if (c.energy > 75 && mood[0] !== 'drowsy') { say(['He jumps off the bed. He is not sleepy.', 'เขากระโดดลงจากที่นอน เขายังไม่ง่วง'], 4000); return; }
       c.nap = t + (c.energy < 40 ? 60 : 30) * MIN; c.wake = 0; A.track('cabin_nap', {}); save(); paint();
     };
 
@@ -680,20 +755,21 @@
       const b = bondOf(c.bond), nextB = BONDS.find((x) => x[0] > c.bond);
       A.sheet(h('div', { class: 'stack' },
         h('div', { class: 'cb-diary-head' }, h('img', { src: 'img/cabin/cat_head.webp', alt: '' }), h('div', null, h('h2', null, (c.name || 'Your cat') + '’s diary'), h('div', { class: 'small' }, b[1] + ' · ' + b[2]), h('div', { class: 'tiny muted' }, nextB ? 'Next: ' + nextB[1] + ' at ' + nextB[0] + ' love' : 'The closest friends there are'))),
-        h('p', { class: 'small th muted' }, 'Care for her to find out who she is. Every secret gives +3 pearls. · ดูแลเธอเพื่อรู้จักเธอมากขึ้น'),
+        h('p', { class: 'small th muted' }, 'Care for him to find out who he is. Every secret gives +3 pearls. · ดูแลเขาเพื่อรู้จักเขามากขึ้น'),
         h('div', { class: 'cb-disc' }, ...DISC.map(([k, e, n, val]) => h('div', { class: 'cb-dc' + (c.known[k] ? ' on' : '') }, pic(c.known[k] ? e : '❓'), h('div', null, h('b', null, n), h('small', null, c.known[k] ? val(c) : 'Not found yet'))))),
         h('div', { class: 'cb-reader' }, pic('💭'), h('div', null, h('b', null, 'Cat reader: understood ' + (c.cnt.read || 0) + ' times'), h('small', null, (c.cnt.read1 || 0) + ' on the first try'))),
         h('div', { class: 'small muted' }, 'Meals: ' + (c.cnt.fed || 0) + ' · Games: ' + (c.cnt.play || 0) + ' · Pets: ' + (c.cnt.pet || 0)),
-        h('button', { class: 'btn ghost block', onclick: () => nameSheet(true) }, '✏️ Change her name')));
+        h('button', { class: 'btn ghost block', onclick: () => nameSheet(true) }, '✏️ Change his name')));
     };
 
     // ------------------------------------------------ her photo
     const photoSheet = () => {
       const sh = A.sheet(h('div', { class: 'stack', style: { textAlign: 'center' } },
-        h('h2', null, '📸 My photo'), h('p', { class: 'small th muted' }, 'Your photo hangs on the cabin wall, next to your cat. · รูปของเธอบนผนังห้อง'),
+        h('h2', null, '📸 My pictures'), h('p', { class: 'small th muted' }, 'Your photo is at the top of the cabin. A picture with no background puts you inside the cabin with ' + NM() + '. · รูปของเธอในห้องบนเรือ'),
         PHOTO ? h('img', { class: 'cb-photo-big', src: PHOTO, alt: '' }) : null,
-        h('button', { class: 'btn mango block', onclick: () => { sh.close(); pickPhoto(paintPhoto); } }, PHOTO ? '🔄 Change photo' : '📷 Choose a photo'),
-        PHOTO ? h('button', { class: 'btn ghost block', onclick: async () => { try { await A.api.setPhoto(null); PHOTO = null; paintPhoto(); } catch (e) { /* offline */ } sh.close(); } }, 'Remove photo') : null));
+        h('button', { class: 'btn mango block', onclick: () => { sh.close(); pickPhoto(() => { paintPhoto(); paintHer(); }); } }, PHOTO ? '🔄 Change my photo' : '📷 Choose my photo'),
+        h('button', { class: 'btn ghost block', onclick: () => { sh.close(); pickPhoto(paintHer, 'figure'); } }, FIGURE ? '🔄 Change me in the cabin (PNG)' : '🧍 Put me in the cabin (PNG, no background)'),
+        PHOTO ? h('button', { class: 'btn ghost block', onclick: async () => { try { await A.api.setPhoto(null); PHOTO = null; paintPhoto(); paintHer(); } catch (e) { /* offline */ } sh.close(); } }, 'Remove photo') : null));
     };
 
     // ------------------------------------------------ naming her (first visit)
@@ -701,13 +777,35 @@
       const inp = h('input', { class: 'input', value: c.name || 'Mango', maxlength: '16', 'aria-label': 'Cat name' });
       const sh = A.sheet(h('div', { class: 'stack', style: { textAlign: 'center' } },
         h('img', { class: 'cb-meet', src: 'img/cabin/cat_full.webp', alt: '' }),
-        h('h2', null, again ? 'Her name' : 'A little cat came on board!'),
-        again ? null : h('p', null, 'She lives with you in the boat cabin now. Feed her, play with her and keep her safe from the Kraken.'),
-        again ? null : h('p', { class: 'small th muted' }, 'แมวน้อยขึ้นเรือมาแล้ว เธออยู่ในห้องของเราบนเรือ ให้อาหาร เล่นด้วย และปกป้องเธอจากคราเคน'),
-        h('b', null, 'What is her name?'), inp,
+        h('h2', null, again ? 'His name' : 'A little cat came on board!'),
+        again ? null : h('p', null, 'He lives with you in the boat cabin now. Feed him, play with him and keep him safe from the Kraken.'),
+        again ? null : h('p', { class: 'small th muted' }, 'แมวน้อยขึ้นเรือมาแล้ว เขาอยู่ในห้องของเราบนเรือ ให้อาหาร เล่นด้วย และปกป้องเขาจากคราเคน'),
+        h('b', null, 'What is his name?'), inp,
         h('button', { class: 'btn mango block', onclick: () => { const n = String(inp.value || '').trim().slice(0, 16) || 'Mango'; c.name = n; A.track('cabin_name', { n }); save(); sh.close(); A.go('cabin'); } }, again ? 'Save' : '🐱 Welcome aboard!')), { noX: !again });
       setTimeout(() => inp.focus(), 300);
     };
+
+    // tap things in the room
+    const poke = (el, it) => { el.classList.remove('poked'); void el.offsetWidth; el.classList.add('poked'); A.sfx.play('tap'); if (it && /bowl/.test(it[0])) { look(-12); say(['He watches the fish swim round and round.', 'เขามองปลาว่ายวนไปมา'], 3500); } };
+    lantern.addEventListener('click', (e) => { e.stopPropagation(); c.lamp = !c.lamp; scene.classList.toggle('lamp-off', !!c.lamp); poke(lantern); save(); });
+    scene.classList.toggle('lamp-off', !!c.lamp);
+    win.addEventListener('click', (e) => { e.stopPropagation(); win.classList.remove('gull'); void win.offsetWidth; win.classList.add('gull'); turn(true); say(['A seagull flies past the window! He watches it.', 'นกนางนวลบินผ่านหน้าต่าง เขามองตาม'], 3500); setTimeout(() => turn(false), 3000); });
+    her.addEventListener('click', (e) => { e.stopPropagation(); poke(her); burst('💗', 3, 28, 45); look(-14); happyEyes(1200); });
+
+    // a butterfly flies through the cabin; his head follows it and he pounces
+    const butterfly = () => {
+      const b = h('span', { class: 'cb-fly', html: A.emoHTML('🦋') }); fx.append(b);
+      [[-10, 400], [8, 1100], [-6, 1800], [10, 2500]].forEach(([d, ms]) => setTimeout(() => look(d), ms));
+      setTimeout(() => anim('pounce', 520), 2300);
+      setTimeout(() => b.remove(), 4200);
+    };
+    // he watches Alvee's finger
+    let lookT = 0;
+    scene.addEventListener('pointermove', (e) => {
+      if (busy || laser.on || now() - lookT < 250 || /m-sleeping/.test(unit.className)) return; lookT = now();
+      const r = catBox.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width * 0.55);
+      look(Math.max(-12, Math.min(12, dx / 18)) * (flip._turn ? -1 : 1));
+    });
 
     // ------------------------------------------------ saving + life loop
     function save() { A.saveSoon(); }
@@ -723,17 +821,21 @@
       if (t > nextBlink) { blink(); nextBlink = t + 2200 + Math.random() * 4200; }
       if (++tickN % 30 === 0) { C.tick(c, t); paint(); }
       if (t > nextIdle && !busy) {
-        nextIdle = t + 6000 + Math.random() * 7000;
+        nextIdle = t + 2600 + Math.random() * 3200;
         const M = mood[0];
-        if (M === 'sleeping') { if (Math.random() < 0.3) anim('twitch', 700); return; }
-        if (M === 'scared') { anim('shake', 900); return; }
+        if (M === 'sleeping') { if (Math.random() < 0.4) anim('twitch', 700); return; }
+        if (M === 'scared') { anim('shake', 900); look(Math.random() < 0.5 ? -12 : 6); return; }
         const r = Math.random();
-        if (r < 0.22) look(Math.random() < 0.5 ? -9 : 9);
-        else if (r < 0.36) { anim('sit', 1400); }
-        else if (r < 0.48) { anim('stretch', 1600); }
-        else if (r < 0.6 && M !== 'grumpy') { turn(true); say(['She turns and watches the sea.', 'เธอหันไปดูทะเล'], 4000); c.cnt.sea = (c.cnt.sea || 0) + 1; if (c.cnt.sea >= 3) discover(st, c, 'sea'); setTimeout(() => turn(false), 4500); }
+        if (r < 0.2) look(Math.random() < 0.5 ? -10 : 10);
+        else if (r < 0.3) { look(-14); if (her.firstChild && Math.random() < 0.5) { happyEyes(900); } }
+        else if (r < 0.38) anim('sit', 1400);
+        else if (r < 0.46) anim('stretch', 1600);
+        else if (r < 0.54) anim('groom', 2200);
+        else if (r < 0.62 && M !== 'grumpy') { turn(true); say(['He turns and watches the sea.', 'เขาหันไปดูทะเล'], 4000); c.cnt.sea = (c.cnt.sea || 0) + 1; if (c.cnt.sea >= 3) discover(st, c, 'sea'); setTimeout(() => turn(false), 3800); }
         else if (r < 0.7) anim('yawn', 1500);
-        else if (r < 0.8 && (M === 'hungry' || M === 'lonely' || M === 'playful' || M === 'itchy')) { SND.meow(M !== 'playful'); sayMood(); }
+        else if (r < 0.8 && !busy) butterfly();
+        else if (r < 0.9) anim('hop', 600);
+        else if (M === 'hungry' || M === 'lonely' || M === 'playful' || M === 'itchy') { SND.meow(M !== 'playful'); sayMood(); }
       }
     }, 1000);
     return root;
@@ -747,7 +849,7 @@
       h('img', { class: 'mt-cat', src: 'img/cabin/cat_full.webp', alt: '' }),
       h('span', { class: 'mt-pic', html: A.emoHTML('🐱') }),
       h('b', null, c.name ? c.name + '’s Cabin' : 'My Cat Cabin'), h('small', { class: 'th' }, 'ห้องแมวในเรือ'),
-      h('span', { class: 'mt-sub' }, !c.name ? '✨ Someone is waiting…' : c.clue && c.clue.m === m[0] && c.clue.ok ? M.e + ' ' + M.en : '💭 What is she feeling?'));
+      h('span', { class: 'mt-sub' }, !c.name ? '✨ Someone is waiting…' : c.clue && c.clue.m === m[0] && c.clue.ok ? M.e + ' ' + M.en : '💭 What is he feeling?'));
   };
   C.homeCard = (st) => {
     const c = st.cabin; if (!c || !c.name) return null;

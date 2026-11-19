@@ -282,7 +282,7 @@
     const V = VIEWS[view];
     if (!V) return;
     root.append(V(arg));
-    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure', 'types', 'type', 'typevs', 'cabin'].includes(view)) {
+    if (['home', 'journey', 'talks', 'words', 'me', 'grammar', 'medals', 'treasure', 'types', 'type', 'typevs'].includes(view)) {
       root.append(nav(view));
       if (A.paintBadges) A.paintBadges();
       A.setPresence({ screen: view });

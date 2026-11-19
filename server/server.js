@@ -171,10 +171,10 @@ async function api(req, res, route, query) {
     fs.mkdirSync(path.join(DATA, 'photos'), { recursive: true });
     const lr = me.role === 'learner' ? me : db.users.find((u) => u.id === query.get('uid')) || db.users.find((u) => u.role === 'learner');
     if (!lr) return send(res, 404, { error: 'No learner' });
-    const pf = path.join(DATA, 'photos', safeId(lr.id) + '.txt');
+    const pf = path.join(DATA, 'photos', safeId(lr.id) + (query.get('k') === 'figure' ? '.figure' : '') + '.txt');
     if (method === 'GET') { let data = null; try { data = fs.readFileSync(pf, 'utf8'); } catch (e) { /* none yet */ } return send(res, 200, { data }); }
     if (method === 'POST') {
-      const b = await readBody(req, 1.5e6);
+      const b = await readBody(req, 3e6);
       if (b.data === null) { try { fs.unlinkSync(pf); } catch (e) { /* gone */ } return send(res, 200, { ok: 1 }); }
       if (typeof b.data !== 'string' || !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(b.data)) return send(res, 400, { error: 'Not a picture' });
       atomicWrite(pf, b.data);

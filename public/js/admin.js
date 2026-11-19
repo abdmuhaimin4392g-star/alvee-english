@@ -732,6 +732,11 @@
           msg.textContent = 'Saved. Give her the new username/password.'; ADM.learners = await A.api.learners();
         } catch (e) { msg.textContent = e.message; }
       } }, 'Save login'), msg));
+    // her pictures in the Cat Cabin (kept private on the server)
+    if (A.cabin && A.cabin.pickPhoto) box.append(h('div', { class: 'card stack' }, h('b', null, '🐱 Cat Cabin pictures'),
+      h('div', { class: 'small muted' }, 'Her round photo at the top of the cabin, and a picture of her with no background (PNG) that sits in the cabin next to the cat. Only you two can see them.'),
+      h('button', { class: 'btn ghost block', onclick: () => A.cabin.pickPhoto(null, null, ADM.uid) }, '📷 Upload her photo'),
+      h('button', { class: 'btn ghost block', onclick: () => A.cabin.pickPhoto(null, 'figure', ADM.uid) }, '🧍 Upload her cabin picture (PNG)')));
     const sel = (id, label, val, opts) => h('div', { class: 'field' }, h('label', { for: id }, label), h('select', { class: 'input', id }, opts.map(([v, t]) => h('option', { value: v, selected: String(v) === String(val) ? true : null }, t))));
     const msg2 = h('div', { class: 'small', role: 'status' });
     box.append(h('div', { class: 'card stack' }, h('b', null, 'Her plan'),
