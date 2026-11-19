@@ -437,6 +437,11 @@
       h('b', null, '🛠️ Maintenance screen: ' + (c.maint ? 'ON' : 'OFF')),
       h('div', { class: 'small' }, c.maint ? 'Her app shows “Upgrading your voyage” and she cannot use it. Turn it off when the update is ready.' : 'She can use the app normally.'),
       h('button', { class: 'btn block ' + (c.maint ? 'mango' : 'ghost'), onclick: () => setCtl({ patch: { maint: !c.maint } }, c.maint ? 'Maintenance off: her app opens again' : 'Maintenance on: her app is closed for now') }, c.maint ? '✅ Turn it off (open her app)' : '🛠️ Turn it on (close her app)')));
+    // the Cat Cabin for her (hidden until switched on here; the Demo tab always shows it)
+    out.push(h('div', { class: 'card stack' },
+      h('b', null, '🐱 Cat Cabin for her: ' + (c.cabin ? 'ON' : 'OFF')),
+      h('div', { class: 'small' }, c.cabin ? 'She can open the Cat Cabin from her Me page.' : 'Hidden from her app. You can still try it in the Demo tab.'),
+      h('button', { class: 'btn block ' + (c.cabin ? 'ghost' : 'mango'), onclick: () => setCtl({ patch: { cabin: !c.cabin } }, c.cabin ? 'Cat Cabin hidden from her' : 'Cat Cabin is open for her') }, c.cabin ? 'Hide it from her' : '🐱 Open it for her')));
     // gifts
     const kind = h('select', { class: 'input' }, [['chest', '🧰 Treasure chest (she answers 3 questions)'], ['golden', '🏆 Golden chest (better treasure)'], ['bottle', '🍾 Message in a bottle'], ['pearls', '⚪ Pearls'], ['gold', '🪙 Gold coins'], ['logs', '🪵 Wood logs (repair her boat)'], ['key', '🔑 Keys (open sealed chests)'], ['sealed', '🔒 Sealed chest (rare treasure, needs a key)'], ['shells', '🐚 Shells'], ['item', '💎 A treasure item'], ['boat', '⛵ A boat']].map(([v, t]) => h('option', { value: v }, t)));
     const n = h('input', { class: 'input', type: 'number', min: 1, max: 5000, value: 10, style: { maxWidth: '110px' } });

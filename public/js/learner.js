@@ -766,7 +766,7 @@
         h('b', null, en), h('small', { class: 'th' }, th), h('span', { class: 'mt-sub' }, sub));
       root.append(h('div', { class: 'sec-head' }, h('span', { class: 'sec-ic', html: A.emoHTML('🗝️') }), h('div', null, h('b', null, 'My rooms'), h('small', { class: 'th' }, 'ห้องของฉัน'))));
       root.append(h('div', { class: 'me-grid' },
-        A.cabin ? A.cabin.meTile(st) : null,
+        A.cabin && A.cabin.open() ? A.cabin.meTile(st) : null,
         room('mt-reef', '🪸', 'Word Reef', 'แนวปะการังคำศัพท์', A.wordCount(st) + ' words', () => A.go('words')),
         room('mt-gram', '📖', 'Grammar book', 'สมุดไวยากรณ์', 'All the rules', () => A.go('grammar')),
         room('mt-medal', '🏅', 'Medals', 'เหรียญรางวัล', got + ' / ' + A.MEDALS.length, () => A.go('medals')),

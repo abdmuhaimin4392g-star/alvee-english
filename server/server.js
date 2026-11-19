@@ -34,12 +34,7 @@ const saveDB = (now) => {
   if (now) return atomicWrite(DB_FILE, JSON.stringify(db));
   dbTimer = setTimeout(() => atomicWrite(DB_FILE, JSON.stringify(db)), 800);
 };
-// maintenance screen: switched ON once when this version is installed; Muhay turns it off in the Control Room
-if (!db.maintInit) {
-  db.maintInit = 1; db.ctl = db.ctl || {};
-  db.users.filter((u) => u.role === 'learner').forEach((u) => { const c = db.ctl[u.id] || (db.ctl[u.id] = {}); c.maint = true; c.rev = (c.rev || 0) + 1; });
-  saveDB(true);
-}
+// maintenance screen: off unless Muhay switches it on in the Control Room
 const safeId = (uid) => String(uid).replace(/[^a-zA-Z0-9_-]/g, '');
 const stateFile = (uid) => path.join(DATA, 'state', safeId(uid) + '.json');
 const eventsFile = (uid) => path.join(DATA, 'events', safeId(uid) + '.jsonl');
@@ -246,6 +241,7 @@ async function api(req, res, route, query) {
     if ('kraken' in p) c.kraken = p.kraken ? Date.now() : 0;
     if ('typingOff' in p) c.typingOff = !!p.typingOff;
     if ('maint' in p) c.maint = !!p.maint;
+    if ('cabin' in p) c.cabin = !!p.cabin;
     if (b.gift) {
       const g = b.gift, KINDS = ['chest', 'golden', 'pearls', 'shells', 'item', 'boat', 'bottle', 'gold', 'key', 'sealed', 'logs'];
       if (!KINDS.includes(g.kind)) return send(res, 400, { error: 'Unknown gift' });

@@ -10,6 +10,7 @@
   const A = window.AE, h = A && A.h, V = A && A.voyage, VIEWS = A && A.VIEWS;
   if (!A || !V || !VIEWS) return;
   const C = (A.cabin = {});
+  C.open = () => !!((A.sandbox && A.sandbox.on) || (A.ctl && A.ctl.cabin) || (A.user && A.user.role === 'admin'));
   const clamp = (x) => Math.max(0, Math.min(100, x));
   const now = () => Date.now();
   const MIN = 6e4, HOUR = 36e5;
@@ -239,6 +240,7 @@
   const r0 = V.reward;
   V.reward = function (ses, acc, passed) {
     const out = r0.apply(this, arguments);
+    if (!C.open()) return out;
     try {
       const st = A.state, c = C.st(st), nm = C.name(st), tk = A.dkey();
       if (out && out.chest && Math.random() < (out.golden ? 0.5 : 0.3)) {
@@ -400,6 +402,7 @@
     return FIGURE;
   };
   VIEWS.cabin = () => {
+    if (!C.open()) { setTimeout(() => A.go('me'), 0); return h('div', { class: 'screen' }); }
     const st = A.state, c = C.st(st), s = V.st(st);
     C.tick(c);
     const t0 = now();
@@ -931,6 +934,7 @@
       h('span', { class: 'mt-sub' }, !c.name ? '✨ Someone is waiting…' : c.clue && c.clue.m === m[0] && c.clue.ok ? M.e + ' ' + M.en : '💭 What is he feeling?'));
   };
   C.homeCard = (st) => {
+    if (!C.open()) return null;
     const c = st.cabin; if (!c || !c.name) return null;
     C.tick(c);
     const m = C.mood(st, c); if (!['hungry', 'scared', 'lonely', 'itchy', 'proud', 'excited', 'playful', 'worried'].includes(m[0])) return null;
