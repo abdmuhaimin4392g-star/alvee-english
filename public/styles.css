@@ -1920,35 +1920,9 @@ img.coral.faded { filter: grayscale(1) brightness(1.5) contrast(.8) drop-shadow(
 .ph-gram { --ph1: #5fc3f0; --ph2: #2867c9; }
 .ph-medal { --ph1: #ffc24a; --ph2: #d97800; }
 
-/* v5.24: shining jewel word tiles */
-.wtile[class*=" wg"] { position: relative; overflow: hidden; color: #fff; font-weight: 700; border: 0; border-radius: 14px; padding: 10px 15px; text-shadow: 0 1px 2px rgba(0,0,0,.28);
-  background: radial-gradient(120% 90% at 20% 0%, rgba(255,255,255,.55), transparent 45%), linear-gradient(155deg, var(--j1), var(--j2));
-  box-shadow: 0 4px 0 var(--j3), 0 8px 14px -6px var(--j2), inset 0 1px 0 rgba(255,255,255,.6), inset 0 -3px 6px rgba(0,0,0,.12); isolation: isolate; }
-.wtile[class*=" wg"]::after { content: ""; position: absolute; top: -40%; left: -70%; width: 45%; height: 180%; transform: rotate(25deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: wgshine 4.5s ease-in-out infinite; z-index: -1; }
-.wtile[class*=" wg"]:nth-child(2n)::after { animation-delay: 1.1s; } .wtile[class*=" wg"]:nth-child(3n)::after { animation-delay: 2.3s; }
-@keyframes wgshine { 0%, 65% { left: -70%; } 100% { left: 140%; } }
-.wtile[class*=" wg"]:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--j3), inset 0 1px 0 rgba(255,255,255,.6); }
-.wg0 { --j1: #ff7b9c; --j2: #d61f56; --j3: #9c0f3a; }
-.wg1 { --j1: #4fe3a5; --j2: #109467; --j3: #0a6647; }
-.wg2 { --j1: #6fa2ff; --j2: #2b47c9; --j3: #1c2f8c; }
-.wg3 { --j1: #c69bff; --j2: #7234d4; --j3: #4f2196; }
-.wg4 { --j1: #ffcf5a; --j2: #e88a0c; --j3: #a85f00; }
-.wg5 { --j1: #5ee6ea; --j2: #0f93ad; --j3: #0a6678; }
-.wg6 { --j1: #ff9ad0; --j2: #e0459a; --j3: #a42c6c; }
-.build-line .wtile[class*=" wg"] { animation: wgpop .25s ease-out; }
-@keyframes wgpop { from { transform: scale(.7); } 70% { transform: scale(1.08); } }
-
 /* stat tiles without gems: coloured with a 3D picture */
 .gem-kpi .gk-ic { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; background: rgba(255,255,255,.28); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4); }
 .gem-kpi .gk-ic .emo-img { width: 24px; height: 24px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
-/* answer buttons in lessons and tests: jewel letter badges and a soft coloured edge */
-.opts .opt:not(.right):not(.wrong) { border-color: color-mix(in srgb, var(--j2) 35%, var(--line)); box-shadow: 0 4px 0 color-mix(in srgb, var(--j2) 30%, var(--line)); background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--j1) 9%, var(--surface))); }
-.opts .opt .k { border: 0; color: #fff; font-weight: 800; background: radial-gradient(120% 90% at 25% 0%, rgba(255,255,255,.5), transparent 50%), linear-gradient(155deg, var(--j1), var(--j2)); box-shadow: 0 2px 0 var(--j3); text-shadow: 0 1px 1px rgba(0,0,0,.3); }
-.opts .opt:nth-child(1) { --j1: #6fa2ff; --j2: #2b47c9; --j3: #1c2f8c; }
-.opts .opt:nth-child(2) { --j1: #ff7b9c; --j2: #d61f56; --j3: #9c0f3a; }
-.opts .opt:nth-child(3) { --j1: #4fe3a5; --j2: #109467; --j3: #0a6647; }
-.opts .opt:nth-child(4) { --j1: #ffcf5a; --j2: #e88a0c; --j3: #a85f00; }
-.opts .opt:nth-child(5) { --j1: #c69bff; --j2: #7234d4; --j3: #4f2196; }
 
 /* ===================== Cat Cabin ===================== */
 .cabin { gap: 12px; }

@@ -1282,12 +1282,11 @@
     const bank = h('div', { class: 'bank' });
     const placed = [];
     const check = h('button', { class: 'btn block', disabled: true }, 'Check');
-    step.tiles.tiles.forEach((t, gi) => {
-      const gc = ' wg' + ((gi * 5 + String(step.sid || '').length) % 7);
-      const b = h('button', { class: 'wtile' + gc, onclick: () => {
+    step.tiles.tiles.forEach((t) => {
+      const b = h('button', { class: 'wtile', onclick: () => {
         if (b.classList.contains('used')) return;
         b.classList.add('used'); A.sfx.play('tap');
-        const p = h('button', { class: 'wtile' + gc, onclick: () => { p.remove(); b.classList.remove('used'); placed.splice(placed.indexOf(t), 1); check.disabled = !placed.length; } }, t.w);
+        const p = h('button', { class: 'wtile', onclick: () => { p.remove(); b.classList.remove('used'); placed.splice(placed.indexOf(t), 1); check.disabled = !placed.length; } }, t.w);
         placed.push(t); line.append(p); check.disabled = false;
         if (D[A.keyOf(t.w)]) A.speech.say(t.w);
       } }, t.w);
